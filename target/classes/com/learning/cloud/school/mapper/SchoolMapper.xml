@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.school.dao.SchoolDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.school.entity.School">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="school_name" jdbcType="VARCHAR" property="schoolName" />
+    <result column="bureau_id" jdbcType="INTEGER" property="bureauId" />
+    <result column="district_name" jdbcType="VARCHAR" property="districtName" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+  </resultMap>
+
+  <select id="getSchools" resultType="com.learning.cloud.school.entity.School">
+    select *
+    from school_1
+  </select>
+  <select id="getBySchoolName" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">
+    select *
+    from school_1
+    where school_name = #{schoolName}
+  </select>
+
+  <insert id="insert" parameterType="com.learning.cloud.school.entity.School">
+    insert into school_1
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolName != null">
+        school_name,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+      <if test="districtName != null">
+        district_name,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="schoolName != null">
+        #{schoolName,jdbcType=VARCHAR},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="districtName != null">
+        #{districtName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.learning.cloud.school.entity.School">
+    udpate school_1
+    set bureau_id = #{bureauId}
+    where school_name = #{schoolName}
+  </update>
+
+</mapper>

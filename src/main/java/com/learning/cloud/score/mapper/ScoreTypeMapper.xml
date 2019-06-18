@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.score.dao.ScoreTypeDao">
+
+  <insert id="addScoreType" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.score.entity.ScoreType">
+    insert into score_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="organizeId != null">
+        organize_id,
+      </if>
+      <if test="actionName != null">
+        action_name,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="organizeId != null">
+        #{organizeId,jdbcType=BIGINT},
+      </if>
+      <if test="actionName != null">
+        #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="editScoreType" parameterType="com.learning.cloud.score.entity.ScoreType">
+    update score_type
+    <set>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=LONGVARCHAR}
+  </update>
+
+  <select id="getScoreTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreType">
+    select * from score_type
+    where id = #{id}
+  </select>
+
+  <select id="getOrganizeScoreType" parameterType="com.learning.cloud.score.entity.ScoreType" resultType="com.learning.cloud.score.entity.ScoreType">
+    select * from score_type
+    where organize_id = #{organizeId}
+  </select>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.index.dao.AuthUserInfoDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.index.entity.AuthUserInfo">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="VARCHAR" property="userId" />
+    <result column="corpId" jdbcType="VARCHAR" property="corpId" />
+  </resultMap>
+
+  <select id="getByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.index.entity.AuthUserInfo">
+    select *
+    from auth_user_info
+    where corp_id = #{corpId}
+  </select>
+
+  <insert id="insert" parameterType="com.learning.cloud.index.entity.AuthUserInfo">
+    insert into auth_user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+    <update id="update" parameterType="com.learning.cloud.index.entity.AuthUserInfo">
+        update auth_user_info
+        <set>
+          <if test="userId != null">
+            user_id = #{userId,jdbcType=VARCHAR},
+          </if>
+        </set>
+        where corp_id = #{corpId,jdbcType=VARCHAR}
+    </update>
+</mapper>

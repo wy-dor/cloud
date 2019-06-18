@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.index.dao.CallbackInfoDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.index.entity.CallbackInfo">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="auth_corp_id" jdbcType="VARCHAR" property="authCorpId" />
+    <result column="auth_code" jdbcType="VARCHAR" property="authCode" />
+    <result column="suite_key" jdbcType="VARCHAR" property="suiteKey" />
+    <result column="time_stamp" jdbcType="VARCHAR" property="timeStamp" />
+  </resultMap>
+
+  <select id="getAuthCodeByCorpId" parameterType="java.lang.String" resultType="java.lang.String">
+    select auth_code
+    from callback_info
+    where auth_corp_id = #{corpId}
+  </select>
+
+  <insert id="insert" parameterType="com.learning.cloud.index.entity.CallbackInfo">
+    insert into callback_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="authCorpId != null">
+        auth_corp_id,
+      </if>
+      <if test="authCode != null">
+        auth_code,
+      </if>
+      <if test="suiteKey != null">
+        suite_key,
+      </if>
+      <if test="timeStamp != null">
+        time_stamp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="authCorpId != null">
+        #{authCorpId,jdbcType=VARCHAR},
+      </if>
+      <if test="authCode != null">
+        #{authCode,jdbcType=VARCHAR},
+      </if>
+      <if test="suiteKey != null">
+        #{suiteKey,jdbcType=VARCHAR},
+      </if>
+      <if test="timeStamp != null">
+        #{timeStamp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.learning.cloud.index.entity.CallbackInfo">
+    update callback_info
+    <set>
+      <if test="authCode != null">
+        auth_code = #{authCode,jdbcType=VARCHAR},
+      </if>
+      <if test="suiteKey != null">
+        suite_key = #{suiteKey,jdbcType=VARCHAR},
+      </if>
+      <if test="timeStamp != null">
+        time_stamp = #{timeStamp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where auth_corp_id = #{authCorpId,jdbcType=VARCHAR}
+  </update>
+</mapper>

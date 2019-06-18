@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.index.dao.ScoreTypeMapper">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.index.entity.ScoreType">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="organize_id" jdbcType="BIGINT" property="organizeId" />
+    <result column="action_name" jdbcType="VARCHAR" property="actionName" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+  </resultMap>
+  <insert id="insert" parameterType="com.learning.cloud.index.entity.ScoreType">
+    insert into score_type (id, organize_id, action_name, 
+      score, time)
+    values (#{id,jdbcType=BIGINT}, #{organizeId,jdbcType=BIGINT}, #{actionName,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{time,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.learning.cloud.index.entity.ScoreType">
+    insert into score_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="organizeId != null">
+        organize_id,
+      </if>
+      <if test="actionName != null">
+        action_name,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="organizeId != null">
+        #{organizeId,jdbcType=BIGINT},
+      </if>
+      <if test="actionName != null">
+        #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

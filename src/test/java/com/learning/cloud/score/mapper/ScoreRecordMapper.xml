@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.score.dao.ScoreRecordMapper">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.score.entity.ScoreRecord">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="record_time" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="score_type_id" jdbcType="BIGINT" property="scoreTypeId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="score_before_record" jdbcType="BIGINT" property="scoreBeforeRecord" />
+    <result column="score" jdbcType="BIGINT" property="score" />
+  </resultMap>
+  <insert id="insert" parameterType="com.learning.cloud.score.entity.ScoreRecord">
+    insert into score_record (id, record_time, score_type_id, 
+      user_id, score_before_record, score
+      )
+    values (#{id,jdbcType=BIGINT}, #{recordTime,jdbcType=TIMESTAMP}, #{scoreTypeId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=VARCHAR}, #{scoreBeforeRecord,jdbcType=BIGINT}, #{score,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.learning.cloud.score.entity.ScoreRecord">
+    insert into score_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="recordTime != null">
+        record_time,
+      </if>
+      <if test="scoreTypeId != null">
+        score_type_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="scoreBeforeRecord != null">
+        score_before_record,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scoreTypeId != null">
+        #{scoreTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="scoreBeforeRecord != null">
+        #{scoreBeforeRecord,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

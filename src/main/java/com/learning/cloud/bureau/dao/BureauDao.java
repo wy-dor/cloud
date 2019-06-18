@@ -1,0 +1,13 @@
+package com.learning.cloud.bureau.dao;
+
+import com.learning.cloud.bureau.entity.Bureau;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@Mapper
+public interface BureauDao {
+    int insert(Bureau record);
+
+    Bureau getByBureauName(String bureauName);
+}

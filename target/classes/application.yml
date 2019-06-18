@@ -1,0 +1,83 @@
+spring:
+  profiles:
+    active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+      enabled: true
+
+  redis:
+    host: 192.168.3.14
+    port: 6379
+    max-idle: 8
+    min-idle: 0
+    max-active: 8
+    maxwait: -1
+    timeout: 0
+    isRedisCache: 1
+
+  # mysql配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    hikari: #HikariCP配置
+      max-idle: 10
+      max-active: 15
+      maxLifetime: 86430000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
+      log-abandoned: true
+      remove-abandoned: true
+      remove-abandoned-timeout: 60
+      initialize: false
+      sqlScriptEncoding: UTF-8
+      maximumPoolSize: 15 #连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapperLocations: classpath:/com/learning/cloud/**/mapper/*.xml
+
+#pagehelper分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com.learning.cloud.**.dao: debug
+  path: C:/server/myloge
+  file: myLog.log
+
+server:
+  port: 8080
+
+#配置项目运行的钉钉应用信息
+dingding:
+  suiteKey: suiterqkbrudxk2jqayay
+  suiteSecret: vEasQjDFQMeCakD2jdkjFydt1Cwx2KJyuhnn_tSUK5xtNvtUTnqvnaTFkzoKFD3K
+  isvCorpId: dingc5fa8a42960b8d6d35c2f4657eb6378f
+
+---
+#开发环境配置
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://47.103.41.179:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
+
+---
+#测试环境
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
+
+---
+#生产环境
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
