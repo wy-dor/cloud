@@ -15,7 +15,7 @@
     where auth_corp_id = #{corpId}
   </select>
 
-  <insert id="insert" parameterType="com.learning.cloud.index.entity.CallbackInfo">
+  <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.CallbackInfo">
     insert into callback_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

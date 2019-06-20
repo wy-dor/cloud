@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.user.teacher.dao.TeacherDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.user.teacher.entity.Teacher">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="campus_id" jdbcType="INTEGER" property="campusId" />
+    <result column="class_ids" jdbcType="VARCHAR" property="classIds" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+
+  <select id="getByUserId" parameterType="java.lang.String"
+          resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where user_id = #{userId}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.teacher.entity.Teacher">
+    insert into user_teacher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="teacherName != null">
+        teacher_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="campusId != null">
+        campus_id,
+      </if>
+      <if test="classIds != null">
+        class_ids,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="teacherName != null">
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="campusId != null">
+        #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="classIds != null">
+        #{classIds,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.learning.cloud.user.teacher.entity.Teacher">
+    update user_teacher
+    <set>
+      <if test="teacherName != null">
+        teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="campusId != null">
+        campus_id = #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="classIds != null">
+        class_ids = #{classIds,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

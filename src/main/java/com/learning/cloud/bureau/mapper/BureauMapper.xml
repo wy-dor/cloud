@@ -9,13 +9,18 @@
     <result column="state" jdbcType="SMALLINT" property="state" />
   </resultMap>
 
+  <select id="getBureaus" resultType="com.learning.cloud.bureau.entity.Bureau">
+    select *
+    from bureau
+  </select>
+
   <select id="getByBureauName" parameterType="java.lang.String" resultType="com.learning.cloud.bureau.entity.Bureau">
     select *
     from bureau
     where bureau_name = #{bureauName}
   </select>
 
-  <insert id="insert" parameterType="com.learning.cloud.bureau.entity.Bureau">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bureau.entity.Bureau">
     insert into bureau
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

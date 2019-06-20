@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -139,6 +140,20 @@ public class AuthenServiceImpl implements AuthenService {
         authAppInfoDao.update(byCorpId);
         return execute.getAccessToken();
     }
+
+    /*更新所有企业的accessToken*/
+    @Override
+    public ServiceResult updateAllAccessToken() throws ApiException {
+        List<AuthCorpInfo> corpInfos = authCorpInfoDao.getCorpInfos();
+        List<String> tokenList = new ArrayList<>();
+        for (AuthCorpInfo corpInfo : corpInfos) {
+            String corpId = corpInfo.getCorpId();
+            String accessToken = getAccessToken(corpId);
+            tokenList.add(accessToken);
+        }
+        return ServiceResult.success(tokenList);
+    }
+
 
     /*获取企业授权信息*/
     @Override

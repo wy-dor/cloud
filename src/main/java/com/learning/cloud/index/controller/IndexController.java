@@ -95,6 +95,14 @@ public class IndexController {
 	}
 
 	/**
+	 * 更新所有企业的accessToken
+	 */
+	@GetMapping("/updateAllAccessToken")
+	public ServiceResult updateAllAccessToken() throws ApiException{
+		return authenService.updateAllAccessToken();
+	}
+
+	/**
 	 * 获取企业永久授权码
 	 */
 	@GetMapping("/getPermanentAuthCode")

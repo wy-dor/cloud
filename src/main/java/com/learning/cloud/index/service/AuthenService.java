@@ -6,11 +6,14 @@ import com.taobao.api.ApiException;
 public interface AuthenService {
 
     /*应用授权*/
-    public ServiceResult authenApp(String corpId) throws ApiException;
+    ServiceResult authenApp(String corpId) throws ApiException;
 
     /*获取企业凭证*/
-    public String getAccessToken(String authCorpId) throws ApiException;
+    String getAccessToken(String authCorpId) throws ApiException;
+
+    /*更新所有企业的access_token*/
+    ServiceResult updateAllAccessToken() throws ApiException;
 
     /*获取企业授权信息*/
-    public ServiceResult getAuthInfo(String corpId) throws ApiException;
+    ServiceResult getAuthInfo(String corpId) throws ApiException;
 }

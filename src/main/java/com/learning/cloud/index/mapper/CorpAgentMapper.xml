@@ -10,7 +10,7 @@
     <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
   </resultMap>
 
-  <insert id="insert" parameterType="com.learning.cloud.index.entity.CorpAgent">
+  <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.CorpAgent">
     insert into corp_agent
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

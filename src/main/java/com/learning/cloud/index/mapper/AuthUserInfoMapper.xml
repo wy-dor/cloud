@@ -13,7 +13,7 @@
     where corp_id = #{corpId}
   </select>
 
-  <insert id="insert" parameterType="com.learning.cloud.index.entity.AuthUserInfo">
+  <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.AuthUserInfo">
     insert into auth_user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

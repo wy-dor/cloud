@@ -17,4 +17,5 @@ public interface SchoolDao {
 
     List<School> getSchools();
 
+    String getCorpIdBySchoolName(String schoolName);
 }

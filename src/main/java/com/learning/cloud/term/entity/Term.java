@@ -19,4 +19,6 @@ public class Term {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date end;
 
+    private String termYear;
+
 }

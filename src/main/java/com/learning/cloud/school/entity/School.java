@@ -7,8 +7,6 @@ public class School {
 
     private Integer bureauId;
 
-    private String districtName;
-
     private Short state;
 
     public Integer getId() {
@@ -33,14 +31,6 @@ public class School {
 
     public void setBureauId(Integer bureauId) {
         this.bureauId = bureauId;
-    }
-
-    public String getDistrictName() {
-        return districtName;
-    }
-
-    public void setDistrictName(String districtName) {
-        this.districtName = districtName == null ? null : districtName.trim();
     }
 
     public Short getState() {

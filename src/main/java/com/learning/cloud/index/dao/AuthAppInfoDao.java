@@ -12,4 +12,6 @@ public interface AuthAppInfoDao {
     int insert(AuthAppInfo authAppInfo);
 
     int update(AuthAppInfo authAppInfo);
+
+    String getCorpAccessToken(String coprId);
 }

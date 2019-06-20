@@ -20,6 +20,9 @@
       <if test="end != null">
         end,
       </if>
+      <if test="termYear != null">
+        term_year,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -37,16 +40,20 @@
       <if test="end != null">
         #{end,jdbcType=DATE},
       </if>
+      <if test="termYear != null">
+        #{termYear,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 
-  <select id="getSchoolTerm" parameterType="java.lang.Long" resultType="com.learning.cloud.term.entity.Term">
+  <select id="getSchoolTerm" resultType="com.learning.cloud.term.entity.Term">
     select * from term
-    where school_id = #{term}
+    where school_id = #{schoolId}
+    and term_year = #{year}
   </select>
 
   <update id="editSchoolTerm" parameterType="com.learning.cloud.term.entity.Term">
-    update course
+    update term
     <set>
       <if test="start != null">
         start = #{start,jdbcType=DATE},

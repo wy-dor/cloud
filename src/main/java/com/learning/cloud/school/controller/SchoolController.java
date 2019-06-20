@@ -13,6 +13,7 @@ public class SchoolController {
     @Autowired
     public SchoolService schoolService;
 
+    /*关联school与bureau*/
     @GetMapping("/setBureauId")
     public ServiceResult setBureauId(School school){
         return schoolService.setBureauId(school);

@@ -5,7 +5,6 @@
     <result column="id" jdbcType="INTEGER" property="id" />
     <result column="school_name" jdbcType="VARCHAR" property="schoolName" />
     <result column="bureau_id" jdbcType="INTEGER" property="bureauId" />
-    <result column="district_name" jdbcType="VARCHAR" property="districtName" />
     <result column="state" jdbcType="SMALLINT" property="state" />
   </resultMap>
 
@@ -13,13 +12,22 @@
     select *
     from school_1
   </select>
+
   <select id="getBySchoolName" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">
     select *
     from school_1
     where school_name = #{schoolName}
   </select>
 
-  <insert id="insert" parameterType="com.learning.cloud.school.entity.School">
+  <select id="getCorpIdBySchoolName" parameterType="java.lang.String" resultType="java.lang.String">
+    select corp_id
+    from school_1 s
+    left join auth_app_info a
+    on s.school_name = a.corp_name
+    where s.school_name = #{schoolName}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.school.entity.School">
     insert into school_1
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -30,9 +38,6 @@
       </if>
       <if test="bureauId != null">
         bureau_id,
-      </if>
-      <if test="districtName != null">
-        district_name,
       </if>
       <if test="state != null">
         state,
@@ -47,9 +52,6 @@
       </if>
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="districtName != null">
-        #{districtName,jdbcType=VARCHAR},
       </if>
       <if test="state != null">
         #{state,jdbcType=SMALLINT},
