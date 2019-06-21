@@ -1,6 +1,8 @@
 package com.learning.cloud.dept.campus.entity;
 
-public class Campus {
+import com.learning.domain.BaseEntity;
+
+public class Campus extends BaseEntity {
     private Integer id;
 
     private String campusName;

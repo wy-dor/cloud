@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.ding.onlineSign.dao.SignDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.ding.onlineSign.entity.Sign">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="class_ids" jdbcType="VARCHAR" property="classIds" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+
+  <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
+          parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    insert into edu_sign
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="classIds != null">
+        class_ids,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="classIds != null">
+        #{classIds,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getValidTaskList" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    select *
+    from edu_sign
+    where state = 1
+    and concat(",",class_ids,",") like concat(",",#{classId},",")
+  </select>
+
+  <!--FIND_IN_SET(#{classId},class_ids)-->
+
+  <insert id="signName" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+    insert into sign_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="parentName != null">
+        parent_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="signId != null">
+        sign_id,
+      </if>
+      <if test="signTime != null">
+        sign_time,
+      </if>
+      <if test="signFlag != null">
+        sign_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentName != null">
+        #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="signId != null">
+        #{signId,jdbcType=INTEGER},
+      </if>
+      <if test="signTime != null">
+        #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signFlag != null">
+        #{signFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="setStateInvalid" parameterType="java.lang.Integer">
+    update edu_sign
+    set state = 0
+    where id = #{signId}
+  </update>
+
+</mapper>

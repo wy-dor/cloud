@@ -11,19 +11,19 @@
 
   <select id="getCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
     select *
-    from campus_1
+    from edu_campus
     where school_id = #{schoolId}
     and campus_name = #{campusName}
   </select>
 
   <update id="updateCampusType" parameterType="java.lang.Integer">
-    update campus_1
+    update edu_campus
     set campus_type = 1
     where school_id = #{schoolId}
   </update>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.campus.entity.Campus">
-    insert into campus_1
+    insert into edu_campus
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,

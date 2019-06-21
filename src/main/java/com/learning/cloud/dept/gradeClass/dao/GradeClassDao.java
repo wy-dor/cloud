@@ -11,4 +11,7 @@ public interface GradeClassDao {
     int insert(GradeClass gradeClass);
 
     GradeClass getByGradeClass(GradeClass gradeClass);
+
+    GradeClass getById(Integer id);
+
 }

@@ -1,6 +1,8 @@
 package com.learning.cloud.dept.gradeClass.entity;
 
-public class GradeClass {
+import com.learning.domain.BaseEntity;
+
+public class GradeClass extends BaseEntity {
     private Integer id;
 
     private String className;

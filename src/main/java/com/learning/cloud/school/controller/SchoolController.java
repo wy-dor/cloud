@@ -14,6 +14,7 @@ public class SchoolController {
     public SchoolService schoolService;
 
     /*关联school与bureau*/
+    /*传入schoolId和bureauId*/
     @GetMapping("/setBureauId")
     public ServiceResult setBureauId(School school){
         return schoolService.setBureauId(school);

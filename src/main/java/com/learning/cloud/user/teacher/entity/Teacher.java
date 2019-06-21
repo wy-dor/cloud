@@ -1,6 +1,8 @@
 package com.learning.cloud.user.teacher.entity;
 
-public class Teacher {
+import com.learning.domain.BaseEntity;
+
+public class Teacher extends BaseEntity {
     private Integer id;
 
     private String teacherName;

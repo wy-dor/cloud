@@ -11,11 +11,12 @@ import java.util.List;
 public interface SchoolDao {
     int insert(School record);
 
-    School getBySchoolName(String schoolName);
+    List<School> getBySchool(School school);
 
     int update(School school);
 
     List<School> getSchools();
 
     String getCorpIdBySchoolName(String schoolName);
+
 }

@@ -10,6 +10,16 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
   </resultMap>
 
+  <select id="getTeachers" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+  </select>
+  <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where id = #{id}
+  </select>
+
   <select id="getByUserId" parameterType="java.lang.String"
           resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *

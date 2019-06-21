@@ -11,10 +11,17 @@
     <result column="teacher_ids" jdbcType="VARCHAR" property="teacherIds" />
   </resultMap>
 
+  <select id="getById" parameterType="java.lang.Integer"
+          resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
+    select *
+    from edu_grade_class
+    where id = #{id}
+  </select>
+
   <select id="getByGradeClass" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
           resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     select *
-    from grade_class_1
+    from edu_grade_class
     where class_name = #{className}
     and grade_name = #{gradeName}
     and session_name = #{sessionName}
@@ -22,7 +29,7 @@
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
-    insert into grade_class_1
+    insert into edu_grade_class
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,

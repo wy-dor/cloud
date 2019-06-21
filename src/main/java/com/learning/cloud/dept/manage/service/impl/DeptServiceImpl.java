@@ -69,11 +69,13 @@ public class DeptServiceImpl implements DeptService {
         for (AuthCorpInfo corpInfo : corpInfos) {
             String corpName = corpInfo.getCorpName();
             if(corpName.endsWith("学校")){
-                School bySchoolName = schoolDao.getBySchoolName(corpName);
+                School school = new School();
+                school.setSchoolName(corpName);
+                School bySchoolName = schoolDao.getBySchool(school).get(0);
                 if(bySchoolName == null){
-                    School school = new School();
-                    school.setSchoolName(corpName);
                     schoolDao.insert(school);
+                    //填充表
+                    init(school);
                 }
             }else{
                 Bureau byBureauName = bureaudao.getByBureauName(corpName);
@@ -84,12 +86,7 @@ public class DeptServiceImpl implements DeptService {
                 }
             }
         }
-        List<School> schools = schoolDao.getSchools();
 
-        //填充表
-        for (School school : schools) {
-            init(school);
-        }
         return ServiceResult.success("ok");
     }
 
@@ -137,6 +134,7 @@ public class DeptServiceImpl implements DeptService {
                                 String className = dept3.getName();
                                 Long classDeptId = dept3.getId();
                                 /*grade_class表的更新*/
+                                /**/
                                 int classId;
                                 GradeClass gradeClass = new GradeClass();
                                 gradeClass.setCampusId(campusId);
@@ -229,6 +227,7 @@ public class DeptServiceImpl implements DeptService {
         } catch (ApiException e) {
             e.printStackTrace();
         }
+        school.setState((short)1);
     }
 
     /*获取子部门的id列表*/

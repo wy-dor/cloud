@@ -17,7 +17,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public ServiceResult setBureauId(School school) {
-        School s = schoolDao.getBySchoolName(school.getSchoolName());
+        School s = schoolDao.getBySchool(school).get(0);
         if(s == null){
             return ServiceResult.success("不存在该学校");
         }

@@ -10,25 +10,39 @@
 
   <select id="getSchools" resultType="com.learning.cloud.school.entity.School">
     select *
-    from school_1
+    from edu_school
   </select>
 
-  <select id="getBySchoolName" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">
+  <!--可查询指定id,或指定名字，或指定状态下的学校-->
+  <select id="getBySchool" parameterType="com.learning.cloud.school.entity.School" resultType="com.learning.cloud.school.entity.School">
     select *
-    from school_1
-    where school_name = #{schoolName}
+    from edu_school
+    <where>
+      <if test="id != null">
+      id = #{id}
+      </if>
+      <if test="schoolName != null">
+      and school_name = #{schoolName}
+      </if>
+      <if test="bureauId != null">
+      and bureau_id = #{bureauId}
+      </if>
+      <if test="state ！= null">
+      and state = #{state}
+      </if>
+    </where>
   </select>
 
   <select id="getCorpIdBySchoolName" parameterType="java.lang.String" resultType="java.lang.String">
     select corp_id
-    from school_1 s
+    from edu_school s
     left join auth_app_info a
     on s.school_name = a.corp_name
     where s.school_name = #{schoolName}
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.school.entity.School">
-    insert into school_1
+    insert into edu_school
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -60,9 +74,19 @@
   </insert>
 
   <update id="update" parameterType="com.learning.cloud.school.entity.School">
-    udpate school_1
-    set bureau_id = #{bureauId}
-    where school_name = #{schoolName}
+    udpate edu_school
+    <set>
+      <if test="schoolName != null">
+        school_name = #{schoolName,jdbcType=VARCHAR},
+      </if>
+      <if test="bureauId != null">
+        bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id}
   </update>
 
 </mapper>

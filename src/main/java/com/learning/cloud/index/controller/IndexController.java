@@ -48,7 +48,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public ServiceResult login(@RequestParam(value = "corpId") String corpId,
+	public JsonResult login(@RequestParam(value = "corpId") String corpId,
 							@RequestParam(value = "authCode") String requestAuthCode) {
 		Long start = System.currentTimeMillis();
 		//获取accessToken,注意正是代码要有异常流处理
@@ -66,7 +66,7 @@ public class IndexController {
 		Map<String,Object> resultMap = new HashMap<>();
 		resultMap.put("userId",userId);
 		resultMap.put("corpId",corpId);
-		return ServiceResult.success(resultMap);
+		return JsonResultUtil.success(resultMap);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class IndexController {
 	 * 获取企业永久授权码
 	 */
 	@GetMapping("/getPermanentAuthCode")
-	public JsonResult getPermanentAuthCode(String authCode,String accessToken) throws ApiException {
+	public ServiceResult getPermanentAuthCode(String authCode,String accessToken) throws ApiException {
 		/*获取永久授权码并库存*/
 		DingTalkClient client1 = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_PERMANENT_CODE);
 		OapiServiceGetPermanentCodeRequest req1 = new OapiServiceGetPermanentCodeRequest();
@@ -114,7 +114,7 @@ public class IndexController {
 		OapiServiceGetPermanentCodeResponse rsp1 = client1.execute( req1, accessToken);
 		String permanentCode = rsp1.getPermanentCode();
 		System.out.println(permanentCode);
-		return JsonResultUtil.success(rsp1);
+		return ServiceResult.success(rsp1);
 	}
 
 	/**

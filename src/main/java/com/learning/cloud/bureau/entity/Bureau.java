@@ -1,6 +1,8 @@
 package com.learning.cloud.bureau.entity;
 
-public class Bureau {
+import com.learning.domain.BaseEntity;
+
+public class Bureau extends BaseEntity {
     private Integer id;
 
     private String bureauName;
