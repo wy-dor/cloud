@@ -71,8 +71,8 @@ public class DeptServiceImpl implements DeptService {
             if(corpName.endsWith("学校")){
                 School school = new School();
                 school.setSchoolName(corpName);
-                School bySchoolName = schoolDao.getBySchool(school).get(0);
-                if(bySchoolName == null){
+                List<School> bySchool = schoolDao.getBySchool(school);
+                if(bySchool == null || bySchool.size() == 0){
                     schoolDao.insert(school);
                     //填充表
                     init(school);

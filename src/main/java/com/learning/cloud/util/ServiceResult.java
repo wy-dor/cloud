@@ -23,7 +23,7 @@ public class ServiceResult<T>  implements Serializable{
         ServiceResult<T> item = new ServiceResult<T>();
         item.success = true;
         item.result = result;
-        item.code = "0";
+        item.code = "1";
         item.message = "success";
         return item;
     }

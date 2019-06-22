@@ -16,18 +16,13 @@ public class SignController {
     @Autowired
     private SignService signService;
 
-    /**
-     * 发布签字任务
-     */
+    /*发布签字任务*/
     @PostMapping("/addSignTask")
     public JsonResult addSignTask(Sign sign)throws Exception{
-
         return signService.addSignTask(sign);
     }
 
-    /**
-     * 签字
-     */
+    /*签字*/
     @GetMapping("/signName")
     public JsonResult signName(SignRecord signRecord)throws Exception{
         return signService.signName(signRecord);
@@ -37,5 +32,16 @@ public class SignController {
     @GetMapping("/getValidTaskList")
     public JsonResult getValidTaskList(Parent parent) throws Exception {
         return signService.getValidTaskList(parent);
+    }
+
+    /*获取家长未完成签字列表*/
+    @GetMapping("/getUndoneTaskList")
+    public JsonResult getUndoneTaskList(Parent parent) throws Exception {
+        return signService.getUndoneTaskList(parent);
+    }
+
+    @GetMapping("/setSateInvalid")
+    public JsonResult setSateInvalid(Integer signId) throws Exception {
+        return signService.setSateInvalid(signId);
     }
 }

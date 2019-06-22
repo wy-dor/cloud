@@ -44,7 +44,7 @@ public class IndexController {
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
 	 * @param corpId			授权企业的CorpId
-	 * @param requestAuthCode	免登临时code
+	 * @param authCode	免登临时code
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody

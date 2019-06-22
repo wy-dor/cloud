@@ -23,9 +23,6 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bureau.entity.Bureau">
     insert into bureau
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="bureauName != null">
         bureau_name,
       </if>
@@ -40,9 +37,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="bureauName != null">
         #{bureauName,jdbcType=VARCHAR},
       </if>

@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.ding.onlineSign.dao.SignDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.ding.onlineSign.entity.Sign">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
-    <result column="class_ids" jdbcType="VARCHAR" property="classIds" />
-    <result column="state" jdbcType="INTEGER" property="state" />
-  </resultMap>
 
   <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
@@ -70,17 +60,20 @@
     select *
     from edu_sign
     where state = 1
-    and concat(",",class_ids,",") like concat(",",#{classId},",")
+    and FIND_IN_SET(#{classId},class_ids)
+    order by end_time desc
   </select>
 
-  <!--FIND_IN_SET(#{classId},class_ids)-->
+  <update id="setStateInvalid" parameterType="java.lang.Integer">
+    update edu_sign
+    set state = 0
+    where id = #{signId}
+  </update>
+
 
   <insert id="signName" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
     insert into sign_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="parentName != null">
         parent_name,
       </if>
@@ -96,14 +89,8 @@
       <if test="signTime != null">
         sign_time,
       </if>
-      <if test="signFlag != null">
-        sign_flag,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="parentName != null">
         #{parentName,jdbcType=VARCHAR},
       </if>
@@ -119,16 +106,9 @@
       <if test="signTime != null">
         #{signTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="signFlag != null">
-        #{signFlag,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
 
-  <update id="setStateInvalid" parameterType="java.lang.Integer">
-    update edu_sign
-    set state = 0
-    where id = #{signId}
-  </update>
+
 
 </mapper>

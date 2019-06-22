@@ -25,9 +25,6 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.campus.entity.Campus">
     insert into edu_campus
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="campusName != null">
         campus_name,
       </if>
@@ -42,9 +39,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="campusName != null">
         #{campusName,jdbcType=VARCHAR},
       </if>

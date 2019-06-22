@@ -14,4 +14,6 @@ public interface SignService {
     JsonResult signName(SignRecord signRecord)throws Exception;
 
     JsonResult setSateInvalid(Integer signId)throws Exception;
+
+    JsonResult getUndoneTaskList(Parent parent);
 }

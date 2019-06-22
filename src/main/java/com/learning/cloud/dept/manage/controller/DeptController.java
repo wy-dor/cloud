@@ -80,4 +80,5 @@ public class DeptController {
     public ServiceResult getRoleList(String accessToken) throws ApiException{
         return ServiceResult.success(deptService.getRoleList(accessToken));
     }
+
 }

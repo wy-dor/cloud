@@ -28,6 +28,7 @@ public class SignServiceImpl implements SignService {
         return JsonResultUtil.success(sign.getId());
     }
 
+    /*查找家长对应有效的班级签字任务*/
     @Override
     public JsonResult getValidTaskList(Parent parent) {
         Integer classId = parent.getClassId();
@@ -36,17 +37,23 @@ public class SignServiceImpl implements SignService {
         return JsonResultUtil.success(taskList);
     }
 
-
-    /*签字*/
+    /*家长进行签字*/
     @Override
     public JsonResult signName(SignRecord signRecord) throws Exception {
-        int i = signDao.signName(signRecord);
+        signDao.signName(signRecord);
         return null;
     }
 
+    /*关闭签字任务*/
     @Override
     public JsonResult setSateInvalid(Integer signId) throws Exception {
-        int i = signDao.setStateInvalid(signId);
+        signDao.setStateInvalid(signId);
+        return null;
+    }
+
+    //todo
+    @Override
+    public JsonResult getUndoneTaskList(Parent parent) {
         return null;
     }
 }

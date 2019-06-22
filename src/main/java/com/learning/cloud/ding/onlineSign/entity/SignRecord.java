@@ -1,8 +1,11 @@
 package com.learning.cloud.ding.onlineSign.entity;
 
+import com.learning.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class SignRecord {
+public class SignRecord extends BaseEntity {
     private Integer id;
 
     private String parentName;
@@ -13,9 +16,8 @@ public class SignRecord {
 
     private Integer signId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
     private Date signTime;
-
-    private Integer signFlag;
 
     public Integer getId() {
         return id;
@@ -63,13 +65,5 @@ public class SignRecord {
 
     public void setSignTime(Date signTime) {
         this.signTime = signTime;
-    }
-
-    public Integer getSignFlag() {
-        return signFlag;
-    }
-
-    public void setSignFlag(Integer signFlag) {
-        this.signFlag = signFlag;
     }
 }

@@ -31,9 +31,6 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     insert into edu_grade_class
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="className != null">
         class_name,
       </if>
@@ -54,9 +51,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="className != null">
         #{className,jdbcType=VARCHAR},
       </if>
