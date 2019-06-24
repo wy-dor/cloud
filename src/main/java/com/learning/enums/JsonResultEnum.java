@@ -23,6 +23,9 @@ public enum JsonResultEnum {
 
     SCORE_TIME_LIMIT(1011,"今日积分类型已达上限"),
 
+    FILE_UPLOAD_ERROR(1021,"文件上传失败！"),
+    FILE_DOWNLOAD_ERROR(1022,"文件下载失败！"),
+
 
 
 

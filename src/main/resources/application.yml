@@ -8,15 +8,15 @@ spring:
       max-request-size: 30MB
       enabled: true
 
-  redis:
-    host: 192.168.3.14
-    port: 6379
-    max-idle: 8
-    min-idle: 0
-    max-active: 8
-    maxwait: -1
-    timeout: 0
-    isRedisCache: 1
+#  redis:
+#    host: 192.168.3.14
+#    port: 6379
+#    max-idle: 8
+#    min-idle: 0
+#    max-active: 8
+#    maxwait: -1
+#    timeout: 0
+#    isRedisCache: 1
 
   # mysql配置
   datasource:

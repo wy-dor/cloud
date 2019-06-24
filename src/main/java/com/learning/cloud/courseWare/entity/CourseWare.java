@@ -1,6 +1,7 @@
 package com.learning.cloud.courseWare.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class CourseWare {
 
     private Long cdId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date cdDay;
 
 }
