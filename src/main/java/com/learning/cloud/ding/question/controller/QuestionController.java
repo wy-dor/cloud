@@ -37,6 +37,8 @@ public class QuestionController {
     public JsonResult getQuestion(Question question)throws Exception{
         return questionService.getQuestion(question);
     }
+
+
     @GetMapping("/getQuestionIn")
     public JsonResult getQuestionIn(Question question)throws Exception{
         return questionService.getQuestionIn(question);
@@ -51,7 +53,7 @@ public class QuestionController {
     }
 
 
-    @PostMapping("/closeQuestion")
+    @GetMapping("/closeQuestion")
     public JsonResult closeQuestion(@RequestParam(value="id") Long id)throws Exception{
         return questionService.closeQuestion(id);
     }
@@ -72,8 +74,5 @@ public class QuestionController {
     public JsonResult getAnswer(Answer answer)throws Exception{
         return questionService.getAnswer(answer);
     }
-
-
-
 
 }

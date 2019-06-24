@@ -12,4 +12,6 @@ public interface StudentDao {
     Student getByUserId(Student student);
 
     int update(Student student);
+
+    Integer getClassStuNum(Integer classId);
 }

@@ -4,6 +4,7 @@ import com.learning.cloud.ding.picture.dao.PictureDao;
 import com.learning.cloud.ding.picture.entity.Picture;
 import com.learning.cloud.ding.picture.service.PictureService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,17 +33,16 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public JsonResult addPic(MultipartFile file) throws Exception {
-//        Picture picture = new Picture();
-//        //有图片需要先上传图片
-//        if(!file.isEmpty()){
-//            BASE64Encoder encoder = new BASE64Encoder();
-//            //base64转图
-//            String pic = encoder.encode(file.getBytes());
-//            picture.setPic(pic);
-//            int i = pictureDao.addPic(picture);
-//        }
-//        return JsonResultUtil.success(picture.getId());
-        return null;
+        Picture picture = new Picture();
+        //有图片需要先上传图片
+        if(!file.isEmpty()){
+            BASE64Encoder encoder = new BASE64Encoder();
+            //base64转图
+            String pic = encoder.encode(file.getBytes());
+            picture.setPic(pic);
+            int i = pictureDao.addPic(picture);
+        }
+        return JsonResultUtil.success(picture.getId());
     }
 
 

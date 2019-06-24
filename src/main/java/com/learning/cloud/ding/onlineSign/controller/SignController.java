@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class SignController {
 
@@ -28,20 +30,46 @@ public class SignController {
         return signService.signName(signRecord);
     }
 
+    /*获取指定班级下所有签名任务，state为0时任务已失效*/
+    @GetMapping("/getAllTasks")
+    public JsonResult getAllTasks(Integer classId)throws Exception{
+        return signService.getAllTasks(classId);
+    }
+
     /*获取有效签字列表*/
     @GetMapping("/getValidTaskList")
-    public JsonResult getValidTaskList(Parent parent) throws Exception {
-        return signService.getValidTaskList(parent);
+    public JsonResult getValidTaskList(Integer classId) throws Exception {
+        return signService.getValidTaskList(classId);
     }
 
     /*获取家长未完成签字列表*/
-    @GetMapping("/getUndoneTaskList")
-    public JsonResult getUndoneTaskList(Parent parent) throws Exception {
-        return signService.getUndoneTaskList(parent);
+    /*主要参数classId和userId*/
+    @GetMapping("/getUnsignedTasks")
+    public JsonResult getUnsignedTasks(Parent parent) throws Exception {
+        return signService.getUnsignedTasks(parent);
     }
 
-    @GetMapping("/setSateInvalid")
-    public JsonResult setSateInvalid(Integer signId) throws Exception {
-        return signService.setSateInvalid(signId);
+    /*老师关闭签字任务*/
+    @GetMapping("/setStateInvalid")
+    public JsonResult setStateInvalid(Integer signId) throws Exception {
+        return signService.setStateInvalid(signId);
+    }
+
+    /*获取每个签名任务需要签名的数量*/
+    @GetMapping("/getSignNum")
+    public JsonResult getSignNum(Integer signId) throws Exception{
+        return  signService.getSignNum(signId);
+    }
+
+    /*获取签名任务下已签名数量*/
+    @GetMapping("/getRecordCount")
+    public JsonResult getRecordCount(Integer signId) throws Exception{
+        return signService.getRecordCount(signId);
+    }
+
+    /*获取签名任务下已签名的签名记录*/
+    @GetMapping("/getRecordsBySignId")
+    public JsonResult getRecordsBySignId(Integer signId) throws Exception{
+        return signService.getRecordsBySignId(signId);
     }
 }

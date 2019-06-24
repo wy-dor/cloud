@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public class GradeClassServiceImpl implements GradeClassService {
     @Autowired
-    public GradeClassDao gradeClassDao;
+    private GradeClassDao gradeClassDao;
 
 
     @Override

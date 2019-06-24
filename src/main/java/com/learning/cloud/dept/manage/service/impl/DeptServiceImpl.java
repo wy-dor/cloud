@@ -35,31 +35,31 @@ import java.util.List;
 public class DeptServiceImpl implements DeptService {
 
     @Autowired
-    public AuthCorpInfoDao authCorpInfoDao;
+    private AuthCorpInfoDao authCorpInfoDao;
 
     @Autowired
-    public AuthAppInfoDao authAppInfoDao;
+    private AuthAppInfoDao authAppInfoDao;
 
     @Autowired
-    public SchoolDao schoolDao;
+    private SchoolDao schoolDao;
 
     @Autowired
-    public BureauDao bureaudao;
+    private BureauDao bureaudao;
 
     @Autowired
-    public CampusDao campusDao;
+    private CampusDao campusDao;
 
     @Autowired
-    public GradeClassDao gradeClassDao;
+    private GradeClassDao gradeClassDao;
 
     @Autowired
-    public TeacherDao teacherDao;
+    private TeacherDao teacherDao;
 
     @Autowired
-    public StudentDao studentDao;
+    private StudentDao studentDao;
 
     @Autowired
-    public ParentDao parentDao;
+    private ParentDao parentDao;
 
     /*初始化学校下部门信息*/
     @Override

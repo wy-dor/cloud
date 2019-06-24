@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SchoolController {
 
     @Autowired
-    public SchoolService schoolService;
+    private SchoolService schoolService;
 
     /*关联school与bureau*/
     /*传入schoolId和bureauId*/

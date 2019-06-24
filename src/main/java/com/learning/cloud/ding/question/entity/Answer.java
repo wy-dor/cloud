@@ -1,5 +1,6 @@
 package com.learning.cloud.ding.question.entity;
 
+import com.learning.domain.BaseEntity;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @Desc:
  */
 @Data
-public class Answer {
+public class Answer extends BaseEntity {
     private Long id;
     private Long questionId;
     private String answerUserId;

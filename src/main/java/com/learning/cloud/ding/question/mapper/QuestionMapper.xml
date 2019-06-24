@@ -70,7 +70,8 @@
   </update>
 
   <select id="getQuestionImIN" parameterType="com.learning.cloud.ding.question.entity.Question" resultType="com.learning.cloud.ding.question.entity.Question">
-    select a.*, IFNULL(c.answer_num,0) answer_num from question a
+    select a.*, IFNULL(c.answer_num,0) answer_num
+    from question a
     left join (select b.question_id,count(*) as answer_num from answer b GROUP BY b.question_id) c
     on a.id = c.question_id
     LEFT JOIN answer d

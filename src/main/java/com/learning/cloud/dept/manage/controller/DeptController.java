@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeptController {
 
     @Autowired
-    public DeptService deptService;
+    private DeptService deptService;
 
     @Autowired
-    public AuthenService authenService;
+    private AuthenService authenService;
 
     @GetMapping("/initDepartment")
     public ServiceResult initDepartment(){

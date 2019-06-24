@@ -2,9 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.ding.onlineSign.dao.SignDao">
 
+  <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    select *
+    from sign
+    where id = #{id}
+    limit 1
+  </select>
+
   <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    insert into edu_sign
+    insert into sign
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
         title,
@@ -23,9 +30,6 @@
       </if>
       <if test="classIds != null">
         class_ids,
-      </if>
-      <if test="state != null">
-        state,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -50,26 +54,45 @@
       <if test="classIds != null">
         #{classIds,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
 
   <select id="getValidTaskList" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
     select *
-    from edu_sign
+    from sign
     where state = 1
     and FIND_IN_SET(#{classId},class_ids)
     order by end_time desc
   </select>
 
+  <select id="getAllTasks" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    select *
+    from sign
+    where FIND_IN_SET(#{classId},class_ids)
+    order by state desc,end_time desc
+  </select>
+
+  <select id="getUnsignedTasks" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    select a.*
+    from (
+	select s.*
+    from sign s
+    where FIND_IN_SET(#{classId} ,class_ids)
+    ) a
+	where a.id not in
+	(
+	select sign_id
+    from sign_record
+    where user_id = #{userId}
+	)
+	and a.state = 1
+  </select>
+
   <update id="setStateInvalid" parameterType="java.lang.Integer">
-    update edu_sign
+    update sign
     set state = 0
     where id = #{signId}
   </update>
-
 
   <insert id="signName" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
     insert into sign_record
@@ -109,6 +132,16 @@
     </trim>
   </insert>
 
+  <select id="getRecordNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*)
+    from sign_record
+    where sign_id = #{signId}
+  </select>
 
+  <select id="getRecordsBySignId" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+    select *
+    from sign_record
+    where sign_id = #{signId}
+  </select>
 
 </mapper>

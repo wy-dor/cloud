@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BureauController {
 
     @Autowired
-    public BureauService bureauService;
+    private BureauService bureauService;
 
     @GetMapping("/getBureaus")
     public ServiceResult getBureaus(){

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GradeClassController {
 
     @Autowired
-    public GradeClassService gradeClassService;
+    private GradeClassService gradeClassService;
 
     /*根据老师获取其所任职的班级信息*/
     @GetMapping("/getClassesByTeacher")

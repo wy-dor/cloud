@@ -9,11 +9,20 @@ public interface SignService {
 
     JsonResult addSignTask(Sign sign)throws Exception;
 
-    JsonResult getValidTaskList(Parent parent)throws Exception;
+    JsonResult getAllTasks(Integer classId) throws Exception;
+
+    JsonResult getValidTaskList(Integer classId)throws Exception;
 
     JsonResult signName(SignRecord signRecord)throws Exception;
 
-    JsonResult setSateInvalid(Integer signId)throws Exception;
+    JsonResult setStateInvalid(Integer signId)throws Exception;
 
-    JsonResult getUndoneTaskList(Parent parent);
+    JsonResult getUnsignedTasks(Parent parent) throws Exception;
+
+    JsonResult getSignNum(Integer signId) throws Exception;
+
+    JsonResult getRecordCount(Integer signId) throws Exception;
+
+    JsonResult getRecordsBySignId(Integer signId) throws Exception;
+
 }

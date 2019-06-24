@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeacherController {
 
     @Autowired
-    public TeacherService teacherService;
+    private TeacherService teacherService;
 
     /*根据用户id获取老师信息*/
     @GetMapping("/getByUserId")

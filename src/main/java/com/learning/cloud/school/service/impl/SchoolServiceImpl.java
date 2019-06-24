@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolServiceImpl implements SchoolService {
 
     @Autowired
-    public SchoolDao schoolDao;
+    private SchoolDao schoolDao;
 
     @Override
     public ServiceResult setBureauId(School school) {
