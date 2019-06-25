@@ -1,0 +1,21 @@
+package com.learning.cloud.score.entity;
+
+import lombok.Data;
+
+import java.util.Date;
+
+@Data
+public class TeacherScoreboard {
+    private Long id;
+
+    private Long schoolId;
+
+    private Long teacherId;
+
+    private Integer score;
+
+    private Date lastTime;
+
+    private Long bureauId;
+
+}

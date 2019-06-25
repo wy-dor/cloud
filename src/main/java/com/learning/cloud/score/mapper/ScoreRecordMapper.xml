@@ -57,4 +57,6 @@
     where score_type_id = #{scoreTypeId}
     and date(record_time) = curdate();
   </select>
+
+
 </mapper>

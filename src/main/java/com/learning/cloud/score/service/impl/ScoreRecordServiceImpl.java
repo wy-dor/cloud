@@ -2,9 +2,14 @@ package com.learning.cloud.score.service.impl;
 
 import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreTypeDao;
+import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
 import com.learning.cloud.score.entity.ScoreType;
 import com.learning.cloud.score.service.ScoreRecordService;
+import com.learning.cloud.user.parent.dao.ParentDao;
+import com.learning.cloud.user.parent.entity.Parent;
+import com.learning.cloud.user.teacher.dao.TeacherDao;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
@@ -45,4 +50,6 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         ScoreRecord last = scoreRecordDao.getLastScoreRecord(userId);
         return JsonResultUtil.success(last);
     }
+
+
 }

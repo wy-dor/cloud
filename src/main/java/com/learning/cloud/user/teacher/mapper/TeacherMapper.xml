@@ -103,4 +103,16 @@
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+
+  <select id="getTeacherIds" parameterType="java.lang.Long" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select ut.* from
+    (
+    SELECT ec.id from edu_campus ec
+    LEFT JOIN edu_school es
+    on ec.school_id = es.id
+    where es.id = #{schoolId}
+    ) as ca
+    LEFT JOIN user_teacher ut
+    on ut.campus_id = ca.id
+  </select>
 </mapper>

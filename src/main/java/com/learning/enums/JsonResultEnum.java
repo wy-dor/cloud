@@ -22,6 +22,10 @@ public enum JsonResultEnum {
     TIME_CONFLICT(1001,"时间冲突，无法调课"),
 
     SCORE_TIME_LIMIT(1011,"今日积分类型已达上限"),
+    SCORE_SCHOOL_ID_NEED(1012,"请传学校id！"),
+
+    FILE_UPLOAD_ERROR(1021,"文件上传失败！"),
+    FILE_DOWNLOAD_ERROR(1022,"文件下载失败！"),
 
 
 
