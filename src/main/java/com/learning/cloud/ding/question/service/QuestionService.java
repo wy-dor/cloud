@@ -24,4 +24,5 @@ public interface QuestionService {
     JsonResult getQuestionIn(Question question)throws Exception;
 
     JsonResult closeQuestion(Long id)throws Exception;
+
 }

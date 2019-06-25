@@ -3,6 +3,7 @@ package com.learning.cloud.ding.onlineSign.dao;
 import com.learning.cloud.ding.onlineSign.entity.Sign;
 import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.user.parent.entity.Parent;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,10 +17,9 @@ public interface SignDao {
 
     int signName(SignRecord signRecord);
 
-    List<Sign> getValidTaskList(Integer classId);
+    List<Sign> getValidTaskList(Parent parent);
 
-    List<Sign> getAllTasks(Integer classId);
-
+    List<Sign> getAllTasks(Parent parent);
 
     int setStateInvalid(Integer signId);
 
@@ -29,5 +29,5 @@ public interface SignDao {
 
     Integer getRecordNum(Integer signId);
 
-    List<SignRecord> getRecordsBySignId(Integer signId);
+    List<SignRecord> getRecordsBySignId(Sign sign);
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.school.ding.picture.dao.PictureDao">
+<mapper namespace="com.learning.cloud.ding.picture.dao.PictureDao">
 
   <insert id="addPic" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.picture.entity.Picture">
     insert into pic

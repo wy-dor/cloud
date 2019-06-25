@@ -73,12 +73,14 @@ public class AuthenServiceImpl implements AuthenService {
         int i = 0;
         if(info == null){
             i = authAppInfoDao.insert(authAppInfo);
+
         }else{
             i = authAppInfoDao.update(authAppInfo);
         }
         if(i == 1){
             System.out.println("企业授权信息更新成功！");
         }
+
         /*获取企业授权信息*/
         return getAuthInfo(corpId);
     }

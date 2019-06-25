@@ -1,6 +1,8 @@
 package com.learning.cloud.user.teacher.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Teacher extends BaseEntity {
     private Integer id;
@@ -12,6 +14,14 @@ public class Teacher extends BaseEntity {
     private Integer campusId;
 
     private String classIds;
+
+    @Setter
+    @Getter
+    private Integer schoolId;
+
+    @Setter
+    @Getter
+    private Integer bureauId;
 
     private String phone;
 

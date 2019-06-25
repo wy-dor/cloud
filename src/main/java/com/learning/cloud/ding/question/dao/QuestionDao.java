@@ -26,4 +26,5 @@ public interface QuestionDao {
     void updateSmallPic(@Param("sPicId") Long sPicId, @Param("id") Long id);
 
     int closeQuestion(Long id);
+
 }

@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
-public class AuthUserInfo {
+import com.learning.domain.BaseEntity;
+
+public class AuthUserInfo extends BaseEntity {
     private Integer id;
 
     private String userId;

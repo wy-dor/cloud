@@ -1,9 +1,10 @@
 package com.learning.cloud.dept.gradeClass.controller;
 
+import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
 import com.learning.cloud.user.teacher.entity.Teacher;
-import com.learning.cloud.user.teacher.service.TeacherService;
 import com.learning.cloud.util.ServiceResult;
+import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,4 +20,18 @@ public class GradeClassController {
     public ServiceResult getClassesByTeacher(Teacher teacher) {
         return gradeClassService.getClassesByTeacher(teacher);
     }
+
+    /*获取学校或分校下的班级列表*/
+    /*参数为schoolId或者id(分校)*/
+    @GetMapping("/getClassesByCampus")
+    public ServiceResult getClassesByCampus(Campus campus){
+        return gradeClassService.getClassesByCampus(campus);
+    }
+
+    /*获取班级下老师，家长，学生的数量*/
+    @GetMapping("/getClassDetails")
+    public JsonResult getClassDetails(Integer classId){
+        return gradeClassService.getClassDetails(classId);
+    }
+
 }

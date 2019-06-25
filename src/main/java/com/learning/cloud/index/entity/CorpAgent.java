@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
-public class CorpAgent {
+import com.learning.domain.BaseEntity;
+
+public class CorpAgent extends BaseEntity {
     private Integer id;
 
     private String agentId;

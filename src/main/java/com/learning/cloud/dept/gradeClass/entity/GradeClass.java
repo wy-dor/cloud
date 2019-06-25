@@ -1,6 +1,8 @@
 package com.learning.cloud.dept.gradeClass.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GradeClass extends BaseEntity {
     private Integer id;
@@ -16,6 +18,18 @@ public class GradeClass extends BaseEntity {
     private Integer headTeacherId;
 
     private String teacherIds;
+
+    @Getter
+    @Setter
+    private Integer teacherNum;
+
+    @Getter
+    @Setter
+    private Integer parentNum;
+
+    @Getter
+    @Setter
+    private Integer stuNum;
 
     public Integer getId() {
         return id;

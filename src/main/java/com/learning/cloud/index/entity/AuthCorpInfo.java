@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
-public class AuthCorpInfo {
+import com.learning.domain.BaseEntity;
+
+public class AuthCorpInfo extends BaseEntity {
     private Integer id;
 
     private String corpId;

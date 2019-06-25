@@ -38,7 +38,7 @@ public class QuestionController {
         return questionService.getQuestion(question);
     }
 
-
+    /*获取我参与的问题*/
     @GetMapping("/getQuestionIn")
     public JsonResult getQuestionIn(Question question)throws Exception{
         return questionService.getQuestionIn(question);
@@ -53,6 +53,7 @@ public class QuestionController {
     }
 
 
+    /*关闭问题*/
     @GetMapping("/closeQuestion")
     public JsonResult closeQuestion(@RequestParam(value="id") Long id)throws Exception{
         return questionService.closeQuestion(id);
@@ -68,7 +69,7 @@ public class QuestionController {
     }
 
     /**
-     * 获取问题的回到
+     * 获取问题的回到 主要参数questionId
      */
     @GetMapping("/getAnswer")
     public JsonResult getAnswer(Answer answer)throws Exception{

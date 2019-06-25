@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface ParentDao {
-    int insert(Parent record);
-
     Parent getByUserId(String userid);
+
+    Integer getClassParentNum(Integer classId);
+
+    int insert(Parent record);
 
     int update(Parent parent);
 }

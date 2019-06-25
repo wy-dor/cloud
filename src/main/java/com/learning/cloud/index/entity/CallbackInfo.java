@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
-public class CallbackInfo {
+import com.learning.domain.BaseEntity;
+
+public class CallbackInfo extends BaseEntity {
     private Integer id;
 
     private String authCorpId;

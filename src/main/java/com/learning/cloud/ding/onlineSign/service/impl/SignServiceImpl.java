@@ -6,6 +6,7 @@ import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.ding.onlineSign.service.SignService;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
@@ -34,15 +35,15 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public JsonResult getAllTasks(Integer classId) throws Exception {
-        List<Sign> taskList = signDao.getAllTasks(classId);
+    public JsonResult getAllTasks(Parent parent) throws Exception {
+        List<Sign> taskList = signDao.getAllTasks(parent);
         return JsonResultUtil.success(new PageEntity<>(taskList));
     }
 
     /*查找家长对应有效的班级签字任务*/
     @Override
-    public JsonResult getValidTaskList(Integer classId) {
-        List<Sign> taskList = signDao.getValidTaskList(classId);
+    public JsonResult getValidTaskList(Parent parent) {
+        List<Sign> taskList = signDao.getValidTaskList(parent);
         return JsonResultUtil.success(new PageEntity<>(taskList));
     }
 
@@ -60,7 +61,6 @@ public class SignServiceImpl implements SignService {
         return null;
     }
 
-    //todo
     @Override
     public JsonResult getUnsignedTasks(Parent parent) throws Exception{
         List<Sign> signList = new ArrayList<>();
@@ -89,8 +89,8 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public JsonResult getRecordsBySignId(Integer signId) throws Exception {
-        List<SignRecord> recordList = signDao.getRecordsBySignId(signId);
+    public JsonResult getRecordsBySignId(Sign sign) throws Exception {
+        List<SignRecord> recordList = signDao.getRecordsBySignId(sign);
         return JsonResultUtil.success(new PageEntity<>(recordList));
     }
 }

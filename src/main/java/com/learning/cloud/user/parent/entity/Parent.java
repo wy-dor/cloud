@@ -17,5 +17,12 @@ public class Parent extends BaseEntity {
 
     private Integer classId;
 
+    private Integer campusId;
+
+    private Integer schoolId;
+
+    private Integer bureauId;
+
     private String phone;
+
 }

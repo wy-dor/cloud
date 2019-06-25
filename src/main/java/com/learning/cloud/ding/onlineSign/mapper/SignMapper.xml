@@ -57,7 +57,7 @@
     </trim>
   </insert>
 
-  <select id="getValidTaskList" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+  <select id="getValidTaskList" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
     select *
     from sign
     where state = 1
@@ -65,7 +65,7 @@
     order by end_time desc
   </select>
 
-  <select id="getAllTasks" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+  <select id="getAllTasks" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
     select *
     from sign
     where FIND_IN_SET(#{classId},class_ids)
@@ -138,10 +138,10 @@
     where sign_id = #{signId}
   </select>
 
-  <select id="getRecordsBySignId" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+  <select id="getRecordsBySignId" parameterType="com.learning.cloud.ding.onlineSign.entity.Sign" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
     select *
     from sign_record
-    where sign_id = #{signId}
+    where sign_id = #{id}
   </select>
 
 </mapper>

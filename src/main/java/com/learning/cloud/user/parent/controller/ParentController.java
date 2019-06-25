@@ -2,6 +2,7 @@ package com.learning.cloud.user.parent.controller;
 
 import com.learning.cloud.user.parent.service.ParentService;
 import com.learning.cloud.util.ServiceResult;
+import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,12 @@ public class ParentController {
     @GetMapping("/getParentByUserId")
     public ServiceResult getParentByUserId(String userId) {
         return parentService.getByUserId(userId);
+    }
+
+    /*获取指定班级的家长数量*/
+    @GetMapping("/getClassParentNum")
+    public JsonResult getClassParentNum(Integer classId){
+        return parentService.getClassParentNum(classId);
     }
 
 }

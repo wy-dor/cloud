@@ -17,6 +17,12 @@
     where user_id = #{userId}
   </select>
 
+  <select id="getClassParentNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(id)
+    from user_parent
+    where class_id = #{classId}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.parent.entity.Parent">
     insert into user_parent
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -31,6 +37,15 @@
       </if>
       <if test="classId != null">
         class_id,
+      </if>
+      <if test="campusId != null">
+        campus_id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
       </if>
       <if test="phone != null">
         phone,
@@ -48,6 +63,15 @@
       </if>
       <if test="classId != null">
         #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="campusId != null">
+        #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=INTEGER},
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},

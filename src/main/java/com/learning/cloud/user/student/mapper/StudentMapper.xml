@@ -21,6 +21,12 @@
     from user_student
     where class_id = #{classId}
   </select>
+
+  <select id="getClassStudents" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.student.entity.Student">
+    select *
+    from user_student
+    where class_id = #{id}
+  </select>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.student.entity.Student">
     insert into user_student
@@ -37,6 +43,12 @@
       <if test="campusId != null">
         campus_id,
       </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="studentName != null">
@@ -50,6 +62,12 @@
       </if>
       <if test="campusId != null">
         #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

@@ -91,6 +91,8 @@ public class DeptServiceImpl implements DeptService {
     }
 
     private void init(School school) {
+        Integer schoolId = school.getId();
+        Integer bureauId = school.getBureauId();
         String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
         String corpAccessToken = authAppInfoDao.getCorpAccessToken(corpId);
         try {
@@ -104,7 +106,7 @@ public class DeptServiceImpl implements DeptService {
                     int campusId;
                     Campus campus = new Campus();
                     campus.setCampusName(dept.getName());
-                    campus.setSchoolId(school.getId());
+                    campus.setSchoolId(schoolId);
                     Campus c = campusDao.getCampus(campus);
                     if(c == null){
                         campusDao.insert(campus);
@@ -167,6 +169,8 @@ public class DeptServiceImpl implements DeptService {
                                             teacher.setTeacherName(userName);
                                             teacher.setUserId(userid);
                                             teacher.setCampusId(campusId);
+                                            teacher.setSchoolId(schoolId);
+                                            teacher.setBureauId(bureauId);
                                             Teacher t = teacherDao.getByUserId(userid);
                                             if(t == null){
                                                 teacher.setClassIds(classIdStr);
@@ -190,6 +194,9 @@ public class DeptServiceImpl implements DeptService {
                                             parent.setUserId(userid);
                                             parent.setParentName(userName);
                                             parent.setClassId(classId);
+                                            parent.setCampusId(campusId);
+                                            parent.setSchoolId(schoolId);
+                                            parent.setBureauId(bureauId);
                                             Parent p = parentDao.getByUserId(userid);
                                             if(p == null){
                                                 parentDao.insert(parent);
@@ -206,7 +213,9 @@ public class DeptServiceImpl implements DeptService {
                                             student.setStudentName(userName);
                                             student.setClassId(classId);
                                             student.setCampusId(campusId);
-                                            Student s = studentDao.getByUserId(student);
+                                            student.setSchoolId(schoolId);
+                                            student.setBureauId(bureauId);
+                                            Student s = studentDao.getByUserId(userid);
                                             if(s == null){
                                                 studentDao.insert(student);
                                             }else{
@@ -222,7 +231,7 @@ public class DeptServiceImpl implements DeptService {
             }
             /*多校区则更新对应标识*/
             if(i > 1){
-                campusDao.updateCampusType(school.getId());
+                campusDao.updateCampusType(schoolId);
             }
         } catch (ApiException e) {
             e.printStackTrace();

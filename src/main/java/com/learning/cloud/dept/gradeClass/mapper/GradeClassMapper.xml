@@ -28,6 +28,12 @@
     and campus_id = #{campusId}
   </select>
 
+  <select id="getClassesByCampusId" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
+    select *
+    from edu_grade_class
+    where campus_id = #{id}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     insert into edu_grade_class
     <trim prefix="(" suffix=")" suffixOverrides=",">
