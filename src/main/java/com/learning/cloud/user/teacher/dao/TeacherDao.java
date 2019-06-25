@@ -20,4 +20,6 @@ public interface TeacherDao {
 
     int update(Teacher teacher);
 
+    //获取学校的老师
+    List<Teacher> getTeacherIds(Long schoolId);
 }

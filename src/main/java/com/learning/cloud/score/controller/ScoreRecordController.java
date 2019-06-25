@@ -23,4 +23,7 @@ public class ScoreRecordController {
     public JsonResult getUserScore(@RequestParam(value="userId",required = true) String userId)throws Exception{
         return scoreRecordService.getUserScore(userId);
     }
+
+
+
 }

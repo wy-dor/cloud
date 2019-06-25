@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.score.dao.TeacherScoreboardMapper">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.score.entity.TeacherScoreboard">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="school_id" jdbcType="BIGINT" property="schoolId" />
+    <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="bureau_id" jdbcType="BIGINT" property="bureauId" />
+  </resultMap>
+  <insert id="insert" parameterType="com.learning.cloud.score.entity.TeacherScoreboard">
+    insert into teacher_scoreboard (id, school_id, teacher_id, 
+      score, last_time, bureau_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT}, #{teacherId,jdbcType=BIGINT}, 
+      #{score,jdbcType=INTEGER}, #{lastTime,jdbcType=TIMESTAMP}, #{bureauId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.learning.cloud.score.entity.TeacherScoreboard">
+    insert into teacher_scoreboard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

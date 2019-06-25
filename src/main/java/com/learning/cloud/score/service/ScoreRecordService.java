@@ -7,4 +7,5 @@ public interface ScoreRecordService {
     JsonResult addScoreRecord(ScoreRecord scoreRecord)throws Exception;
 
     JsonResult getUserScore(String userId)throws Exception;
+
 }

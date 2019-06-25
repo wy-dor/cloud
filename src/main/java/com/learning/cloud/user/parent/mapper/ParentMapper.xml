@@ -73,4 +73,14 @@
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+
+  <select id="getParents" parameterType="java.lang.Long" resultType="com.learning.cloud.user.parent.entity.Parent">
+    select up.* from (
+    SELECT ec.id from edu_campus ec
+    LEFT JOIN edu_school es
+    on ec.school_id = es.id where es.id = #{schoolId}
+    ) as ca
+    LEFT JOIN user_parent up
+    on up.campus_id = ca.id
+  </select>
 </mapper>

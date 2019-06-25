@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.score.dao.ScoreboardDao">
+
+  <select id="getSchoolScore" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.SchoolScoreboard">
+    select * from school_scoreboard
+    where school_id = #{schoolId}
+  </select>
+
+  <insert id="addSchoolScoreboard" parameterType="com.learning.cloud.score.entity.SchoolScoreboard">
+    insert into school_scoreboard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getClassScore" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
+    select * from class_scoreboard
+    where class_id = #{classId}
+  </select>
+
+  <insert id="addClassScoreboard" parameterType="com.learning.cloud.score.entity.ClassScoreboard">
+    insert into class_scoreboard
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getSchoolRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.SchoolScoreboard">
+    select * from school_scoreboard
+    where bureau_id = #{bureauId}
+  </select>
+
+  <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
+    select sr.* from user_teacher ut
+    left join score_record sr
+    on ut.user_id = sr.user_id
+    where ut.bureau_id = #{bureauId}
+    <if test="schoolId != null">
+      and ut.school_id = #{school}
+    </if>
+  </select>
+</mapper>
