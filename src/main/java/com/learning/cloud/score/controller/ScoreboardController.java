@@ -42,4 +42,9 @@ public class ScoreboardController {
                                     @RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
         return scoreboardService.getTeacherRank(bureauId, schoolId);
     }
+
+    @GetMapping("getParentRank")
+    public JsonResult getParentRank(@RequestParam(value="parentId",required = false) Long parentId)throws Exception{
+        return scoreboardService.getParentRank(parentId);
+    }
 }
