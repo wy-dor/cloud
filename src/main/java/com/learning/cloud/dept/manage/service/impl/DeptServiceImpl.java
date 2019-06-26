@@ -241,12 +241,17 @@ public class DeptServiceImpl implements DeptService {
 
     /*获取子部门的id列表*/
     @Override
-    public OapiDepartmentListIdsResponse getDeptListIds(String pDeptId,String accessToken) throws ApiException {
+    public OapiDepartmentListIdsResponse getDeptListIds(String pDeptId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_ids");
         OapiDepartmentListIdsRequest request = new OapiDepartmentListIdsRequest();
         request.setId(pDeptId);
         request.setHttpMethod("GET");
-        OapiDepartmentListIdsResponse response = client.execute(request, accessToken);
+        OapiDepartmentListIdsResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 

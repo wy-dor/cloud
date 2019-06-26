@@ -3,7 +3,6 @@ package com.learning.cloud.dept.manage.controller;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.util.ServiceResult;
-import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
