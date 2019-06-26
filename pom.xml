@@ -59,14 +59,14 @@
             <artifactId>top-api-sdk-dev</artifactId>
             <version>ding-open-mc-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190608.jar</systemPath>
+            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190608.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.taobao.top</groupId>
             <artifactId>lippi-oapi-encrpt</artifactId>
             <version>dingtalk-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
+            <systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
         </dependency>
 
         <!-- JSON -->
@@ -214,6 +214,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
 
             <!-- Mybatis 生成代码插件-->
