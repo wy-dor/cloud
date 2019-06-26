@@ -233,7 +233,7 @@ public class DeptServiceImpl implements DeptService {
             if(i > 1){
                 campusDao.updateCampusType(schoolId);
             }
-        } catch (ApiException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         school.setState((short)1);
@@ -252,7 +252,7 @@ public class DeptServiceImpl implements DeptService {
 
     /*获取部门列表*/
     @Override
-    public OapiDepartmentListResponse getDeptList(String pDeptId,String accessToken,Integer isFetchChild ) throws ApiException {
+    public OapiDepartmentListResponse getDeptList(String pDeptId,String accessToken,Integer isFetchChild ) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list");
         OapiDepartmentListRequest request = new OapiDepartmentListRequest();
         request.setId(pDeptId);
@@ -262,59 +262,84 @@ public class DeptServiceImpl implements DeptService {
             request.setFetchChild(true);
         }
         request.setHttpMethod("GET");
-        OapiDepartmentListResponse response = client.execute(request, accessToken);
+        OapiDepartmentListResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*获取部门详情*/
     @Override
-    public OapiDepartmentGetResponse getDeptDetail(String deptId,String accessToken) throws ApiException {
+    public OapiDepartmentGetResponse getDeptDetail(String deptId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/get");
         OapiDepartmentGetRequest request = new OapiDepartmentGetRequest();
         request.setId(deptId);
         request.setHttpMethod("GET");
-        OapiDepartmentGetResponse response = client.execute(request, accessToken);
+        OapiDepartmentGetResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*获取部门用户userid列表*/
     @Override
-    public OapiUserGetDeptMemberResponse getDeptMember(String deptId,String accessToken) throws ApiException {
+    public OapiUserGetDeptMemberResponse getDeptMember(String deptId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getDeptMember");
         OapiUserGetDeptMemberRequest req = new OapiUserGetDeptMemberRequest();
         req.setDeptId(deptId);
         req.setHttpMethod("GET");
-        OapiUserGetDeptMemberResponse rsp = client.execute(req, accessToken);
+        OapiUserGetDeptMemberResponse rsp = null;
+        try {
+            rsp = client.execute(req, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return rsp;
     }
 
     /*获取部门用户*/
     @Override
-    public OapiUserSimplelistResponse getDeptUserList(String deptId,String accessToken) throws ApiException {
+    public OapiUserSimplelistResponse getDeptUserList(String deptId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/simplelist");
         OapiUserSimplelistRequest request = new OapiUserSimplelistRequest();
         request.setDepartmentId(Long.parseLong(deptId));
         request.setOffset(0L);
         request.setSize(10L);
         request.setHttpMethod("GET");
-        OapiUserSimplelistResponse response = client.execute(request, accessToken);
+        OapiUserSimplelistResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*获取用户详情*/
     @Override
-    public OapiUserGetResponse getUserDetail(String userId,String accessToken) throws ApiException {
+    public OapiUserGetResponse getUserDetail(String userId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userId);
         request.setHttpMethod("GET");
-        OapiUserGetResponse response = client.execute(request, accessToken);
+        OapiUserGetResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*获取部门用户详情*/
     @Override
-    public OapiUserListbypageResponse getDeptUserListByPage(long deptId,String accessToken) throws ApiException {
+    public OapiUserListbypageResponse getDeptUserListByPage(long deptId,String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/listbypage");
         OapiUserListbypageRequest request = new OapiUserListbypageRequest();
         request.setDepartmentId(deptId);
@@ -322,40 +347,60 @@ public class DeptServiceImpl implements DeptService {
         request.setSize(10L);
         request.setOrder("entry_desc");
         request.setHttpMethod("GET");
-        OapiUserListbypageResponse execute = client.execute(request,accessToken);
+        OapiUserListbypageResponse execute = null;
+        try {
+            execute = client.execute(request,accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return execute;
     }
 
     /*查询部门的所有上级父部门路径*/
     @Override
-    public OapiDepartmentListParentDeptsByDeptResponse getListParentDeptsByDept(String deptId, String accessToken) throws ApiException {
+    public OapiDepartmentListParentDeptsByDeptResponse getListParentDeptsByDept(String deptId, String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_parent_depts_by_dept");
         OapiDepartmentListParentDeptsByDeptRequest request = new OapiDepartmentListParentDeptsByDeptRequest();
         request.setId(deptId);
         request.setHttpMethod("GET");
-        OapiDepartmentListParentDeptsByDeptResponse response = client.execute(request, accessToken);
+        OapiDepartmentListParentDeptsByDeptResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*查询指定用户的所有上级父部门路径*/
     @Override
-    public OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException {
+    public OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_parent_depts");
         OapiDepartmentListParentDeptsRequest request = new OapiDepartmentListParentDeptsRequest();
         request.setUserId(userId);
         request.setHttpMethod("GET");
-        OapiDepartmentListParentDeptsResponse response = client.execute(request, accessToken);
+        OapiDepartmentListParentDeptsResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
     /*获取所有的角色列表*/
-    public OapiRoleListResponse getRoleList(String accessToken) throws ApiException {
+    public OapiRoleListResponse getRoleList(String accessToken) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/list");
         OapiRoleListRequest request = new OapiRoleListRequest();
         request.setOffset(0L);
         request.setSize(10L);
 
-        OapiRoleListResponse response = client.execute(request, accessToken);
+        OapiRoleListResponse response = null;
+        try {
+            response = client.execute(request, accessToken);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 }
