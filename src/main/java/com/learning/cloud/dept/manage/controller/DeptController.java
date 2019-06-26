@@ -1,7 +1,8 @@
 package com.learning.cloud.dept.manage.controller;
 
 import com.learning.cloud.dept.manage.service.DeptService;
-import com.learning.cloud.index.service.AuthenService;
+import com.learning.cloud.school.entity.School;
+import com.learning.cloud.school.service.SchoolService;
 import com.learning.cloud.util.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,18 @@ public class DeptController {
     private DeptService deptService;
 
     @Autowired
-    private AuthenService authenService;
+    private SchoolService schoolService;
 
-    @GetMapping("/initDepartment")
-    public ServiceResult initDepartment(){
-        return deptService.initDepartment();
+    /*关联school与bureau*/
+    /*传入id(school的id)和bureauId*/
+    @GetMapping("/setBureauId")
+    public ServiceResult setBureauId(School school){
+        Integer i = schoolService.setBureauId(school);
+        if(i > 0){
+            School s = schoolService.getBySchool(school).get(0);
+            deptService.init(s);
+        }
+        return ServiceResult.success("设置成功");
     }
 
     /*获取部门列表*/
@@ -73,11 +81,6 @@ public class DeptController {
     @GetMapping("/getListParentDeptsByUser")
     public ServiceResult getListParentDeptsByUser(String userId, String accessToken) {
         return ServiceResult.success(deptService.getListParentDeptsByUser(userId,accessToken));
-    }
-
-    @GetMapping("/getRoleList")
-    public ServiceResult getRoleList(String accessToken) {
-        return ServiceResult.success(deptService.getRoleList(accessToken));
     }
 
 }

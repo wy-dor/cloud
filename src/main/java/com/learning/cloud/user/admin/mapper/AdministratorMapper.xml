@@ -9,6 +9,13 @@
     <result column="status" jdbcType="SMALLINT" property="status" />
   </resultMap>
 
+  <select id="getByAdm" parameterType="com.learning.cloud.user.admin.entity.Administrator" resultType="com.learning.cloud.user.admin.entity.Administrator">
+    select *
+    from administrator
+    where user_id = #{userId}
+    and school_id = #{schoolId}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.admin.entity.Administrator">
     insert into administrator
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -10,7 +10,13 @@
     <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
   </resultMap>
 
-  <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.CorpAgent">
+  <select id="getByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.index.entity.CorpAgent">
+    select *
+    from corp_agent
+    where corp_id = #{corpId}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.index.entity.CorpAgent">
     insert into corp_agent
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -53,4 +59,23 @@
       </if>
     </trim>
   </insert>
+
+  <update id="update" parameterType="com.learning.cloud.index.entity.CorpAgent">
+    update corp_agent
+    <set>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentName != null">
+        agent_name = #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where corp_id = #{corpId,jdbcType=VARCHAR}
+  </update>
 </mapper>

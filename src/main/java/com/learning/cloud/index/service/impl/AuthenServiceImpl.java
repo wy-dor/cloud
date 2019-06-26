@@ -4,6 +4,8 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.bureau.dao.BureauDao;
+import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
 import com.learning.cloud.index.dao.*;
@@ -12,6 +14,10 @@ import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.index.entity.AuthUserInfo;
 import com.learning.cloud.index.entity.CorpAgent;
 import com.learning.cloud.index.service.AuthenService;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.admin.dao.AdministratorDao;
+import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +48,15 @@ public class AuthenServiceImpl implements AuthenService {
 
     @Autowired
     private AuthUserInfoDao authUserInfoDao;
+
+    @Autowired
+    private SchoolDao schoolDao;
+
+    @Autowired
+    private BureauDao bureauDao;
+
+    @Autowired
+    private AdministratorDao administratorDao;
 
     @Override
     public ServiceResult authenApp(String corpId) throws ApiException {
@@ -83,6 +98,7 @@ public class AuthenServiceImpl implements AuthenService {
 
         /*获取企业授权信息*/
         return getAuthInfo(corpId);
+
     }
 
     /*获取套件令牌Token（获取第三方应用凭证）*/
@@ -131,7 +147,13 @@ public class AuthenServiceImpl implements AuthenService {
 
     /*获取企业凭证*/
     @Override
-    public String getAccessToken(String authCorpId) throws ApiException {
+    public String getAccessToken(String authCorpId) {
+        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
+        return byCorpId.getCorpAccessToken();
+    }
+
+    /*更新指定企业凭证*/
+    public String updateAccessToken(String authCorpId) throws ApiException {
         DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
         OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
         req.setAuthCorpid(authCorpId);
@@ -150,7 +172,7 @@ public class AuthenServiceImpl implements AuthenService {
         List<String> tokenList = new ArrayList<>();
         for (AuthCorpInfo corpInfo : corpInfos) {
             String corpId = corpInfo.getCorpId();
-            String accessToken = getAccessToken(corpId);
+            String accessToken = updateAccessToken(corpId);
             tokenList.add(accessToken);
         }
         return ServiceResult.success(tokenList);
@@ -160,6 +182,8 @@ public class AuthenServiceImpl implements AuthenService {
     /*获取企业授权信息*/
     @Override
     public ServiceResult getAuthInfo(String corpId) throws ApiException {
+        String accessToken = getAccessToken(corpId);
+        /*获取企业授权信息*/
         DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_AUTH_INFO);
         OapiServiceGetAuthInfoRequest req = new OapiServiceGetAuthInfoRequest();
         req.setAuthCorpid(corpId);
@@ -167,8 +191,9 @@ public class AuthenServiceImpl implements AuthenService {
         /*保存授权企业信息*/
         OapiServiceGetAuthInfoResponse.AuthCorpInfo CorpInfo = response.getAuthCorpInfo();
         AuthCorpInfo authCorpInfo = new AuthCorpInfo();
+        String corpName = CorpInfo.getCorpName();
         authCorpInfo.setCorpId(corpId);
-        authCorpInfo.setCorpName(CorpInfo.getCorpName());
+        authCorpInfo.setCorpName(corpName);
         authCorpInfo.setIndustry(CorpInfo.getIndustry());
         authCorpInfo.setAuthLevel(CorpInfo.getAuthLevel().intValue());
         authCorpInfo.setInviteUrl(CorpInfo.getInviteUrl());
@@ -182,12 +207,56 @@ public class AuthenServiceImpl implements AuthenService {
         int i = 0;
         if(corpInfoByCorpId == null){
              i = authCorpInfoDao.insert(authCorpInfo);
-        }/*else{
+        }else{
             i = authCorpInfoDao.update(authCorpInfo);
-        }*/
+        }
         if(i == 1){
             System.out.println("保存授权企业信息成功");
         }
+
+        if(corpName.endsWith("学校")){
+            Integer schoolId;
+            School school = new School();
+            school.setSchoolName(corpName);
+            List<School> bySchool = schoolDao.getBySchool(school);
+            if(bySchool == null || bySchool.size() == 0){
+                schoolDao.insert(school);
+                schoolId = school.getId();
+            }else{
+                schoolId = bySchool.get(0).getId();
+            }
+            /*更新管理员表*/
+            OapiRoleListResponse rsp = getRoleList(accessToken);
+            List<OapiRoleListResponse.OpenRole> roles = rsp.getResult().getList().get(0).getRoles();
+            for (OapiRoleListResponse.OpenRole role : roles) {
+                /*更新管理员信息*/
+                if(role.getName().contains("管理员")){
+                    Long roleId = role.getId();
+                    OapiRoleSimplelistResponse rsp1 = getRoleSimpleList(roleId, accessToken);
+                    List<OapiRoleSimplelistResponse.OpenEmpSimple> list = rsp1.getResult().getList();
+                    for (OapiRoleSimplelistResponse.OpenEmpSimple openEmpSimple : list) {
+                        Administrator a = new Administrator();
+                        a.setName(openEmpSimple.getName());
+                        a.setUserId(openEmpSimple.getUserid());
+                        a.setSchoolId(schoolId);
+                        Administrator byAdm = administratorDao.getByAdm(a);
+                        if(byAdm == null){
+                            administratorDao.insert(a);
+                        }
+                    }
+                }
+            }
+
+        }else{
+            Bureau byBureauName = bureauDao.getByBureauName(corpName);
+            if(byBureauName == null){
+                Bureau bureau = new Bureau();
+                bureau.setBureauName(corpName);
+                bureauDao.insert(bureau);
+            }
+        }
+
+
         /*保存应用信息*/
         OapiServiceGetAuthInfoResponse.AuthInfo authInfo = response.getAuthInfo();
         List<OapiServiceGetAuthInfoResponse.Agent> agents = authInfo.getAgent();
@@ -198,10 +267,14 @@ public class AuthenServiceImpl implements AuthenService {
             ca.setAgentName(agent.getAgentName());
             ca.setAppId(agent.getAppid().toString());
             ca.setLogoUrl(agent.getLogoUrl());
-            int j = corpAgentDao.insert(ca);
-            if(j == 1){
-                System.out.println("保存应用信息成功！");
+            CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+            if(byCorpId == null){
+                corpAgentDao.insert(ca);
+            }else{
+                corpAgentDao.update(ca);
             }
+            System.out.println("保存应用信息成功！");
+
         }
         /*保存授权用户信息*/
         OapiServiceGetAuthInfoResponse.AuthUserInfo authUserInfo = response.getAuthUserInfo();
@@ -219,6 +292,27 @@ public class AuthenServiceImpl implements AuthenService {
             System.out.println("授权用户信息保存成功");
         }
         return ServiceResult.success(response);
+    }
+
+    /*获取角色下的员工列表*/
+    public OapiRoleSimplelistResponse getRoleSimpleList(long roleId,String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/simplelist");
+        OapiRoleSimplelistRequest request = new OapiRoleSimplelistRequest();
+        request.setRoleId(roleId);
+        request.setOffset(0L);
+        request.setSize(10L);
+        OapiRoleSimplelistResponse response = client.execute(request, accessToken);
+        return response;
+    }
+
+    /*获取所有的角色列表*/
+    public OapiRoleListResponse getRoleList(String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/list");
+        OapiRoleListRequest request = new OapiRoleListRequest();
+        request.setOffset(0L);
+        request.setSize(10L);
+        OapiRoleListResponse response = client.execute(request, accessToken);
+        return response;
     }
 
 }

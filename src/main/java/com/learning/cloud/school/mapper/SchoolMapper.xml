@@ -68,7 +68,7 @@
   </insert>
 
   <update id="update" parameterType="com.learning.cloud.school.entity.School">
-    udpate edu_school
+    update edu_school
     <set>
       <if test="schoolName != null">
         school_name = #{schoolName,jdbcType=VARCHAR},
