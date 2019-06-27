@@ -37,4 +37,10 @@ public class CourseExchangeController {
         return courseExchangeService.getMyExchange(teacherId);
     }
 
+    @PostMapping("confirmExchange")
+    public JsonResult confirmExchange(@RequestParam(value="id",required = true) Long id,
+                                      @RequestParam(value="status",required = true) int status)throws Exception{
+        return courseExchangeService.confirmExchange(id, status);
+    }
+
 }

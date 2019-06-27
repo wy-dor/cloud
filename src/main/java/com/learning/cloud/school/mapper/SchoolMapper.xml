@@ -83,4 +83,9 @@
     where id = #{id}
   </update>
 
+  <select id="getBySchoolId" parameterType="java.lang.Integer" resultType="com.learning.cloud.school.entity.School">
+    select * from edu_school
+    where id = #{schoolId}
+  </select>
+
 </mapper>

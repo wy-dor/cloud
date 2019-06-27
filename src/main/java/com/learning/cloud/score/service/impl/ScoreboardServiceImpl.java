@@ -1,5 +1,7 @@
 package com.learning.cloud.score.service.impl;
 
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreboardDao;
 import com.learning.cloud.score.entity.ClassScoreboard;
@@ -29,6 +31,9 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     private ScoreRecordDao scoreRecordDao;
 
     @Autowired
+    private SchoolDao schoolDao;
+
+    @Autowired
     private TeacherDao teacherDao;
 
     @Autowired
@@ -56,6 +61,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
      */
     @Override
     public JsonResult updateSchoolScore(Long schoolId) throws Exception {
+        School school = schoolDao.getBySchoolId(schoolId.intValue());
         if(schoolId!=null){
             //获取所有老师
             List<Teacher> teachers = teacherDao.getTeacherIds(schoolId);
@@ -85,7 +91,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
             schoolScoreboard.setSchoolId(schoolId);
             schoolScoreboard.setScore(new Double(score).intValue());
-//            schoolScoreboard.setBureauId(null);
+            schoolScoreboard.setBureauId(school.getBureauId().longValue());
             int i = scoreboardDao.addSchoolScoreboard(schoolScoreboard);
             return JsonResultUtil.success();
         }else {

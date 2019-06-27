@@ -14,4 +14,6 @@ public interface CourseExchangeService {
     JsonResult getCourseExchange(String day)throws Exception;
 
     JsonResult getMyExchange(Long teacherId)throws Exception;
+
+    JsonResult confirmExchange(Long id, int status)throws Exception;
 }

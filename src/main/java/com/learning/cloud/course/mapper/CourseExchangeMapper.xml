@@ -50,6 +50,9 @@
       <if test="fromNum != null">
         from_num,
       </if>
+      <if test="toNum != null">
+        to_num,
+      </if>
       <if test="fromDay != null">
         from_day,
       </if>
@@ -85,6 +88,9 @@
       <if test="fromNum != null">
         #{fromNum,jdbcType=SMALLINT},
       </if>
+      <if test="toNum != null">
+        #{toNum,jdbcType=SMALLINT},
+      </if>
       <if test="fromDay != null">
         #{fromDay,jdbcType=DATE},
       </if>
@@ -119,4 +125,9 @@
     where ( create_teacher_id = #{teacherId} or accept_teacher_id = #{teacherId})
     and to_day>#{day}
   </select>
+
+  <update id="confirmExchange" parameterType="java.lang.Long">
+    update course_exchange set status = #{status}
+    where id = #{id}
+  </update>
 </mapper>

@@ -14,6 +14,8 @@ public class CourseExchange {
 
     private Short fromNum;
 
+    private Short toNum;
+
     private Long fromId;
 
     private Long toId;
