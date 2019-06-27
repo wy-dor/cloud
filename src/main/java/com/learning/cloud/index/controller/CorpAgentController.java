@@ -16,9 +16,4 @@ public class CorpAgentController {
     public JsonResult getAgentId(String corpId) {
         return corpAgentService.getAgentId(corpId);
     }
-
-    @GetMapping("/getIsSchool")
-    public JsonResult getIsSchool(String corpId){
-        return corpAgentService.getIsSchool(corpId);
-    }
 }

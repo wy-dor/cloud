@@ -8,7 +8,7 @@ import com.taobao.api.ApiException;
 public interface DeptService {
     void init(School school) throws ApiException;
 
-    ServiceResult getUserRole(String userId, String accessToken) throws ApiException;
+    String getUserRole(String userId, String accessToken) throws ApiException;
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException;
 

@@ -30,12 +30,6 @@ public class DeptController {
         return ServiceResult.success("设置成功");
     }
 
-    /*获取用户的角色信息*/
-    @GetMapping("/getUserRole")
-    public ServiceResult getUserRole(String userId, String corpId) throws ApiException {
-        return deptService.getUserRole(userId,corpId);
-    }
-
     /*获取部门列表*/
     @GetMapping("/getDeptList")
     public ServiceResult getDeptList(String pDeptId, String accessToken, Integer isFetchChild) throws ApiException {

@@ -7,13 +7,12 @@ import com.dingtalk.api.request.OapiServiceGetCorpTokenRequest;
 import com.dingtalk.api.request.OapiServiceGetPermanentCodeRequest;
 import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
-import com.dingtalk.api.response.OapiServiceGetCorpTokenResponse;
-import com.dingtalk.api.response.OapiServiceGetPermanentCodeResponse;
-import com.dingtalk.api.response.OapiServiceGetSuiteTokenResponse;
-import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
+import com.dingtalk.api.response.*;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
+import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.service.AuthenService;
+import com.learning.cloud.index.service.CorpAgentService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
@@ -38,13 +37,20 @@ public class IndexController {
 	@Autowired
 	private AuthenService authenService;
 
+	@Autowired
+	private DeptService deptService;
+
+	@Autowired
+	private CorpAgentService corpAgentService;
+
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult login(@RequestParam(value = "corpId") String corpId,
-                            @RequestParam(value = "authCode") String requestAuthCode) {
+                            @RequestParam(value = "authCode") String requestAuthCode) throws ApiException {
+		Map<String,Object> resultMap = new HashMap<>();
 		Long start = System.currentTimeMillis();
 		//获取accessToken,注意正是代码要有异常流处理
 		OapiServiceGetCorpTokenResponse oapiServiceGetCorpTokenResponse = getOapiServiceGetCorpToken(corpId);
@@ -56,11 +62,22 @@ public class IndexController {
 		//3.查询得到当前用户的userId
 		// 获得到userId之后应用应该处理应用自身的登录会话管理（session）,避免后续的业务交互（前端到应用服务端）每次都要重新获取用户身份，提升用户体验
 		String userId = oapiUserGetuserinfoResponse.getUserid();
-
-		//返回结果
-		Map<String,Object> resultMap = new HashMap<>();
 		resultMap.put("userId",userId);
 		resultMap.put("corpId",corpId);
+
+		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, corpId);
+		String name = resp1.getName();
+		resultMap.put("userName",name);
+
+		//返回登录用户角色（学生，老师，家长）
+		String userRole = deptService.getUserRole(userId, accessToken);
+		resultMap.put("roleName",userRole);
+
+		//获取组织身份（学校，教育局）
+		Boolean isSchool = corpAgentService.getIsSchool(corpId);
+		resultMap.put("isSchool",isSchool);
+
+		//返回结果
 		return JsonResultUtil.success(resultMap);
 	}
 

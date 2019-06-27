@@ -210,23 +210,26 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public ServiceResult getUserRole(String userId, String corpId) throws ApiException {
+    public String getUserRole(String userId, String accessToken) throws ApiException {
         String roleName = "";
-        String accessToken = getAccessToken(corpId);
         OapiDepartmentListParentDeptsResponse resp = getListParentDeptsByUser(userId,accessToken);
         String department = resp.getDepartment();
         /*"department": "[[117451249, 117656244, 117680160, 117597295, 117425251, -7, 1]]"*/
         /*"department": "[[117451247, 117656244, 117680160, 117597295, 117425251, -7, 1],
         [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
-        String deptId = department.split(",")[0].substring(2);
-        OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
-        String deptName = resp1.getName();
-        if(deptName.equals("老师")){
-            roleName = "老师";
-        }else if (deptName.equals("家长")){
-            roleName = "家长";
+        if (department .equals("[]")){
+            roleName = "学生";
+        }else{
+            String deptId = department.split(",")[0].substring(2);
+            OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
+            String deptName = resp1.getName();
+            if(deptName.equals("老师")){
+                roleName = "老师";
+            }else if (deptName.equals("家长")){
+                roleName = "家长";
+            }
         }
-        return ServiceResult.success(roleName);
+        return roleName;
     }
 
     private String getAccessToken(String corpId) throws ApiException {
