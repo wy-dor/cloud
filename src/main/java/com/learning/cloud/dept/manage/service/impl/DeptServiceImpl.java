@@ -4,16 +4,12 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
-import com.learning.cloud.bureau.dao.BureauDao;
-import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.dept.campus.dao.CampusDao;
 import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthAppInfoDao;
-import com.learning.cloud.index.dao.AuthCorpInfoDao;
-import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.parent.dao.ParentDao;
@@ -22,7 +18,6 @@ import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
-import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,16 +30,10 @@ import java.util.List;
 public class DeptServiceImpl implements DeptService {
 
     @Autowired
-    private AuthCorpInfoDao authCorpInfoDao;
-
-    @Autowired
     private AuthAppInfoDao authAppInfoDao;
 
     @Autowired
     private SchoolDao schoolDao;
-
-    @Autowired
-    private BureauDao bureaudao;
 
     @Autowired
     private CampusDao campusDao;
@@ -61,36 +50,8 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private ParentDao parentDao;
 
-    /*初始化学校下部门信息*/
     @Override
-    public ServiceResult initDepartment() {
-        /*初始化教育局和学校表数据*/
-        List<AuthCorpInfo> corpInfos = authCorpInfoDao.getCorpInfos();
-        for (AuthCorpInfo corpInfo : corpInfos) {
-            String corpName = corpInfo.getCorpName();
-            if(corpName.endsWith("学校")){
-                School school = new School();
-                school.setSchoolName(corpName);
-                List<School> bySchool = schoolDao.getBySchool(school);
-                if(bySchool == null || bySchool.size() == 0){
-                    schoolDao.insert(school);
-                    //填充表
-                    init(school);
-                }
-            }else{
-                Bureau byBureauName = bureaudao.getByBureauName(corpName);
-                if(byBureauName == null){
-                    Bureau bureau = new Bureau();
-                    bureau.setBureauName(corpName);
-                    bureaudao.insert(bureau);
-                }
-            }
-        }
-
-        return ServiceResult.success("ok");
-    }
-
-    private void init(School school) {
+    public void init(School school) {
         Integer schoolId = school.getId();
         Integer bureauId = school.getBureauId();
         String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
@@ -136,7 +97,6 @@ public class DeptServiceImpl implements DeptService {
                                 String className = dept3.getName();
                                 Long classDeptId = dept3.getId();
                                 /*grade_class表的更新*/
-                                /**/
                                 int classId;
                                 GradeClass gradeClass = new GradeClass();
                                 gradeClass.setCampusId(campusId);
@@ -393,19 +353,4 @@ public class DeptServiceImpl implements DeptService {
         return response;
     }
 
-    /*获取所有的角色列表*/
-    public OapiRoleListResponse getRoleList(String accessToken) {
-        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/list");
-        OapiRoleListRequest request = new OapiRoleListRequest();
-        request.setOffset(0L);
-        request.setSize(10L);
-
-        OapiRoleListResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-        return response;
-    }
 }

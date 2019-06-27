@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface CorpAgentDao {
+    CorpAgent getByCorpId(String corpId);
+
     int insert(CorpAgent record);
 
+    int update(CorpAgent corpAgent);
 }

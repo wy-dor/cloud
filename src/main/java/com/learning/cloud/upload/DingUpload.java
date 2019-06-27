@@ -12,15 +12,15 @@ import com.learning.cloud.index.service.AuthenService;
 import com.taobao.api.FileItem;
 import com.taobao.api.internal.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: yyt
  * @Date: 2019-06-25 20:58
  * @Desc:
  */
-@Component
+@RestController
 public class DingUpload {
 
     @Autowired
@@ -42,11 +42,11 @@ public class DingUpload {
 
     //授权用户访问企业自定义空间
     @GetMapping("getComSpaceAccess")
-    public String getComSpaceAccess(String corpId, String userId)throws Exception{
+    public String getComSpaceAccess(String corpId, String agentId, String userId)throws Exception{
         String accessToken = authenService.getAccessToken(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/cspace/grant_custom_space");
         OapiCspaceGrantCustomSpaceRequest request = new OapiCspaceGrantCustomSpaceRequest();
-        request.setAgentId("135717601");
+        request.setAgentId(agentId);
         request.setDomain("test");
         request.setType("add");
         request.setUserid(userId);

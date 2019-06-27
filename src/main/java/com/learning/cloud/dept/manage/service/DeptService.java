@@ -1,12 +1,10 @@
 package com.learning.cloud.dept.manage.service;
 
 import com.dingtalk.api.response.*;
-import com.learning.cloud.util.ServiceResult;
-import com.taobao.api.ApiException;
+import com.learning.cloud.school.entity.School;
 
 public interface DeptService {
-
-    ServiceResult initDepartment();
+    void init(School school);
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken);
 
@@ -26,5 +24,4 @@ public interface DeptService {
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken);
 
-    OapiRoleListResponse getRoleList(String accessToken);
 }

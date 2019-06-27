@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class SchoolServiceImpl implements SchoolService {
@@ -16,12 +18,13 @@ public class SchoolServiceImpl implements SchoolService {
     private SchoolDao schoolDao;
 
     @Override
-    public ServiceResult setBureauId(School school) {
-        School s = schoolDao.getBySchool(school).get(0);
-        if(s == null){
-            return ServiceResult.success("不存在该学校");
-        }
+    public Integer setBureauId(School school) {
         int i = schoolDao.update(school);
-        return ServiceResult.success("设置成功");
+        return i;
+    }
+
+    @Override
+    public List<School> getBySchool(School school) {
+        return schoolDao.getBySchool(school);
     }
 }

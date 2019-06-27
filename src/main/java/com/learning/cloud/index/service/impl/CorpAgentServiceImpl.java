@@ -1,0 +1,25 @@
+package com.learning.cloud.index.service.impl;
+
+import com.learning.cloud.index.dao.CorpAgentDao;
+import com.learning.cloud.index.entity.CorpAgent;
+import com.learning.cloud.index.service.CorpAgentService;
+import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+public class CorpAgentServiceImpl implements CorpAgentService {
+
+    @Autowired
+    private CorpAgentDao corpAgentDao;
+
+    @Override
+    public JsonResult getAgentId(String corpId) {
+        CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+        String agentId = byCorpId.getAgentId();
+        return JsonResultUtil.success(agentId);
+    }
+}
