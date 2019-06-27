@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.index.dao.AuthAppInfoDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.index.entity.AuthAppInfo">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="corpId" jdbcType="VARCHAR" property="corpId" />
-    <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
-    <result column="permanent_code" jdbcType="VARCHAR" property="permanentCode" />
-    <result column="temp_auth_code" jdbcType="VARCHAR" property="tempAuthCode" />
-    <result column="suite_access_token" jdbcType="VARCHAR" property="suiteAccessToken" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-  </resultMap>
-
-
+  
   <select id="findByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.index.entity.AuthAppInfo">
     select *
     from auth_app_info
@@ -50,6 +40,9 @@
       </if>
       <if test="createdTime != null">
         created_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -103,6 +96,9 @@
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}
