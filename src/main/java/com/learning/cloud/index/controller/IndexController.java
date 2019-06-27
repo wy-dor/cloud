@@ -68,6 +68,7 @@ public class IndexController {
 		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, corpId);
 		String name = resp1.getName();
 		resultMap.put("userName",name);
+		resultMap.put("isAdmin",resp1.getIsAdmin());
 
 		//返回登录用户角色（学生，老师，家长）
 		String userRole = deptService.getUserRole(userId, accessToken);
