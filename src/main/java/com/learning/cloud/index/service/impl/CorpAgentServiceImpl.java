@@ -1,6 +1,8 @@
 package com.learning.cloud.index.service.impl;
 
+import com.learning.cloud.index.dao.AuthCorpInfoDao;
 import com.learning.cloud.index.dao.CorpAgentDao;
+import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.index.entity.CorpAgent;
 import com.learning.cloud.index.service.CorpAgentService;
 import com.learning.domain.JsonResult;
@@ -16,10 +18,22 @@ public class CorpAgentServiceImpl implements CorpAgentService {
     @Autowired
     private CorpAgentDao corpAgentDao;
 
+    @Autowired
+    private AuthCorpInfoDao authCorpInfoDao;
+
     @Override
     public JsonResult getAgentId(String corpId) {
         CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
         String agentId = byCorpId.getAgentId();
         return JsonResultUtil.success(agentId);
+    }
+
+    public JsonResult getIsSchool(String corpId){
+        AuthCorpInfo info = authCorpInfoDao.getCorpInfoByCorpId(corpId);
+        Boolean flag = false;
+        if(info.getIndustry().equals("初中等教育")){
+            flag = true;
+        }
+        return JsonResultUtil.success(flag);
     }
 }

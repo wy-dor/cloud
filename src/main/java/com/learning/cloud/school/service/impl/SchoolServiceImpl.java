@@ -3,7 +3,6 @@ package com.learning.cloud.school.service.impl;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
-import com.learning.cloud.util.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

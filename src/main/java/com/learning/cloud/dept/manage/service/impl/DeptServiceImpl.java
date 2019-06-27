@@ -4,12 +4,15 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.config.ApiUrlConstant;
+import com.learning.cloud.config.Constant;
 import com.learning.cloud.dept.campus.dao.CampusDao;
 import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthAppInfoDao;
+import com.learning.cloud.index.entity.AuthAppInfo;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.parent.dao.ParentDao;
@@ -18,11 +21,13 @@ import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -51,13 +56,13 @@ public class DeptServiceImpl implements DeptService {
     private ParentDao parentDao;
 
     @Override
-    public void init(School school) {
+    public void init(School school) throws ApiException {
         Integer schoolId = school.getId();
         Integer bureauId = school.getBureauId();
         String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
-        String corpAccessToken = authAppInfoDao.getCorpAccessToken(corpId);
+        String accessToken = getAccessToken(corpId);
         try {
-            OapiDepartmentListResponse resp = getDeptList("1", corpAccessToken , 1);
+            OapiDepartmentListResponse resp = getDeptList("1", accessToken , 1);
             List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
             int i = 0;
             /*校区表初始化*/
@@ -79,19 +84,19 @@ public class DeptServiceImpl implements DeptService {
                     /*班级表填充*/
                     Long campusDeptId = dept.getId();
                     /*得到session_name字段*/
-                    OapiDepartmentListResponse resp1 = getDeptList(campusDeptId.toString(), corpAccessToken, 0);
+                    OapiDepartmentListResponse resp1 = getDeptList(campusDeptId.toString(), accessToken, 0);
                     List<OapiDepartmentListResponse.Department> sessionDeptList = resp1.getDepartment();
                     for (OapiDepartmentListResponse.Department dept1 : sessionDeptList) {
                         String sessionName = dept1.getName();
                         Long sessionDeptId = dept1.getId();
                         /*grade_name字段*/
-                        OapiDepartmentListResponse resp2 = getDeptList(sessionDeptId.toString(), corpAccessToken, 0);
+                        OapiDepartmentListResponse resp2 = getDeptList(sessionDeptId.toString(), accessToken, 0);
                         List<OapiDepartmentListResponse.Department> gradeDeptList = resp2.getDepartment();
                         for (OapiDepartmentListResponse.Department dept2 : gradeDeptList) {
                             String gradeName = dept2.getName();
                             Long gradeDeptId = dept2.getId();
                             /*class_name字段*/
-                            OapiDepartmentListResponse resp3 = getDeptList(gradeDeptId.toString(), corpAccessToken, 0);
+                            OapiDepartmentListResponse resp3 = getDeptList(gradeDeptId.toString(), accessToken, 0);
                             List<OapiDepartmentListResponse.Department> classDeptList = resp3.getDepartment();
                             for (OapiDepartmentListResponse.Department dept3 : classDeptList) {
                                 String className = dept3.getName();
@@ -103,21 +108,25 @@ public class DeptServiceImpl implements DeptService {
                                 gradeClass.setSessionName(sessionName);
                                 gradeClass.setGradeName(gradeName);
                                 gradeClass.setClassName(className);
+                                gradeClass.setSchoolId(schoolId);
+                                gradeClass.setBureauId(bureauId);
                                 GradeClass gc = gradeClassDao.getByGradeClass(gradeClass);
                                 if(gc == null){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
                                 }else{
                                     classId = gc.getId();
+                                    gradeClass.setId(classId);
+                                    gradeClassDao.update(gradeClass);
                                 }
                                 /*获取老师，学生，家长部门id*/
-                                OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), corpAccessToken, 0);
+                                OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
                                 List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();
                                 for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
                                     String userRole = dept4.getName();
                                     Long id = dept4.getId();
                                     /*用户表更新*/
-                                    OapiUserSimplelistResponse resp5 = getDeptUserList(id.toString(), corpAccessToken);
+                                    OapiUserSimplelistResponse resp5 = getDeptUserList(id.toString(), accessToken);
                                     List<OapiUserSimplelistResponse.Userlist> userlist = resp5.getUserlist();
                                     /*用户表填充*/
                                     if(userRole.equals("老师")){
@@ -197,27 +206,62 @@ public class DeptServiceImpl implements DeptService {
             e.printStackTrace();
         }
         school.setState((short)1);
+        schoolDao.update(school);
+    }
+
+    @Override
+    public ServiceResult getUserRole(String userId, String corpId) throws ApiException {
+        String roleName = "";
+        String accessToken = getAccessToken(corpId);
+        OapiDepartmentListParentDeptsResponse resp = getListParentDeptsByUser(userId,accessToken);
+        String department = resp.getDepartment();
+        /*"department": "[[117451249, 117656244, 117680160, 117597295, 117425251, -7, 1]]"*/
+        /*"department": "[[117451247, 117656244, 117680160, 117597295, 117425251, -7, 1],
+        [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
+        String deptId = department.split(",")[0].substring(2);
+        OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
+        String deptName = resp1.getName();
+        if(deptName.equals("老师")){
+            roleName = "老师";
+        }else if (deptName.equals("家长")){
+            roleName = "家长";
+        }
+        return ServiceResult.success(roleName);
+    }
+
+    private String getAccessToken(String corpId) throws ApiException {
+        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
+        String accessToken = byCorpId.getCorpAccessToken();
+        Date updateTime = byCorpId.getUpdateTime();
+        Date now = new Date();
+        /*accessToken两小时过期*/
+        long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
+        if(minutes >= 120){
+            DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
+            OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
+            req.setAuthCorpid(corpId);
+            OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
+            accessToken = execute.getAccessToken();
+            byCorpId.setCorpAccessToken(accessToken);
+            authAppInfoDao.update(byCorpId);
+        }
+        return accessToken;
     }
 
     /*获取子部门的id列表*/
     @Override
-    public OapiDepartmentListIdsResponse getDeptListIds(String pDeptId,String accessToken) {
+    public OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_ids");
         OapiDepartmentListIdsRequest request = new OapiDepartmentListIdsRequest();
         request.setId(pDeptId);
         request.setHttpMethod("GET");
-        OapiDepartmentListIdsResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiDepartmentListIdsResponse response = client.execute(request, accessToken);
         return response;
     }
 
     /*获取部门列表*/
     @Override
-    public OapiDepartmentListResponse getDeptList(String pDeptId,String accessToken,Integer isFetchChild ) {
+    public OapiDepartmentListResponse getDeptList(String pDeptId, String accessToken, Integer isFetchChild) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list");
         OapiDepartmentListRequest request = new OapiDepartmentListRequest();
         request.setId(pDeptId);
@@ -238,73 +282,54 @@ public class DeptServiceImpl implements DeptService {
 
     /*获取部门详情*/
     @Override
-    public OapiDepartmentGetResponse getDeptDetail(String deptId,String accessToken) {
+    public OapiDepartmentGetResponse getDeptDetail(String deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/get");
         OapiDepartmentGetRequest request = new OapiDepartmentGetRequest();
         request.setId(deptId);
         request.setHttpMethod("GET");
-        OapiDepartmentGetResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiDepartmentGetResponse response = client.execute(request, accessToken);
         return response;
     }
 
     /*获取部门用户userid列表*/
     @Override
-    public OapiUserGetDeptMemberResponse getDeptMember(String deptId,String accessToken) {
+    public OapiUserGetDeptMemberResponse getDeptMember(String deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getDeptMember");
         OapiUserGetDeptMemberRequest req = new OapiUserGetDeptMemberRequest();
         req.setDeptId(deptId);
         req.setHttpMethod("GET");
-        OapiUserGetDeptMemberResponse rsp = null;
-        try {
-            rsp = client.execute(req, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiUserGetDeptMemberResponse rsp = client.execute(req, accessToken);
         return rsp;
     }
 
     /*获取部门用户*/
     @Override
-    public OapiUserSimplelistResponse getDeptUserList(String deptId,String accessToken) {
+    public OapiUserSimplelistResponse getDeptUserList(String deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/simplelist");
         OapiUserSimplelistRequest request = new OapiUserSimplelistRequest();
         request.setDepartmentId(Long.parseLong(deptId));
         request.setOffset(0L);
         request.setSize(10L);
         request.setHttpMethod("GET");
-        OapiUserSimplelistResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiUserSimplelistResponse response = client.execute(request, accessToken);
         return response;
     }
 
     /*获取用户详情*/
     @Override
-    public OapiUserGetResponse getUserDetail(String userId,String accessToken) {
+    public OapiUserGetResponse getUserDetail(String userId, String corpId) throws ApiException {
+        String accessToken = getAccessToken(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userId);
         request.setHttpMethod("GET");
-        OapiUserGetResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiUserGetResponse response = client.execute(request, accessToken);
         return response;
     }
 
     /*获取部门用户详情*/
     @Override
-    public OapiUserListbypageResponse getDeptUserListByPage(long deptId,String accessToken) {
+    public OapiUserListbypageResponse getDeptUserListByPage(long deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/listbypage");
         OapiUserListbypageRequest request = new OapiUserListbypageRequest();
         request.setDepartmentId(deptId);
@@ -312,44 +337,29 @@ public class DeptServiceImpl implements DeptService {
         request.setSize(10L);
         request.setOrder("entry_desc");
         request.setHttpMethod("GET");
-        OapiUserListbypageResponse execute = null;
-        try {
-            execute = client.execute(request,accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiUserListbypageResponse execute = client.execute(request,accessToken);
         return execute;
     }
 
     /*查询部门的所有上级父部门路径*/
     @Override
-    public OapiDepartmentListParentDeptsByDeptResponse getListParentDeptsByDept(String deptId, String accessToken) {
+    public OapiDepartmentListParentDeptsByDeptResponse getListParentDeptsByDept(String deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_parent_depts_by_dept");
         OapiDepartmentListParentDeptsByDeptRequest request = new OapiDepartmentListParentDeptsByDeptRequest();
         request.setId(deptId);
         request.setHttpMethod("GET");
-        OapiDepartmentListParentDeptsByDeptResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiDepartmentListParentDeptsByDeptResponse response = client.execute(request, accessToken);
         return response;
     }
 
     /*查询指定用户的所有上级父部门路径*/
     @Override
-    public OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) {
+    public OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_parent_depts");
         OapiDepartmentListParentDeptsRequest request = new OapiDepartmentListParentDeptsRequest();
         request.setUserId(userId);
         request.setHttpMethod("GET");
-        OapiDepartmentListParentDeptsResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiDepartmentListParentDeptsResponse response = client.execute(request, accessToken);
         return response;
     }
 

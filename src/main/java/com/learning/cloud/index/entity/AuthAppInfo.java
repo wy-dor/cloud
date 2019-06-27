@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -18,6 +20,10 @@ public class AuthAppInfo extends BaseEntity {
     private String suiteAccessToken;
 
     private Date createdTime;
+
+    @Getter
+    @Setter
+    private Date updateTime;
 
     private String corpAccessToken;
 

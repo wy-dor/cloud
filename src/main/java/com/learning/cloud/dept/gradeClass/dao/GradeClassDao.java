@@ -18,4 +18,6 @@ public interface GradeClassDao {
     GradeClass getById(Integer id);
 
     List<GradeClass> getClassesByCampusId(Campus campus);
+
+    int update(GradeClass gradeClass);
 }

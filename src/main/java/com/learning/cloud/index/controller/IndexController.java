@@ -3,8 +3,14 @@ package com.learning.cloud.index.controller;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.DingTalkSignatureUtil;
-import com.dingtalk.api.request.*;
-import com.dingtalk.api.response.*;
+import com.dingtalk.api.request.OapiServiceGetCorpTokenRequest;
+import com.dingtalk.api.request.OapiServiceGetPermanentCodeRequest;
+import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
+import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
+import com.dingtalk.api.response.OapiServiceGetCorpTokenResponse;
+import com.dingtalk.api.response.OapiServiceGetPermanentCodeResponse;
+import com.dingtalk.api.response.OapiServiceGetSuiteTokenResponse;
+import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
 import com.learning.cloud.index.service.AuthenService;
@@ -33,23 +39,12 @@ public class IndexController {
 	private AuthenService authenService;
 
 	/**
-	 * 欢迎页面
-	 */
-	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
-	public String welcome() {
-		return "welcome";
-	}
-
-
-	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
-	 * @param corpId			授权企业的CorpId
-	 * @param authCode	免登临时code
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult login(@RequestParam(value = "corpId") String corpId,
-							@RequestParam(value = "authCode") String requestAuthCode) {
+                            @RequestParam(value = "authCode") String requestAuthCode) {
 		Long start = System.currentTimeMillis();
 		//获取accessToken,注意正是代码要有异常流处理
 		OapiServiceGetCorpTokenResponse oapiServiceGetCorpTokenResponse = getOapiServiceGetCorpToken(corpId);
@@ -89,7 +84,7 @@ public class IndexController {
 	 * 获取企业凭证接口
 	 */
 	@GetMapping("/getAccessToken")
-	public ServiceResult getAccessToken(String corpId) throws ApiException{
+	public ServiceResult getAccessToken(String corpId) throws ApiException {
 		String accessToken = authenService.getAccessToken(corpId);
 		return ServiceResult.success(accessToken);
 	}
@@ -98,7 +93,7 @@ public class IndexController {
 	 * 更新所有企业的accessToken
 	 */
 	@GetMapping("/updateAllAccessToken")
-	public ServiceResult updateAllAccessToken() throws ApiException{
+	public ServiceResult updateAllAccessToken() throws ApiException {
 		return authenService.updateAllAccessToken();
 	}
 
@@ -106,7 +101,7 @@ public class IndexController {
 	 * 获取企业永久授权码
 	 */
 	@GetMapping("/getPermanentAuthCode")
-	public ServiceResult getPermanentAuthCode(String authCode,String accessToken) throws ApiException {
+	public ServiceResult getPermanentAuthCode(String authCode, String accessToken) throws ApiException {
 		/*获取永久授权码并库存*/
 		DingTalkClient client1 = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_PERMANENT_CODE);
 		OapiServiceGetPermanentCodeRequest req1 = new OapiServiceGetPermanentCodeRequest();

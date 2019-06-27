@@ -49,6 +49,12 @@
       <if test="campusId != null">
         campus_id,
       </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
       <if test="headTeacherId != null">
         head_teacher_id,
       </if>
@@ -69,6 +75,12 @@
       <if test="campusId != null">
         #{campusId,jdbcType=INTEGER},
       </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=INTEGER},
+      </if>
       <if test="headTeacherId != null">
         #{headTeacherId,jdbcType=INTEGER},
       </if>
@@ -77,4 +89,34 @@
       </if>
     </trim>
   </insert>
+  <update id="update" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
+    update edu_grade_class
+    <set>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeName != null">
+        grade_name = #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionName != null">
+        session_name = #{sessionName,jdbcType=VARCHAR},
+      </if>
+      <if test="campusId != null">
+        campus_id = #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="headTeacherId != null">
+        head_teacher_id = #{headTeacherId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherIds != null">
+        teacher_ids = #{teacherIds,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>
