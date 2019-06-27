@@ -155,11 +155,12 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     @Override
     public JsonResult getTeacherRank(Long bureauId, Long schoolId) throws Exception{
         List<ScoreRecord> scoreRecords = scoreboardDao.getTeacherRank(bureauId, schoolId);
-        return null;
+        return JsonResultUtil.success(scoreRecords);
     }
 
     @Override
-    public JsonResult getParentRank(Long parentId) throws Exception {
+    public JsonResult getClassRank(Long schoolId) throws Exception {
+        List<ClassScoreboard> classScoreboards = scoreboardDao.getClassRank(schoolId);
         return null;
     }
 }

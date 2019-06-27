@@ -24,4 +24,6 @@ public interface ScoreboardDao {
     List<SchoolScoreboard> getSchoolRank(Long bureauId);
 
     List<ScoreRecord> getTeacherRank(@Param("bureauId") Long bureauId, @Param("schoolId") Long schoolId);
+
+    List<ClassScoreboard> getClassRank(Long schoolId);
 }

@@ -108,4 +108,8 @@
       and ut.school_id = #{school}
     </if>
   </select>
+
+  <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
+
+  </select>
 </mapper>

@@ -36,7 +36,7 @@ public class LoginController {
         if(response.isSuccess()){
             String accessToken = response.getAccessToken();
             JsonResult jsonResult = getAdministrator(code, accessToken);
-            return JsonResultUtil.success();
+            return JsonResultUtil.success(jsonResult);
         }else {
             return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_ERROR);
         }
