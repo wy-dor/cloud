@@ -29,8 +29,8 @@ public class CourseWareController {
     private CourseWareService courseWareService;
 
     @PostMapping("addCourseWare")
-    public JsonResult addCourseWare(CourseWare courseWare,@RequestParam("file") MultipartFile file)throws Exception{
-        return courseWareService.addCourseWare(courseWare, file);
+    public JsonResult addCourseWare(CourseWare courseWare)throws Exception{
+        return courseWareService.addCourseWare(courseWare);
     }
 
     @GetMapping("getCourseWare")

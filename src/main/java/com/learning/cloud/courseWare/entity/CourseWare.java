@@ -13,7 +13,7 @@ public class CourseWare {
 
     private String fileName;
 
-    private String filePath;
+    private String dingFile;
 
     private Date uploadTime;
 

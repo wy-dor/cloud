@@ -24,15 +24,17 @@ public class CourseWareServiceImpl implements CourseWareService {
 
     //新增课件
     @Override
-    public JsonResult addCourseWare(CourseWare courseWare, MultipartFile file) throws Exception {
+    public JsonResult addCourseWare(CourseWare courseWare) throws Exception {
         //获取文件，将文件保存在服务器路径下
-        if(file!=null&&!file.isEmpty()){
-            String filePath = SaveFile(file, courseWare.getTeacherId());
-            courseWare.setFilePath(filePath);
-            int i = courseWareDao.addCourseWare(courseWare);
-            return JsonResultUtil.success(courseWare.getId());
-        }
-        return JsonResultUtil.error(JsonResultEnum.FILE_UPLOAD_ERROR);
+//        if(file!=null&&!file.isEmpty()){
+//            String filePath = SaveFile(file, courseWare.getTeacherId());
+//            courseWare.setFilePath(filePath);
+//            int i = courseWareDao.addCourseWare(courseWare);
+//            return JsonResultUtil.success(courseWare.getId());
+//        }
+        //使用钉盘，不在服务器保存文件
+        int i = courseWareDao.addCourseWare(courseWare);
+        return JsonResultUtil.success(courseWare.getId());
     }
 
     private String SaveFile(MultipartFile file, Long teacherId) {

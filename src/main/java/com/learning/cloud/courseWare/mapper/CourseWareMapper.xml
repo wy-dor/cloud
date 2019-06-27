@@ -11,11 +11,8 @@
       <if test="cwName != null">
         cw_name,
       </if>
-      <if test="fileName != null">
-        file_name,
-      </if>
-      <if test="filePath != null">
-        file_path,
+      <if test="dingFile != null">
+        ding_file,
       </if>
       <if test="uploadTime != null">
         upload_time,
@@ -40,11 +37,8 @@
       <if test="cwName != null">
         #{cwName,jdbcType=VARCHAR},
       </if>
-      <if test="fileName != null">
-        #{fileName,jdbcType=VARCHAR},
-      </if>
-      <if test="filePath != null">
-        #{filePath,jdbcType=VARCHAR},
+      <if test="dingFile != null">
+        #{dingFile,jdbcType=VARCHAR},
       </if>
       <if test="uploadTime != null">
         #{uploadTime,jdbcType=TIMESTAMP},
