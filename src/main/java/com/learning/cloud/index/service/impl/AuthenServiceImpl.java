@@ -102,7 +102,8 @@ public class AuthenServiceImpl implements AuthenService {
     }
 
     /*获取套件令牌Token（获取第三方应用凭证）*/
-    private String getSuiteAccessToken() throws ApiException {
+    @Override
+    public String getSuiteAccessToken() throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_SUITE_TOKEN);
         OapiServiceGetSuiteTokenRequest request = new OapiServiceGetSuiteTokenRequest();
         request.setSuiteKey(Constant.SUITE_KEY);

@@ -41,4 +41,11 @@ public class GradeClassController {
         return gradeClassService.getByGradeClass(gradeClass);
     }
 
+    /*根据班级id获取班级信息，参数id*/
+    @GetMapping("/getGradeClassById")
+    public JsonResult getGradeClassById(Integer id){
+        return gradeClassService.getGradeClassById(id);
+    }
+
+
 }

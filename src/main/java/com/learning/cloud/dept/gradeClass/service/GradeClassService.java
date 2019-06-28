@@ -16,4 +16,6 @@ public interface GradeClassService {
     JsonResult getClassDetails(Integer classId);
 
     JsonResult getByGradeClass(GradeClass gradeClass);
+
+    JsonResult getGradeClassById(Integer id);
 }

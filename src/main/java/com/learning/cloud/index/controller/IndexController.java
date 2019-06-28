@@ -42,9 +42,6 @@ public class IndexController {
 	private DeptService deptService;
 
 	@Autowired
-	private CorpAgentService corpAgentService;
-
-	@Autowired
 	private BureauService bureauService;
 
 	/**
@@ -137,17 +134,10 @@ public class IndexController {
 	/**
 	 * 获取第三方应用凭证
 	 */
-	@GetMapping("/getSuiteAcessToken")
-	public JsonResult getSuiteAcessToken() throws ApiException {
+	@GetMapping("/getSuiteAccessToken")
+	public JsonResult getSuiteAccessToken() throws ApiException {
 		/*获取套件令牌Token*/
-		DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_SUITE_TOKEN);
-		OapiServiceGetSuiteTokenRequest request = new OapiServiceGetSuiteTokenRequest();
-		request.setSuiteKey(Constant.SUITE_KEY);
-		request.setSuiteSecret(Constant.SUITE_SECRET);
-		/*钉钉推送的suiteTicket。测试应用可以随意填写。*/
-		request.setSuiteTicket(Constant.SUITE_TICKET);
-		OapiServiceGetSuiteTokenResponse response = client.execute(request);
-		String suiteAccessToken = response.getSuiteAccessToken();
+		String suiteAccessToken = authenService.getSuiteAccessToken();
 		return JsonResultUtil.success(suiteAccessToken);
 	}
 
