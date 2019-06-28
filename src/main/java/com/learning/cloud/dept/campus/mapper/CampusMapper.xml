@@ -40,6 +40,9 @@
       <if test="campusType != null">
         campus_type,
       </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
       <if test="state != null">
         state,
       </if>
@@ -54,9 +57,30 @@
       <if test="campusType != null">
         #{campusType,jdbcType=INTEGER},
       </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
+      </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
+
+  <update id="update" parameterType="com.learning.cloud.dept.campus.entity.Campus">
+    update edu_campus
+    <set>
+      <if test="campusName != null">
+        campus_name = #{campusName,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+  </update>
 </mapper>

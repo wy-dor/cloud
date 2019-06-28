@@ -3,6 +3,7 @@ package com.learning.cloud.bureau.controller;
 import com.learning.cloud.bureau.service.BureauService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,6 @@ public class BureauController {
     /*返回组织的bureauId*/
     @GetMapping("/getBureauIdByCorpId")
     public JsonResult getBureauIdByCorpId(String corpId){
-        return bureauService.getBureauIdByCorpId(corpId);
+        return JsonResultUtil.success(bureauService.getOrgInfoByCorpId(corpId));
     }
 }

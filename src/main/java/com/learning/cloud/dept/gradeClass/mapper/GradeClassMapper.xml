@@ -79,7 +79,7 @@
       </if>
       <if test="bureauId != null">
       bureau_id,
-    </if>
+      </if>
       <if test="deptId != null">
         dept_id,
       </if>

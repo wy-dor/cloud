@@ -40,6 +40,7 @@ public class DeptController {
         return ServiceResult.success("设置成功");
     }
 
+    /*班级结构数据同步*/
     @GetMapping("/updateUserInClass")
     public ServiceResult updateUserInClass(int classId) throws ApiException{
         deptService.saveUserInClass(classId);

@@ -8,6 +8,7 @@ import com.dingtalk.api.request.OapiServiceGetPermanentCodeRequest;
 import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.bureau.service.BureauService;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
 import com.learning.cloud.dept.manage.service.DeptService;
@@ -43,6 +44,9 @@ public class IndexController {
 	@Autowired
 	private CorpAgentService corpAgentService;
 
+	@Autowired
+	private BureauService bureauService;
+
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
 	 */
@@ -74,9 +78,9 @@ public class IndexController {
 		Map map = deptService.getUserRole(userId, accessToken);
 		resultMap.putAll(map);
 
-		//获取组织身份（学校，教育局）
-		Boolean isSchool = corpAgentService.getIsSchool(corpId);
-		resultMap.put("isSchool",isSchool);
+		//获取组织信息bureauId,isSchool,schoolName
+		Map<String, Object> orgInfoMap = bureauService.getOrgInfoByCorpId(corpId);
+		resultMap.putAll(orgInfoMap);
 
 		//返回结果
 		return JsonResultUtil.success(resultMap);
