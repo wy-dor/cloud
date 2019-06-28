@@ -126,7 +126,7 @@
     and to_day>#{day}
   </select>
 
-  <update id="confirmExchange" parameterType="java.lang.Long">
+  <update id="confirmExchange">
     update course_exchange set status = #{status}
     where id = #{id}
   </update>

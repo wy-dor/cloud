@@ -120,8 +120,8 @@ public class MultiThreadScheduleTask {
             ClassScoreboard classScoreboard = new ClassScoreboard();
             classScoreboard.setClassId(gd.getId().longValue());
             classScoreboard.setScore(new Double(score).intValue());
-            //classScoreboard.setSchoolId(gd.get.longValue());
-            //classScoreboard.setBureauId(gd.getId().longValue());
+            classScoreboard.setSchoolId(gd.getSchoolId().longValue());
+            classScoreboard.setBureauId(gd.getBureauId().longValue());
             int i = scoreboardDao.addClassScoreboard(classScoreboard);
         }
     }

@@ -87,7 +87,7 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     }
 
     @Override
-    public JsonResult confirmExchange(Long id, int status) throws Exception {
+    public JsonResult confirmExchange(Long id, Integer status) throws Exception {
         int i = courseExchangeDao.confirmExchange(id, status);
         if(i>0){
             return JsonResultUtil.success();

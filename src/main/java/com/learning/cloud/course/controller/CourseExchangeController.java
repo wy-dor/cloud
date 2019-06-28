@@ -39,7 +39,7 @@ public class CourseExchangeController {
 
     @PostMapping("confirmExchange")
     public JsonResult confirmExchange(@RequestParam(value="id",required = true) Long id,
-                                      @RequestParam(value="status",required = true) int status)throws Exception{
+                                      @RequestParam(value="status",required = true) Integer status)throws Exception{
         return courseExchangeService.confirmExchange(id, status);
     }
 
