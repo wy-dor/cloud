@@ -1,6 +1,8 @@
 package com.learning.cloud.school.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class School extends BaseEntity {
     private Integer id;
@@ -10,6 +12,10 @@ public class School extends BaseEntity {
     private Integer bureauId;
 
     private Short state;
+
+    @Getter
+    @Setter
+    private String corpId;
 
     public Integer getId() {
         return id;

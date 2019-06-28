@@ -1,6 +1,7 @@
 package com.learning.cloud.dept.gradeClass.controller;
 
 import com.learning.cloud.dept.campus.entity.Campus;
+import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.util.ServiceResult;
@@ -32,6 +33,12 @@ public class GradeClassController {
     @GetMapping("/getClassDetails")
     public JsonResult getClassDetails(Integer classId){
         return gradeClassService.getClassDetails(classId);
+    }
+
+    /*学校下递进条件查询班级，依次添加查询条件*/
+    @GetMapping("/getByGradeClass")
+    public JsonResult getByGradeClass(GradeClass gradeClass){
+        return gradeClassService.getByGradeClass(gradeClass);
     }
 
 }

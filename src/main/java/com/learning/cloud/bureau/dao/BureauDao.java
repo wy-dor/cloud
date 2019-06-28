@@ -14,4 +14,6 @@ public interface BureauDao {
     int insert(Bureau record);
 
     Bureau getByBureauName(String bureauName);
+
+    Bureau getByCorpId(String corpId);
 }

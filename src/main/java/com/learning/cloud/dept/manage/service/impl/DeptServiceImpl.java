@@ -28,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -108,9 +110,10 @@ public class DeptServiceImpl implements DeptService {
                                 gradeClass.setSessionName(sessionName);
                                 gradeClass.setGradeName(gradeName);
                                 gradeClass.setClassName(className);
+                                GradeClass gc = gradeClassDao.getByGradeClass(gradeClass).get(0);
                                 gradeClass.setSchoolId(schoolId);
                                 gradeClass.setBureauId(bureauId);
-                                GradeClass gc = gradeClassDao.getByGradeClass(gradeClass);
+                                gradeClass.setDeptId(classDeptId);
                                 if(gc == null){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
@@ -119,80 +122,8 @@ public class DeptServiceImpl implements DeptService {
                                     gradeClass.setId(classId);
                                     gradeClassDao.update(gradeClass);
                                 }
-                                /*获取老师，学生，家长部门id*/
-                                OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
-                                List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();
-                                for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
-                                    String userRole = dept4.getName();
-                                    Long id = dept4.getId();
-                                    /*用户表更新*/
-                                    OapiUserSimplelistResponse resp5 = getDeptUserList(id.toString(), accessToken);
-                                    List<OapiUserSimplelistResponse.Userlist> userlist = resp5.getUserlist();
-                                    /*用户表填充*/
-                                    if(userRole.equals("老师")){
-                                        for (OapiUserSimplelistResponse.Userlist user : userlist) {
-                                            String userName = user.getName();
-                                            String userid = user.getUserid();
-                                            String classIdStr = classId + "";
-                                            Teacher teacher = new Teacher();
-                                            teacher.setTeacherName(userName);
-                                            teacher.setUserId(userid);
-                                            teacher.setCampusId(campusId);
-                                            teacher.setSchoolId(schoolId);
-                                            teacher.setBureauId(bureauId);
-                                            Teacher t = teacherDao.getByUserId(userid);
-                                            if(t == null){
-                                                teacher.setClassIds(classIdStr);
-                                                teacherDao.insert(teacher);
-                                            }else{
-                                                String classIds = t.getClassIds();
-                                                String idsStr = "," + t.getClassIds() + ",";
-                                                if(!idsStr.contains("," + classIdStr + ",")){
-                                                    StringBuilder sb = new StringBuilder(classIds);
-                                                    sb.append("," + classIdStr);
-                                                    t.setClassIds(sb.toString());
-                                                    teacherDao.update(t);
-                                                }
-                                            }
-                                        }
-                                    }else if(userRole.equals("家长")){
-                                        for (OapiUserSimplelistResponse.Userlist user : userlist) {
-                                            String userName = user.getName();
-                                            String userid = user.getUserid();
-                                            Parent parent = new Parent();
-                                            parent.setUserId(userid);
-                                            parent.setParentName(userName);
-                                            parent.setClassId(classId);
-                                            parent.setCampusId(campusId);
-                                            parent.setSchoolId(schoolId);
-                                            parent.setBureauId(bureauId);
-                                            Parent p = parentDao.getByUserId(userid);
-                                            if(p == null){
-                                                parentDao.insert(parent);
-                                            }else{
-                                                parentDao.update(parent);
-                                            }
-                                        }
-                                    }else if(userRole.equals("学生")){
-                                        for (OapiUserSimplelistResponse.Userlist user : userlist) {
-                                            String userName = user.getName();
-                                            String userid = user.getUserid();
-                                            Student student = new Student();
-                                            student.setUserId(userid);
-                                            student.setStudentName(userName);
-                                            student.setClassId(classId);
-                                            student.setCampusId(campusId);
-                                            student.setSchoolId(schoolId);
-                                            student.setBureauId(bureauId);
-                                            Student s = studentDao.getByUserId(userid);
-                                            if(s == null){
-                                                studentDao.insert(student);
-                                            }else{
-                                                studentDao.update(student);
-                                            }
-                                        }
-                                    }
-                                }
+                                /*班级结构数据同步*/
+                                saveUserInClass(classId);
                             }
                         }
                     }
@@ -210,7 +141,95 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public String getUserRole(String userId, String accessToken) throws ApiException {
+    public void saveUserInClass(int classId) throws ApiException {
+        GradeClass byId = gradeClassDao.getById(classId);
+        Integer schoolId = byId.getSchoolId();
+        Integer bureauId = byId.getBureauId();
+        School school = new School();
+        school.setId(schoolId);
+        String corpId = schoolDao.getBySchool(school).get(0).getCorpId();
+        String accessToken = getAccessToken(corpId);
+        int campusId = byId.getCampusId();
+        Long classDeptId = byId.getDeptId();
+        /*获取老师，学生，家长部门id*/
+        OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
+        List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();
+        for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
+            String userRole = dept4.getName();
+            Long userDeptId = dept4.getId();
+            /*用户表更新*/
+            OapiUserSimplelistResponse resp5 = getDeptUserList(userDeptId.toString(), accessToken);
+            List<OapiUserSimplelistResponse.Userlist> userlist = resp5.getUserlist();
+            /*用户表填充*/
+            if(userRole.equals("老师")){
+                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                    String userName = user.getName();
+                    String userid = user.getUserid();
+                    String classIdStr = classId + "";
+                    Teacher teacher = new Teacher();
+                    teacher.setTeacherName(userName);
+                    teacher.setUserId(userid);
+                    teacher.setCampusId(campusId);
+                    teacher.setSchoolId(schoolId);
+                    teacher.setBureauId(bureauId);
+                    Teacher t = teacherDao.getByUserId(userid);
+                    if(t == null){
+                        teacher.setClassIds(classIdStr);
+                        teacherDao.insert(teacher);
+                    }else{
+                        String classIds = t.getClassIds();
+                        String idsStr = "," + t.getClassIds() + ",";
+                        if(!idsStr.contains("," + classIdStr + ",")){
+                            StringBuilder sb = new StringBuilder(classIds);
+                            sb.append("," + classIdStr);
+                            t.setClassIds(sb.toString());
+                            teacherDao.update(t);
+                        }
+                    }
+                }
+            }else if(userRole.equals("家长")){
+                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                    String userName = user.getName();
+                    String userid = user.getUserid();
+                    Parent parent = new Parent();
+                    parent.setUserId(userid);
+                    parent.setParentName(userName);
+                    parent.setClassId(classId);
+                    parent.setCampusId(campusId);
+                    parent.setSchoolId(schoolId);
+                    parent.setBureauId(bureauId);
+                    Parent p = parentDao.getByUserId(userid);
+                    if(p == null){
+                        parentDao.insert(parent);
+                    }else{
+                        parentDao.update(parent);
+                    }
+                }
+            }else if(userRole.equals("学生")){
+                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                    String userName = user.getName();
+                    String userid = user.getUserid();
+                    Student student = new Student();
+                    student.setUserId(userid);
+                    student.setStudentName(userName);
+                    student.setClassId(classId);
+                    student.setCampusId(campusId);
+                    student.setSchoolId(schoolId);
+                    student.setBureauId(bureauId);
+                    Student s = studentDao.getByUserId(userid);
+                    if(s == null){
+                        studentDao.insert(student);
+                    }else{
+                        studentDao.update(student);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public Map<String, String> getUserRole(String userId, String accessToken) throws ApiException {
+        Map<String,String> map = new HashMap<>();
         String roleName = "";
         OapiDepartmentListParentDeptsResponse resp = getListParentDeptsByUser(userId,accessToken);
         String department = resp.getDepartment();
@@ -219,17 +238,24 @@ public class DeptServiceImpl implements DeptService {
         [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
         if (department .equals("[]")){
             roleName = "学生";
+            Integer classId = studentDao.getByUserId(userId).getClassId();
+            map.put("classId",classId + "");
         }else{
             String deptId = department.split(",")[0].substring(2);
             OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
             String deptName = resp1.getName();
             if(deptName.equals("老师")){
                 roleName = "老师";
+                Integer id = teacherDao.getByUserId(userId).getId();
+                map.put("teacherId",id + "");
             }else if (deptName.equals("家长")){
                 roleName = "家长";
+                Integer classId = parentDao.getByUserId(userId).getClassId();
+                map.put("classId",classId + "");
             }
         }
-        return roleName;
+        map.put("roleName",roleName);
+        return map;
     }
 
     private String getAccessToken(String corpId) throws ApiException {
@@ -238,8 +264,8 @@ public class DeptServiceImpl implements DeptService {
         Date updateTime = byCorpId.getUpdateTime();
         Date now = new Date();
         /*accessToken两小时过期*/
-        long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
-        if(minutes >= 120){
+        long hours = (now.getTime() - updateTime.getTime()) / 1000 / 60 / 60;
+        if(hours >= 2){
             DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
             OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
             req.setAuthCorpid(corpId);

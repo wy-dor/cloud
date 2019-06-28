@@ -22,10 +22,35 @@
           resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     select *
     from edu_grade_class
-    where class_name = #{className}
-    and grade_name = #{gradeName}
-    and session_name = #{sessionName}
-    and campus_id = #{campusId}
+    <where>
+      <if test="className != null">
+        and class_name = #{className,jdbcType=VARCHAR}
+      </if>
+      <if test="gradeName != null">
+        and grade_name = #{gradeName,jdbcType=VARCHAR}
+      </if>
+      <if test="sessionName != null">
+        and session_name = #{sessionName,jdbcType=VARCHAR}
+      </if>
+      <if test="campusId != null">
+        and campus_id = #{campusId,jdbcType=INTEGER}
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId,jdbcType=INTEGER}
+      </if>
+      <if test="bureauId != null">
+        and bureau_id = #{bureauId,jdbcType=INTEGER}
+      </if>
+      <if test="deptId != null">
+        and dept_id = #{deptId,jdbcType=BIGINT}
+      </if>
+      <if test="headTeacherId != null">
+        and head_teacher_id = #{headTeacherId}
+      </if>
+      <if test="teacherIds != null">
+        and teacher_ids = #{teacherIds}
+      </if>
+    </where>
   </select>
 
   <select id="getClassesByCampusId" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
@@ -53,7 +78,10 @@
         school_id,
       </if>
       <if test="bureauId != null">
-        bureau_id,
+      bureau_id,
+    </if>
+      <if test="deptId != null">
+        dept_id,
       </if>
       <if test="headTeacherId != null">
         head_teacher_id,
@@ -80,6 +108,9 @@
       </if>
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
       </if>
       <if test="headTeacherId != null">
         #{headTeacherId,jdbcType=INTEGER},
@@ -109,6 +140,9 @@
       </if>
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
       </if>
       <if test="headTeacherId != null">
         head_teacher_id = #{headTeacherId,jdbcType=INTEGER},

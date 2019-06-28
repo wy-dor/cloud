@@ -13,6 +13,8 @@ public class Student extends BaseEntity {
 
     private Integer classId;
 
+    private Integer campusId;
+
     @Setter
     @Getter
     private Integer schoolId;
@@ -20,8 +22,6 @@ public class Student extends BaseEntity {
     @Setter
     @Getter
     private Integer bureauId;
-
-    private Integer campusId;
 
     public Integer getId() {
         return id;

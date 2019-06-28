@@ -147,9 +147,23 @@ public class AuthenServiceImpl implements AuthenService {
 
     /*获取企业凭证*/
     @Override
-    public String getAccessToken(String authCorpId) {
+    public String getAccessToken(String authCorpId) throws ApiException {
         AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
-        return byCorpId.getCorpAccessToken();
+        String accessToken = byCorpId.getCorpAccessToken();
+        Date updateTime = byCorpId.getUpdateTime();
+        Date now = new Date();
+        /*accessToken两小时过期*/
+        long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
+        if(minutes >= 120){
+            DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
+            OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
+            req.setAuthCorpid(authCorpId);
+            OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
+            accessToken = execute.getAccessToken();
+            byCorpId.setCorpAccessToken(accessToken);
+            authAppInfoDao.update(byCorpId);
+        }
+        return accessToken;
     }
 
     /*更新指定企业凭证*/

@@ -15,6 +15,8 @@ public class Teacher extends BaseEntity {
 
     private String classIds;
 
+    private String phone;
+
     @Setter
     @Getter
     private Integer schoolId;
@@ -22,8 +24,6 @@ public class Teacher extends BaseEntity {
     @Setter
     @Getter
     private Integer bureauId;
-
-    private String phone;
 
     public Integer getId() {
         return id;

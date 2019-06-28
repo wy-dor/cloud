@@ -9,6 +9,12 @@
     <result column="state" jdbcType="SMALLINT" property="state" />
   </resultMap>
 
+  <select id="getByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.bureau.entity.Bureau">
+    select *
+    from bureau
+    where corp_id = #{corpId}
+  </select>
+
   <select id="getBureaus" resultType="com.learning.cloud.bureau.entity.Bureau">
     select *
     from bureau
@@ -26,6 +32,9 @@
       <if test="bureauName != null">
         bureau_name,
       </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
       <if test="proviceName != null">
         provice_name,
       </if>
@@ -39,6 +48,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="bureauName != null">
         #{bureauName,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
       </if>
       <if test="proviceName != null">
         #{proviceName,jdbcType=VARCHAR},

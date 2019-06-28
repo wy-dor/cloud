@@ -19,4 +19,6 @@ public interface StudentDao {
     Integer getClassStuNum(Integer classId);
 
     List<Student> getClassStudents(GradeClass gradeClass);
+
+    List<Student> getStudentsByName(Student student);
 }

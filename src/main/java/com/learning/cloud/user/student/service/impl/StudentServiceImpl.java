@@ -39,4 +39,10 @@ public class StudentServiceImpl implements StudentService {
         List<Student> studentList = studentDao.getClassStudents(gradeClass);
         return JsonResultUtil.success(new PageEntity<>(studentList));
     }
+
+    @Override
+    public JsonResult getStudentsByName(Student student) {
+        List<Student> studentList = studentDao.getStudentsByName(student);
+        return JsonResultUtil.success(new PageEntity<>(studentList));
+    }
 }

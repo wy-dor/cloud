@@ -3,6 +3,8 @@ package com.learning.cloud.school.service.impl;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
+import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,5 +27,11 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public List<School> getBySchool(School school) {
         return schoolDao.getBySchool(school);
+    }
+
+    @Override
+    public JsonResult getSchoolIdByCorpId(String corpId) {
+        School school = schoolDao.getSchoolByCorpId(corpId);
+        return JsonResultUtil.success(school.getId());
     }
 }

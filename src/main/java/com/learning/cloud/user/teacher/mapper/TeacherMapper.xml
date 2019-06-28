@@ -97,6 +97,12 @@
       <if test="classIds != null">
         class_ids = #{classIds,jdbcType=VARCHAR},
       </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
       </if>

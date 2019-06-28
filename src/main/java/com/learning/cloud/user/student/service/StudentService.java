@@ -1,6 +1,7 @@
 package com.learning.cloud.user.student.service;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 
@@ -11,4 +12,6 @@ public interface StudentService {
     JsonResult getClassStudentNum(Integer classId);
 
     JsonResult getClassStudents(GradeClass gradeClass);
+
+    JsonResult getStudentsByName(Student student);
 }

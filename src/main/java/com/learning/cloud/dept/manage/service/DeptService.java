@@ -5,10 +5,14 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 
+import java.util.Map;
+
 public interface DeptService {
     void init(School school) throws ApiException;
 
-    String getUserRole(String userId, String accessToken) throws ApiException;
+    void saveUserInClass(int classId) throws ApiException;
+
+    Map<String, String> getUserRole(String userId, String accessToken) throws ApiException;
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException;
 

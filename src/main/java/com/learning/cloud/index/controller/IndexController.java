@@ -71,8 +71,8 @@ public class IndexController {
 		resultMap.put("isAdmin",resp1.getIsAdmin());
 
 		//返回登录用户角色（学生，老师，家长）
-		String userRole = deptService.getUserRole(userId, accessToken);
-		resultMap.put("roleName",userRole);
+		Map map = deptService.getUserRole(userId, accessToken);
+		resultMap.putAll(map);
 
 		//获取组织身份（学校，教育局）
 		Boolean isSchool = corpAgentService.getIsSchool(corpId);

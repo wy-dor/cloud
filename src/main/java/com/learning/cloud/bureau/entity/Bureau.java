@@ -1,6 +1,8 @@
 package com.learning.cloud.bureau.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Bureau extends BaseEntity {
     private Integer id;
@@ -12,6 +14,10 @@ public class Bureau extends BaseEntity {
     private String cityName;
 
     private Short state;
+
+    @Getter
+    @Setter
+    private String corpId;
 
     public Integer getId() {
         return id;

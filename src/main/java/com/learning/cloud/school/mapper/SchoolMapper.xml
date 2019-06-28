@@ -27,6 +27,9 @@
       <if test="bureauId != null">
       and bureau_id = #{bureauId}
       </if>
+      <if test="corpId != null">
+       and corp_id = #{corpId}
+      </if>
       <if test="state != null">
       and state = #{state}
       </if>
@@ -41,6 +44,14 @@
     where s.school_name = #{schoolName}
   </select>
 
+  <select id="getSchoolByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">
+    select s.*
+    from edu_school s
+    left join auth_corp_info a
+    on s.school_name = a.corp_name
+    where a.corp_id = #{corpId}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.school.entity.School">
     insert into edu_school
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -49,6 +60,9 @@
       </if>
       <if test="bureauId != null">
         bureau_id,
+      </if>
+      <if test="corpId != null">
+        corp_id,
       </if>
       <if test="state != null">
         state,
@@ -60,6 +74,9 @@
       </if>
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
       </if>
       <if test="state != null">
         #{state,jdbcType=SMALLINT},
@@ -75,6 +92,9 @@
       </if>
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
       </if>
       <if test="state != null">
         state = #{state,jdbcType=SMALLINT},

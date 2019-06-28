@@ -5,6 +5,7 @@ import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
@@ -84,5 +85,11 @@ public class GradeClassServiceImpl implements GradeClassService {
         Integer parentNum = parentDao.getClassParentNum(classId);
         map.put("parentNum",parentNum);
         return JsonResultUtil.success(map);
+    }
+
+    @Override
+    public JsonResult getByGradeClass(GradeClass gradeClass) {
+        List<GradeClass> classes = gradeClassDao.getByGradeClass(gradeClass);
+        return JsonResultUtil.success(new PageEntity<>(classes));
     }
 }

@@ -30,6 +30,12 @@ public class DeptController {
         return ServiceResult.success("设置成功");
     }
 
+    @GetMapping("/updateUserInClass")
+    public ServiceResult updateUserInClass(int classId) throws ApiException{
+        deptService.saveUserInClass(classId);
+        return ServiceResult.success("更新成功");
+    }
+
     /*获取部门列表*/
     @GetMapping("/getDeptList")
     public ServiceResult getDeptList(String pDeptId, String accessToken, Integer isFetchChild) throws ApiException {

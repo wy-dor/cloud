@@ -39,6 +39,10 @@ public class GradeClass extends BaseEntity {
     @Setter
     private Integer stuNum;
 
+    @Getter
+    @Setter
+    private Long deptId;
+
     public Integer getId() {
         return id;
     }

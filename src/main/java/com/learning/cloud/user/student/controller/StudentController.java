@@ -1,6 +1,7 @@
 package com.learning.cloud.user.student.controller;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.student.service.StudentService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
@@ -32,6 +33,11 @@ public class StudentController {
         return studentService.getClassStudents(gradeClass);
     }
 
+    /*对学生姓名进行模糊查询*/
+    @GetMapping("/getStudentsByName")
+    public JsonResult getStudentsByName(Student student){
+        return studentService.getStudentsByName(student);
+    }
 }
 
 
