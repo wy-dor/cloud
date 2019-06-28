@@ -1,6 +1,7 @@
 package com.learning.cloud.user.teacher.service;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 
@@ -11,4 +12,6 @@ public interface TeacherService {
     JsonResult getClassTeacherNum(Integer classId);
 
     JsonResult getClassTeachers(GradeClass gradeClass);
+
+    JsonResult setTeacherCourseType(Teacher teacher);
 }

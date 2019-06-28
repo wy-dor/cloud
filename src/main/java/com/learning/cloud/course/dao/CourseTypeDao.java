@@ -16,6 +16,8 @@ import java.util.List;
 public interface CourseTypeDao {
     List<CourseType> getSchoolCourseType(Long schoolId);
 
+    CourseType getByTypeId(Long id);
+
     int addSchoolCourseType(CourseType courseType);
 
     int deleteCourseType(Long id);

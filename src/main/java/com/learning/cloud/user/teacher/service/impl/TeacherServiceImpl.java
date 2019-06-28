@@ -1,5 +1,7 @@
 package com.learning.cloud.user.teacher.service.impl;
 
+import com.learning.cloud.course.dao.CourseDao;
+import com.learning.cloud.course.dao.CourseTypeDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.user.teacher.service.TeacherService;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
@@ -21,10 +23,17 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherDao teacherDao;
 
+    @Autowired
+    private CourseTypeDao courseTypeDao;
 
     @Override
     public ServiceResult getByUserId(String userId) {
         Teacher byUserId = teacherDao.getByUserId(userId);
+        Long courseTypeId = byUserId.getCourseType();
+        if(courseTypeId != null){
+            String courseName = courseTypeDao.getByTypeId(courseTypeId).getCourseName();
+            byUserId.setCourseName(courseName);
+        }
         return ServiceResult.success(byUserId);
     }
 
@@ -37,6 +46,19 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public JsonResult getClassTeachers(GradeClass gradeClass) {
         List<Teacher> teacherList = teacherDao.getClassTeachers(gradeClass);
+        for (Teacher teacher : teacherList) {
+            Long courseTypeId = teacher.getCourseType();
+            if(courseTypeId != null){
+                String courseName = courseTypeDao.getByTypeId(courseTypeId).getCourseName();
+                teacher.setCourseName(courseName);
+            }
+        }
         return JsonResultUtil.success(new PageEntity<>(teacherList));
+    }
+
+    @Override
+    public JsonResult setTeacherCourseType(Teacher teacher) {
+        teacherDao.update(teacher);
+        return JsonResultUtil.success("更新成功");
     }
 }

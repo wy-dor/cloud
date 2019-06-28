@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 @Mapper
 public interface TeacherDao {
-
     List<Teacher> getTeachers(Teacher teacher);
 
     int insert(Teacher record);

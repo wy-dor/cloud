@@ -1,6 +1,7 @@
 package com.learning.cloud.user.teacher.controller;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.teacher.service.TeacherService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
@@ -31,6 +32,13 @@ public class TeacherController {
     @GetMapping("/getClassTeachers")
     public JsonResult getClassTeachers(GradeClass gradeClass){
         return teacherService.getClassTeachers(gradeClass);
+    }
+
+    /*设置老师的所教科目*/
+    /*参数为老师的id和campusType*/
+    @GetMapping("/setTeacherCourseType")
+    public JsonResult setTeacherCourseType(Teacher teacher){
+        return teacherService.setTeacherCourseType(teacher);
     }
 
 }
