@@ -6,6 +6,8 @@ import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
+import com.learning.cloud.course.dao.CourseDao;
+import com.learning.cloud.course.entity.Course;
 import com.learning.cloud.dept.campus.dao.CampusDao;
 import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
@@ -15,6 +17,8 @@ import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.entity.AuthAppInfo;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.term.dao.TermDao;
+import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
@@ -56,6 +60,12 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private ParentDao parentDao;
+
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private TermService termService;
 
     @Override
     public void init(School school) throws ApiException {
@@ -104,7 +114,7 @@ public class DeptServiceImpl implements DeptService {
                                 String className = dept3.getName();
                                 Long classDeptId = dept3.getId();
                                 /*grade_class表的更新*/
-                                int classId;
+                                Integer classId;
                                 GradeClass gradeClass = new GradeClass();
                                 gradeClass.setCampusId(campusId);
                                 gradeClass.setSessionName(sessionName);
@@ -117,6 +127,12 @@ public class DeptServiceImpl implements DeptService {
                                 if(gc == null){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
+                                    //增加课程
+                                    Course course = new Course();
+                                    course.setSchoolId(schoolId.longValue());
+                                    course.setClassId(classId.longValue());
+                                    course.setGradeName(gradeName);
+                                    courseDao.addCourse(course);
                                 }else{
                                     classId = gc.getId();
                                     gradeClass.setId(classId);

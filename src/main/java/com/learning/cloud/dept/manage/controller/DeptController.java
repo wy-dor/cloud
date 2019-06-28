@@ -3,7 +3,9 @@ package com.learning.cloud.dept.manage.controller;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
+import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.util.ServiceResult;
+import com.learning.domain.JsonResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,19 @@ public class DeptController {
     @Autowired
     private SchoolService schoolService;
 
+    @Autowired
+    private TermService termService;
+
     /*关联school与bureau*/
     /*传入id(school的id)和bureauId*/
     @GetMapping("/setBureauId")
     public ServiceResult setBureauId(School school) throws ApiException {
         Integer i = schoolService.setBureauId(school);
+        try {
+            termService.getSchoolTerm(school.getId().longValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(i > 0){
             School s = schoolService.getBySchool(school).get(0);
             deptService.init(s);
