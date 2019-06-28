@@ -81,4 +81,14 @@ public class CourseWareServiceImpl implements CourseWareService {
         List<CourseWare> courseWares = courseWareDao.getCourseWare(day, cdId);
         return JsonResultUtil.success(courseWares);
     }
+
+    @Override
+    public JsonResult likeThisCourseWare(Long id) throws Exception {
+        int i = courseWareDao.likeThisCourseWare(id);
+        if(i>0){
+            return JsonResultUtil.success();
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
+        }
+    }
 }

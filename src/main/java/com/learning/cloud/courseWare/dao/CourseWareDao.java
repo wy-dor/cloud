@@ -13,4 +13,6 @@ public interface CourseWareDao {
     int addCourseWare(CourseWare courseWare);
 
     List<CourseWare> getCourseWare(@Param("day") String day, @Param("cdId") Long cdId);
+
+    int likeThisCourseWare(Long id);
 }

@@ -85,4 +85,14 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
         List<CourseExchange> courseExchanges = courseExchangeDao.getMyExchange(teacherId, day);
         return JsonResultUtil.success(courseExchanges);
     }
+
+    @Override
+    public JsonResult confirmExchange(Long id, Integer status) throws Exception {
+        int i = courseExchangeDao.confirmExchange(id, status);
+        if(i>0){
+            return JsonResultUtil.success();
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
+        }
+    }
 }

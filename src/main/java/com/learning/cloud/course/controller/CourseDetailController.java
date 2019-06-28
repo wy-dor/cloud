@@ -46,4 +46,5 @@ public class CourseDetailController {
     public JsonResult getCourseDetailById(@RequestParam(value="id",required = true) Long id)throws Exception{
         return courseDetailService.getCourseDetailById(id);
     }
+
 }

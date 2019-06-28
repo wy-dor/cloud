@@ -20,5 +20,9 @@ public interface GradeClassDao {
 
     List<GradeClass> getClassesByCampusId(Campus campus);
 
+
+    List<GradeClass> getAllClass();
+
     int update(GradeClass gradeClass);
+
 }

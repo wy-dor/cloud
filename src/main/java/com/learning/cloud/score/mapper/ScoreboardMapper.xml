@@ -110,6 +110,7 @@
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
-
+    select * from class_scoreBoard
+    where school_id = #{schoolId}
   </select>
 </mapper>

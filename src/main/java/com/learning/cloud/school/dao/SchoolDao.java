@@ -20,4 +20,6 @@ public interface SchoolDao {
     String getCorpIdBySchoolName(String schoolName);
 
     School getSchoolByCorpId(String corpId);
+
+    School getBySchoolId(Integer schoolId);
 }

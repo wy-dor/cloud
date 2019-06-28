@@ -1,5 +1,9 @@
 package com.learning.cloud.score.service.impl;
 
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
+import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreboardDao;
 import com.learning.cloud.score.entity.ClassScoreboard;
@@ -29,10 +33,17 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     private ScoreRecordDao scoreRecordDao;
 
     @Autowired
+    private SchoolDao schoolDao;
+
+    @Autowired
     private TeacherDao teacherDao;
 
     @Autowired
     private ParentDao parentDao;
+
+    @Autowired
+    private GradeClassDao gradeClassDao;
+
     /**
      * 获取学校的积分值，取老师的平均值*系数和家长的平均值*系数
      * @param schoolId
@@ -56,6 +67,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
      */
     @Override
     public JsonResult updateSchoolScore(Long schoolId) throws Exception {
+        School school = schoolDao.getBySchoolId(schoolId.intValue());
         if(schoolId!=null){
             //获取所有老师
             List<Teacher> teachers = teacherDao.getTeacherIds(schoolId);
@@ -85,7 +97,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
             schoolScoreboard.setSchoolId(schoolId);
             schoolScoreboard.setScore(new Double(score).intValue());
-//            schoolScoreboard.setBureauId(null);
+            schoolScoreboard.setBureauId(school.getBureauId().longValue());
             int i = scoreboardDao.addSchoolScoreboard(schoolScoreboard);
             return JsonResultUtil.success();
         }else {
@@ -107,6 +119,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
 
     @Override
     public JsonResult updateClassScore(Long classId) throws Exception {
+        GradeClass gradeClass = gradeClassDao.getById(classId.intValue());
         if(classId!=null){
             //获取所有老师
             List<Teacher> teachers = teacherDao.getTeacherIds(classId);
@@ -135,9 +148,9 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             //保存到数据库表中
             ClassScoreboard classScoreboard = new ClassScoreboard();
             classScoreboard.setClassId(classId);
-//            classScoreboard.setSchoolId(schoolId);
             classScoreboard.setScore(new Double(score).intValue());
-//            classScoreboard.setBureauId(null);
+            classScoreboard.setSchoolId(gradeClass.getSchoolId().longValue());
+            classScoreboard.setBureauId(gradeClass.getBureauId().longValue());
             int i = scoreboardDao.addClassScoreboard(classScoreboard);
             return JsonResultUtil.success();
         }else {
@@ -161,6 +174,6 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     @Override
     public JsonResult getClassRank(Long schoolId) throws Exception {
         List<ClassScoreboard> classScoreboards = scoreboardDao.getClassRank(schoolId);
-        return null;
+        return JsonResultUtil.success(classScoreboards);
     }
 }

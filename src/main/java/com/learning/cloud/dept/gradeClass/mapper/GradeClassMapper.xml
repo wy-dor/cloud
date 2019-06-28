@@ -120,6 +120,11 @@
       </if>
     </trim>
   </insert>
+
+  <select id="getAllClass" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
+    select * from edu_grade_class
+  </select>
+
   <update id="update" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     update edu_grade_class
     <set>
