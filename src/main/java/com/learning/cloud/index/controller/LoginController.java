@@ -50,8 +50,12 @@ public class LoginController {
         OapiSsoGetuserinfoResponse response = client.execute(request,accessToken);
         if(response.isSuccess()){
             if(response.getIsSys()){
-                return JsonResultUtil.success(response);
-            }else{
+                if(response.getCorpInfo().getCorpName().contains("学校")){
+                    return JsonResultUtil.success(response);
+                }else {
+                    throw new PayException(JsonResultEnum.NO_FUNCTION_FOR);
+                }
+            }else {
                 throw new PayException(JsonResultEnum.OA_LOGIN_NOT_SYS);
             }
         }else {

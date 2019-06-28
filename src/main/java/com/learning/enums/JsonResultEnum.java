@@ -30,6 +30,7 @@ public enum JsonResultEnum {
     OA_LOGIN_ERROR(1031,"OA免登出错"),
     OA_LOGIN_NOT_SYS(1032,"OA免登出错,不是管理员"),
     THIRD_LOGIN_ERROR(1033,"第三方登录出错"),
+    NO_FUNCTION_FOR(1034,"没有管理端功能"),
 
     ;
 
