@@ -3,6 +3,7 @@ package com.learning.cloud.user.teacher.entity;
 import com.learning.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.GetMapping;
 
 public class Teacher extends BaseEntity {
     private Integer id;
@@ -24,6 +25,10 @@ public class Teacher extends BaseEntity {
     @Setter
     @Getter
     private Integer bureauId;
+
+    @Getter
+    @Setter
+    private Long courseType;
 
     public Integer getId() {
         return id;

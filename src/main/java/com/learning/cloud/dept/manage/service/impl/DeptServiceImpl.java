@@ -4,8 +4,6 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
-import com.learning.cloud.config.ApiUrlConstant;
-import com.learning.cloud.config.Constant;
 import com.learning.cloud.course.dao.CourseDao;
 import com.learning.cloud.course.entity.Course;
 import com.learning.cloud.dept.campus.dao.CampusDao;
@@ -13,26 +11,20 @@ import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
-import com.learning.cloud.index.dao.AuthAppInfoDao;
-import com.learning.cloud.index.entity.AuthAppInfo;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
-import com.learning.cloud.term.dao.TermDao;
-import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
-import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +32,6 @@ import java.util.Map;
 @Service
 @Transactional
 public class DeptServiceImpl implements DeptService {
-
-    @Autowired
-    private AuthAppInfoDao authAppInfoDao;
 
     @Autowired
     private SchoolDao schoolDao;
@@ -83,19 +72,22 @@ public class DeptServiceImpl implements DeptService {
                 Long parentDeptId = dept.getParentid();
                 if(parentDeptId == -7){
                     int campusId;
+                    Long campusDeptId = dept.getId();
                     Campus campus = new Campus();
                     campus.setCampusName(dept.getName());
                     campus.setSchoolId(schoolId);
                     Campus c = campusDao.getCampus(campus);
+                    campus.setDeptId(campusDeptId);
                     if(c == null){
                         campusDao.insert(campus);
                         campusId = campus.getId();
                     }else{
                         campusId = c.getId();
+                        campus.setId(campusId);
+                        campusDao.update(campus);
                     }
                     i++;
                     /*班级表填充*/
-                    Long campusDeptId = dept.getId();
                     /*得到session_name字段*/
                     OapiDepartmentListResponse resp1 = getDeptList(campusDeptId.toString(), accessToken, 0);
                     List<OapiDepartmentListResponse.Department> sessionDeptList = resp1.getDepartment();
@@ -153,6 +145,7 @@ public class DeptServiceImpl implements DeptService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //标记已初始化
         school.setState((short)1);
         schoolDao.update(school);
     }
@@ -299,12 +292,7 @@ public class DeptServiceImpl implements DeptService {
             request.setFetchChild(true);
         }
         request.setHttpMethod("GET");
-        OapiDepartmentListResponse response = null;
-        try {
-            response = client.execute(request, accessToken);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        OapiDepartmentListResponse response = client.execute(request, accessToken);
         return response;
     }
 

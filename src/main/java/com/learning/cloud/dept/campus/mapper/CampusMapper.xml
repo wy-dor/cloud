@@ -82,5 +82,6 @@
         state = #{state,jdbcType=INTEGER},
       </if>
     </set>
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

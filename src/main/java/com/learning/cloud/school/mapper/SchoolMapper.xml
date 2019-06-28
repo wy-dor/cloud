@@ -38,10 +38,8 @@
 
   <select id="getCorpIdBySchoolName" parameterType="java.lang.String" resultType="java.lang.String">
     select corp_id
-    from edu_school s
-    left join auth_app_info a
-    on s.school_name = a.corp_name
-    where s.school_name = #{schoolName}
+    from edu_school
+    where school_name = #{schoolName}
   </select>
 
   <select id="getSchoolByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">

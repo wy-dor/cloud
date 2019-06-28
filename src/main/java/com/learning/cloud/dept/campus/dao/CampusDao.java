@@ -17,4 +17,6 @@ public interface CampusDao {
     List<Campus> getSchoolCampuses(Integer schoolId);
 
     int updateCampusType(Integer id);
+
+    int update(Campus campus);
 }
