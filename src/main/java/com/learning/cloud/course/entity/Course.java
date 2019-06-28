@@ -27,4 +27,6 @@ public class Course extends BaseEntity {
 
     private String content;
 
+    private String termName;
+
 }
