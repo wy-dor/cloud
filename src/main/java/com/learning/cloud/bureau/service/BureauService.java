@@ -4,9 +4,10 @@ import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.domain.JsonResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BureauService {
     List<Bureau> getBureaus();
 
-    JsonResult getBureauIdByCorpId(String corpId);
+    Map<String,Object> getOrgInfoByCorpId(String corpId);
 }

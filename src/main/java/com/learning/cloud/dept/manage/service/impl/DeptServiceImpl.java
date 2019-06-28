@@ -6,6 +6,8 @@ import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
+import com.learning.cloud.course.dao.CourseDao;
+import com.learning.cloud.course.entity.Course;
 import com.learning.cloud.dept.campus.dao.CampusDao;
 import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
@@ -13,8 +15,11 @@ import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.entity.AuthAppInfo;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.term.dao.TermDao;
+import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
@@ -57,12 +62,18 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private ParentDao parentDao;
 
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private AuthenService authenService;
+
     @Override
     public void init(School school) throws ApiException {
         Integer schoolId = school.getId();
         Integer bureauId = school.getBureauId();
         String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
-        String accessToken = getAccessToken(corpId);
+        String accessToken = authenService.getAccessToken(corpId);
         try {
             OapiDepartmentListResponse resp = getDeptList("1", accessToken , 1);
             List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
@@ -104,7 +115,7 @@ public class DeptServiceImpl implements DeptService {
                                 String className = dept3.getName();
                                 Long classDeptId = dept3.getId();
                                 /*grade_class表的更新*/
-                                int classId;
+                                Integer classId;
                                 GradeClass gradeClass = new GradeClass();
                                 gradeClass.setCampusId(campusId);
                                 gradeClass.setSessionName(sessionName);
@@ -117,6 +128,12 @@ public class DeptServiceImpl implements DeptService {
                                 if(gc == null){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
+                                    //增加课程
+                                    Course course = new Course();
+                                    course.setSchoolId(schoolId.longValue());
+                                    course.setClassId(classId.longValue());
+                                    course.setGradeName(gradeName);
+                                    courseDao.addCourse(course);
                                 }else{
                                     classId = gc.getId();
                                     gradeClass.setId(classId);
@@ -148,7 +165,7 @@ public class DeptServiceImpl implements DeptService {
         School school = new School();
         school.setId(schoolId);
         String corpId = schoolDao.getBySchool(school).get(0).getCorpId();
-        String accessToken = getAccessToken(corpId);
+        String accessToken = authenService.getAccessToken(corpId);
         int campusId = byId.getCampusId();
         Long classDeptId = byId.getDeptId();
         /*获取老师，学生，家长部门id*/
@@ -177,6 +194,7 @@ public class DeptServiceImpl implements DeptService {
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
                     }else{
+                        //判断老师所在班级是否存在，存在则不需要更新
                         String classIds = t.getClassIds();
                         String idsStr = "," + t.getClassIds() + ",";
                         if(!idsStr.contains("," + classIdStr + ",")){
@@ -258,25 +276,6 @@ public class DeptServiceImpl implements DeptService {
         return map;
     }
 
-    private String getAccessToken(String corpId) throws ApiException {
-        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
-        String accessToken = byCorpId.getCorpAccessToken();
-        Date updateTime = byCorpId.getUpdateTime();
-        Date now = new Date();
-        /*accessToken两小时过期*/
-        long hours = (now.getTime() - updateTime.getTime()) / 1000 / 60 / 60;
-        if(hours >= 2){
-            DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
-            OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
-            req.setAuthCorpid(corpId);
-            OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
-            accessToken = execute.getAccessToken();
-            byCorpId.setCorpAccessToken(accessToken);
-            authAppInfoDao.update(byCorpId);
-        }
-        return accessToken;
-    }
-
     /*获取子部门的id列表*/
     @Override
     public OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException {
@@ -347,7 +346,7 @@ public class DeptServiceImpl implements DeptService {
     /*获取用户详情*/
     @Override
     public OapiUserGetResponse getUserDetail(String userId, String corpId) throws ApiException {
-        String accessToken = getAccessToken(corpId);
+        String accessToken = authenService.getAccessToken(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userId);

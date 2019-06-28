@@ -1,6 +1,8 @@
 package com.learning.cloud.dept.campus.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Campus extends BaseEntity {
     private Integer id;
@@ -12,6 +14,10 @@ public class Campus extends BaseEntity {
     private Integer campusType;
 
     private Integer state;
+
+    @Getter
+    @Setter
+    private Long deptId;
 
     public Integer getId() {
         return id;

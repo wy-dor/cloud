@@ -8,6 +8,7 @@ import com.dingtalk.api.request.OapiServiceGetPermanentCodeRequest;
 import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.bureau.service.BureauService;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
 import com.learning.cloud.dept.manage.service.DeptService;
@@ -41,7 +42,7 @@ public class IndexController {
 	private DeptService deptService;
 
 	@Autowired
-	private CorpAgentService corpAgentService;
+	private BureauService bureauService;
 
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
@@ -74,9 +75,9 @@ public class IndexController {
 		Map map = deptService.getUserRole(userId, accessToken);
 		resultMap.putAll(map);
 
-		//获取组织身份（学校，教育局）
-		Boolean isSchool = corpAgentService.getIsSchool(corpId);
-		resultMap.put("isSchool",isSchool);
+		//获取组织信息bureauId,isSchool,schoolName
+		Map<String, Object> orgInfoMap = bureauService.getOrgInfoByCorpId(corpId);
+		resultMap.putAll(orgInfoMap);
 
 		//返回结果
 		return JsonResultUtil.success(resultMap);
@@ -133,17 +134,10 @@ public class IndexController {
 	/**
 	 * 获取第三方应用凭证
 	 */
-	@GetMapping("/getSuiteAcessToken")
-	public JsonResult getSuiteAcessToken() throws ApiException {
+	@GetMapping("/getSuiteAccessToken")
+	public JsonResult getSuiteAccessToken() throws ApiException {
 		/*获取套件令牌Token*/
-		DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_SUITE_TOKEN);
-		OapiServiceGetSuiteTokenRequest request = new OapiServiceGetSuiteTokenRequest();
-		request.setSuiteKey(Constant.SUITE_KEY);
-		request.setSuiteSecret(Constant.SUITE_SECRET);
-		/*钉钉推送的suiteTicket。测试应用可以随意填写。*/
-		request.setSuiteTicket(Constant.SUITE_TICKET);
-		OapiServiceGetSuiteTokenResponse response = client.execute(request);
-		String suiteAccessToken = response.getSuiteAccessToken();
+		String suiteAccessToken = authenService.getSuiteAccessToken();
 		return JsonResultUtil.success(suiteAccessToken);
 	}
 

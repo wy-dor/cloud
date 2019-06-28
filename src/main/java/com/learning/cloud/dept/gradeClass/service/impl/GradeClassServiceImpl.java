@@ -92,4 +92,10 @@ public class GradeClassServiceImpl implements GradeClassService {
         List<GradeClass> classes = gradeClassDao.getByGradeClass(gradeClass);
         return JsonResultUtil.success(new PageEntity<>(classes));
     }
+
+    @Override
+    public JsonResult getGradeClassById(Integer id) {
+        GradeClass byId = gradeClassDao.getById(id);
+        return JsonResultUtil.success(byId);
+    }
 }
