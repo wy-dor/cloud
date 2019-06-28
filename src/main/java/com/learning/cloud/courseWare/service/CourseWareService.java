@@ -8,4 +8,6 @@ public interface CourseWareService {
     JsonResult addCourseWare(CourseWare courseWare)throws Exception;
 
     JsonResult getCourseWare(String day, Long cdId)throws Exception;
+
+    JsonResult likeThisCourseWare(Long id)throws Exception;
 }

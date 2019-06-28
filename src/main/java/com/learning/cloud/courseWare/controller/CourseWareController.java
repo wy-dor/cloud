@@ -70,4 +70,9 @@ public class CourseWareController {
         return JsonResultUtil.success();
     }
 
+    @PostMapping("likeThisCourseWare")
+    public JsonResult likeThisCourseWare(@RequestParam(value="id",required = false) Long id)throws Exception{
+        return courseWareService.likeThisCourseWare(id);
+    }
+
 }
