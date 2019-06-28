@@ -70,7 +70,20 @@ public class CourseSectionServiceImpl implements CourseSectionService {
         int i = courseSectionDao.saveSectionArray(schoolId, sectionArray);
         if(i>0){
             return JsonResultUtil.success();
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
-        return null;
+    }
+
+    @Override
+    public JsonResult deleteSection(Long id) throws Exception {
+        int i = courseSectionDao.deleteSection(id);
+        return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult deleteSchoolSection(Long schoolId) throws Exception {
+        int i = courseSectionDao.deleteSchoolSection(schoolId);
+        return JsonResultUtil.success();
     }
 }

@@ -84,4 +84,14 @@
       (school_id, content) values (#{schoolId},#{sectionArray})
       on DUPLICATE KEY UPDATE content = #{sectionArray}
   </insert>
+
+  <delete id="deleteSection">
+    delete from course_section
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteSchoolSection">
+    delete from course_section
+    where school_id = #{schoolId}
+  </delete>
 </mapper>

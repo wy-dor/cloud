@@ -22,4 +22,8 @@ public interface CourseSectionDao {
     List<CourseSection> getSchoolSection(Long schoolId);
 
     int saveSectionArray(@Param("schoolId") Long schoolId, @Param("sectionArray") String sectionArray);
+
+    int deleteSection(Long id);
+
+    int deleteSchoolSection(Long schoolId);
 }
