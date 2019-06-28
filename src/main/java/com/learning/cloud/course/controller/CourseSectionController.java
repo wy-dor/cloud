@@ -39,4 +39,15 @@ public class CourseSectionController {
     public JsonResult saveSectionArray(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return courseSectionService.saveSectionArray(schoolId);
     }
+
+    @PostMapping("deleteSection")
+    public JsonResult deleteSection(@RequestParam(value="id",required = true) Long id)throws Exception{
+        return courseSectionService.deleteSection(id);
+    }
+
+    @PostMapping("deleteSchoolSection")
+    public JsonResult deleteSchoolSection(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+        return courseSectionService.deleteSchoolSection(schoolId);
+    }
+
 }

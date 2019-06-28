@@ -89,16 +89,17 @@
   </update>
 
   <select id="getSchoolCourse" parameterType="com.learning.cloud.course.entity.Course" resultType="com.learning.cloud.course.entity.Course">
-    select * from course
-    where school_id = #{schoolId}
+    select a.*,b.term_name from course a left join term b
+    on a.term_id = b.id
+    where a.school_id = #{schoolId}
     <if test="gradeName != null">
-      and grade_name like CONCAT('%',#{gradeName},'%')
+      and a.grade_name like CONCAT('%',#{gradeName},'%')
     </if>
     <if test="status != null">
-      and status = #{status}
+      and a.status = #{status}
     </if>
     <if test="termId != null">
-      and term_id = #{termId}
+      and a.term_id = #{termId}
     </if>
   </select>
 </mapper>
