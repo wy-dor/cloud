@@ -1,6 +1,10 @@
 package com.learning.cloud.index.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
 
 public class CorpAgent extends BaseEntity {
     private Integer id;
@@ -14,6 +18,10 @@ public class CorpAgent extends BaseEntity {
     private String appId;
 
     private String logoUrl;
+
+    @Getter
+    @Setter
+    private Date udpateTime;
 
     public Integer getId() {
         return id;

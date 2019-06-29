@@ -35,7 +35,7 @@ public class TeacherController {
     }
 
     /*设置老师的所教科目*/
-    /*参数为老师的id和campusType*/
+    /*参数为老师的id和courseType(courseType的id)*/
     @GetMapping("/setTeacherCourseType")
     public JsonResult setTeacherCourseType(Teacher teacher){
         return teacherService.setTeacherCourseType(teacher);

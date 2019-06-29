@@ -249,8 +249,14 @@ public class DeptServiceImpl implements DeptService {
         [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
         if (department .equals("[]")){
             roleName = "学生";
-            Integer classId = studentDao.getByUserId(userId).getClassId();
+            Student byUserId = studentDao.getByUserId(userId);
+            if(byUserId == null){
+                map.put("roleName","无");
+            }else{
+            Integer classId = byUserId.getClassId();
+            map.put("roleName","学生");
             map.put("classId",classId + "");
+            }
         }else{
             String deptId = department.split(",")[0].substring(2);
             OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);

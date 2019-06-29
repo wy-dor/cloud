@@ -75,6 +75,9 @@
       <if test="logoUrl != null">
         logo_url = #{logoUrl,jdbcType=VARCHAR},
       </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}
   </update>

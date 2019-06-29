@@ -5,6 +5,8 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
 import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.util.ServiceResult;
+import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
