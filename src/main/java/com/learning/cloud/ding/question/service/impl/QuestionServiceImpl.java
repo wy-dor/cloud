@@ -202,7 +202,8 @@ public class QuestionServiceImpl implements QuestionService {
     public JsonResult deleteBatchQuestions(String questionIds) {
         String[] idsStr = questionIds.split(",");
         for (String s : idsStr) {
-            questionDao.deleteQuestion(Long.parseLong(s));
+            long id = Long.parseLong(s);
+            questionDao.deleteQuestion(id);
         }
         return JsonResultUtil.success("删除成功");
     }

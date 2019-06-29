@@ -9,11 +9,19 @@
     limit 1
   </select>
 
+  <select id="getToAuthorize" resultType="com.learning.cloud.index.entity.AuthAppInfo">
+    select *
+    from auth_app_info
+    where permanent_code = ''
+    and state = 1
+  </select>
+
   <select id="getCorpAccessToken" parameterType="java.lang.String" resultType="java.lang.String">
     select corp_access_token
     from auth_app_info
     where corp_id = #{corpId}
   </select>
+
   <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
     insert into auth_app_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,8 +108,10 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="state != null">
+        state = #{state,jdbcType=SMALLINT},
+      </if>
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}
   </update>
-
 </mapper>

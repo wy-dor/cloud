@@ -6,8 +6,8 @@ import com.dingtalk.oapi.lib.aes.DingTalkEncryptException;
 import com.dingtalk.oapi.lib.aes.DingTalkEncryptor;
 import com.dingtalk.oapi.lib.aes.Utils;
 import com.learning.cloud.config.Constant;
-import com.learning.cloud.index.entity.CallbackInfo;
-import com.learning.cloud.index.service.CallbackService;
+import com.learning.cloud.index.dao.AuthAppInfoDao;
+import com.learning.cloud.index.entity.AuthAppInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CallbackController {
     private static final Logger mainLogger = LoggerFactory.getLogger(CallbackController.class);
 
     @Autowired
-    private CallbackService callbackService;
+    private AuthAppInfoDao authAppInfoDao;
 
     /**
      * 创建套件后，验证回调URL创建有效事件（第一次保存回调URL之前）
@@ -44,6 +44,8 @@ public class CallbackController {
      * 企业授权开通应用事件
      */
     private static final String EVENT_TMP_AUTH_CODE = "tmp_auth_code";
+
+    private static final String EVENT_SUITE_RELIEVE = "suite_relieve";
     /**
      * 相应钉钉回调时的值
      */
@@ -70,6 +72,8 @@ public class CallbackController {
             String encryptMsg = json.getString("encrypt");
             String plainText = dingTalkEncryptor.getDecryptMsg(signature, timestamp, nonce, encryptMsg);
             JSONObject obj = JSON.parseObject(plainText);
+            String authCorpId = obj.getString("AuthCorpId");
+            String authCode = obj.getString("AuthCode");
 
             //根据回调数据类型做不同的业务处理
             String eventType = obj.getString("EventType");
@@ -86,19 +90,27 @@ public class CallbackController {
                 //本事件应用应该异步进行授权开通企业的初始化，目的是尽最大努力快速返回给钉钉服务端。用以提升企业管理员开通应用体验
                 //即使本接口没有收到数据或者收到事件后处理初始化失败都可以后续再用户试用应用时从前端获取到corpId并拉取授权企业信息，
                 // 进而初始化开通及企业。
-                bizLogger.info("企业授权开通应用事件: " + plainText);
-                CallbackInfo callbackInfo = new CallbackInfo();
-                callbackInfo.setAuthCorpId(obj.getString("AuthCorpId"));
-                callbackInfo.setAuthCode(obj.getString("AuthCode"));
-                callbackInfo.setSuiteKey(obj.getString("SuiteKey"));
-                callbackInfo.setTimeStamp(obj.getString("TimeStamp"));
-                int i = callbackService.saveCallbackInfo(callbackInfo);
-                if(i == 1){
-                    System.out.println("授权信息保存成功！");
+                AuthAppInfo authAppInfo = new AuthAppInfo();
+                authAppInfo.setCorpId(authCorpId);
+                authAppInfo.setTempAuthCode(authCode);
+                AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
+                if(byCorpId == null){
+                    authAppInfoDao.insert(authAppInfo);
                 }else{
-                    System.out.println("授权信息保存失败！=========================");
+                    byCorpId.setTempAuthCode(authCode);
+                    byCorpId.setState(1);
+                    authAppInfoDao.update(byCorpId);
                 }
-            } else {
+                bizLogger.info("企业授权开通应用事件: " + plainText);
+            }else if(EVENT_SUITE_RELIEVE.equals(eventType)){
+                AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
+                byCorpId.setState(0);
+                byCorpId.setPermanentCode("");
+                int i = authAppInfoDao.update(byCorpId);
+                if(i == 1){
+                    bizLogger.info("企业解除授权事件：" + plainText);
+                }
+            }else {
                 // 其他类型事件处理
             }
             // 返回success的加密信息表示回调处理成功

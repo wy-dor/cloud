@@ -21,11 +21,15 @@ public class AuthAppInfo extends BaseEntity {
 
     private Date createdTime;
 
+    private String corpAccessToken;
+
     @Getter
     @Setter
     private Date updateTime;
 
-    private String corpAccessToken;
+    @Getter
+    @Setter
+    private Integer state;
 
     public Integer getId() {
         return id;

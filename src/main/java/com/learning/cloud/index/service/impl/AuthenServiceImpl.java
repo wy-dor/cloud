@@ -38,9 +38,6 @@ public class AuthenServiceImpl implements AuthenService {
     private AuthAppInfoDao authAppInfoDao;
 
     @Autowired
-    private CallbackInfoDao callbackInfoDao;
-
-    @Autowired
     private AuthCorpInfoDao authCorpInfoDao;
 
     @Autowired
@@ -61,7 +58,7 @@ public class AuthenServiceImpl implements AuthenService {
     @Override
     public ServiceResult authenApp(String corpId) throws ApiException {
         /*获取临时授权码*/
-        String authCode = callbackInfoDao.getAuthCodeByCorpId(corpId);
+        String authCode = authAppInfoDao.findByCorpId(corpId).getTempAuthCode();
 
         authAppInfo = new AuthAppInfo();
         authAppInfo.setCreatedTime(new Date());
@@ -73,6 +70,7 @@ public class AuthenServiceImpl implements AuthenService {
 
         /*获取永久授权码并库存*/
         String permanentCode = getPermanentCode(authCode, suiteAccessToken);
+        authAppInfo.setPermanentCode(permanentCode);
 
         /*激活应用*/
         String errmsg = appActive(suiteAccessToken, permanentCode);
@@ -84,17 +82,10 @@ public class AuthenServiceImpl implements AuthenService {
         /*String accessToken = getAccessToken(corpId);
         authAppInfo.setCorpAccessToken(accessToken);*/
 
-        AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
-        int i = 0;
-        if(info == null){
-            i = authAppInfoDao.insert(authAppInfo);
-
-        }else{
-            i = authAppInfoDao.update(authAppInfo);
-        }
-        if(i == 1){
+       int i = authAppInfoDao.update(authAppInfo);
+       if(i == 1){
             System.out.println("企业授权信息更新成功！");
-        }
+       }
 
         /*获取企业授权信息*/
         return getAuthInfo(corpId);
