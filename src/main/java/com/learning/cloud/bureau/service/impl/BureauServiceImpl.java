@@ -42,6 +42,7 @@ public class BureauServiceImpl implements BureauService {
             String schoolName = byCorpId.getSchoolName();
             map.put("isSchool",true);
             map.put("schoolName",schoolName);
+            map.put("schoolId",byCorpId.getId());
         }
         map.put("bureauId",bureauId);
         return map;

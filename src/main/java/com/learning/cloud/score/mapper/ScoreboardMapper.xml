@@ -43,6 +43,7 @@
         #{bureauId,jdbcType=BIGINT},
       </if>
     </trim>
+    on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
   </insert>
 
   <select id="getClassScore" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
@@ -92,25 +93,33 @@
         #{bureauId,jdbcType=BIGINT},
       </if>
     </trim>
+    on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
   </insert>
 
   <select id="getSchoolRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.SchoolScoreboard">
-    select * from school_scoreboard
-    where bureau_id = #{bureauId}
+    select sc.*,es.school_name from school_scoreboard sc
+	LEFT JOIN edu_school es
+	on sc.school_id = es.id
+    where sc.bureau_id = #{bureauId}
+    order by score
   </select>
 
   <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select sr.* from user_teacher ut
+    select sr.*, ut.teacher_name from user_teacher ut
     left join score_record sr
     on ut.user_id = sr.user_id
     where ut.bureau_id = #{bureauId}
     <if test="schoolId != null">
-      and ut.school_id = #{school}
+      and ut.school_id = #{schoolId}
     </if>
+    order by sr.score
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
-    select * from class_scoreBoard
-    where school_id = #{schoolId}
+    select cs.*,ec.grade_name from class_scoreBoard cs
+		LEFT JOIN edu_grade_class ec
+		on cs.class_id = ec.id
+    where cs.school_id = #{schoolId}
+    order by score
   </select>
 </mapper>
