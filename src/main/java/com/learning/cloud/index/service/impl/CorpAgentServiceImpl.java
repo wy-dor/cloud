@@ -23,10 +23,10 @@ public class CorpAgentServiceImpl implements CorpAgentService {
     private AuthCorpInfoDao authCorpInfoDao;
 
     @Override
-    public JsonResult getAgentId(String corpId) {
+    public String getAgentId(String corpId) {
         CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
         String agentId = byCorpId.getAgentId();
-        return JsonResultUtil.success(agentId);
+        return agentId;
     }
 
     public Boolean getIsSchool(String corpId){

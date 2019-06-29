@@ -44,6 +44,9 @@ public class IndexController {
 	@Autowired
 	private BureauService bureauService;
 
+	@Autowired
+	private CorpAgentService corpAgentService;
+
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
 	 */
@@ -78,6 +81,10 @@ public class IndexController {
 		//获取组织信息bureauId,isSchool,schoolName
 		Map<String, Object> orgInfoMap = bureauService.getOrgInfoByCorpId(corpId);
 		resultMap.putAll(orgInfoMap);
+
+		//获取agentId
+		String agentId = corpAgentService.getAgentId(corpId);
+		resultMap.put("agentId",agentId);
 
 		//返回结果
 		return JsonResultUtil.success(resultMap);

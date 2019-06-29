@@ -76,7 +76,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             int ts = teachers.size();
             for(Teacher te: teachers){
                 ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
-                sum_teacher_score += last.getScore();
+                sum_teacher_score += (last.getScore()==null?0:last.getScore());
             }
             //取家长最新积分
             List<Parent> parents = parentDao.getParents(schoolId);
@@ -84,7 +84,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             int ps = parents.size();
             for(Parent pa : parents){
                 ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
-                Long score = last.getScore();
+                Long score = last.getScore()==null?0:last.getScore();
                 if(score!=0){
                     sum_parent_score += score;
                 }else {

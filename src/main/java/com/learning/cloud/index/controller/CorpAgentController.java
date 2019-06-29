@@ -2,6 +2,7 @@ package com.learning.cloud.index.controller;
 
 import com.learning.cloud.index.service.CorpAgentService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ public class CorpAgentController {
 
     @GetMapping("/getAgentId")
     public JsonResult getAgentId(String corpId) {
-        return corpAgentService.getAgentId(corpId);
+        String agentId = corpAgentService.getAgentId(corpId);
+        return JsonResultUtil.success(agentId);
     }
 }

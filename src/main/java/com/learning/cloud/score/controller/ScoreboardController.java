@@ -4,6 +4,7 @@ import com.learning.cloud.score.service.ScoreboardService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ public class ScoreboardController {
         return scoreboardService.getSchoolScore(schoolId);
     }
 
-    @GetMapping("updateSchoolScore")
+    @PostMapping("updateSchoolScore")
     public JsonResult updateSchoolScore(Long schoolId)throws Exception{
         return scoreboardService.updateSchoolScore(schoolId);
     }
@@ -27,7 +28,7 @@ public class ScoreboardController {
         return scoreboardService.getClassScore(classId);
     }
 
-    @GetMapping("updateClassScore")
+    @PostMapping("updateClassScore")
     public JsonResult updateClassScore(Long classId)throws Exception{
         return scoreboardService.updateClassScore(classId);
     }
