@@ -53,7 +53,7 @@ public class QuestionController {
     }
 
     /*批量删除问题*/
-    @GetMapping("/deleteBatchQuestions")
+    @PostMapping("/deleteBatchQuestions")
     public JsonResult deleteBatchQuestions(String questionIds){
         return questionService.deleteBatchQuestions(questionIds);
     }

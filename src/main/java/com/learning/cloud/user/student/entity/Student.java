@@ -23,6 +23,10 @@ public class Student extends BaseEntity {
     @Getter
     private Integer bureauId;
 
+    @Getter
+    @Setter
+    private String avatar;
+
     public Integer getId() {
         return id;
     }

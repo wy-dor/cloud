@@ -25,4 +25,5 @@ public class Parent extends BaseEntity {
 
     private String phone;
 
+    private String avatar;
 }

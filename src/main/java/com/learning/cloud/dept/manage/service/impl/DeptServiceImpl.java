@@ -58,8 +58,8 @@ public class DeptServiceImpl implements DeptService {
     private AuthenService authenService;
 
     @Override
-    public void init(School school) throws ApiException {
-        Integer schoolId = school.getId();
+    public void init(Integer schoolId) throws ApiException {
+        School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
         String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
         String accessToken = authenService.getAccessToken(corpId);
@@ -239,7 +239,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public Map<String, String> getUserRole(String userId, String accessToken) throws ApiException {
+    public Map<String, String> getUserRole(String userId, String accessToken, String avatar) throws ApiException {
         Map<String,String> map = new HashMap<>();
         String roleName = "";
         OapiDepartmentListParentDeptsResponse resp = getListParentDeptsByUser(userId,accessToken);
@@ -256,6 +256,8 @@ public class DeptServiceImpl implements DeptService {
             Integer classId = byUserId.getClassId();
             map.put("roleName","学生");
             map.put("classId",classId + "");
+            byUserId.setAvatar(avatar);
+            studentDao.update(byUserId);
             }
         }else{
             String deptId = department.split(",")[0].substring(2);
@@ -263,12 +265,18 @@ public class DeptServiceImpl implements DeptService {
             String deptName = resp1.getName();
             if(deptName.equals("老师")){
                 roleName = "老师";
-                Integer id = teacherDao.getByUserId(userId).getId();
+                Teacher byUserId = teacherDao.getByUserId(userId);
+                Integer id = byUserId.getId();
                 map.put("teacherId",id + "");
+                byUserId.setAvatar(avatar);
+                teacherDao.update(byUserId);
             }else if (deptName.equals("家长")){
                 roleName = "家长";
-                Integer classId = parentDao.getByUserId(userId).getClassId();
+                Parent byUserId = parentDao.getByUserId(userId);
+                Integer classId = byUserId.getClassId();
                 map.put("classId",classId + "");
+                byUserId.setAvatar(avatar);
+                parentDao.update(byUserId);
             }
         }
         map.put("roleName",roleName);

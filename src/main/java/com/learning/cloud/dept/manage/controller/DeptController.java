@@ -5,11 +5,10 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
 import com.learning.cloud.term.service.TermService;
 import com.learning.cloud.util.ServiceResult;
-import com.learning.domain.JsonResult;
-import com.learning.utils.JsonResultUtil;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,10 +34,16 @@ public class DeptController {
             e.printStackTrace();
         }
         if(i > 0){
-            School s = schoolService.getBySchool(school).get(0);
-            deptService.init(s);
+            deptService.init(school.getId());
         }
         return ServiceResult.success("设置成功");
+    }
+
+    /*学校结构数据同步*/
+    @PostMapping("/initSchool")
+    public ServiceResult initSchool(Integer schoolId) throws ApiException {
+        deptService.init(schoolId);
+        return ServiceResult.success("同步成功");
     }
 
     /*班级结构数据同步*/

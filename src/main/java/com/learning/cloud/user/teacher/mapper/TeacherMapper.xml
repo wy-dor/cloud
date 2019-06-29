@@ -115,6 +115,9 @@
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
       </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
     </set>
     <where>
       <if test="userId != null">

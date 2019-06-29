@@ -8,11 +8,11 @@ import com.taobao.api.ApiException;
 import java.util.Map;
 
 public interface DeptService {
-    void init(School school) throws ApiException;
+    void init(Integer schoolId) throws ApiException;
 
     void saveUserInClass(int classId) throws ApiException;
 
-    Map<String, String> getUserRole(String userId, String accessToken) throws ApiException;
+    Map<String, String> getUserRole(String userId, String accessToken, String avatar) throws ApiException;
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException;
 

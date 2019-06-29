@@ -34,6 +34,10 @@ public class Teacher extends BaseEntity {
     @Setter
     private String courseName;
 
+    @Getter
+    @Setter
+    private String avatar;
+
     public Integer getId() {
         return id;
     }

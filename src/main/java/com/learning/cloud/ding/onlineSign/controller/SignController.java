@@ -32,12 +32,13 @@ public class SignController {
     }
 
     /*获取指定班级下所有签名任务，state为0时任务已失效*/
+    /*classId*/
     @GetMapping("/getAllTasks")
     public JsonResult getAllTasks(Parent parent)throws Exception{
         return signService.getAllTasks(parent);
     }
 
-    /*获取有效签字列表*/
+    /*获取有效签字列表,classId*/
     @GetMapping("/getValidTaskList")
     public JsonResult getValidTaskList(Parent parent) throws Exception {
         return signService.getValidTaskList(parent);
