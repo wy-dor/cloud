@@ -18,4 +18,6 @@ public class ClassScoreboard {
 
     private Long bureauId;
 
+    private String gradeName;
+
 }

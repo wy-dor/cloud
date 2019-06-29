@@ -16,4 +16,6 @@ public class SchoolScoreboard {
 
     private Long bureauId;
 
+    private String schoolName;
+
 }

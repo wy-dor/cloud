@@ -18,4 +18,6 @@ public class ScoreRecord {
 
     private Long score;
 
+    private String teacherName;
+
 }
