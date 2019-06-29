@@ -20,14 +20,14 @@ import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+@Slf4j
 @Service
 @Transactional
 public class AuthenServiceImpl implements AuthenService {
@@ -69,8 +69,11 @@ public class AuthenServiceImpl implements AuthenService {
         authAppInfo.setSuiteAccessToken(suiteAccessToken);
 
         /*获取永久授权码并库存*/
-        String permanentCode = getPermanentCode(authCode, suiteAccessToken);
+        Map<String,String> map = getPermanentCode(authCode, suiteAccessToken);
+        String permanentCode = map.get("permanentCode");
+        String corpName = map.get("corpName");
         authAppInfo.setPermanentCode(permanentCode);
+        authAppInfo.setCorpName(corpName);
 
         /*激活应用*/
         String errmsg = appActive(suiteAccessToken, permanentCode);
@@ -110,7 +113,8 @@ public class AuthenServiceImpl implements AuthenService {
     }
 
     /*获取永久授权码并库存*/
-    private String getPermanentCode(String authCode, String suiteAccessToken) throws ApiException {
+    private Map getPermanentCode(String authCode, String suiteAccessToken) throws ApiException {
+        Map<String,String> map = new HashMap<>();
         DingTalkClient client1 = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_PERMANENT_CODE + suiteAccessToken);
         OapiServiceGetPermanentCodeRequest req1 = new OapiServiceGetPermanentCodeRequest();
         req1.setTmpAuthCode(authCode);
@@ -121,9 +125,10 @@ public class AuthenServiceImpl implements AuthenService {
         authAppInfo.setPermanentCode(permanentCode);
         authAppInfo.setCorpId(authCorpId);
         authAppInfo.setCorpName(corpName);
+        map.put("permanentCode",permanentCode);
+        map.put("corpName",corpName);
         System.out.println("permanentCode:" + permanentCode);
-        System.out.println("authCorpId：" + authCorpId);
-        return permanentCode;
+        return map;
     }
 
     /*激活应用*/

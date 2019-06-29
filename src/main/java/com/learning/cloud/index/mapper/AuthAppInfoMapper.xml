@@ -84,9 +84,6 @@
   <update id="update" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
     update auth_app_info
     <set>
-      <if test="corpId != null">
-        corp_id = #{corpId,jdbcType=VARCHAR},
-      </if>
       <if test="corpName != null">
         corp_name = #{corpName,jdbcType=VARCHAR},
       </if>

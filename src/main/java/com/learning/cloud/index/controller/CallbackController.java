@@ -104,11 +104,13 @@ public class CallbackController {
                 bizLogger.info("企业授权开通应用事件: " + plainText);
             }else if(EVENT_SUITE_RELIEVE.equals(eventType)){
                 AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
-                byCorpId.setState(0);
-                byCorpId.setPermanentCode("");
-                int i = authAppInfoDao.update(byCorpId);
-                if(i == 1){
-                    bizLogger.info("企业解除授权事件：" + plainText);
+                if(byCorpId != null){
+                    byCorpId.setState(0);
+                    byCorpId.setPermanentCode("");
+                    int i = authAppInfoDao.update(byCorpId);
+                    if(i == 1){
+                        bizLogger.info("企业解除授权事件：" + plainText);
+                    }
                 }
             }else {
                 // 其他类型事件处理
