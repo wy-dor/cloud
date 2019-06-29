@@ -75,4 +75,10 @@ public class CourseWareController {
         return courseWareService.likeThisCourseWare(id);
     }
 
+    @GetMapping("getMyCourseWare")
+    public JsonResult getMyCourseWare(@RequestParam(value="teacherId",required = true) Long teacherId)throws Exception{
+        return courseWareService.getMyCourseWare(teacherId);
+    }
+
+
 }

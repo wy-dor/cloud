@@ -15,4 +15,6 @@ public interface CourseWareDao {
     List<CourseWare> getCourseWare(@Param("day") String day, @Param("cdId") Long cdId);
 
     int likeThisCourseWare(Long id);
+
+    List<CourseWare> getMyCourseWare(Long teacherId);
 }

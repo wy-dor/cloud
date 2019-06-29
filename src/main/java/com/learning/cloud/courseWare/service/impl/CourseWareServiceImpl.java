@@ -91,4 +91,10 @@ public class CourseWareServiceImpl implements CourseWareService {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }
+
+    @Override
+    public JsonResult getMyCourseWare(Long teacherId) throws Exception {
+        List<CourseWare> courseWares = courseWareDao.getMyCourseWare(teacherId);
+        return null;
+    }
 }

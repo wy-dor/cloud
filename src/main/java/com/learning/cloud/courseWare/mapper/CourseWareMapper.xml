@@ -68,4 +68,9 @@
     update course_ware set likes = likes+1
     where id = #{id}
   </update>
+
+  <select id="getMyCourseWare" parameterType="java.lang.Long" resultType="com.learning.cloud.courseWare.entity.CourseWare">
+    select * from course_ware
+    where teacher_id = #{teacherId}
+  </select>
 </mapper>
