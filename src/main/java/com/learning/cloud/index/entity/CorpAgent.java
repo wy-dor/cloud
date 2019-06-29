@@ -21,7 +21,7 @@ public class CorpAgent extends BaseEntity {
 
     @Getter
     @Setter
-    private Date udpateTime;
+    private Date updateTime;
 
     public Integer getId() {
         return id;

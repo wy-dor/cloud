@@ -162,6 +162,7 @@ public class AuthenServiceImpl implements AuthenService {
             OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
             accessToken = execute.getAccessToken();
             byCorpId.setCorpAccessToken(accessToken);
+            byCorpId.setUpdateTime(new Date());
             authAppInfoDao.update(byCorpId);
         }
         return accessToken;
@@ -176,6 +177,7 @@ public class AuthenServiceImpl implements AuthenService {
         String accessToken = execute.getAccessToken();
         AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
         byCorpId.setCorpAccessToken(accessToken);
+        byCorpId.setUpdateTime(new Date());
         authAppInfoDao.update(byCorpId);
         return execute.getAccessToken();
     }
@@ -282,6 +284,7 @@ public class AuthenServiceImpl implements AuthenService {
             ca.setAgentName(agent.getAgentName());
             ca.setAppId(agent.getAppid().toString());
             ca.setLogoUrl(agent.getLogoUrl());
+            ca.setUpdateTime(new Date());
             CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
             if(byCorpId == null){
                 corpAgentDao.insert(ca);

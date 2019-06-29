@@ -25,4 +25,5 @@ public interface QuestionService {
 
     JsonResult closeQuestion(Long id)throws Exception;
 
+    JsonResult deleteBatchQuestions(String questionIds);
 }

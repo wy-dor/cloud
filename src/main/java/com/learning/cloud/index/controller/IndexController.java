@@ -71,6 +71,8 @@ public class IndexController {
 
 		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, corpId);
 		String name = resp1.getName();
+		String avatar = resp1.getAvatar();
+		resultMap.put("avatar",avatar);
 		resultMap.put("userName",name);
 		resultMap.put("isAdmin",resp1.getIsAdmin());
 
