@@ -52,10 +52,10 @@ public class LoginController {
             if(response.getIsSys()){
                 return JsonResultUtil.success(response);
             }else {
-                throw new PayException(JsonResultEnum.OA_LOGIN_NOT_SYS);
+                return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_NOT_SYS);
             }
         }else {
-            throw new PayException(JsonResultEnum.OA_LOGIN_ERROR);
+            return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_ERROR);
         }
     }
 
