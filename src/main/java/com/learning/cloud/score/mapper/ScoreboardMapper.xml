@@ -105,7 +105,7 @@
   </select>
 
   <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select sr.*, ut.teacher_name from user_teacher ut
+    select sr.*, ut.teacher_name, ut.avatar from user_teacher ut
     left join score_record sr
     on ut.user_id = sr.user_id
     where ut.bureau_id = #{bureauId}

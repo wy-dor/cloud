@@ -20,4 +20,6 @@ public class ScoreRecord {
 
     private String teacherName;
 
+    private String avatar;
+
 }
