@@ -68,7 +68,7 @@ public class LoginController {
                     result.put("isSchool",true);
                     result.put("body",response.getBody());
                 }
-                return JsonResultUtil.success(response);
+                return JsonResultUtil.success(result);
             }else {
                 return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_NOT_SYS);
             }
