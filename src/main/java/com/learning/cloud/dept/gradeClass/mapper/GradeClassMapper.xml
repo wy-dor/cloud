@@ -54,14 +54,16 @@
   </select>
 
   <select id="getClassesByCampusId" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
-    select *
-    from edu_grade_class
+    select egc.*, ec.campus_name
+    from edu_grade_class egc
+    left join edu_campus ec
+    on egc.campus_id = ec.id
     where 1=1
     <if test="id != null">
-      and campus_id = #{id}
+      and egc.campus_id = #{id}
     </if>
     <if test="schoolId != null">
-      and school_id = #{schoolId}
+      and egc.school_id = #{schoolId}
     </if>
   </select>
 

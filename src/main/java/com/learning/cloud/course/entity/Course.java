@@ -29,4 +29,6 @@ public class Course extends BaseEntity {
 
     private String termName;
 
+    private String className;
+
 }
