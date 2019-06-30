@@ -20,4 +20,6 @@ public interface CourseSectionService {
     JsonResult deleteSection(Long id)throws Exception;
 
     JsonResult deleteSchoolSection(Long schoolId)throws Exception;
+
+    JsonResult getSchoolSectionArray(Long schoolId)throws Exception;
 }

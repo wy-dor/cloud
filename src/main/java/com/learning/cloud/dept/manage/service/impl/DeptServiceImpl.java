@@ -130,6 +130,7 @@ public class DeptServiceImpl implements DeptService {
                                     course.setSchoolId(schoolId.longValue());
                                     course.setClassId(classId.longValue());
                                     course.setGradeName(gradeName);
+                                    course.setClassName(className);
                                     courseDao.addCourse(course);
                                 }else{
                                     GradeClass gc = classList.get(0);

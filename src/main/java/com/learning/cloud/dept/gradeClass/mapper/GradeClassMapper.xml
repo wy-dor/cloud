@@ -54,9 +54,17 @@
   </select>
 
   <select id="getClassesByCampusId" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
-    select *
-    from edu_grade_class
-    where campus_id = #{id}
+    select egc.*, ec.campus_name
+    from edu_grade_class egc
+    left join edu_campus ec
+    on egc.campus_id = ec.id
+    where 1=1
+    <if test="id != null">
+      and egc.campus_id = #{id}
+    </if>
+    <if test="schoolId != null">
+      and egc.school_id = #{schoolId}
+    </if>
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">

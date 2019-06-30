@@ -50,4 +50,9 @@ public class CourseSectionController {
         return courseSectionService.deleteSchoolSection(schoolId);
     }
 
+    @GetMapping("getSchoolSectionArray")
+    public JsonResult getSchoolSectionArray(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+        return courseSectionService.getSchoolSectionArray(schoolId);
+    }
+
 }

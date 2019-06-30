@@ -94,4 +94,9 @@
     delete from course_section
     where school_id = #{schoolId}
   </delete>
+
+  <select id="getSchoolSectionArray" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSectionArray">
+    select * from course_section_array
+    where school_id = #{schoolId}
+  </select>
 </mapper>

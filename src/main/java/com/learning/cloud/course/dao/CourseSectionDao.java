@@ -1,6 +1,7 @@
 package com.learning.cloud.course.dao;
 
 import com.learning.cloud.course.entity.CourseSection;
+import com.learning.cloud.course.entity.CourseSectionArray;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -26,4 +27,6 @@ public interface CourseSectionDao {
     int deleteSection(Long id);
 
     int deleteSchoolSection(Long schoolId);
+
+    CourseSectionArray getSchoolSectionArray(Long schoolId);
 }

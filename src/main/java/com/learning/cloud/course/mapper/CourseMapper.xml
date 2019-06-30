@@ -32,6 +32,9 @@
       <if test="content != null">
         content,
       </if>
+      <if test="className != null">
+        className,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -60,6 +63,9 @@
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="className != null">
+        #{class_name,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

@@ -21,6 +21,10 @@ public class GradeClass extends BaseEntity {
 
     @Getter
     @Setter
+    private String campusName;
+
+    @Getter
+    @Setter
     private Integer schoolId;
 
     @Getter
