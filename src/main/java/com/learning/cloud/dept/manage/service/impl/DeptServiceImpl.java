@@ -181,11 +181,11 @@ public class DeptServiceImpl implements DeptService {
             if(userRole.equals("老师")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     String userName = user.getName();
-                    String userid = user.getUserid();
+                    String userId = user.getUserid();
                     String classIdStr = classId + "";
                     Teacher teacher = new Teacher();
                     teacher.setTeacherName(userName);
-                    teacher.setUserId(userid);
+                    teacher.setUserId(userId);
                     teacher.setCampusId(campusId);
                     teacher.setSchoolId(schoolId);
                     teacher.setBureauId(bureauId);

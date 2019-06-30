@@ -72,9 +72,14 @@ public class IndexController {
 		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, corpId);
 		String name = resp1.getName();
 		String avatar = resp1.getAvatar();
+		Boolean isAdmin = resp1.getIsAdmin();
 		resultMap.put("avatar",avatar);
 		resultMap.put("userName",name);
-		resultMap.put("isAdmin",resp1.getIsAdmin());
+		resultMap.put("isAdmin", isAdmin);
+
+		//获取agentId
+		String agentId = corpAgentService.getAgentId(corpId);
+		resultMap.put("agentId",agentId);
 
 		//获取组织信息bureauId,isSchool,schoolName
 		Map<String, Object> orgInfoMap = bureauService.getOrgInfoByCorpId(corpId);
@@ -84,13 +89,15 @@ public class IndexController {
 		//添加教育局角色登录判断
 		Boolean isSchool = (Boolean) resultMap.get("isSchool");
 		if(isSchool){
-			Map map = deptService.getUserRole(userId, accessToken , avatar, corpId);
+			Map map = null;
+			try {
+				map = deptService.getUserRole(userId, accessToken , avatar, corpId);
+			} catch (ApiException e) {
+				e.printStackTrace();
+				return JsonResultUtil.success(resultMap);
+			}
 			resultMap.putAll(map);
 		}
-
-		//获取agentId
-		String agentId = corpAgentService.getAgentId(corpId);
-		resultMap.put("agentId",agentId);
 
 		//返回结果
 		return JsonResultUtil.success(resultMap);
