@@ -3,6 +3,7 @@ package com.learning.cloud.course.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.learning.cloud.course.dao.CourseSectionDao;
 import com.learning.cloud.course.entity.CourseSection;
+import com.learning.cloud.course.entity.CourseSectionArray;
 import com.learning.cloud.course.entity.SectionArray;
 import com.learning.cloud.course.service.CourseSectionService;
 import com.learning.domain.JsonResult;
@@ -10,7 +11,6 @@ import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.swing.SwingUtilities2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,5 +85,11 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     public JsonResult deleteSchoolSection(Long schoolId) throws Exception {
         int i = courseSectionDao.deleteSchoolSection(schoolId);
         return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult getSchoolSectionArray(Long schoolId) throws Exception {
+        CourseSectionArray courseSectionArray = courseSectionDao.getSchoolSectionArray(schoolId);
+        return JsonResultUtil.success(courseSectionArray);
     }
 }

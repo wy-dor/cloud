@@ -57,14 +57,12 @@
     select *
     from edu_grade_class
     where 1=1
-    <trim suffixOverrides=",">
-      <if test="id != null">
-        and campus_id = #{id},
-      </if>
-      <if test="schoolId != null">
-        and school_id = #{schoolId},
-      </if>
-    </trim>
+    <if test="id != null">
+      and campus_id = #{id}
+    </if>
+    <if test="schoolId != null">
+      and school_id = #{schoolId}
+    </if>
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">

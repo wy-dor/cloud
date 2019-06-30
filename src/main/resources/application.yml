@@ -66,7 +66,7 @@ dingding:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://47.103.41.179:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://106.15.232.47:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
 
 ---
 #测试环境
