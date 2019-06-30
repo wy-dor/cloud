@@ -59,10 +59,14 @@ public class LoginController {
         if(response.isSuccess()){
             if(response.getIsSys()){
                 School byCorpId = schoolDao.getSchoolByCorpId(response.getCorpInfo().getCorpid());
+                Map<String, Object> result = new HashMap<>();
                 if(byCorpId == null){
-                    Map<String, Object> result = new HashMap<>();
+
                     result.put("isSchool",false);
-                    result.put("result",response.getBody());
+                    result.put("body",response.getBody());
+                }else {
+                    result.put("isSchool",true);
+                    result.put("body",response.getBody());
                 }
                 return JsonResultUtil.success(response);
             }else {
