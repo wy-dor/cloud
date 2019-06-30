@@ -96,8 +96,8 @@ public class IndexController {
 	 * 获取企业授权信息接口
 	 */
 	@RequestMapping("/getAuthInfo")
-	public ServiceResult getAuthInfo(String corpId) throws ApiException {
-		return authenService.getAuthInfo(corpId);
+	public ServiceResult getAuthInfo(String corpId,String accessToken) throws ApiException {
+		return authenService.getAuthInfo(corpId,accessToken);
 	}
 
 	/**

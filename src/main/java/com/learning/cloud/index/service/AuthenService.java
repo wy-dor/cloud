@@ -17,5 +17,5 @@ public interface AuthenService {
     String getSuiteAccessToken() throws ApiException;
 
     /*获取企业授权信息*/
-    ServiceResult getAuthInfo(String corpId) throws ApiException;
+    ServiceResult getAuthInfo(String corpId ,String accessToken) throws ApiException;
 }
