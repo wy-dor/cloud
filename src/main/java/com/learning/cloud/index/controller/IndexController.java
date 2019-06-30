@@ -17,6 +17,7 @@ import com.learning.cloud.index.service.CorpAgentService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.taobao.api.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,13 +77,17 @@ public class IndexController {
 		resultMap.put("userName",name);
 		resultMap.put("isAdmin",resp1.getIsAdmin());
 
-		//返回登录用户角色（学生，老师，家长）
-		Map map = deptService.getUserRole(userId, accessToken ,avatar);
-		resultMap.putAll(map);
-
 		//获取组织信息bureauId,isSchool,schoolName
 		Map<String, Object> orgInfoMap = bureauService.getOrgInfoByCorpId(corpId);
 		resultMap.putAll(orgInfoMap);
+
+		//返回登录用户角色（学生，老师，家长）
+		//添加教育局角色登录判断
+		Boolean isSchool = (Boolean) resultMap.get("isSchool");
+		if(isSchool){
+			Map map = deptService.getUserRole(userId, accessToken , avatar, corpId);
+			resultMap.putAll(map);
+		}
 
 		//获取agentId
 		String agentId = corpAgentService.getAgentId(corpId);

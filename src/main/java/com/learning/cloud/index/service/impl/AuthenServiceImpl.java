@@ -183,9 +183,10 @@ public class AuthenServiceImpl implements AuthenService {
         OapiServiceGetAuthInfoResponse.AuthCorpInfo CorpInfo = response.getAuthCorpInfo();
         AuthCorpInfo authCorpInfo = new AuthCorpInfo();
         String corpName = CorpInfo.getCorpName();
+        String industry = CorpInfo.getIndustry();
         authCorpInfo.setCorpId(corpId);
         authCorpInfo.setCorpName(corpName);
-        authCorpInfo.setIndustry(CorpInfo.getIndustry());
+        authCorpInfo.setIndustry(industry);
         authCorpInfo.setAuthLevel(CorpInfo.getAuthLevel().intValue());
         authCorpInfo.setInviteUrl(CorpInfo.getInviteUrl());
         if(CorpInfo.getIsAuthenticated()){
@@ -205,7 +206,7 @@ public class AuthenServiceImpl implements AuthenService {
             System.out.println("保存授权企业信息成功");
         }
 
-        if(corpName.endsWith("学校")){
+        if(industry.equals("初中等教育")){
             Integer schoolId;
             School school = new School();
             school.setSchoolName(corpName);
@@ -239,7 +240,7 @@ public class AuthenServiceImpl implements AuthenService {
                 }
             }
 
-        }else{
+        }else if(industry.equals("教育行政机构")){
             Bureau byBureauName = bureauDao.getByBureauName(corpName);
             if(byBureauName == null){
                 Bureau bureau = new Bureau();
