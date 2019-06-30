@@ -152,11 +152,7 @@ public class AuthenServiceImpl implements AuthenService {
         /*accessToken两小时过期*/
         long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
         if(minutes >= 120){
-            DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
-            OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
-            req.setAuthCorpid(authCorpId);
-            OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
-            accessToken = execute.getAccessToken();
+            accessToken = getURLAccessToken(authCorpId);
             byCorpId.setCorpAccessToken(accessToken);
             byCorpId.setUpdateTime(new Date());
             authAppInfoDao.update(byCorpId);
@@ -213,6 +209,7 @@ public class AuthenServiceImpl implements AuthenService {
             Integer schoolId;
             School school = new School();
             school.setSchoolName(corpName);
+            school.setCorpId(corpId);
             List<School> bySchool = schoolDao.getBySchool(school);
             if(bySchool == null || bySchool.size() == 0){
                 schoolDao.insert(school);
@@ -247,6 +244,7 @@ public class AuthenServiceImpl implements AuthenService {
             if(byBureauName == null){
                 Bureau bureau = new Bureau();
                 bureau.setBureauName(corpName);
+                bureau.setCorpId(corpId);
                 bureauDao.insert(bureau);
             }
         }

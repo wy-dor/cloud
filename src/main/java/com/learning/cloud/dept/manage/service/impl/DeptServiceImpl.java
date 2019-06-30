@@ -61,7 +61,12 @@ public class DeptServiceImpl implements DeptService {
     public void init(Integer schoolId) throws ApiException {
         School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
-        String corpId = schoolDao.getCorpIdBySchoolName(school.getSchoolName());
+        //todo
+        //
+        if(bureauId == null){
+            bureauId = 1;
+        }
+        String corpId = school.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
         try {
             OapiDepartmentListResponse resp = getDeptList("1", accessToken , 1);
@@ -113,11 +118,11 @@ public class DeptServiceImpl implements DeptService {
                                 gradeClass.setSessionName(sessionName);
                                 gradeClass.setGradeName(gradeName);
                                 gradeClass.setClassName(className);
-                                GradeClass gc = gradeClassDao.getByGradeClass(gradeClass).get(0);
+                                List<GradeClass> classList = gradeClassDao.getByGradeClass(gradeClass);
                                 gradeClass.setSchoolId(schoolId);
                                 gradeClass.setBureauId(bureauId);
                                 gradeClass.setDeptId(classDeptId);
-                                if(gc == null){
+                                if(classList.size() <= 0){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
                                     //增加课程
@@ -127,6 +132,7 @@ public class DeptServiceImpl implements DeptService {
                                     course.setGradeName(gradeName);
                                     courseDao.addCourse(course);
                                 }else{
+                                    GradeClass gc = classList.get(0);
                                     classId = gc.getId();
                                     gradeClass.setId(classId);
                                     gradeClassDao.update(gradeClass);
