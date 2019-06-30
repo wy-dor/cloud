@@ -12,7 +12,7 @@ public interface DeptService {
 
     void saveUserInClass(int classId) throws ApiException;
 
-    Map<String, String> getUserRole(String userId, String accessToken, String avatar) throws ApiException;
+    Map<String, String> getUserRole(String userId, String accessToken, String avatar ,String corpId) throws ApiException;
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException;
 

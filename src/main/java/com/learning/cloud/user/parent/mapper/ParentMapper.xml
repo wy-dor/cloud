@@ -15,6 +15,21 @@
     select *
     from user_parent
     where user_id = #{userId}
+    limit 1
+  </select>
+
+  <select id="getParentInClass" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
+    select *
+    from user_parent
+    where user_id = #{userId}
+    and class_id = #{classId}
+  </select>
+
+  <select id="getParentsInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
+    select *
+    from user_parent
+    where user_id = #{userId}
+    and school_id = #{schoolId}
   </select>
 
   <select id="getClassParentNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -88,15 +103,10 @@
       <if test="studentId != null">
         student_name = #{studentId,jdbcType=INTEGER},
       </if>
-      <if test="classId != null">
-        class_id = #{classId,jdbcType=INTEGER},
-      </if>
       <if test="campusId != null">
         campus_id = #{campusId,jdbcType=INTEGER},
       </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
+
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
       </if>
@@ -108,6 +118,12 @@
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
+    <if test="classId != null">
+    and class_id = #{classId,jdbcType=INTEGER}
+    </if>
+    <if test="schoolId != null">
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    </if>
   </update>
 
   <select id="getParents" parameterType="java.lang.Long" resultType="com.learning.cloud.user.parent.entity.Parent">

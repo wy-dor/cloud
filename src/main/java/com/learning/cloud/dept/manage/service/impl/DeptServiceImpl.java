@@ -176,10 +176,10 @@ public class DeptServiceImpl implements DeptService {
             Long userDeptId = dept4.getId();
             /*用户表更新*/
             OapiUserSimplelistResponse resp5 = getDeptUserList(userDeptId.toString(), accessToken);
-            List<OapiUserSimplelistResponse.Userlist> userlist = resp5.getUserlist();
+            List<OapiUserSimplelistResponse.Userlist> userList = resp5.getUserlist();
             /*用户表填充*/
             if(userRole.equals("老师")){
-                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                for (OapiUserSimplelistResponse.Userlist user : userList) {
                     String userName = user.getName();
                     String userid = user.getUserid();
                     String classIdStr = classId + "";
@@ -189,7 +189,7 @@ public class DeptServiceImpl implements DeptService {
                     teacher.setCampusId(campusId);
                     teacher.setSchoolId(schoolId);
                     teacher.setBureauId(bureauId);
-                    Teacher t = teacherDao.getByUserId(userid);
+                    Teacher t = teacherDao.getTeacherInSchool(teacher);
                     if(t == null){
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
@@ -206,7 +206,7 @@ public class DeptServiceImpl implements DeptService {
                     }
                 }
             }else if(userRole.equals("家长")){
-                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                for (OapiUserSimplelistResponse.Userlist user : userList) {
                     String userName = user.getName();
                     String userid = user.getUserid();
                     Parent parent = new Parent();
@@ -216,7 +216,7 @@ public class DeptServiceImpl implements DeptService {
                     parent.setCampusId(campusId);
                     parent.setSchoolId(schoolId);
                     parent.setBureauId(bureauId);
-                    Parent p = parentDao.getByUserId(userid);
+                    Parent p = parentDao.getParentInClass(parent);
                     if(p == null){
                         parentDao.insert(parent);
                     }else{
@@ -224,7 +224,7 @@ public class DeptServiceImpl implements DeptService {
                     }
                 }
             }else if(userRole.equals("学生")){
-                for (OapiUserSimplelistResponse.Userlist user : userlist) {
+                for (OapiUserSimplelistResponse.Userlist user : userList) {
                     String userName = user.getName();
                     String userid = user.getUserid();
                     Student student = new Student();
@@ -246,9 +246,10 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public Map<String, String> getUserRole(String userId, String accessToken, String avatar) throws ApiException {
+    public Map<String, String> getUserRole(String userId, String accessToken, String avatar ,String corpId) throws ApiException {
         Map<String,String> map = new HashMap<>();
         String roleName = "";
+        Integer schoolId = schoolDao.getSchoolByCorpId(corpId).getId();
         OapiDepartmentListParentDeptsResponse resp = getListParentDeptsByUser(userId,accessToken);
         String department = resp.getDepartment();
         /*"department": "[[117451249, 117656244, 117680160, 117597295, 117425251, -7, 1]]"*/
@@ -272,18 +273,26 @@ public class DeptServiceImpl implements DeptService {
             String deptName = resp1.getName();
             if(deptName.equals("老师")){
                 roleName = "老师";
-                Teacher byUserId = teacherDao.getByUserId(userId);
-                Integer id = byUserId.getId();
+                Teacher teacher = new Teacher();
+                teacher.setUserId(userId);
+                teacher.setSchoolId(schoolId);
+                Teacher t = teacherDao.getTeacherInSchool(teacher);
+                Integer id = t.getId();
                 map.put("teacherId",id + "");
-                byUserId.setAvatar(avatar);
-                teacherDao.update(byUserId);
+                t.setAvatar(avatar);
+                teacherDao.update(t);
             }else if (deptName.equals("家长")){
                 roleName = "家长";
-                Parent byUserId = parentDao.getByUserId(userId);
-                Integer classId = byUserId.getClassId();
+                Parent parent = new Parent();
+                parent.setUserId(userId);
+                parent.setSchoolId(schoolId);
+                //todo
+                //处理家长多个classId返回
+                Parent p = parentDao.getParentsInSchool(parent).get(0);
+                Integer classId = p.getClassId();
                 map.put("classId",classId + "");
-                byUserId.setAvatar(avatar);
-                parentDao.update(byUserId);
+                p.setAvatar(avatar);
+                parentDao.update(p);
             }
         }
         map.put("roleName",roleName);

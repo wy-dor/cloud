@@ -16,6 +16,8 @@ public interface TeacherDao {
 
     Teacher getByUserId(String userId);
 
+    Teacher getTeacherInSchool(Teacher teacher);
+
     int update(Teacher teacher);
 
     Integer getClassTeacherNum(Integer classId);

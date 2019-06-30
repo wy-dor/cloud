@@ -35,6 +35,8 @@ public class DeptController {
         }
         if(i > 0){
             deptService.init(school.getId());
+        }else{
+            return ServiceResult.success("已加入");
         }
         return ServiceResult.success("设置成功");
     }

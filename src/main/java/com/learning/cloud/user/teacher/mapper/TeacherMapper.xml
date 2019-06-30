@@ -16,6 +16,13 @@
     where find_in_set(#{id},class_ids)
   </select>
 
+  <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where user_id = #{userId}
+    and school_id = #{schoolId}
+  </select>
+
   <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
@@ -27,6 +34,7 @@
     select *
     from user_teacher
     where user_id = #{userId}
+    limit 1
   </select>
 
   <select id="getClassTeacherNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -103,9 +111,6 @@
       <if test="classIds != null">
         class_ids = #{classIds,jdbcType=VARCHAR},
       </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
       </if>
@@ -119,14 +124,8 @@
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
     </set>
-    <where>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR}
-      </if>
-      <if test="id != null">
-        and id = #{id,jdbcType=INTEGER}
-      </if>
-    </where>
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and school_id = #{schoolId,jdbcType=INTEGER}
   </update>
 
   <select id="getTeacherIds" parameterType="java.lang.Long" resultType="com.learning.cloud.user.teacher.entity.Teacher">

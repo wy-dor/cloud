@@ -13,6 +13,10 @@ public interface ParentDao {
 
     Integer getClassParentNum(Integer classId);
 
+    Parent getParentInClass(Parent parent);
+
+    List<Parent> getParentsInSchool(Parent parent);
+
     int insert(Parent record);
 
     int update(Parent parent);
