@@ -57,11 +57,11 @@ public class IndexController {
 		Map<String,Object> resultMap = new HashMap<>();
 		Long start = System.currentTimeMillis();
 		//获取accessToken,注意正是代码要有异常流处理
-		OapiServiceGetCorpTokenResponse oapiServiceGetCorpTokenResponse = getOapiServiceGetCorpToken(corpId);
-		String accessToken = oapiServiceGetCorpTokenResponse.getAccessToken();
+        String accessToken = authenService.getAccessToken(corpId);
 
-		//获取用户信息
+        //获取用户信息
 		OapiUserGetuserinfoResponse oapiUserGetuserinfoResponse = getOapiUserGetuserinfo(accessToken,requestAuthCode);
+
 
 		//3.查询得到当前用户的userId
 		// 获得到userId之后应用应该处理应用自身的登录会话管理（session）,避免后续的业务交互（前端到应用服务端）每次都要重新获取用户身份，提升用户体验
@@ -106,23 +106,6 @@ public class IndexController {
 	@GetMapping("/AuthenApp")
 	public ServiceResult AuthenApp(String corpId) throws ApiException {
 		return authenService.authenApp(corpId);
-	}
-
-	/**
-	 * 获取企业凭证接口
-	 */
-	@GetMapping("/getAccessToken")
-	public ServiceResult getAccessToken(String corpId) throws ApiException {
-		String accessToken = authenService.getAccessToken(corpId);
-		return ServiceResult.success(accessToken);
-	}
-
-	/**
-	 * 更新所有企业的accessToken
-	 */
-	@GetMapping("/updateAllAccessToken")
-	public ServiceResult updateAllAccessToken() throws ApiException {
-		return authenService.updateAllAccessToken();
 	}
 
 	/**

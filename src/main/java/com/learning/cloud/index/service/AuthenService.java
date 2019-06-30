@@ -11,9 +11,6 @@ public interface AuthenService {
     /*获取企业凭证*/
     String getAccessToken(String authCorpId) throws ApiException;
 
-    /*更新所有企业的access_token*/
-    ServiceResult updateAllAccessToken() throws ApiException;
-
     String getSuiteAccessToken() throws ApiException;
 
     /*获取企业授权信息*/
