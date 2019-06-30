@@ -33,7 +33,7 @@
         content,
       </if>
       <if test="className != null">
-        className,
+        class_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -65,7 +65,7 @@
         #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="className != null">
-        #{class_name,jdbcType=VARCHAR},
+        #{className,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
