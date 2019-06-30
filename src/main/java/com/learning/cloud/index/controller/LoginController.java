@@ -8,10 +8,15 @@ import com.dingtalk.api.request.OapiSsoGetuserinfoRequest;
 import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
+import com.learning.cloud.bureau.entity.Bureau;
+import com.learning.cloud.bureau.service.BureauService;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
 import com.learning.exception.PayException;
 import com.learning.utils.JsonResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +28,9 @@ import java.util.Map;
  */
 @RestController
 public class LoginController {
+
+    @Autowired
+    private SchoolDao schoolDao;
 
     //应用管理后台免登
     @GetMapping("oaLogin")
@@ -50,6 +58,12 @@ public class LoginController {
         OapiSsoGetuserinfoResponse response = client.execute(request,accessToken);
         if(response.isSuccess()){
             if(response.getIsSys()){
+                School byCorpId = schoolDao.getSchoolByCorpId(response.getCorpInfo().getCorpid());
+                if(byCorpId == null){
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("isSchool",false);
+                    result.put("result",response.getBody());
+                }
                 return JsonResultUtil.success(response);
             }else {
                 return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_NOT_SYS);
