@@ -152,15 +152,21 @@ public class AuthenServiceImpl implements AuthenService {
         /*accessToken两小时过期*/
         long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
         if(minutes >= 120){
-            DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
-            OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
-            req.setAuthCorpid(authCorpId);
-            OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
-            accessToken = execute.getAccessToken();
+            accessToken = getURLAccessToken(authCorpId);
             byCorpId.setCorpAccessToken(accessToken);
             byCorpId.setUpdateTime(new Date());
             authAppInfoDao.update(byCorpId);
         }
+        return accessToken;
+    }
+
+    private String getURLAccessToken(String authCorpId) throws ApiException {
+        String accessToken;
+        DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
+        OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
+        req.setAuthCorpid(authCorpId);
+        OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
+        accessToken = execute.getAccessToken();
         return accessToken;
     }
 
@@ -195,7 +201,7 @@ public class AuthenServiceImpl implements AuthenService {
     /*获取企业授权信息*/
     @Override
     public ServiceResult getAuthInfo(String corpId) throws ApiException {
-        String accessToken = getAccessToken(corpId);
+        String accessToken = getURLAccessToken(corpId);
         /*获取企业授权信息*/
         DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_AUTH_INFO);
         OapiServiceGetAuthInfoRequest req = new OapiServiceGetAuthInfoRequest();
