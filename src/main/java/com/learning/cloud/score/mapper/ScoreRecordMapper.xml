@@ -52,9 +52,10 @@
     order by id desc limit 1
   </select>
 
-  <select id="getRecordTimeByType" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
+  <select id="getRecordTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
     select * from score_record
     where score_type_id = #{scoreTypeId}
+    and user_id = #{userId}
     and date(record_time) = curdate();
   </select>
 
