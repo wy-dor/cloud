@@ -55,12 +55,12 @@ public class GradeClassServiceImpl implements GradeClassService {
 
     @Override
     public ServiceResult getClassesByCampus(Campus campus) {
-        Integer id = campus.getId();
-        Integer schoolId = campus.getSchoolId();
-        if(id == null){
-            Campus c = campusDao.getSchoolCampuses(schoolId).get(0);
-            campus.setId(c.getId());
-        }
+//        Integer id = campus.getId();
+//        Integer schoolId = campus.getSchoolId();
+//        if(id == null){
+//            Campus c = campusDao.getSchoolCampuses(schoolId).get(0);
+//            campus.setId(c.getId());
+//        }
         List<GradeClass> classList = gradeClassDao.getClassesByCampusId(campus);
         for (GradeClass gc : classList) {
             Integer classId = gc.getId();

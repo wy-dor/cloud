@@ -56,7 +56,15 @@
   <select id="getClassesByCampusId" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     select *
     from edu_grade_class
-    where campus_id = #{id}
+    where 1=1
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        and campus_id = #{id},
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId},
+      </if>
+    </trim>
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass">

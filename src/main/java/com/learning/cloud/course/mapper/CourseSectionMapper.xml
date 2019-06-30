@@ -74,9 +74,9 @@
   </update>
 
   <select id="getSchoolSection" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSection">
-    select * from course_section
+    select * from course_section_array
     where school_id = #{schoolId}
-    order by start
+--     order by start
   </select>
 
   <insert id="saveSectionArray">
