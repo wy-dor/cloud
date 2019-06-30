@@ -79,10 +79,10 @@ public class DeptServiceImpl implements DeptService {
                     int campusId;
                     Long campusDeptId = dept.getId();
                     Campus campus = new Campus();
-                    campus.setCampusName(dept.getName());
-                    campus.setSchoolId(schoolId);
-                    Campus c = campusDao.getByCampus(campus);
                     campus.setDeptId(campusDeptId);
+                    Campus c = campusDao.getByCampus(campus);
+                    campus.setSchoolId(schoolId);
+                    campus.setCampusName(dept.getName());
                     if(c == null){
                         campusDao.insert(campus);
                         campusId = campus.getId();

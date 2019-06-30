@@ -124,8 +124,7 @@
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
     </set>
-    where user_id = #{userId,jdbcType=VARCHAR}
-    and school_id = #{schoolId,jdbcType=INTEGER}
+    where id = #{id}
   </update>
 
   <select id="getTeacherIds" parameterType="java.lang.Long" resultType="com.learning.cloud.user.teacher.entity.Teacher">
