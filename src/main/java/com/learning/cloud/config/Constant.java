@@ -35,9 +35,6 @@ public class Constant {
      */
     public static final String TOKEN = "ddedu";
 
-    /**
-     *
-     */
     public static final String SUITE_TICKET = "OLK2TEpm8utaUf5qaPYPPqmvoKGEgbZbQL4f6NZL41a5Ka8a8ytuySS8N6TmgQhSSadzLPsG1iaUpdIPJlb49x";
 
 }

@@ -9,11 +9,10 @@
     <result column="state" jdbcType="INTEGER" property="state" />
   </resultMap>
 
-  <select id="getCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
+  <select id="getByCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
     select *
     from edu_campus
-    where school_id = #{schoolId}
-    and campus_name = #{campusName}
+    where dept_id = #{deptId}
   </select>
 
   <select id="getSchoolCampuses" parameterType="java.lang.Integer" resultType="com.learning.cloud.dept.campus.entity.Campus">

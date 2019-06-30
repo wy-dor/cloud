@@ -12,7 +12,7 @@ public interface CampusDao {
 
     int insert(Campus record);
 
-    Campus getCampus(Campus campus);
+    Campus getByCampus(Campus campus);
 
     List<Campus> getSchoolCampuses(Integer schoolId);
 

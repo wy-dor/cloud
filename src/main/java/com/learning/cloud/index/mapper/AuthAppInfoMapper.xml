@@ -12,7 +12,7 @@
   <select id="getToAuthorize" resultType="com.learning.cloud.index.entity.AuthAppInfo">
     select *
     from auth_app_info
-    where permanent_code = ''
+    where (permanent_code = '' or permanent_code is null)
     and state = 1
   </select>
 

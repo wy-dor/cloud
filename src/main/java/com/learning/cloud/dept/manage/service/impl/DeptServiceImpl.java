@@ -76,7 +76,7 @@ public class DeptServiceImpl implements DeptService {
                     Campus campus = new Campus();
                     campus.setCampusName(dept.getName());
                     campus.setSchoolId(schoolId);
-                    Campus c = campusDao.getCampus(campus);
+                    Campus c = campusDao.getByCampus(campus);
                     campus.setDeptId(campusDeptId);
                     if(c == null){
                         campusDao.insert(campus);
