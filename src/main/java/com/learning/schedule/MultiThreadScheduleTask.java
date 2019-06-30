@@ -2,6 +2,9 @@ package com.learning.schedule;
 
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.index.dao.AuthAppInfoDao;
+import com.learning.cloud.index.entity.AuthAppInfo;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.score.dao.ScoreRecordDao;
@@ -13,6 +16,7 @@ import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -44,6 +48,12 @@ public class MultiThreadScheduleTask {
 
     @Autowired
     private GradeClassDao gradeClassDao;
+
+    @Autowired
+    private AuthAppInfoDao authAppInfoDao;
+
+    @Autowired
+    private AuthenService authenService;
 
     @Async
     @Scheduled(cron = "0 0 5 * * ?") //每天5点
@@ -170,4 +180,15 @@ public class MultiThreadScheduleTask {
         }
     }
 
+    @Async
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void refreshAgent() throws InterruptedException, ApiException {
+        List<AuthAppInfo> infos = authAppInfoDao.getToAuthorize();
+        if(infos != null && infos.size() > 0){
+            for (AuthAppInfo info : infos) {
+                authenService.authenApp(info.getCorpId());
+            }
+        }
+
+    }
 }
