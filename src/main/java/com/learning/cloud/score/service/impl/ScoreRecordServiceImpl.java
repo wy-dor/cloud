@@ -35,6 +35,9 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
             lastScore = last.getScore();
         }
         ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecord.getScoreTypeId());
+        if(scoreType==null){
+            return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
+        }
         // 判断同一项每日加分次数
         List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordTimeByType(scoreRecord.getScoreTypeId(),scoreRecord.getUserId());
         if(scoreRecords.size()>=scoreType.getTime()){
