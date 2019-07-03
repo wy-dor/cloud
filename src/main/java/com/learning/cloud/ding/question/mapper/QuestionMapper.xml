@@ -17,8 +17,8 @@
       <if test="question != null">
         question,
       </if>
-      <if test="picId != null">
-        pic_id,
+      <if test="sPicId != null">
+        s_pic_id,
       </if>
       <if test="type != null">
         type,
@@ -37,8 +37,8 @@
       <if test="question != null">
         #{question,jdbcType=VARCHAR},
       </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
+      <if test="sPicId != null">
+        #{sPicId,jdbcType=BIGINT},
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},

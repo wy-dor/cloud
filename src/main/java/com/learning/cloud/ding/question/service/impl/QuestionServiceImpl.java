@@ -47,17 +47,19 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public JsonResult addQuestion(MultipartFile file, Question question) throws Exception {
-
-        if(file!=null){
+        //原始图片储存
+        /*if(file!=null){
             Long picId = addPicture(file);
             question.setPicId(picId);
+        }*/
+        //压缩图片并进行保存
+        if(file != null) {
+            long picId = reduceImg(file);
+            //将压缩后的图片id保存到记录
+            question.setSPicId(picId);
         }
-        //上传图片
         int i = questionDao.addQuestion(question);
-        //压缩图片
-        if(file!=null){
-            reduceImg(file,question.getId());
-        }
+
         return JsonResultUtil.success(question.getId());
     }
 
@@ -101,7 +103,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     public JsonResult addAnswer(MultipartFile file, Answer answer) throws Exception {
         if(file!=null) {
-            Long picId = addPicture(file);
+//            Long picId = addPicture(file);
+            Long picId = reduceImg(file);
             answer.setPicId(picId);
         }
         int i = answerDao.addAnswer(answer);
@@ -144,8 +147,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 压缩图片
+     * @return
      */
-    public void reduceImg(MultipartFile file, Long id)throws Exception{
+    public Long reduceImg(MultipartFile file)throws Exception{
         int widthDist = 500;
         int heightDist = 500;
         InputStream inputStream = null;
@@ -168,10 +172,8 @@ public class QuestionServiceImpl implements QuestionService {
         Picture picture = new Picture();
         picture.setPic(sp);
         int i = pictureDao.addPic(picture);
-
-        //将压缩后的图片id保存到记录
-        questionDao.updateSmallPic(picture.getId(),id);
-
+//        questionDao.updateSmallPic(picture.getId(),id);
+        return picture.getId();
     }
 
     private void inputStreamToFile(InputStream inputStream, File toFile) throws Exception{
