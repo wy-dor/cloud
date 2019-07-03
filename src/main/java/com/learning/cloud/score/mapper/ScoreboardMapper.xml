@@ -105,14 +105,17 @@
   </select>
 
   <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select sr.*, ut.teacher_name, ut.avatar from user_teacher ut
-    left join score_record sr
-    on ut.user_id = sr.user_id
-    where ut.bureau_id = #{bureauId}
+    select sr.* ,ut.teacher_name from user_teacher ut
+    LEFT JOIN (
+      SELECT sr1.* FROM score_record sr1 LEFT JOIN
+      score_record sr2 on (sr1.user_id = sr2.user_id and sr1.id &lt; sr2.id)
+      WHERE sr2.id is null) sr
+    ON ut.user_id = sr.user_id
+    where ut.bureau_id =#{bureauId}
     <if test="schoolId != null">
       and ut.school_id = #{schoolId}
     </if>
-    order by sr.score
+    ORDER BY sr.score desc
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">

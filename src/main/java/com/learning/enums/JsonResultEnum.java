@@ -32,6 +32,8 @@ public enum JsonResultEnum {
     THIRD_LOGIN_ERROR(1033,"第三方登录出错"),
     NO_FUNCTION_FOR(1034,"没有管理端功能"),
 
+    NO_SCORE_ACTION(1041,"没有添加积分项，请联系教育局管理员添加"),
+
     ;
 
     @Getter private Integer code;
