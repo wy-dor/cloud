@@ -157,4 +157,14 @@
     select * from course_detail
     where id = #{id}
   </select>
+
+  <delete id="deleteCourseDetailById">
+    delete from course_detail
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteAllCourseDetail">
+    delete from course_detail
+    where course_id = #{courseId}
+  </delete>
 </mapper>

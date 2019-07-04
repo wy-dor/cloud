@@ -24,4 +24,8 @@ public interface CourseDetailDao {
     List<CourseDetail> getTeacherCourseDetail(@Param("teacherId") Long teacherId, @Param("weekDay") Integer weekDay);
 
     CourseDetail getCourseDetailById(Long id);
+
+    int deleteCourseDetailById(Long id);
+
+    int deleteAllCourseDetail(Long courseId);
 }

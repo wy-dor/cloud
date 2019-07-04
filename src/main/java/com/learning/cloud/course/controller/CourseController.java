@@ -42,4 +42,9 @@ public class CourseController {
     public JsonResult getSchoolCourse(Course course)throws Exception{
         return courseService.getSchoolCourse(course);
     }
+
+    @PostMapping("publishCourse")
+    public JsonResult publishCourse(@RequestParam(value="id",required = true) Long id) throws Exception{
+        return courseService.publishCourse(id);
+    }
 }

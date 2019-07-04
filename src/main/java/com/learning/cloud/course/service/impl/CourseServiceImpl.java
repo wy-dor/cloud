@@ -50,4 +50,14 @@ public class CourseServiceImpl implements CourseService {
         List<Course> courses = courseDao.getSchoolCourse(course);
         return JsonResultUtil.success(new PageInfo<>(courses));
     }
+
+    @Override
+    public JsonResult publishCourse(Long id) throws Exception {
+        int i = courseDao.publishCourse(id);
+        if(i>0){
+            return JsonResultUtil.success();
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
+        }
+    }
 }

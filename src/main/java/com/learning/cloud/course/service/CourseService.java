@@ -16,4 +16,6 @@ public interface CourseService {
     JsonResult editCourse(Course course)throws Exception;
 
     JsonResult getSchoolCourse(Course course)throws Exception;
+
+    JsonResult publishCourse(Long id)throws Exception;
 }

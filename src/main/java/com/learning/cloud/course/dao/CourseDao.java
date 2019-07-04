@@ -21,4 +21,6 @@ public interface CourseDao {
     int editCourse(Course course);
 
     List<Course> getSchoolCourse(Course course);
+
+    int publishCourse(Long id);
 }

@@ -18,4 +18,8 @@ public interface CourseDetailService {
     JsonResult getTeacherCourseDetail(Long teacherId, Integer weekDay)throws Exception;
 
     JsonResult getCourseDetailById(Long id)throws Exception;
+
+    JsonResult deleteCourseDetailById(Long id)throws Exception;
+
+    JsonResult deleteAllCourseDetail(Long courseId)throws Exception;
 }

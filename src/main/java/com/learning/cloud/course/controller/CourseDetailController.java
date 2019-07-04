@@ -47,4 +47,16 @@ public class CourseDetailController {
         return courseDetailService.getCourseDetailById(id);
     }
 
+    //删除课程明细
+    @PostMapping("deleteCourseDetailById")
+    public JsonResult deleteCourseDetailById(@RequestParam(value="id",required = true) Long id)throws Exception{
+        return courseDetailService.deleteCourseDetailById(id);
+    }
+
+    //清空课表
+    @PostMapping("deleteAllCourseDetail")
+    public JsonResult deleteAllCourseDetail(@RequestParam(value="courseId",required = true) Long courseId)throws Exception{
+        return courseDetailService.deleteAllCourseDetail(courseId);
+    }
+
 }

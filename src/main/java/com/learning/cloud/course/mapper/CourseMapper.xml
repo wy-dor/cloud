@@ -108,4 +108,9 @@
       and a.term_id = #{termId}
     </if>
   </select>
+
+  <update id="publishCourse">
+    update course set status = 2
+    where id = #{id}
+  </update>
 </mapper>
