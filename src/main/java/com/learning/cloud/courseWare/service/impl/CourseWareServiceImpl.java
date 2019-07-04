@@ -95,6 +95,6 @@ public class CourseWareServiceImpl implements CourseWareService {
     @Override
     public JsonResult getMyCourseWare(Long teacherId) throws Exception {
         List<CourseWare> courseWares = courseWareDao.getMyCourseWare(teacherId);
-        return null;
+        return JsonResultUtil.success(courseWares);
     }
 }
