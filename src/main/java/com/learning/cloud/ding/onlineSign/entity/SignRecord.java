@@ -16,7 +16,7 @@ public class SignRecord extends BaseEntity {
 
     private Integer signId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date signTime;
 
     public Integer getId() {
