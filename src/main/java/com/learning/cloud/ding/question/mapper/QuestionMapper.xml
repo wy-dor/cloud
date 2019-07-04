@@ -72,13 +72,13 @@
   <select id="getQuestionImIN" parameterType="com.learning.cloud.ding.question.entity.Question" resultType="com.learning.cloud.ding.question.entity.Question">
     select a.*, IFNULL(c.answer_num,0) answer_num
     from question a
-    left join (select b.question_id,count(*) as answer_num from answer b GROUP BY b.question_id) c
+    left join (select b.question_id,count(*) as answer_num from answer b GROUP BY b.question_id,b.answer_user_id) c
     on a.id = c.question_id
-    LEFT JOIN answer d
-    on d.question_id = a.id
+    LEFT JOIN (select d.answer_user_id, d.question_id from answer d GROUP BY d.question_id,d.answer_user_id) e
+    on e.question_id = a.id
     where a.status!=3
     <if test="answerUserId!=null">
-      and d.answer_user_id = #{answerUserId}
+      and e.answer_user_id = #{answerUserId}
     </if>
     <if test="type!=null">
       and a.type = #{type}
