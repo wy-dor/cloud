@@ -14,7 +14,7 @@ public class CourseType extends BaseEntity {
     private Long id;
     private Long schoolId;
     private String courseName;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String editTime;
     private Integer status;
 }

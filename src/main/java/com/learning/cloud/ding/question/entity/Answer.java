@@ -16,7 +16,7 @@ public class Answer extends BaseEntity {
     private String answerUserId;
     private String answerName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String answerTime;
     private String answerContent;
     private Long picId;

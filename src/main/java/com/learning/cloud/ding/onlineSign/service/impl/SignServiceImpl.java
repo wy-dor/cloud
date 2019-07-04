@@ -51,14 +51,14 @@ public class SignServiceImpl implements SignService {
     @Override
     public JsonResult signName(SignRecord signRecord) throws Exception {
         signDao.signName(signRecord);
-        return null;
+        return JsonResultUtil.success();
     }
 
     /*关闭签字任务*/
     @Override
     public JsonResult setStateInvalid(Integer signId) throws Exception {
         signDao.setStateInvalid(signId);
-        return null;
+        return JsonResultUtil.success();
     }
 
     @Override

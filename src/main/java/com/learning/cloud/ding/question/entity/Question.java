@@ -16,7 +16,7 @@ public class Question extends BaseEntity {
     private String createUserId;
     private String createName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String createTime;
     private String question;
     private Long picId;

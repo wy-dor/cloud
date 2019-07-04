@@ -18,7 +18,7 @@ public class Course extends BaseEntity {
 
     private Long termId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastTime;
 
     private Long lastModifier;

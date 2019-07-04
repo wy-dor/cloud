@@ -9,7 +9,7 @@ import java.util.Date;
 public class CourseExchange {
     private Long id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private Short fromNum;
