@@ -133,7 +133,7 @@
     SELECT ec.id from edu_campus ec
     LEFT JOIN edu_school es
     on ec.school_id = es.id
-    where es.id = #{schoolId}
+    where es.id = #{classId}
     ) as ca
     LEFT JOIN user_teacher ut
     on ut.campus_id = ca.id

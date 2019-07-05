@@ -146,7 +146,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             double teacherAvg = 0.0;
             double parentAvg = 0.0;
             //获取所有老师
-            List<Teacher> teachers = teacherDao.getTeacherIds(classId);
+            List<Teacher> teachers = teacherDao.getClassTeachers(gradeClass);
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();

@@ -128,7 +128,7 @@ public class MultiThreadScheduleTask {
             double teacherAvg = 0.0;
             double parentAvg = 0.0;
             //获取所有老师
-            List<Teacher> teachers = teacherDao.getTeacherIds(gd.getId().longValue());
+            List<Teacher> teachers = teacherDao.getClassTeachers(gd);
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();

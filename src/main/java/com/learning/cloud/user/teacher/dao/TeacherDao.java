@@ -25,5 +25,5 @@ public interface TeacherDao {
     List<Teacher> getClassTeachers(GradeClass gradeClass);
 
     //获取学校的老师
-    List<Teacher> getTeacherIds(Long schoolId);
+    List<Teacher> getTeacherIds(Long classId);
 }
