@@ -119,7 +119,7 @@
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
-    select cs.*,ec.grade_name from class_scoreboard cs
+    select cs.*,ec.class_name from class_scoreboard cs
 		LEFT JOIN edu_grade_class ec
 		on cs.class_id = ec.id
     where cs.school_id = #{schoolId}
