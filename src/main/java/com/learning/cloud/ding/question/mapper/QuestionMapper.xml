@@ -61,7 +61,7 @@
     <if test="status!=null">
       and a.status = #{status}
     </if>
-    order by c.answer_num desc, a.create_time
+    order by c.answer_num desc, a.create_time desc
   </select>
 
   <update id="deleteQuestion" parameterType="java.lang.Long">
