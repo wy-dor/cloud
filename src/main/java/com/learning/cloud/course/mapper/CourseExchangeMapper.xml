@@ -124,7 +124,7 @@
     select * from course_exchange a
     left join course_detail b
     on a.to_id = b.id
-    where a.from_day = #{day}
+    where (a.from_day = #{day} or a.to_day = #{day})
     <if test="classId!=null">
         and a.class_id = #{classId}
     </if>
