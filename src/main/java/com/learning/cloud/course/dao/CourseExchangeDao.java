@@ -18,7 +18,7 @@ import java.util.List;
 public interface CourseExchangeDao {
     int addCourseExchange(CourseExchange courseExchange);
 
-    List<CourseExchange> getCourseExchange(String day);
+    List<CourseExchange> getCourseExchange(@Param("classId") Long classId, @Param("day") String day);
 
     List<CourseExchange> getMyExchange(@Param("teacherId") Long teacherId, @Param("day") String day);
 

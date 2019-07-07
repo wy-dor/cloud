@@ -3,6 +3,7 @@
 <mapper namespace="com.learning.cloud.course.dao.CourseExchangeDao">
   <resultMap id="DayExchangeResultMap" type="com.learning.cloud.course.entity.CourseExchange">
     <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="class_id" jdbcType="BIGINT" property="classId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="from_id" jdbcType="BIGINT" property="fromId" />
     <result column="to_id" jdbcType="BIGINT" property="toId" />
@@ -38,6 +39,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="classId != null">
+        class_id,
       </if>
       <if test="createTime != null">
         create_time,
@@ -76,6 +80,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},

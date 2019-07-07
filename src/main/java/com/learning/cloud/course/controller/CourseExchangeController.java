@@ -27,8 +27,9 @@ public class CourseExchangeController {
     }
 
     @GetMapping("getCourseExchange")
-    public JsonResult getCourseExchange(@RequestParam(value="day",required = false) String day)throws Exception{
-        return courseExchangeService.getCourseExchange(day);
+    public JsonResult getCourseExchange(@RequestParam(value="classId",required = true) Long classId,
+            @RequestParam(value="day",required = false) String day)throws Exception{
+        return courseExchangeService.getCourseExchange(classId,day);
     }
 
     //获取老师未完成的调课
