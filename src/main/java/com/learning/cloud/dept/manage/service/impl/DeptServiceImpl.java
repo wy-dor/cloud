@@ -275,7 +275,8 @@ public class DeptServiceImpl implements DeptService {
             /*"department": "[[117451247, 117656244, 117680160, 117597295, 117425251, -7, 1],
             [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
             String[] split = department.replace("[", "").split("],");
-            for (String deptId : split) {
+            for (String s : split) {
+                String deptId = s.split(",")[0];
                 OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
                 String deptName = resp1.getName();
                 if(deptName.equals("老师")){
