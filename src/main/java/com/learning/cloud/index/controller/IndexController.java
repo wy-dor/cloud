@@ -89,14 +89,7 @@ public class IndexController {
 		//添加教育局角色登录判断
 		Boolean isSchool = (Boolean) resultMap.get("isSchool");
 		if(isSchool){
-			Map map = null;
-			try {
-				map = deptService.getUserRole(userId, accessToken , avatar, corpId);
-			} catch (ApiException e) {
-				e.printStackTrace();
-				resultMap.put("roleName","无");
-				return JsonResultUtil.success(resultMap);
-			}
+			Map map = deptService.getUserRole(userId, accessToken , avatar, corpId);
 			resultMap.putAll(map);
 		}
 
