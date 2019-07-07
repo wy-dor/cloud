@@ -20,6 +20,7 @@ import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.utils.CommonUtils;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,9 +161,12 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void saveUserInClass(int classId) throws ApiException {
-        List<Integer> teacherIdList = new ArrayList<>();
-        List<Integer> studentIdList = new ArrayList<>();
-        List<Integer> parentIdList = new ArrayList<>();
+        List<Integer> teacherIdList = teacherDao.getTeacherIdListInClass(classId);
+        List<Integer> teacherIdList1 = new ArrayList<>();
+        List<Integer> studentIdList = studentDao.getStudentIdListInClass(classId);
+        List<Integer> studentIdList1 = new ArrayList<>();
+        List<Integer> parentIdList = parentDao.getParentIdListInClass(classId);
+        List<Integer> parentIdList1 = new ArrayList<>();
         GradeClass byId = gradeClassDao.getById(classId);
         Integer schoolId = byId.getSchoolId();
         Integer bureauId = byId.getBureauId();
@@ -197,7 +201,6 @@ public class DeptServiceImpl implements DeptService {
                     if(t == null){
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
-
                     }else{
                         //判断老师所在班级是否存在，存在则不需要更新
                         String classIds = t.getClassIds();
@@ -225,6 +228,7 @@ public class DeptServiceImpl implements DeptService {
                     if(p == null){
                         parentDao.insert(parent);
                     }else{
+                        parentIdList1.add(p.getId());
                         parentDao.update(parent);
                     }
                 }
@@ -243,10 +247,15 @@ public class DeptServiceImpl implements DeptService {
                     if(s == null){
                         studentDao.insert(student);
                     }else{
+                        studentIdList1.add(s.getId());
                         studentDao.update(student);
                     }
                 }
             }
+        }
+        if(studentIdList != null && studentIdList.size() != 0){
+            //todo
+            //筛选两集合差集，进行数据删除
         }
     }
 
@@ -274,7 +283,7 @@ public class DeptServiceImpl implements DeptService {
         }else{
             /*"department": "[[117451247, 117656244, 117680160, 117597295, 117425251, -7, 1],
             [118996286, 118754319, 118798287, 118917275, 118958294, -7, 1]]"*/
-            String[] split = department.replace("[", "").split("],");
+            String[] split = department.replace("[", "").split("], ");
             for (String s : split) {
                 String deptId = s.split(",")[0];
                 OapiDepartmentGetResponse resp1 = getDeptDetail(deptId,accessToken);
