@@ -36,4 +36,6 @@ public class CourseExchange {
 
     private CourseDetail courseDetail;
 
+    private Long classId;
+
 }

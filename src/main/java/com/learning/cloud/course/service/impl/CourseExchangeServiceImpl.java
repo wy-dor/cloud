@@ -62,19 +62,21 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
 
     /**
      * 获取某日需要调换的课程
+     *
+     * @param classId
      * @param day
      * @return
      * @throws Exception
      */
     @Override
-    public JsonResult getCourseExchange(String day) throws Exception {
+    public JsonResult getCourseExchange(Long classId, String day) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(day!=null){
 
         }else {
             day = sdf.format(new Date());
         }
-        List<CourseExchange> courseExchanges = courseExchangeDao.getCourseExchange(day);
+        List<CourseExchange> courseExchanges = courseExchangeDao.getCourseExchange(classId,day);
         return JsonResultUtil.success(courseExchanges);
     }
 
