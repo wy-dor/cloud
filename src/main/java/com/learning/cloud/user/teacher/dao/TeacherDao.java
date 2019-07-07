@@ -16,6 +16,8 @@ public interface TeacherDao {
 
     Teacher getByUserId(String userId);
 
+    Teacher getById(Integer teacherId);
+
     Teacher getTeacherInSchool(Teacher teacher);
 
     int update(Teacher teacher);
@@ -23,6 +25,8 @@ public interface TeacherDao {
     Integer getClassTeacherNum(Integer classId);
 
     List<Teacher> getClassTeachers(GradeClass gradeClass);
+
+    List<Integer> getTeacherIdListInClass(Integer classId);
 
     //获取学校的老师
     List<Teacher> getTeacherIds(Long classId);

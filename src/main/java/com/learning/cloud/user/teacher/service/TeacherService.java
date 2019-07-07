@@ -14,4 +14,6 @@ public interface TeacherService {
     JsonResult getClassTeachers(GradeClass gradeClass);
 
     JsonResult setTeacherCourseType(Teacher teacher);
+
+    JsonResult removeTeacherFromClass(Integer teacherId, Integer classId);
 }

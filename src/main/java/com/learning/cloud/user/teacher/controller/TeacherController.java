@@ -41,4 +41,9 @@ public class TeacherController {
         return teacherService.setTeacherCourseType(teacher);
     }
 
+    @GetMapping("/removeTeacherFromClass")
+    public JsonResult removeTeacherFromClass(Integer teacherId,Integer classId){
+        return teacherService.removeTeacherFromClass(teacherId,classId);
+    }
+
 }

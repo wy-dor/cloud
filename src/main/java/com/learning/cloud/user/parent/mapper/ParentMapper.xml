@@ -25,6 +25,12 @@
     and class_id = #{classId}
   </select>
 
+  <select id="getParentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select id
+    from user_parent
+    where class_id = #{classId}
+  </select>
+
   <select id="getParentsInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
     select *
     from user_parent

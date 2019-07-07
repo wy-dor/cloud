@@ -28,6 +28,12 @@
     where class_id = #{id}
   </select>
 
+  <select id="getStudentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select id
+    from user_student
+    where class_id = #{classId}
+  </select>
+
   <select id="getStudentsByName" parameterType="com.learning.cloud.user.student.entity.Student" resultType="com.learning.cloud.user.student.entity.Student">
     select *
     from user_student

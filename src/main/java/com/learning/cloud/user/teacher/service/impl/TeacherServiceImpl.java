@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -59,6 +60,24 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public JsonResult setTeacherCourseType(Teacher teacher) {
         teacherDao.update(teacher);
+        return JsonResultUtil.success("更新成功");
+    }
+
+    @Override
+    public JsonResult removeTeacherFromClass(Integer teacherId, Integer classId) {
+        Teacher t = teacherDao.getById(teacherId);
+        String classIds = t.getClassIds();
+        String[] split = classIds.split(",");
+        List<String> ss = Arrays.asList(split);
+        String classIdStr = classId.toString();
+        for (String s : ss) {
+            if(s.equals(classIdStr)){
+                ss.remove(s);
+                break;
+            }
+        }
+        t.setClassIds(ss.toString());
+        teacherDao.update(t);
         return JsonResultUtil.success("更新成功");
     }
 }

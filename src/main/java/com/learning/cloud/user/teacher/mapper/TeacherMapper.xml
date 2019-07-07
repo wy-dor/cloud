@@ -16,6 +16,12 @@
     where find_in_set(#{id},class_ids)
   </select>
 
+  <select id="getTeacherIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select id
+    from user_teacher
+    where find_in_set(#{classId},class_ids)
+  </select>
+
   <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
@@ -26,14 +32,15 @@
   <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
-    where id = #{id}
+    where id = #{teacherId}
   </select>
 
   <select id="getByUserId" parameterType="java.lang.String"
           resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
-    where user_id = #{userId}
+    where
+    user_id = #{userId}
     limit 1
   </select>
 
