@@ -27,7 +27,7 @@ public class CourseExchangeController {
     }
 
     @GetMapping("getCourseExchange")
-    public JsonResult getCourseExchange(@RequestParam(value="classId",required = true) Long classId,
+    public JsonResult getCourseExchange(@RequestParam(value="classId",required = false) Long classId,
             @RequestParam(value="day",required = false) String day)throws Exception{
         return courseExchangeService.getCourseExchange(classId,day);
     }
