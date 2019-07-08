@@ -94,8 +94,6 @@ public class IndexController {
 				map = deptService.getUserRole(userId, accessToken , avatar, corpId);
 			} catch (ApiException e) {
 				e.printStackTrace();
-				resultMap.put("roleName","无");
-				return JsonResultUtil.success(resultMap);
 			}
 			resultMap.putAll(map);
 		}
