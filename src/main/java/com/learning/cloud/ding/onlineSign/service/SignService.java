@@ -3,8 +3,8 @@ package com.learning.cloud.ding.onlineSign.service;
 import com.learning.cloud.ding.onlineSign.entity.Sign;
 import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.user.parent.entity.Parent;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface SignService {
 
@@ -14,7 +14,7 @@ public interface SignService {
 
     JsonResult getValidTaskList(Parent parent)throws Exception;
 
-    JsonResult signName(SignRecord signRecord)throws Exception;
+    JsonResult signName(SignRecord signRecord, MultipartFile file)throws Exception;
 
     JsonResult setStateInvalid(Integer signId)throws Exception;
 

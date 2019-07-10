@@ -4,15 +4,16 @@ import com.learning.cloud.ding.onlineSign.dao.SignDao;
 import com.learning.cloud.ding.onlineSign.entity.Sign;
 import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.ding.onlineSign.service.SignService;
+import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class SignServiceImpl implements SignService {
 
     @Autowired
     private StudentDao studentDao;
+
+    @Autowired
+    private QuestionService questionService;
 
     /*新增签字任务*/
     @Override
@@ -49,7 +53,11 @@ public class SignServiceImpl implements SignService {
 
     /*家长进行签字*/
     @Override
-    public JsonResult signName(SignRecord signRecord) throws Exception {
+    public JsonResult signName(SignRecord signRecord, MultipartFile file) throws Exception {
+        if(file != null){
+            Long picId = questionService.reduceImg(file);
+            signRecord.setPicId(picId);
+        }
         signDao.signName(signRecord);
         return JsonResultUtil.success();
     }

@@ -112,6 +112,12 @@
       <if test="signTime != null">
         sign_time,
       </if>
+      <if test="picId != null">
+        pic_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="parentName != null">
@@ -128,6 +134,12 @@
       </if>
       <if test="signTime != null">
         #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="picId != null">
+        #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

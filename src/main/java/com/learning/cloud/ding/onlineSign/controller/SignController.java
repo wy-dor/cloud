@@ -4,14 +4,13 @@ import com.learning.cloud.ding.onlineSign.entity.Sign;
 import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.ding.onlineSign.service.SignService;
 import com.learning.cloud.user.parent.entity.Parent;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class SignController {
@@ -26,9 +25,9 @@ public class SignController {
     }
 
     /*签字*/
-    @GetMapping("/signName")
-    public JsonResult signName(SignRecord signRecord)throws Exception{
-        return signService.signName(signRecord);
+    @PostMapping("/signName")
+    public JsonResult signName(@RequestParam(value = "file",required = false) MultipartFile file, SignRecord signRecord)throws Exception{
+        return signService.signName(signRecord,file);
     }
 
     /*获取指定班级下所有签名任务，state为0时任务已失效*/

@@ -1,6 +1,8 @@
 package com.learning.cloud.ding.onlineSign.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -18,6 +20,14 @@ public class SignRecord extends BaseEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date signTime;
+
+    @Getter
+    @Setter
+    private Long picId;
+
+    @Getter
+    @Setter
+    private String remark;
 
     public Integer getId() {
         return id;

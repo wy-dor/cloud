@@ -149,6 +149,7 @@ public class QuestionServiceImpl implements QuestionService {
      * 压缩图片
      * @return
      */
+    @Override
     public Long reduceImg(MultipartFile file)throws Exception{
         int widthDist = 500;
         int heightDist = 500;
