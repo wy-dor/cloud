@@ -166,4 +166,15 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getClassIdList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select id
+    from edu_grade_class
+    where school_id = #{schoolId}
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from edu_grade_class
+    where id = #{classId}
+  </delete>
 </mapper>

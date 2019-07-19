@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.dept.department.dao.DepartmentDao">
+  <select id="getByDeptId" parameterType="java.lang.String" resultType="com.learning.cloud.dept.department.entity.Department">
+    select *
+    from department
+    where dept_id = #{deptId}
+    limit 1
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.department.entity.Department">
+    insert into department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="outerDept != null">
+        outer_dept,
+      </if>
+      <if test="deptManagerUseridList != null">
+        dept_manager_userid_list,
+      </if>
+      <if test="groupContainSubDept != null">
+        group_contain_sub_dept,
+      </if>
+      <if test="deptHiding != null">
+        dept_hiding,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="outerDept != null">
+        #{outerDept,jdbcType=SMALLINT},
+      </if>
+      <if test="deptManagerUseridList != null">
+        #{deptManagerUseridList,jdbcType=VARCHAR},
+      </if>
+      <if test="groupContainSubDept != null">
+        #{groupContainSubDept,jdbcType=SMALLINT},
+      </if>
+      <if test="deptHiding != null">
+        #{deptHiding,jdbcType=SMALLINT},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.learning.cloud.dept.department.entity.Department">
+    update department
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="outerDept != null">
+        outer_dept = #{outerDept,jdbcType=SMALLINT},
+      </if>
+      <if test="deptManagerUseridList != null">
+        dept_manager_userid_list = #{deptManagerUseridList,jdbcType=VARCHAR},
+      </if>
+      <if test="groupContainSubDept != null">
+        group_contain_sub_dept = #{groupContainSubDept,jdbcType=SMALLINT},
+      </if>
+      <if test="deptHiding != null">
+        dept_hiding = #{deptHiding,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where dept_id = #{deptId,jdbcType=VARCHAR}
+  </update>
+</mapper>

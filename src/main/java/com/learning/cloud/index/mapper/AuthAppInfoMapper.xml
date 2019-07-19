@@ -9,13 +9,6 @@
     limit 1
   </select>
 
-  <select id="getToAuthorize" resultType="com.learning.cloud.index.entity.AuthAppInfo">
-    select *
-    from auth_app_info
-    where (permanent_code = '' or permanent_code is null)
-    and state = 1
-  </select>
-
   <select id="getCorpAccessToken" parameterType="java.lang.String" resultType="java.lang.String">
     select corp_access_token
     from auth_app_info
@@ -34,23 +27,14 @@
       <if test="corpName != null">
         corp_name,
       </if>
-      <if test="permanentCode != null">
-        permanent_code,
-      </if>
-      <if test="tempAuthCode != null">
-        temp_auth_code,
-      </if>
-      <if test="suiteAccessToken != null">
-        suite_access_token,
-      </if>
       <if test="corpAccessToken != null">
         corp_access_token,
       </if>
       <if test="createdTime != null">
         created_time,
       </if>
-      <if test="updateTime != null">
-        update_time,
+      <if test="suiteTicket != null">
+        suite_ticket,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -63,20 +47,14 @@
       <if test="corpName != null">
         #{corpName,jdbcType=VARCHAR},
       </if>
-      <if test="permanentCode != null">
-        #{permanentCode,jdbcType=VARCHAR},
-      </if>
-      <if test="tempAuthCode != null">
-        #{tempAuthCode,jdbcType=VARCHAR},
-      </if>
-      <if test="suiteAccessToken != null">
-        #{suiteAccessToken,jdbcType=VARCHAR},
-      </if>
       <if test="corpAccessToken != null">
         #{corpAccessToken,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="suiteTicket != null">
+        #{suiteTicket,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -87,26 +65,14 @@
       <if test="corpName != null">
         corp_name = #{corpName,jdbcType=VARCHAR},
       </if>
-      <if test="permanentCode != null">
-        permanent_code = #{permanentCode,jdbcType=VARCHAR},
-      </if>
-      <if test="tempAuthCode != null">
-        temp_auth_code = #{tempAuthCode,jdbcType=VARCHAR},
-      </if>
-      <if test="suiteAccessToken != null">
-        suite_access_token = #{suiteAccessToken,jdbcType=VARCHAR},
-      </if>
       <if test="corpAccessToken != null">
         corp_access_token = #{corpAccessToken,jdbcType=VARCHAR},
       </if>
-      <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="state != null">
         state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="suiteTicket != null">
+        suite_ticket = #{suiteTicket,jdbcType=VARCHAR},
       </if>
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}

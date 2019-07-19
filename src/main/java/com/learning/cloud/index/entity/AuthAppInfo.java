@@ -13,12 +13,6 @@ public class AuthAppInfo extends BaseEntity {
 
     private String corpName;
 
-    private String permanentCode;
-
-    private String tempAuthCode;
-
-    private String suiteAccessToken;
-
     private Date createdTime;
 
     private String corpAccessToken;
@@ -30,6 +24,10 @@ public class AuthAppInfo extends BaseEntity {
     @Getter
     @Setter
     private Integer state;
+
+    @Getter
+    @Setter
+    private String suiteTicket;
 
     public Integer getId() {
         return id;
@@ -53,30 +51,6 @@ public class AuthAppInfo extends BaseEntity {
 
     public void setCorpName(String corpName) {
         this.corpName = corpName == null ? null : corpName.trim();
-    }
-
-    public String getPermanentCode() {
-        return permanentCode;
-    }
-
-    public void setPermanentCode(String permanentCode) {
-        this.permanentCode = permanentCode == null ? null : permanentCode.trim();
-    }
-
-    public String getTempAuthCode() {
-        return tempAuthCode;
-    }
-
-    public void setTempAuthCode(String tempAuthCode) {
-        this.tempAuthCode = tempAuthCode == null ? null : tempAuthCode.trim();
-    }
-
-    public String getSuiteAccessToken() {
-        return suiteAccessToken;
-    }
-
-    public void setSuiteAccessToken(String suiteAccessToken) {
-        this.suiteAccessToken = suiteAccessToken == null ? null : suiteAccessToken.trim();
     }
 
     public Date getCreatedTime() {

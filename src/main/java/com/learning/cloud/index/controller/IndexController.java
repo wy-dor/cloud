@@ -5,7 +5,6 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.DingTalkSignatureUtil;
 import com.dingtalk.api.request.OapiServiceGetCorpTokenRequest;
 import com.dingtalk.api.request.OapiServiceGetPermanentCodeRequest;
-import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.*;
 import com.learning.cloud.bureau.service.BureauService;
@@ -17,7 +16,6 @@ import com.learning.cloud.index.service.CorpAgentService;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.taobao.api.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,47 +98,6 @@ public class IndexController {
 
 		//返回结果
 		return JsonResultUtil.success(resultMap);
-	}
-
-	/**
-	 * 获取企业授权信息接口
-	 */
-	@RequestMapping("/getAuthInfo")
-	public ServiceResult getAuthInfo(String corpId,String accessToken) throws ApiException {
-		return authenService.getAuthInfo(corpId,accessToken);
-	}
-
-	/**
-	 * 授权应用
-	 */
-	@GetMapping("/AuthenApp")
-	public ServiceResult AuthenApp(String corpId) throws ApiException {
-		return authenService.authenApp(corpId);
-	}
-
-	/**
-	 * 获取企业永久授权码
-	 */
-	@GetMapping("/getPermanentAuthCode")
-	public ServiceResult getPermanentAuthCode(String authCode, String accessToken) throws ApiException {
-		/*获取永久授权码并库存*/
-		DingTalkClient client1 = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_PERMANENT_CODE);
-		OapiServiceGetPermanentCodeRequest req1 = new OapiServiceGetPermanentCodeRequest();
-		req1.setTmpAuthCode(authCode);
-		OapiServiceGetPermanentCodeResponse rsp1 = client1.execute( req1, accessToken);
-		String permanentCode = rsp1.getPermanentCode();
-		System.out.println(permanentCode);
-		return ServiceResult.success(rsp1);
-	}
-
-	/**
-	 * 获取第三方应用凭证
-	 */
-	@GetMapping("/getSuiteAccessToken")
-	public JsonResult getSuiteAccessToken() throws ApiException {
-		/*获取套件令牌Token*/
-		String suiteAccessToken = authenService.getSuiteAccessToken();
-		return JsonResultUtil.success(suiteAccessToken);
 	}
 
 	/**

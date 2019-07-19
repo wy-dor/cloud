@@ -23,4 +23,8 @@ public interface StudentDao {
     List<Integer> getStudentIdListInClass(Integer classId);
 
     List<Student> getStudentsByName(Student student);
+
+    int delete(Integer id);
+
+    int deleteByClassId(Integer classId);
 }

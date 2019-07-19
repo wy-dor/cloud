@@ -20,16 +20,15 @@ import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.utils.CommonUtils;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -54,6 +53,9 @@ public class DeptServiceImpl implements DeptService {
     private ParentDao parentDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private CourseDao courseDao;
 
     @Autowired
@@ -61,6 +63,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void init(Integer schoolId) throws ApiException {
+        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
+        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
         //todo
@@ -116,14 +120,14 @@ public class DeptServiceImpl implements DeptService {
                                 /*grade_class表的更新*/
                                 Integer classId;
                                 GradeClass gradeClass = new GradeClass();
+                                gradeClass.setDeptId(classDeptId);
+                                List<GradeClass> classList = gradeClassDao.getByGradeClass(gradeClass);
                                 gradeClass.setCampusId(campusId);
                                 gradeClass.setSessionName(sessionName);
                                 gradeClass.setGradeName(gradeName);
                                 gradeClass.setClassName(className);
-                                List<GradeClass> classList = gradeClassDao.getByGradeClass(gradeClass);
                                 gradeClass.setSchoolId(schoolId);
                                 gradeClass.setBureauId(bureauId);
-                                gradeClass.setDeptId(classDeptId);
                                 if(classList.size() <= 0){
                                     gradeClassDao.insert(gradeClass);
                                     classId = gradeClass.getId();
@@ -137,9 +141,20 @@ public class DeptServiceImpl implements DeptService {
                                 }else{
                                     GradeClass gc = classList.get(0);
                                     classId = gc.getId();
+                                    classIdList2.add(classId);
                                     gradeClass.setId(classId);
                                     gradeClassDao.update(gradeClass);
                                 }
+                                //删除班级记录同步
+                                List<Integer> classIdList3 = CommonUtils.removeArrayDups(classIdList1, classIdList2);
+                                if(classIdList3.size() > 0){
+                                    for (Integer cId : classIdList3) {
+                                        gradeClassDao.delete(cId);
+                                        studentDao.deleteByClassId(cId);
+                                        parentDao.deleteByClassId(cId);
+                                    }
+                                }
+
                                 /*班级结构数据同步*/
                                 saveUserInClass(classId);
                             }
@@ -161,12 +176,15 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void saveUserInClass(int classId) throws ApiException {
-        List<Integer> teacherIdList = teacherDao.getTeacherIdListInClass(classId);
-        List<Integer> teacherIdList1 = new ArrayList<>();
-        List<Integer> studentIdList = studentDao.getStudentIdListInClass(classId);
-        List<Integer> studentIdList1 = new ArrayList<>();
-        List<Integer> parentIdList = parentDao.getParentIdListInClass(classId);
-        List<Integer> parentIdList1 = new ArrayList<>();
+        //教师表删除同步记录
+        Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
+        Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
+        //学生表删除同步记录
+        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
+        List<Integer> studentIdList2 = new ArrayList<>();
+        //家长表删除同步记录
+        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
+        List<Integer> parentIdList2 = new ArrayList<>();
         GradeClass byId = gradeClassDao.getById(classId);
         Integer schoolId = byId.getSchoolId();
         Integer bureauId = byId.getBureauId();
@@ -180,6 +198,10 @@ public class DeptServiceImpl implements DeptService {
         OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
         List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();
         for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
+            String userName = "";
+            String userId = "";
+            String unionId = "";
+            int roleType = 0;
             String userRole = dept4.getName();
             Long userDeptId = dept4.getId();
             /*用户表更新*/
@@ -188,8 +210,9 @@ public class DeptServiceImpl implements DeptService {
             /*用户表填充*/
             if(userRole.equals("老师")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
-                    String userName = user.getName();
-                    String userId = user.getUserid();
+                    userName = user.getName();
+                    userId = user.getUserid();
+                    roleType = 3;
                     String classIdStr = classId + "";
                     Teacher teacher = new Teacher();
                     teacher.setTeacherName(userName);
@@ -202,23 +225,37 @@ public class DeptServiceImpl implements DeptService {
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
                     }else{
-                        //判断老师所在班级是否存在，存在则不需要更新
+                        //判断老师所在班级是否存在
                         String classIds = t.getClassIds();
                         String idsStr = "," + t.getClassIds() + ",";
                         if(!idsStr.contains("," + classIdStr + ",")){
                             StringBuilder sb = new StringBuilder(classIds);
                             sb.append("," + classIdStr);
                             t.setClassIds(sb.toString());
-                            teacherDao.update(t);
                         }
+                        teacherDao.update(t);
+                        teacherClassIdMap2.put(t.getId(),classIds);
+                    }
+                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    User u = new User();
+                    u.setUnionId(unionId);
+                    User u1 = userDao.getByUnionId(unionId);
+                    if(u1 == null){
+                        u.setUserName(userName);
+                        u.setUserId(userId);
+                        u.setRoleType(roleType);
+                        u.setSchoolId(schoolId);
+                        u.setCampusId(campusId);
+                        userDao.insert(u);
                     }
                 }
             }else if(userRole.equals("家长")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
-                    String userName = user.getName();
-                    String userid = user.getUserid();
+                    userName = user.getName();
+                    userId = user.getUserid();
+                    roleType = 2;
                     Parent parent = new Parent();
-                    parent.setUserId(userid);
+                    parent.setUserId(userId);
                     parent.setParentName(userName);
                     parent.setClassId(classId);
                     parent.setCampusId(campusId);
@@ -228,34 +265,92 @@ public class DeptServiceImpl implements DeptService {
                     if(p == null){
                         parentDao.insert(parent);
                     }else{
-                        parentIdList1.add(p.getId());
+                        parentIdList2.add(p.getId());
                         parentDao.update(parent);
+                    }
+                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    User u = new User();
+                    u.setUnionId(unionId);
+                    User u1 = userDao.getByUnionId(unionId);
+                    if(u1 == null){
+                        u.setUserName(userName);
+                        u.setUserId(userId);
+                        u.setRoleType(roleType);
+                        u.setSchoolId(schoolId);
+                        u.setCampusId(campusId);
+                        userDao.insert(u);
                     }
                 }
             }else if(userRole.equals("学生")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
-                    String userName = user.getName();
-                    String userid = user.getUserid();
+                    userName = user.getName();
+                    userId = user.getUserid();
+                    roleType = 4;
                     Student student = new Student();
-                    student.setUserId(userid);
+                    student.setUserId(userId);
                     student.setStudentName(userName);
                     student.setClassId(classId);
                     student.setCampusId(campusId);
                     student.setSchoolId(schoolId);
                     student.setBureauId(bureauId);
-                    Student s = studentDao.getByUserId(userid);
+                    Student s = studentDao.getByUserId(userId);
                     if(s == null){
                         studentDao.insert(student);
                     }else{
-                        studentIdList1.add(s.getId());
+                        studentIdList2.add(s.getId());
                         studentDao.update(student);
+                    }
+                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    User u = new User();
+                    u.setUnionId(unionId);
+                    User u1 = userDao.getByUnionId(unionId);
+                    if(u1 == null){
+                        u.setUserName(userName);
+                        u.setUserId(userId);
+                        u.setRoleType(roleType);
+                        u.setSchoolId(schoolId);
+                        u.setCampusId(campusId);
+                        userDao.insert(u);
                     }
                 }
             }
         }
-        if(studentIdList != null && studentIdList.size() != 0){
-            //todo
-            //筛选两集合差集，进行数据删除
+        //学生表删除数据同步
+        if(studentIdList1 != null && studentIdList1.size() > 0){
+            List<Integer> studentIdList = CommonUtils.removeArrayDups(studentIdList1, studentIdList2);
+            for (Integer id : studentIdList) {
+                studentDao.delete(id);
+            }
+        }
+        //家长表删除数据同步
+        if(parentIdList1 != null && parentIdList1.size() > 0){
+            List<Integer> parentIdList = CommonUtils.removeArrayDups(parentIdList1, parentIdList2);
+            for (Integer id : parentIdList) {
+                parentDao.delete(id);
+            }
+        }
+        //老师表删除数据同步
+        if(teacherClassIdMap1 != null && teacherClassIdMap2.size() > 0){
+            Set<Integer> strings1 = teacherClassIdMap1.keySet();
+            String[] idStrArray1 =  (String[])strings1.toArray();
+            Set<Integer> strings2 = teacherClassIdMap2.keySet();
+            String[] idStrArray2 =  (String[])strings2.toArray();
+            String[] classIdStrArr1 = CommonUtils.removeStringDups(idStrArray1, idStrArray2);
+            for (String s : classIdStrArr1) {
+                teacherDao.delete(Integer.parseInt(s));
+            }
+            String[] classIdStrArr2 = CommonUtils.retainStringDups(idStrArray1, idStrArray2);
+            for (String s : classIdStrArr2) {
+                int id = Integer.parseInt(s);
+                String[] classIdStrs1 = teacherClassIdMap1.get(id).split(",");
+                String[] classIdStrs2 = teacherClassIdMap2.get(id).split(",");
+                String[] classIdStrs3 = CommonUtils.retainStringDups(classIdStrs1, classIdStrs2);
+                Teacher teacher = new Teacher();
+                teacher.setId(id);
+                teacher.setClassIds(Arrays.toString(classIdStrs3));
+                teacherDao.update(teacher);
+            }
+
         }
     }
 
@@ -357,7 +452,7 @@ public class DeptServiceImpl implements DeptService {
         return response;
     }
 
-    /*获取部门用户userid列表*/
+    /*获取部门用户userId列表*/
     @Override
     public OapiUserGetDeptMemberResponse getDeptMember(String deptId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getDeptMember");

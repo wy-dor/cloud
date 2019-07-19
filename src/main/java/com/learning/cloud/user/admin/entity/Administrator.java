@@ -1,6 +1,8 @@
 package com.learning.cloud.user.admin.entity;
 
-public class Administrator {
+import com.learning.domain.BaseEntity;
+
+public class Administrator extends BaseEntity {
     private Integer id;
 
     private String userId;

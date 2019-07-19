@@ -141,4 +141,14 @@
     LEFT JOIN user_parent up
     on up.campus_id = ca.id
   </select>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from user_parent
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByClassId" parameterType="java.lang.Integer">
+    delete from user_parent
+    where class_id = #{classId}
+  </delete>
 </mapper>

@@ -16,10 +16,10 @@
     where find_in_set(#{id},class_ids)
   </select>
 
-  <select id="getTeacherIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select id
+  <select id="getTeacherClassIdsMap" parameterType="java.lang.Integer" resultType="java.util.Map">
+    select id ,class_ids
     from user_teacher
-    where find_in_set(#{classId},class_ids)
+    where school_id = #{schoolId}
   </select>
 
   <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
@@ -145,4 +145,9 @@
     LEFT JOIN user_teacher ut
     on ut.campus_id = ca.id
   </select>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from user_teacher
+    where id = #{id}
+  </delete>
 </mapper>

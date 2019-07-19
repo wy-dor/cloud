@@ -55,104 +55,19 @@ public class AuthenServiceImpl implements AuthenService {
     @Autowired
     private AdministratorDao administratorDao;
 
-    @Override
-    public ServiceResult authenApp(String corpId) throws ApiException {
-        /*获取临时授权码*/
-        String authCode = authAppInfoDao.findByCorpId(corpId).getTempAuthCode();
-
-        authAppInfo = new AuthAppInfo();
-        authAppInfo.setCreatedTime(new Date());
-        authAppInfo.setTempAuthCode(authCode);
-
-        /*获取套件令牌Token*/
-        String suiteAccessToken = getSuiteAccessToken();
-        authAppInfo.setSuiteAccessToken(suiteAccessToken);
-
-        /*获取永久授权码并库存*/
-        Map<String,String> map = getPermanentCode(authCode, suiteAccessToken);
-        String permanentCode = map.get("permanentCode");
-        String corpName = map.get("corpName");
-        authAppInfo.setPermanentCode(permanentCode);
-        authAppInfo.setCorpName(corpName);
-
-        /*激活应用*/
-        String errmsg = appActive(suiteAccessToken, permanentCode);
-        if(errmsg.equals("ok")){
-            System.out.println("成功激活应用！");
-        }
-
-        /*获取企业凭证*/
-        String accessToken = getURLAccessToken(corpId);
-        authAppInfo.setCorpAccessToken(accessToken);
-
-       int i = authAppInfoDao.update(authAppInfo);
-       if(i == 1){
-            System.out.println("企业授权信息更新成功！");
-       }
-
-        /*获取企业授权信息*/
-        return getAuthInfo(corpId,accessToken);
-
-    }
-
-    /*获取套件令牌Token（获取第三方应用凭证）*/
-    @Override
-    public String getSuiteAccessToken() throws ApiException {
-        DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_SUITE_TOKEN);
-        OapiServiceGetSuiteTokenRequest request = new OapiServiceGetSuiteTokenRequest();
-        request.setSuiteKey(Constant.SUITE_KEY);
-        request.setSuiteSecret(Constant.SUITE_SECRET);
-        /*钉钉推送的suiteTicket。测试应用可以随意填写。*/
-        request.setSuiteTicket(Constant.SUITE_TICKET);
-        OapiServiceGetSuiteTokenResponse response = client.execute(request);
-        String suiteAccessToken = response.getSuiteAccessToken();
-        Long expiresIn = response.getExpiresIn();
-        System.out.println("access_token:" + suiteAccessToken);
-        System.out.println("expires in " + expiresIn);
-        return suiteAccessToken;
-    }
-
-    /*获取永久授权码并库存*/
-    private Map getPermanentCode(String authCode, String suiteAccessToken) throws ApiException {
-        Map<String,String> map = new HashMap<>();
-        DingTalkClient client1 = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_PERMANENT_CODE + suiteAccessToken);
-        OapiServiceGetPermanentCodeRequest req1 = new OapiServiceGetPermanentCodeRequest();
-        req1.setTmpAuthCode(authCode);
-        OapiServiceGetPermanentCodeResponse rsp1 = client1.execute(req1);
-        String permanentCode = rsp1.getPermanentCode();
-        String authCorpId = rsp1.getAuthCorpInfo().getCorpid();
-        String corpName = rsp1.getAuthCorpInfo().getCorpName();
-        authAppInfo.setPermanentCode(permanentCode);
-        authAppInfo.setCorpId(authCorpId);
-        authAppInfo.setCorpName(corpName);
-        map.put("permanentCode",permanentCode);
-        map.put("corpName",corpName);
-        System.out.println("permanentCode:" + permanentCode);
-        return map;
-    }
-
-    /*激活应用*/
-    private String appActive(String suiteAccessToken, String permanentCode) throws ApiException {
-        DingTalkClient client2 = new DefaultDingTalkClient(ApiUrlConstant.URL_ACTIVE_SUITE + suiteAccessToken);
-        OapiServiceActivateSuiteRequest req2 = new OapiServiceActivateSuiteRequest();
-        req2.setSuiteKey(Constant.SUITE_KEY);
-        req2.setAuthCorpid(authAppInfo.getCorpId());
-        req2.setPermanentCode(permanentCode);
-        OapiServiceActivateSuiteResponse rsp2 = client2.execute(req2);
-        return rsp2.getErrmsg();
-    }
 
     /*获取企业凭证*/
     @Override
     public String getAccessToken(String authCorpId) throws ApiException {
         AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
+        String suiteTicket = byCorpId.getSuiteTicket();
         String accessToken = byCorpId.getCorpAccessToken();
         Date updateTime = byCorpId.getUpdateTime();
         Date now = new Date();
         /*accessToken两小时过期*/
         long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
         if(minutes >= 120){
-            accessToken = getURLAccessToken(authCorpId);
+            accessToken = getURLAccessToken(authCorpId,suiteTicket);
             byCorpId.setCorpAccessToken(accessToken);
             byCorpId.setUpdateTime(new Date());
             authAppInfoDao.update(byCorpId);
@@ -160,55 +75,45 @@ public class AuthenServiceImpl implements AuthenService {
         return accessToken;
     }
 
-    private String getURLAccessToken(String authCorpId) throws ApiException {
+    @Override
+    public String getURLAccessToken(String authCorpId, String suiteTicket) throws ApiException {
         String accessToken;
         DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
         OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
         req.setAuthCorpid(authCorpId);
-        OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, Constant.SUITE_TICKET);
+        OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, suiteTicket);
         accessToken = execute.getAccessToken();
         return accessToken;
     }
 
 
     /*获取企业授权信息*/
-    @Override
     public ServiceResult getAuthInfo(String corpId,String accessToken) throws ApiException {
         /*获取企业授权信息*/
         DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_AUTH_INFO);
         OapiServiceGetAuthInfoRequest req = new OapiServiceGetAuthInfoRequest();
         req.setAuthCorpid(corpId);
-        OapiServiceGetAuthInfoResponse response = client.execute(req,Constant.SUITE_KEY,Constant.SUITE_SECRET, Constant.SUITE_TICKET);
+        OapiServiceGetAuthInfoResponse response = client.execute(req,Constant.SUITE_KEY,Constant.SUITE_SECRET, "xxx");
         /*保存授权企业信息*/
-        OapiServiceGetAuthInfoResponse.AuthCorpInfo CorpInfo = response.getAuthCorpInfo();
+        OapiServiceGetAuthInfoResponse.AuthCorpInfo corpInfo = response.getAuthCorpInfo();
         AuthCorpInfo authCorpInfo = new AuthCorpInfo();
-        String corpName = CorpInfo.getCorpName();
-        String industry = CorpInfo.getIndustry();
+        String corpName = corpInfo.getCorpName();
+        String industry = corpInfo.getIndustry();
         authCorpInfo.setCorpId(corpId);
         authCorpInfo.setCorpName(corpName);
         authCorpInfo.setIndustry(industry);
-        authCorpInfo.setAuthLevel(CorpInfo.getAuthLevel().intValue());
-        authCorpInfo.setInviteUrl(CorpInfo.getInviteUrl());
-        if(CorpInfo.getIsAuthenticated()){
+        authCorpInfo.setAuthLevel(corpInfo.getAuthLevel().intValue());
+        authCorpInfo.setInviteUrl(corpInfo.getInviteUrl());
+        if(corpInfo.getIsAuthenticated()){
             authCorpInfo.setIsAuthenticated((short)1);
         }else{
             authCorpInfo.setIsAuthenticated((short)0);
         }
-        authCorpInfo.setLicenseCode(CorpInfo.getLicenseCode());
-        AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
-        int i = 0;
-        if(corpInfoByCorpId == null){
-             i = authCorpInfoDao.insert(authCorpInfo);
-        }else{
-            i = authCorpInfoDao.update(authCorpInfo);
-        }
-        if(i == 1){
-            System.out.println("保存授权企业信息成功");
-        }
-
+        authCorpInfo.setLicenseCode(corpInfo.getLicenseCode());
         if(industry.equals("初中等教育")){
             Integer schoolId;
             School school = new School();
+            authCorpInfo.setIndustryType(1);
             school.setSchoolName(corpName);
             school.setCorpId(corpId);
             List<School> bySchool = schoolDao.getBySchool(school);
@@ -241,6 +146,7 @@ public class AuthenServiceImpl implements AuthenService {
             }
 
         }else if(industry.equals("教育行政机构")){
+            authCorpInfo.setIndustryType(2);
             Bureau byBureauName = bureauDao.getByBureauName(corpName);
             if(byBureauName == null){
                 Bureau bureau = new Bureau();
@@ -248,6 +154,16 @@ public class AuthenServiceImpl implements AuthenService {
                 bureau.setCorpId(corpId);
                 bureauDao.insert(bureau);
             }
+        }
+        AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
+        int i = 0;
+        if(corpInfoByCorpId == null){
+             i = authCorpInfoDao.insert(authCorpInfo);
+        }else{
+            i = authCorpInfoDao.update(authCorpInfo);
+        }
+        if(i == 1){
+            System.out.println("保存授权企业信息成功");
         }
 
 

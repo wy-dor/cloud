@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.bizData.dao.SyncBizDataMediumDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="subscribe_id" jdbcType="VARCHAR" property="subscribeId" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="biz_id" jdbcType="VARCHAR" property="bizId" />
+    <result column="biz_type" jdbcType="INTEGER" property="bizType" />
+    <result column="open_cursor" jdbcType="BIGINT" property="openCursor" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+  <select id="getBizData" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+    SELECT *
+    FROM ding_cloud_push.open_sync_biz_data_medium
+    WHERE subscribe_id = #{subscribeId}
+    and biz_type = #{bizType}
+    and status = 0
+  </select>
+
+  <select id="getAllBizDataMedium" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+    SELECT *
+    FROM ding_cloud_push.open_sync_biz_data_medium
+    where status = 0
+  </select>
+
+  <update id="updateStatus" parameterType="java.lang.Long">
+    update ding_cloud_push.open_sync_biz_data
+    set status = 1
+    where id = #{id}
+  </update>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+    insert into open_sync_biz_data_medium
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="subscribeId != null">
+        subscribe_id,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="bizId != null">
+        biz_id,
+      </if>
+      <if test="bizType != null">
+        biz_type,
+      </if>
+      <if test="openCursor != null">
+        open_cursor,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="bizData != null">
+        biz_data,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subscribeId != null">
+        #{subscribeId,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizId != null">
+        #{bizId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null">
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="openCursor != null">
+        #{openCursor,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bizData != null">
+        #{bizData,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

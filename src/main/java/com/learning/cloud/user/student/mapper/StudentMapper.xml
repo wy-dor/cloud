@@ -108,4 +108,14 @@
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from user_student
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByClassId" parameterType="java.lang.Integer">
+    delete from user_student
+    where class_id = #{classId}
+  </delete>
 </mapper>

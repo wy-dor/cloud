@@ -50,6 +50,12 @@
       <if test="licenseCode != null">
         license_code,
       </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="industryType != null">
+        industry_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -76,6 +82,12 @@
       <if test="licenseCode != null">
         #{licenseCode,jdbcType=VARCHAR},
       </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="industryType != null">
+        #{industryType,jdbcType=SMALLINT},
+      </if>
     </trim>
   </insert>
 
@@ -99,6 +111,18 @@
       </if>
       <if test="licenseCode != null">
         license_code = #{licenseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="industryType != null">
+        industry_type = #{industryType,jdbcType=SMALLINT},
+      </if>
+      <if test="suiteKey != null">
+        suite_key = #{suiteKey,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null">
+        access_token = #{accessToken,jdbcType=VARCHAR},
       </if>
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}

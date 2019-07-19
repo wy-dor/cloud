@@ -16,15 +16,14 @@ public class Constant {
      * 应用的app_id，登录开发者后台，点击应用管理，进入应用详情可见
      */
     public static final String APP_ID="20671";
-    /**
-     * 应用的SuiteKey，登录开发者后台，点击应用管理，进入应用详情可见
-     */
-    public static final String SUITE_KEY="suiterqkbrudxk2jqayay";
-    /**
-     * 应用的SuiteSecret，登录开发者后台，点击应用管理，进入应用详情可见
-     */
-    public static final String SUITE_SECRET="vEasQjDFQMeCakD2jdkjFydt1Cwx2KJyuhnn_tSUK5xtNvtUTnqvnaTFkzoKFD3K";
 
+//    public static final String SUITE_KEY="suiterqkbrudxk2jqayay";
+
+//    public static final String SUITE_SECRET="vEasQjDFQMeCakD2jdkjFydt1Cwx2KJyuhnn_tSUK5xtNvtUTnqvnaTFkzoKFD3K";
+
+    public static final String SUITE_KEY="suiteiupbsqvnrh1t5whf";
+
+    public static final String SUITE_SECRET="yeqc41yBZNXMmeq3iA5vQk7ZBE5t4-S-oq3IHMpGzLkyrivP72XCM5zU9f06viKY";
     /**
      * 回调URL加解密用。应用的数据加密密钥，登录开发者后台，点击应用管理，进入应用详情可见
      */
@@ -34,7 +33,4 @@ public class Constant {
      * 回调URL签名用。应用的签名Token, 登录开发者后台，点击应用管理，进入应用详情可见
      */
     public static final String TOKEN = "ddedu";
-
-    public static final String SUITE_TICKET = "OLK2TEpm8utaUf5qaPYPPqmvoKGEgbZbQL4f6NZL41a5Ka8a8ytuySS8N6TmgQhSSadzLPsG1iaUpdIPJlb49x";
-
 }

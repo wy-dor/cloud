@@ -24,4 +24,8 @@ public interface ParentDao {
     int update(Parent parent);
 
     List<Parent> getParents(Long schoolId);
+
+    int delete(Integer id);
+
+    int deleteByClassId(Integer classId);
 }

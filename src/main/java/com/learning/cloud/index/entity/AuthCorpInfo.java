@@ -1,6 +1,8 @@
 package com.learning.cloud.index.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AuthCorpInfo extends BaseEntity {
     private Integer id;
@@ -18,6 +20,22 @@ public class AuthCorpInfo extends BaseEntity {
     private Short isAuthenticated;
 
     private String licenseCode;
+
+    @Getter
+    @Setter
+    private Integer industryType;
+
+    @Getter
+    @Setter
+    private Integer orgId;
+
+    @Getter
+    @Setter
+    private String suiteKey;
+
+    @Getter
+    @Setter
+    private String accessToken;
 
     public Integer getId() {
         return id;

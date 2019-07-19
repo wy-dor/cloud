@@ -15,7 +15,5 @@ public interface AuthAppInfoDao {
 
     int update(AuthAppInfo authAppInfo);
 
-    String getCorpAccessToken(String coprId);
-
-    List<AuthAppInfo> getToAuthorize();
+    String getCorpAccessToken(String corpId);
 }
