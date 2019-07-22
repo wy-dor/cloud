@@ -42,6 +42,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
 //        List<SyncBizDataMedium> bizData_16 = syncBizDataMediumDao.getBizData(subscribeId, 16);
 
         List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium();
+        if(allBizDataMedium == null || allBizDataMedium.size() == 0){
+            return null;
+        }
         for (SyncBizDataMedium syncBizDataMedium : allBizDataMedium) {
             Long id = syncBizDataMedium.getId();
             String corpId = syncBizDataMedium.getCorpId();
