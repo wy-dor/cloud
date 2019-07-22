@@ -22,6 +22,13 @@
     order by gmt_modified desc
   </select>
 
+  <select id="getForSuiteTicket" resultType="com.learning.cloud.bizData.entity.SyncBizData">
+    SELECT *
+    FROM ding_cloud_push.open_sync_biz_data
+    WHERE biz_type = 2
+    limit 1
+  </select>
+
   <select id="getAllBizData" resultType="com.learning.cloud.bizData.entity.SyncBizData">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data

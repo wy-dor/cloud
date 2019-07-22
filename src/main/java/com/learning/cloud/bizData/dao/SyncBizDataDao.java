@@ -15,6 +15,8 @@ public interface SyncBizDataDao {
 
     List<SyncBizData> getBizData(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
 
+    SyncBizData getForSuiteTicket();
+
     List<SyncBizData> getAllBizData();
 
     //印证推送相同corpId的数据覆盖后status重新为0
