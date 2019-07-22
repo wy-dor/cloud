@@ -239,40 +239,41 @@ public class MultiThreadScheduleTask {
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
         List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
-        for (SyncBizData bizData : bizData_04) {
-            Long id = bizData.getId();
-            Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
-            String syncAction = (String)parse_0.get("syncAction");
-            if("org_suite_auth".equals(syncAction)){
-                //更新授权企业表
-                Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
-                AuthCorpInfo authCorpInfo = new AuthCorpInfo();
-                String corpId = (String) auth_corp_info.get("corpid");
-                String corpName = (String) auth_corp_info.get("corp_name");
-                String industry = (String) auth_corp_info.get("industry");
-                authCorpInfo.setCorpId(corpId);
-                authCorpInfo.setCorpName(corpName);
-                authCorpInfo.setIndustry(industry);
-                authCorpInfo.setAuthLevel((Integer) auth_corp_info.get("auth_level"));
-                authCorpInfo.setInviteUrl((String) auth_corp_info.get("invite_url"));
-                if((Boolean) auth_corp_info.get("is_authenticated")){
-                    authCorpInfo.setIsAuthenticated((short)1);
-                }else{
-                    authCorpInfo.setIsAuthenticated((short)0);
-                }
-                authCorpInfo.setLicenseCode((String) auth_corp_info.get("license_code"));
-                if(industry.equals("初中等教育")){
-                    School school = new School();
-                    authCorpInfo.setIndustryType(1);
-                    school.setSchoolName(corpName);
-                    school.setCorpId(corpId);
-                    List<School> bySchool = schoolDao.getBySchool(school);
-                    if(bySchool == null || bySchool.size() == 0){
-                        schoolDao.insert(school);
+        if(bizData_04 != null && bizData_04.size() > 0){
+            for (SyncBizData bizData : bizData_04) {
+                Long id = bizData.getId();
+                Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
+                String syncAction = (String)parse_0.get("syncAction");
+                if("org_suite_auth".equals(syncAction)){
+                    //更新授权企业表
+                    Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
+                    AuthCorpInfo authCorpInfo = new AuthCorpInfo();
+                    String corpId = (String) auth_corp_info.get("corpid");
+                    String corpName = (String) auth_corp_info.get("corp_name");
+                    String industry = (String) auth_corp_info.get("industry");
+                    authCorpInfo.setCorpId(corpId);
+                    authCorpInfo.setCorpName(corpName);
+                    authCorpInfo.setIndustry(industry);
+                    authCorpInfo.setAuthLevel((Integer) auth_corp_info.get("auth_level"));
+                    authCorpInfo.setInviteUrl((String) auth_corp_info.get("invite_url"));
+                    if((Boolean) auth_corp_info.get("is_authenticated")){
+                        authCorpInfo.setIsAuthenticated((short)1);
+                    }else{
+                        authCorpInfo.setIsAuthenticated((short)0);
                     }
+                    authCorpInfo.setLicenseCode((String) auth_corp_info.get("license_code"));
+                    if(industry.equals("初中等教育")){
+                        School school = new School();
+                        authCorpInfo.setIndustryType(1);
+                        school.setSchoolName(corpName);
+                        school.setCorpId(corpId);
+                        List<School> bySchool = schoolDao.getBySchool(school);
+                        if(bySchool == null || bySchool.size() == 0){
+                            schoolDao.insert(school);
+                        }
 
-                    //todo
-                    /*更新管理员表*/
+                        //todo
+                        /*更新管理员表*/
                     /*OapiRoleListResponse rsp = getRoleList(accessToken);
                     List<OapiRoleListResponse.OpenRole> roles = rsp.getResult().getList().get(0).getRoles();
                     for (OapiRoleListResponse.OpenRole role : roles) {
@@ -294,87 +295,88 @@ public class MultiThreadScheduleTask {
                         }
                     }*/
 
-                }else if(industry.equals("教育行政机构")){
-                    authCorpInfo.setIndustryType(2);
-                    Bureau byBureauName = bureauDao.getByBureauName(corpName);
-                    if(byBureauName == null){
-                        Bureau bureau = new Bureau();
-                        bureau.setBureauName(corpName);
-                        bureau.setCorpId(corpId);
-                        bureauDao.insert(bureau);
+                    }else if(industry.equals("教育行政机构")){
+                        authCorpInfo.setIndustryType(2);
+                        Bureau byBureauName = bureauDao.getByBureauName(corpName);
+                        if(byBureauName == null){
+                            Bureau bureau = new Bureau();
+                            bureau.setBureauName(corpName);
+                            bureau.setCorpId(corpId);
+                            bureauDao.insert(bureau);
+                        }
                     }
-                }
-                AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
-                int i = 0;
-                if(corpInfoByCorpId == null){
-                    i = authCorpInfoDao.insert(authCorpInfo);
-                }else{
-                    i = authCorpInfoDao.update(authCorpInfo);
-                }
-                if(i == 1){
-                    System.out.println("保存授权企业信息成功");
-                }
+                    AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
+                    int i = 0;
+                    if(corpInfoByCorpId == null){
+                        i = authCorpInfoDao.insert(authCorpInfo);
+                    }else{
+                        i = authCorpInfoDao.update(authCorpInfo);
+                    }
+                    if(i == 1){
+                        System.out.println("保存授权企业信息成功");
+                    }
 
-                //保存应用信息
-                Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
-                List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
-                for (Map<String, Object> a : agent) {
-                    CorpAgent ca = new CorpAgent();
-                    ca.setAgentId(((Integer)a.get("agentid")).toString());
-                    ca.setCorpId(corpId);
-                    ca.setAgentName((String)a.get("agent_name"));
-                    ca.setAppId(((Integer)a.get("appid")).toString());
-                    ca.setLogoUrl((String)a.get("logo_url"));
-                    ca.setUpdateTime(new Date());
-                    CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+                    //保存应用信息
+                    Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
+                    List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
+                    for (Map<String, Object> a : agent) {
+                        CorpAgent ca = new CorpAgent();
+                        ca.setAgentId(((Integer)a.get("agentid")).toString());
+                        ca.setCorpId(corpId);
+                        ca.setAgentName((String)a.get("agent_name"));
+                        ca.setAppId(((Integer)a.get("appid")).toString());
+                        ca.setLogoUrl((String)a.get("logo_url"));
+                        ca.setUpdateTime(new Date());
+                        CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+                        if(byCorpId == null){
+                            corpAgentDao.insert(ca);
+                        }else{
+                            corpAgentDao.update(ca);
+                        }
+                        System.out.println("保存应用信息成功！");
+                    }
+
+                    //更新授权应用表
+                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                    if(forSuiteTicket != null){
+                        Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
+                        String suiteTicket = parse.get("suiteTicket");
+                        String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
+                        AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
+                        AuthAppInfo authAppInfo = new AuthAppInfo();
+                        authAppInfo.setCorpId(corpId);
+                        authAppInfo.setCorpName(corpName);
+                        authAppInfo.setSuiteTicket(suiteTicket);
+                        authAppInfo.setCorpAccessToken(accessToken);
+                        if(info == null){
+                            authAppInfo.setCreatedTime(new Date());
+                            authAppInfoDao.insert(authAppInfo);
+                        }else{
+                            authAppInfoDao.update(authAppInfo);
+                        }
+                    }
+
+                    //保存授权用户信息
+                    Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
+                    AuthUserInfo userInfo = new AuthUserInfo();
+                    userInfo.setUserId((String) auth_user_info.get("userId"));
+                    userInfo.setCorpId(corpId);
+                    AuthUserInfo byCorpId = authUserInfoDao.getByCorpId(corpId);
+                    int k = 0;
                     if(byCorpId == null){
-                        corpAgentDao.insert(ca);
+                        k = authUserInfoDao.insert(userInfo);
                     }else{
-                        corpAgentDao.update(ca);
+                        k = authUserInfoDao.update(userInfo);
                     }
-                    System.out.println("保存应用信息成功！");
-                }
-
-                //更新授权应用表
-                SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-                if(forSuiteTicket != null){
-                    Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
-                    String suiteTicket = parse.get("suiteTicket");
-                    String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                    AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
-                    AuthAppInfo authAppInfo = new AuthAppInfo();
-                    authAppInfo.setCorpId(corpId);
-                    authAppInfo.setCorpName(corpName);
-                    authAppInfo.setSuiteTicket(suiteTicket);
-                    authAppInfo.setCorpAccessToken(accessToken);
-                    if(info == null){
-                        authAppInfo.setCreatedTime(new Date());
-                        authAppInfoDao.insert(authAppInfo);
-                    }else{
-                        authAppInfoDao.update(authAppInfo);
+                    if(k == 1){
+                        System.out.println("授权用户信息保存成功");
                     }
                 }
+                syncBizDataDao.updateStatus(id);
+                //授权后更新一次数据
+                bizDataMediumService.initBizDataMedium();
 
-                //保存授权用户信息
-                Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
-                AuthUserInfo userInfo = new AuthUserInfo();
-                userInfo.setUserId((String) auth_user_info.get("userId"));
-                userInfo.setCorpId(corpId);
-                AuthUserInfo byCorpId = authUserInfoDao.getByCorpId(corpId);
-                int k = 0;
-                if(byCorpId == null){
-                    k = authUserInfoDao.insert(userInfo);
-                }else{
-                    k = authUserInfoDao.update(userInfo);
-                }
-                if(k == 1){
-                    System.out.println("授权用户信息保存成功");
-                }
             }
-            syncBizDataDao.updateStatus(id);
-            //授权后更新一次数据
-            bizDataMediumService.initBizDataMedium();
-
         }
 
         //更新推送的suite_ticket
