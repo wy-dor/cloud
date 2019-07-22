@@ -33,7 +33,7 @@ public class LoginController {
     private SchoolDao schoolDao;
 
     //应用管理后台免登
-    @GetMapping("oaLogin")
+    @GetMapping("/api/oaLogin")
     public JsonResult oaLogin(String code)throws Exception{
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sso/gettoken");
         OapiSsoGettokenRequest request = new OapiSsoGettokenRequest();
@@ -78,7 +78,7 @@ public class LoginController {
     }
 
 
-    @GetMapping("getUserInfoByCode")
+    @GetMapping("/api/getUserInfoByCode")
     public JsonResult getUserInfoByCode(String code)throws Exception{
         DefaultDingTalkClient  client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sns/getuserinfo_bycode");
         OapiSnsGetuserinfoBycodeRequest req = new OapiSnsGetuserinfoBycodeRequest();

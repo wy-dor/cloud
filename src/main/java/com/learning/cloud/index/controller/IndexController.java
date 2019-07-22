@@ -108,7 +108,7 @@ public class IndexController {
 	}
 
 
-	@GetMapping("/getURLAccessToken")
+	@GetMapping("/api/getURLAccessToken")
 	public JsonResult getURLAccessToken(String authCorpId, String suiteTicket) throws ApiException {
 		String accessToken = authenService.getURLAccessToken(authCorpId, suiteTicket);
 		return JsonResultUtil.success(accessToken);

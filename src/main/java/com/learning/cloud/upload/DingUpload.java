@@ -27,7 +27,7 @@ public class DingUpload {
     private AuthenService authenService;
 
     //获取企业下的自定义空间
-    @GetMapping("getComSpace")
+    @GetMapping("/api/getComSpace")
     public String getComSpace(String corpId, String agentId)throws Exception{
         String accessToken = authenService.getAccessToken(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/cspace/get_custom_space");
@@ -41,7 +41,7 @@ public class DingUpload {
     }
 
     //授权用户访问企业自定义空间
-    @GetMapping("getComSpaceAccess")
+    @GetMapping("/api/getComSpaceAccess")
     public String getComSpaceAccess(String corpId, String agentId, String userId)throws Exception{
         String accessToken = authenService.getAccessToken(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/cspace/grant_custom_space");

@@ -18,17 +18,17 @@ public class ScoreTypeController {
     @Autowired
     private ScoreTypeService scoreTypeService;
 
-    @PostMapping("addScoreType")
+    @PostMapping("/api/addScoreType")
     public JsonResult addScoreType(ScoreType scoreType) throws Exception{
        return  scoreTypeService.addScoreType(scoreType);
     }
 
-    @PostMapping("editScoreType")
+    @PostMapping("/api/editScoreType")
     public JsonResult editScoreType(ScoreType scoreType) throws Exception {
         return scoreTypeService.editScoreType(scoreType);
     }
 
-    @GetMapping("getOrganizeScoreType")
+    @GetMapping("/api/getOrganizeScoreType")
     public JsonResult getOrganizeScoreType(ScoreType scoreType)throws Exception{
         return scoreTypeService.getOrganizeScoreType(scoreType);
     }
