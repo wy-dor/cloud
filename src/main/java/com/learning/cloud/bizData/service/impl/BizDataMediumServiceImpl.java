@@ -7,6 +7,7 @@ import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.dept.department.dao.DepartmentDao;
 import com.learning.cloud.dept.department.entity.Department;
 import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
@@ -45,7 +46,13 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         for (SyncBizDataMedium syncBizDataMedium : allBizDataMedium) {
             Long id = syncBizDataMedium.getId();
             String corpId = syncBizDataMedium.getCorpId();
-            Integer schoolId = schoolDao.getSchoolByCorpId(corpId).getId();
+            Integer schoolId;
+            School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
+            if(schoolByCorpId == null){
+                schoolId = -1;
+            }else{
+                schoolId = schoolByCorpId.getId();
+            }
             Integer bizType = syncBizDataMedium.getBizType();
             Map<String, Object> bizDataParse = (Map<String, Object>) JSON.parse(syncBizDataMedium.getBizData());
             String syncAction = (String) bizDataParse.get("syncAction");
@@ -65,15 +72,18 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     roleType = 1;
                 }
                 //设置角色类型
-                List<Long> departmentList = (List<Long>) bizDataParse.get("department");
-                for (Long deptId : departmentList) {
-                    String deptName = departmentDao.getByDeptId(deptId.toString()).getName();
-                    if(deptName.equals("老师")){
-                        roleType = 3;
-                    }else if(deptName.equals("学生")){
-                        roleType = 4;
-                    }else if(deptName.equals("家长")){
-                        roleType = 2;
+                List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
+                for (Integer deptId : departmentList) {
+                    Department byDeptId = departmentDao.getByDeptId(deptId.toString());
+                    if(byDeptId != null){
+                        String deptName = byDeptId.getName();
+                        if(deptName.equals("老师")){
+                            roleType = 3;
+                        }else if(deptName.equals("学生")){
+                            roleType = 4;
+                        }else if(deptName.equals("家长")){
+                            roleType = 2;
+                        }
                     }
                 }
                 user.setRoleType(roleType);
@@ -93,28 +103,32 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
 
             }else if(bizType == 14){
-                Department dept = new Department();
-                dept.setDeptId(((Long) bizDataParse.get("id")).toString());
-                dept.setCorpId(corpId);
-                dept.setName((String) bizDataParse.get("name"));
-                dept.setParentId((String) bizDataParse.get("parentid"));
-                if((Boolean) bizDataParse.get("outerDept")){
-                    dept.setOuterDept((short)1);
-                }else{
-                    dept.setOuterDept((short)0);
-                }
-                dept.setDeptManagerUseridList((String) bizDataParse.get("deptManagerUseridList"));
-                if((Boolean) bizDataParse.get("groupContainSubDept")){
-                    dept.setGroupContainSubDept((short)1);
-                }else{
-                    dept.setGroupContainSubDept((short)0);
-                }
+                //todo
+                //部门删除
+                if (!syncAction.equals("org_dept_remove")) {
+                    Department dept = new Department();
+                    dept.setDeptId(((Integer) bizDataParse.get("id")).toString());
+                    dept.setCorpId(corpId);
+                    dept.setName((String) bizDataParse.get("name"));
+                    dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
+                    if((Boolean) bizDataParse.get("outerDept")){
+                        dept.setOuterDept((short)1);
+                    }else{
+                        dept.setOuterDept((short)0);
+                    }
+                    dept.setDeptManagerUseridList((String) bizDataParse.get("deptManagerUseridList"));
+                    if((Boolean) bizDataParse.get("groupContainSubDept")){
+                        dept.setGroupContainSubDept((short)1);
+                    }else{
+                        dept.setGroupContainSubDept((short)0);
+                    }
 
-                //部门同步
-                if(syncAction.equals("org_dept_create")){
-                    departmentDao.insert(dept);
-                }else if(syncAction.equals("org_dept_modify")){
-                    departmentDao.update(dept);
+                    //部门同步
+                    if(syncAction.equals("org_dept_create")){
+                        departmentDao.insert(dept);
+                    }else if(syncAction.equals("org_dept_modify")){
+                        departmentDao.update(dept);
+                    }
                 }
             }else if(bizType == 16){
                 //企业同步

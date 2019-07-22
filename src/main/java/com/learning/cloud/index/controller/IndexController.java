@@ -100,6 +100,13 @@ public class IndexController {
 		return JsonResultUtil.success(resultMap);
 	}
 
+
+	@GetMapping("/getURLAccessToken")
+	public JsonResult getURLAccessToken(String authCorpId, String suiteTicket) throws ApiException {
+		String accessToken = authenService.getURLAccessToken(authCorpId, suiteTicket);
+		return JsonResultUtil.success(accessToken);
+	}
+
 	/**
 	 * ISV获取企业访问凭证
 	 * @param corpId	授权企业的corpId

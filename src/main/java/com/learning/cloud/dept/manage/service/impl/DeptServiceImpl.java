@@ -70,7 +70,7 @@ public class DeptServiceImpl implements DeptService {
         //todo
         //
         if(bureauId == null){
-            bureauId = 1;
+            bureauId = -1;
         }
         String corpId = school.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);

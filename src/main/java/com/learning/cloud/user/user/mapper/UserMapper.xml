@@ -86,7 +86,7 @@
         campus_id = #{campusId,jdbcType=INTEGER},
       </if>
       <if test="roleType != null">
-        roleType = #{roleType,jdbcType=INTEGER},
+        role_type = #{roleType,jdbcType=INTEGER},
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=INTEGER},
