@@ -68,6 +68,9 @@ spring:
     url: jdbc:mysql://106.15.232.47:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  suiteId: 6453002
+  suiteKey: suiteiupbsqvnrh1t5whf
+  suiteSecret: yeqc41yBZNXMmeq3iA5vQk7ZBE5t4-S-oq3IHMpGzLkyrivP72XCM5zU9f06viKY
 
 ---
 #测试环境
@@ -77,6 +80,9 @@ spring:
     url: jdbc:mysql://106.15.232.47:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  suiteId: 6453002
+  suiteKey: suiteiupbsqvnrh1t5whf
+  suiteSecret: yeqc41yBZNXMmeq3iA5vQk7ZBE5t4-S-oq3IHMpGzLkyrivP72XCM5zU9f06viKY
 
 ---
 #生产环境
@@ -86,3 +92,6 @@ spring:
     url: jdbc:mysql://rm-bp1e42m37x3a83d26.mysql.rds.aliyuncs.com:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: ding_user
     password: Lsm131452
+  suiteId: 6298012
+  suiteKey: suitets3egysydvw6xhns
+  suiteSecret: hZ1Qn3Sq0-ug2ySUXWdf_kjlODNVysS1CoRuDOFhpEzmx5ueGbOPl3Bg9e9w2Mod

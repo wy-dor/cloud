@@ -20,6 +20,7 @@ import com.taobao.api.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -45,6 +46,12 @@ public class IndexController {
 
 	@Autowired
 	private CorpAgentService corpAgentService;
+	
+	@Value("${spring.suiteKey}")
+	private String suiteKey;
+
+	@Value("${spring.suiteSecret}")
+	private String suiteSecret;
 
 	/**
 	 * 钉钉用户登录，显示当前登录的企业和用户
@@ -118,13 +125,13 @@ public class IndexController {
 
 		long timestamp = System.currentTimeMillis();
 		//正式应用应该由钉钉通过开发者的回调地址动态获取到
-		String suiteTicket = getSuiteTicket(Constant.SUITE_KEY);
-		String signature = DingTalkSignatureUtil.computeSignature(Constant.SUITE_SECRET,
+		String suiteTicket = getSuiteTicket(suiteKey);
+		String signature = DingTalkSignatureUtil.computeSignature(suiteSecret,
 				DingTalkSignatureUtil.getCanonicalStringForIsv(timestamp, suiteTicket));
 		Map<String, String> params = new LinkedHashMap<String, String>();
 		params.put("timestamp", String.valueOf(timestamp));
 		params.put("suiteTicket", suiteTicket);
-		params.put("accessKey", Constant.SUITE_KEY);
+		params.put("accessKey", suiteKey);
 		params.put("signature", signature);
 		String queryString = DingTalkSignatureUtil.paramToQueryString(params, "utf-8");
 		DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN + "?" + queryString);

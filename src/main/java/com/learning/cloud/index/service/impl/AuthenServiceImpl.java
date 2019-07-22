@@ -22,6 +22,7 @@ import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,12 @@ public class AuthenServiceImpl implements AuthenService {
     @Autowired
     private AdministratorDao administratorDao;
 
+    @Value("${spring.suiteKey}")
+    private String suiteKey;
+
+    @Value("${spring.suiteSecret}")
+    private String suiteSecret;
+
 
     /*获取企业凭证*/
     @Override
@@ -81,7 +88,7 @@ public class AuthenServiceImpl implements AuthenService {
         DefaultDingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_CORP_TOKEN);
         OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
         req.setAuthCorpid(authCorpId);
-        OapiServiceGetCorpTokenResponse execute = client.execute(req, Constant.SUITE_KEY, Constant.SUITE_SECRET, suiteTicket);
+        OapiServiceGetCorpTokenResponse execute = client.execute(req, suiteKey, suiteSecret, suiteTicket);
         accessToken = execute.getAccessToken();
         return accessToken;
     }
@@ -93,7 +100,7 @@ public class AuthenServiceImpl implements AuthenService {
         DingTalkClient client = new DefaultDingTalkClient(ApiUrlConstant.URL_GET_AUTH_INFO);
         OapiServiceGetAuthInfoRequest req = new OapiServiceGetAuthInfoRequest();
         req.setAuthCorpid(corpId);
-        OapiServiceGetAuthInfoResponse response = client.execute(req,Constant.SUITE_KEY,Constant.SUITE_SECRET, "xxx");
+        OapiServiceGetAuthInfoResponse response = client.execute(req,suiteKey,suiteSecret, "xxx");
         /*保存授权企业信息*/
         OapiServiceGetAuthInfoResponse.AuthCorpInfo corpInfo = response.getAuthCorpInfo();
         AuthCorpInfo authCorpInfo = new AuthCorpInfo();

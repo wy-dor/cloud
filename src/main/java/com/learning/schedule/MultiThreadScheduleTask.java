@@ -33,9 +33,9 @@ import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
 import com.learning.cloud.bizData.entity.SyncBizDataMedium;
-import com.learning.schedule.config.Constant;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -92,6 +92,9 @@ public class MultiThreadScheduleTask {
 
     @Autowired
     private BizDataMediumService bizDataMediumService;
+
+    @Value("${spring.suiteId}")
+    private String suiteId;
 
     @Async
     @Scheduled(cron = "0 0 5 * * ?") //每天5点
@@ -233,7 +236,7 @@ public class MultiThreadScheduleTask {
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")//每隔一分钟
     public void queryBizData() throws InterruptedException, ApiException {
-        String subscribeId = Constant.SUITE_ID + "_0";
+        String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
         List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
         for (SyncBizData bizData : bizData_04) {
@@ -365,7 +368,7 @@ public class MultiThreadScheduleTask {
                     String corpName = corpInfo.getCorpName();
                     String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
                     if(accessToken == null){
-                        accessToken = "###";
+                        continue;
                     }
                     AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
                     AuthAppInfo authAppInfo = new AuthAppInfo();

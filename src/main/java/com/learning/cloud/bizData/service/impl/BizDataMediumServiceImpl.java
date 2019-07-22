@@ -11,7 +11,6 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
-import com.learning.schedule.config.Constant;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
