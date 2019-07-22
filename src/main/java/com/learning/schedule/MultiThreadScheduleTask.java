@@ -352,6 +352,7 @@ public class MultiThreadScheduleTask {
             syncBizDataDao.updateStatus(id);
         }
 
+        //更新推送的suite_ticket
         List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
         if(bizDataList != null){
             for (SyncBizData bizData_02 : bizDataList) {
@@ -369,7 +370,6 @@ public class MultiThreadScheduleTask {
                     authAppInfo.setCreatedTime(new Date());
                     authAppInfoDao.insert(authAppInfo);
                 }else{
-                    authAppInfo.setUpdateTime(new Date());
                     authAppInfoDao.update(authAppInfo);
                 }
                 syncBizDataDao.updateStatus(id);
