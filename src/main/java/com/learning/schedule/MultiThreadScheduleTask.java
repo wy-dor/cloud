@@ -336,27 +336,24 @@ public class MultiThreadScheduleTask {
                 }
 
                 //更新授权应用表
-                List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
-                if(bizDataList != null){
-                    SyncBizData bizData_02 = bizDataList.get(0);
-                    Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
+                SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                if(forSuiteTicket != null){
+                    Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                     String suiteTicket = parse.get("suiteTicket");
                     String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                    AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
+                    AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
                     AuthAppInfo authAppInfo = new AuthAppInfo();
                     authAppInfo.setCorpId(corpId);
                     authAppInfo.setCorpName(corpName);
                     authAppInfo.setSuiteTicket(suiteTicket);
                     authAppInfo.setCorpAccessToken(accessToken);
-                    if(byCorpId == null){
+                    if(info == null){
                         authAppInfo.setCreatedTime(new Date());
                         authAppInfoDao.insert(authAppInfo);
                     }else{
                         authAppInfoDao.update(authAppInfo);
                     }
-
                 }
-
 
                 //保存授权用户信息
                 Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
@@ -382,7 +379,7 @@ public class MultiThreadScheduleTask {
 
         //更新推送的suite_ticket
         List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
-        if(bizDataList != null){
+        if(bizDataList != null && bizDataList.size() != 0){
             for (SyncBizData bizData_02 : bizDataList) {
                 Long id = bizData_02.getId();
                 Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
