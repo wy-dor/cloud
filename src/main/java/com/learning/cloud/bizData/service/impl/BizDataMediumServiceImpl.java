@@ -57,6 +57,11 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             String syncAction = (String) bizDataParse.get("syncAction");
             if(bizType == 13){
                 //员工同步
+                //todo
+                //员工删除
+                if(syncAction.equals("user_leave_org")){
+                    continue;
+                }
                 String userId = (String) bizDataParse.get("userid");
                 String userName = (String) bizDataParse.get("name");
                 String unionId = (String) bizDataParse.get("unionid");
@@ -104,31 +109,32 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             }else if(bizType == 14){
                 //todo
                 //部门删除
-                if (!syncAction.equals("org_dept_remove")) {
-                    Department dept = new Department();
-                    dept.setDeptId(((Integer) bizDataParse.get("id")).toString());
-                    dept.setCorpId(corpId);
-                    dept.setName((String) bizDataParse.get("name"));
-                    dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
-                    if((Boolean) bizDataParse.get("outerDept")){
-                        dept.setOuterDept((short)1);
-                    }else{
-                        dept.setOuterDept((short)0);
-                    }
-                    dept.setDeptManagerUseridList((String) bizDataParse.get("deptManagerUseridList"));
-                    if((Boolean) bizDataParse.get("groupContainSubDept")){
-                        dept.setGroupContainSubDept((short)1);
-                    }else{
-                        dept.setGroupContainSubDept((short)0);
-                    }
-
-                    //部门同步
-                    if(syncAction.equals("org_dept_create")){
-                        departmentDao.insert(dept);
-                    }else if(syncAction.equals("org_dept_modify")){
-                        departmentDao.update(dept);
-                    }
+                if (syncAction.equals("org_dept_remove")) {
+                    continue;
                 }
+                Department dept = new Department();
+                dept.setDeptId(((Integer) bizDataParse.get("id")).toString());
+                dept.setCorpId(corpId);
+                dept.setName((String) bizDataParse.get("name"));
+                dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
+                if((Boolean) bizDataParse.get("outerDept")){
+                    dept.setOuterDept((short)1);
+                }else{
+                    dept.setOuterDept((short)0);
+                }
+                dept.setDeptManagerUseridList((String) bizDataParse.get("deptManagerUseridList"));
+                if((Boolean) bizDataParse.get("groupContainSubDept")){
+                    dept.setGroupContainSubDept((short)1);
+                }else{
+                    dept.setGroupContainSubDept((short)0);
+                }
+                //部门同步
+                if(syncAction.equals("org_dept_create")){
+                    departmentDao.insert(dept);
+                }else if(syncAction.equals("org_dept_modify")){
+                    departmentDao.update(dept);
+                }
+
             }else if(bizType == 16){
                 //企业同步
 

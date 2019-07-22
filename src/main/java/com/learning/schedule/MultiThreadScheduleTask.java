@@ -235,7 +235,7 @@ public class MultiThreadScheduleTask {
 
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")//每隔一分钟
-    public void queryBizData() throws InterruptedException, ApiException {
+    public void queryBizData() throws Exception {
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
         List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
@@ -335,6 +335,32 @@ public class MultiThreadScheduleTask {
                     System.out.println("保存应用信息成功！");
                 }
 
+                //更新授权应用表
+                List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
+                if(bizDataList != null){
+                    SyncBizData bizData_02 = bizDataList.get(0);
+                    Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
+                    String suiteTicket = parse.get("suiteTicket");
+                    String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
+                    AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
+                    AuthAppInfo authAppInfo = new AuthAppInfo();
+                    authAppInfo.setCorpId(corpId);
+                    authAppInfo.setCorpName(corpName);
+                    authAppInfo.setSuiteTicket(suiteTicket);
+                    authAppInfo.setCorpAccessToken(accessToken);
+                    if(byCorpId == null){
+                        authAppInfo.setCreatedTime(new Date());
+                        authAppInfoDao.insert(authAppInfo);
+                    }else{
+                        authAppInfoDao.update(authAppInfo);
+                    }
+
+                    //标识已操作
+                    syncBizDataDao.updateStatus(id);
+
+                }
+
+
                 //保存授权用户信息
                 Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
                 AuthUserInfo userInfo = new AuthUserInfo();
@@ -351,8 +377,10 @@ public class MultiThreadScheduleTask {
                     System.out.println("授权用户信息保存成功");
                 }
             }
-
             syncBizDataDao.updateStatus(id);
+            //授权后更新一次数据
+            bizDataMediumService.initBizDataMedium();
+
         }
 
         //更新推送的suite_ticket

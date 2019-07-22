@@ -389,6 +389,9 @@ public class DeptServiceImpl implements DeptService {
                     teacher.setUserId(userId);
                     teacher.setSchoolId(schoolId);
                     Teacher t = teacherDao.getTeacherInSchool(teacher);
+                    if(t == null){
+                        continue;
+                    }
                     Integer id = t.getId();
                     map.put("teacherId",id + "");
                     t.setAvatar(avatar);
@@ -401,7 +404,11 @@ public class DeptServiceImpl implements DeptService {
                     parent.setSchoolId(schoolId);
                     //todo
                     //处理家长多个classId返回
-                    Parent p = parentDao.getParentsInSchool(parent).get(0);
+                    List<Parent> parentsInSchool = parentDao.getParentsInSchool(parent);
+                    if(parentsInSchool == null || parentsInSchool.size() == 0){
+                        continue;
+                    }
+                    Parent p = parentsInSchool.get(0);
                     Integer classId = p.getClassId();
                     map.put("classId",classId + "");
                     p.setAvatar(avatar);
