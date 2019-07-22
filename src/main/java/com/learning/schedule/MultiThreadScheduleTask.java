@@ -355,9 +355,6 @@ public class MultiThreadScheduleTask {
                         authAppInfoDao.update(authAppInfo);
                     }
 
-                    //标识已操作
-                    syncBizDataDao.updateStatus(id);
-
                 }
 
 
