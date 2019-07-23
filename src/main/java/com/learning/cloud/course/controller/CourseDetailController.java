@@ -20,41 +20,41 @@ public class CourseDetailController {
     @Autowired
     private CourseDetailService courseDetailService;
 
-    @GetMapping("/getCourseDetailByClassId")
+    @GetMapping("/api/getCourseDetailByClassId")
     public JsonResult getCourseDetailByClassId(@RequestParam(value="classId",required = true) Long classId,
                                                @RequestParam(value="weekDay",required = false) Integer weekDay)throws Exception{
         return courseDetailService.getCourseDetailByClassId(classId, weekDay);
     }
 
-    @PostMapping("/addCourseDetail")
+    @PostMapping("/api/addCourseDetail")
     public JsonResult addCourseDetail(CourseDetail courseDetail)throws Exception{
         return courseDetailService.addCourseDetail(courseDetail);
     }
 
-    @PostMapping("/editCourseDetail")
+    @PostMapping("/api/editCourseDetail")
     public JsonResult editCourseDetail(CourseDetail courseDetail)throws Exception{
         return courseDetailService.editCourseDetail(courseDetail);
     }
 
-    @GetMapping("/getTeacherCourseDetail")
+    @GetMapping("/api/getTeacherCourseDetail")
     public JsonResult getTeacherCourseDetail(@RequestParam(value="teacherId",required = true) Long teacherId,
                                              @RequestParam(value="weekDay",required = false) Integer weekDay)throws Exception{
         return courseDetailService.getTeacherCourseDetail(teacherId, weekDay);
     }
 
-    @GetMapping("/getCourseDetailById")
+    @GetMapping("/api/getCourseDetailById")
     public JsonResult getCourseDetailById(@RequestParam(value="id",required = true) Long id)throws Exception{
         return courseDetailService.getCourseDetailById(id);
     }
 
     //删除课程明细
-    @PostMapping("/deleteCourseDetailById")
+    @PostMapping("/api/deleteCourseDetailById")
     public JsonResult deleteCourseDetailById(@RequestParam(value="id",required = true) Long id)throws Exception{
         return courseDetailService.deleteCourseDetailById(id);
     }
 
     //清空课表
-    @PostMapping("/deleteAllCourseDetail")
+    @PostMapping("/api/deleteAllCourseDetail")
     public JsonResult deleteAllCourseDetail(@RequestParam(value="courseId",required = true) Long courseId)throws Exception{
         return courseDetailService.deleteAllCourseDetail(courseId);
     }

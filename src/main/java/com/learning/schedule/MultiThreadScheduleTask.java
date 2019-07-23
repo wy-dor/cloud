@@ -1,6 +1,8 @@
 package com.learning.schedule;
 
 import com.alibaba.fastjson.JSON;
+import com.dingtalk.api.response.OapiRoleListResponse;
+import com.dingtalk.api.response.OapiRoleSimplelistResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
@@ -22,12 +24,16 @@ import com.learning.cloud.score.dao.ScoreboardDao;
 import com.learning.cloud.score.entity.ClassScoreboard;
 import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.bizData.dao.SyncBizDataDao;
+import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
+import com.learning.cloud.bizData.entity.SyncBizDataMedium;
+import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -232,7 +238,7 @@ public class MultiThreadScheduleTask {
     public void queryBizData() throws Exception {
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
-        List<SyncBizData> bizData_04 = syncBizDataDao.getForAuth(subscribeId);
+        List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
         if(bizData_04 != null && bizData_04.size() > 0){
             for (SyncBizData bizData : bizData_04) {
                 Long id = bizData.getId();
@@ -331,9 +337,9 @@ public class MultiThreadScheduleTask {
                     }
 
                     //更新授权应用表
-                    String bz = syncBizDataDao.getSuiteTicket();
-                    if(bz != null){
-                        Map<String, String> parse = (Map<String, String>) JSON.parse(bz);
+                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                    if(forSuiteTicket != null){
+                        Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                         String suiteTicket = parse.get("suiteTicket");
                         String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
                         AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
@@ -367,39 +373,43 @@ public class MultiThreadScheduleTask {
                     }
                 }
                 syncBizDataDao.updateStatus(id);
+                //授权后更新一次数据
+                bizDataMediumService.initBizDataMedium();
 
             }
         }
 
         //更新推送的suite_ticket
-        SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-        if(forSuiteTicket != null){
-            Long id = forSuiteTicket.getId();
-            Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
-            String suiteTicket = parse.get("suiteTicket");
-            List<AuthCorpInfo> corpInfos = authCorpInfoDao.getCorpInfos();
-            for (AuthCorpInfo corpInfo : corpInfos) {
-                String corpId = corpInfo.getCorpId();
-                String corpName = corpInfo.getCorpName();
-                String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                if(accessToken == null){
-                    continue;
+        List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
+        if(bizDataList != null && bizDataList.size() != 0){
+            for (SyncBizData bizData_02 : bizDataList) {
+                Long id = bizData_02.getId();
+                Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
+                String suiteTicket = parse.get("suiteTicket");
+                List<AuthCorpInfo> corpInfos = authCorpInfoDao.getCorpInfos();
+                for (AuthCorpInfo corpInfo : corpInfos) {
+                    String corpId = corpInfo.getCorpId();
+                    String corpName = corpInfo.getCorpName();
+                    String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
+                    if(accessToken == null){
+                        continue;
+                    }
+                    AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
+                    AuthAppInfo authAppInfo = new AuthAppInfo();
+                    authAppInfo.setCorpId(corpId);
+                    authAppInfo.setCorpName(corpName);
+                    authAppInfo.setSuiteTicket(suiteTicket);
+                    authAppInfo.setCorpAccessToken(accessToken);
+                    if(byCorpId == null){
+                        authAppInfo.setCreatedTime(new Date());
+                        authAppInfoDao.insert(authAppInfo);
+                    }else{
+                        authAppInfoDao.update(authAppInfo);
+                    }
                 }
-                AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
-                AuthAppInfo authAppInfo = new AuthAppInfo();
-                authAppInfo.setCorpId(corpId);
-                authAppInfo.setCorpName(corpName);
-                authAppInfo.setSuiteTicket(suiteTicket);
-                authAppInfo.setCorpAccessToken(accessToken);
-                if(byCorpId == null){
-                    authAppInfo.setCreatedTime(new Date());
-                    authAppInfoDao.insert(authAppInfo);
-                }else{
-                    authAppInfoDao.update(authAppInfo);
-                }
+                //标识已操作
+                syncBizDataDao.updateStatus(id);
             }
-            //标识已操作
-            syncBizDataDao.updateStatus(id);
         }
 
     }

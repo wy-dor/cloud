@@ -21,29 +21,29 @@ public class CourseController {
     private CourseService courseService;
 
     //课程主表
-    @GetMapping("/getCourseByClassId")
+    @GetMapping("/api/getCourseByClassId")
     public JsonResult getCourseByClassId(@RequestParam(value="classId",required = true) Long classId)throws Exception{
         return courseService.getCourseByClassId(classId);
     }
 
     //班级课表
-    @PostMapping("/addCourse")
+    @PostMapping("/api/addCourse")
     public JsonResult addCourse(Course course)throws Exception{
         return courseService.addCourse(course);
     }
 
     //修改课表
-    @PostMapping("/editCourse")
+    @PostMapping("/api/editCourse")
     public JsonResult editCourse(Course course) throws Exception{
         return courseService.editCourse(course);
     }
 
-    @GetMapping("/getSchoolCourse")
+    @GetMapping("/api/getSchoolCourse")
     public JsonResult getSchoolCourse(Course course)throws Exception{
         return courseService.getSchoolCourse(course);
     }
 
-    @PostMapping("/publishCourse")
+    @PostMapping("/api/publishCourse")
     public JsonResult publishCourse(@RequestParam(value="id",required = true) Long id) throws Exception{
         return courseService.publishCourse(id);
     }

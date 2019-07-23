@@ -12,7 +12,7 @@ public class BizDataMediumController {
     @Autowired
     private BizDataMediumService bizDataMediumService;
 
-    @GetMapping("/api/initBizDataMedium")
+    @GetMapping("/api/api/initBizDataMedium")
     public JsonResult initBizDataMedium() throws Exception{
         return bizDataMediumService.initBizDataMedium();
     }

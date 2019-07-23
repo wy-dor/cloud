@@ -13,25 +13,17 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
 
-  <select id="getForAuth" parameterType="java.lang.String" resultType="com.learning.cloud.bizData.entity.SyncBizData">
+  <select id="getBizData" resultType="com.learning.cloud.bizData.entity.SyncBizData">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data
     WHERE subscribe_id = #{subscribeId}
-    and biz_type = 4
+    and biz_type = #{bizType}
     and status = 0
     order by gmt_modified desc
   </select>
 
   <select id="getForSuiteTicket" resultType="com.learning.cloud.bizData.entity.SyncBizData">
     SELECT *
-    FROM ding_cloud_push.open_sync_biz_data
-    WHERE biz_type = 2
-    and status = 0
-    limit 1
-  </select>
-
-  <select id="getSuiteTicket" resultType="com.learning.cloud.bizData.entity.SyncBizData">
-    SELECT biz_data
     FROM ding_cloud_push.open_sync_biz_data
     WHERE biz_type = 2
     limit 1

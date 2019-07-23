@@ -16,32 +16,32 @@ public class TeacherController {
     private TeacherService teacherService;
 
     /*根据用户id获取老师信息*/
-    @GetMapping("/getByUserId")
+    @GetMapping("/api/getByUserId")
     public ServiceResult getByUserId(String userId) {
         return teacherService.getByUserId(userId);
     }
 
     /*获取指定班级的老师数量*/
-    @GetMapping("/getClassTeacherNum")
+    @GetMapping("/api/getClassTeacherNum")
     public JsonResult getClassTeacherNum(Integer classId){
         return teacherService.getClassTeacherNum(classId);
     }
 
     /*获取指定班级下的老师列表*/
     /*参数为班级id*/
-    @GetMapping("/getClassTeachers")
+    @GetMapping("/api/getClassTeachers")
     public JsonResult getClassTeachers(GradeClass gradeClass){
         return teacherService.getClassTeachers(gradeClass);
     }
 
     /*设置老师的所教科目*/
     /*参数为老师的id和courseType(courseType的id)*/
-    @GetMapping("/setTeacherCourseType")
+    @GetMapping("/api/setTeacherCourseType")
     public JsonResult setTeacherCourseType(Teacher teacher){
         return teacherService.setTeacherCourseType(teacher);
     }
 
-    @GetMapping("/removeTeacherFromClass")
+    @GetMapping("/api/removeTeacherFromClass")
     public JsonResult removeTeacherFromClass(Integer teacherId,Integer classId){
         return teacherService.removeTeacherFromClass(teacherId,classId);
     }

@@ -15,13 +15,13 @@ public class BureauController {
     private BureauService bureauService;
 
     //获取所有的教育局列表
-    @GetMapping("/getBureaus")
+    @GetMapping("/api/getBureaus")
     public ServiceResult getBureaus(){
         return ServiceResult.success(bureauService.getBureaus());
     }
 
     /*返回组织的bureauId*/
-    @GetMapping("/getBureauIdByCorpId")
+    @GetMapping("/api/getBureauIdByCorpId")
     public JsonResult getBureauIdByCorpId(String corpId){
         return JsonResultUtil.success(bureauService.getOrgInfoByCorpId(corpId));
     }

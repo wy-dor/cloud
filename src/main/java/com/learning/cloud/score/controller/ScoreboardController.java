@@ -13,38 +13,38 @@ public class ScoreboardController {
     @Autowired
     private ScoreboardService scoreboardService;
 
-    @GetMapping("/getSchoolScore")
+    @GetMapping("/api/getSchoolScore")
     public JsonResult getSchoolScore(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return scoreboardService.getSchoolScore(schoolId);
     }
 
-    @PostMapping("/updateSchoolScore")
+    @PostMapping("/api/updateSchoolScore")
     public JsonResult updateSchoolScore(Long schoolId)throws Exception{
         return scoreboardService.updateSchoolScore(schoolId);
     }
 
-    @GetMapping("/getClassScore")
+    @GetMapping("/api/getClassScore")
     public JsonResult getClassScore(@RequestParam(value="classId",required = true) Long classId)throws Exception{
         return scoreboardService.getClassScore(classId);
     }
 
-    @PostMapping("/updateClassScore")
+    @PostMapping("/api/updateClassScore")
     public JsonResult updateClassScore(Long classId)throws Exception{
         return scoreboardService.updateClassScore(classId);
     }
 
-    @GetMapping("/getSchoolRank")
+    @GetMapping("/api/getSchoolRank")
     public JsonResult getSchoolRank(@RequestParam(value="bureauId",required = true) Long bureauId)throws Exception{
         return scoreboardService.getSchoolRank(bureauId);
     }
 
-    @GetMapping("/getTeacherRank")
+    @GetMapping("/api/getTeacherRank")
     public JsonResult getTeacherRank(@RequestParam(value="bureauId",required = true) Long bureauId,
                                     @RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
         return scoreboardService.getTeacherRank(bureauId, schoolId);
     }
 
-    @GetMapping("/getClassRank")
+    @GetMapping("/api/getClassRank")
     public JsonResult getClassRank(@RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
         return scoreboardService.getClassRank(schoolId);
     }

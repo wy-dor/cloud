@@ -25,7 +25,7 @@ public class QuestionController {
     /**
      * 新增问题
      */
-    @PostMapping("/addQuestion")
+    @PostMapping("/api/addQuestion")
     public JsonResult addQuestion(@RequestParam(value="file",required = false) MultipartFile file, Question question)throws Exception{
         return questionService.addQuestion(file,question);
     }
@@ -33,13 +33,13 @@ public class QuestionController {
     /**
      * 展示问题
      */
-    @GetMapping("/getQuestion")
+    @GetMapping("/api/getQuestion")
     public JsonResult getQuestion(Question question)throws Exception{
         return questionService.getQuestion(question);
     }
 
     /*获取我参与的问题*/
-    @GetMapping("/getQuestionIn")
+    @GetMapping("/api/getQuestionIn")
     public JsonResult getQuestionIn(Question question)throws Exception{
         return questionService.getQuestionIn(question);
     }
@@ -47,19 +47,19 @@ public class QuestionController {
     /**
      * 删除问题
      */
-    @PostMapping("/deleteQuestion")
+    @PostMapping("/api/deleteQuestion")
     public JsonResult deleteQuestion(@RequestParam(value="id") Long id)throws Exception{
         return questionService.deleteQuestion(id);
     }
 
     /*批量删除问题*/
-    @PostMapping("/deleteBatchQuestions")
+    @PostMapping("/api/deleteBatchQuestions")
     public JsonResult deleteBatchQuestions(String questionIds){
         return questionService.deleteBatchQuestions(questionIds);
     }
 
     /*关闭问题*/
-    @GetMapping("/closeQuestion")
+    @GetMapping("/api/closeQuestion")
     public JsonResult closeQuestion(@RequestParam(value="id") Long id)throws Exception{
         return questionService.closeQuestion(id);
     }
@@ -68,7 +68,7 @@ public class QuestionController {
     /**
      * 回答问题
      */
-    @PostMapping("/addAnswer")
+    @PostMapping("/api/addAnswer")
     public JsonResult addAnswer(@RequestParam(value="file", required = false) MultipartFile file, Answer answer)throws Exception{
         return questionService.addAnswer(file, answer);
     }
@@ -76,7 +76,7 @@ public class QuestionController {
     /**
      * 获取问题的回到 主要参数questionId
      */
-    @GetMapping("/getAnswer")
+    @GetMapping("/api/getAnswer")
     public JsonResult getAnswer(Answer answer)throws Exception{
         return questionService.getAnswer(answer);
     }

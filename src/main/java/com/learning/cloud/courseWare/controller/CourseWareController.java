@@ -28,19 +28,19 @@ public class CourseWareController {
     @Autowired
     private CourseWareService courseWareService;
 
-    @PostMapping("/addCourseWare")
+    @PostMapping("/api/addCourseWare")
     public JsonResult addCourseWare(CourseWare courseWare)throws Exception{
         return courseWareService.addCourseWare(courseWare);
     }
 
-    @GetMapping("/getCourseWare")
+    @GetMapping("/api/getCourseWare")
     public JsonResult getCourseWare(@RequestParam(value="day",required = false) String day,
                                     @RequestParam(value="cdId",required = false) Long cdId
                                     )throws Exception{
         return courseWareService.getCourseWare(day, cdId);
     }
 
-    @GetMapping("/downLoadFile")
+    @GetMapping("/api/downLoadFile")
     public JsonResult downLoadFile(HttpServletResponse response, String filePath) throws Exception{
         OutputStream out = null;
         InputStream in = null;
@@ -70,12 +70,12 @@ public class CourseWareController {
         return JsonResultUtil.success();
     }
 
-    @PostMapping("/likeThisCourseWare")
+    @PostMapping("/api/likeThisCourseWare")
     public JsonResult likeThisCourseWare(@RequestParam(value="id",required = false) Long id)throws Exception{
         return courseWareService.likeThisCourseWare(id);
     }
 
-    @GetMapping("/getMyCourseWare")
+    @GetMapping("/api/getMyCourseWare")
     public JsonResult getMyCourseWare(@RequestParam(value="teacherId",required = true) Long teacherId)throws Exception{
         return courseWareService.getMyCourseWare(teacherId);
     }

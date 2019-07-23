@@ -12,12 +12,12 @@ public class InnerAppController {
     @Autowired
     private InnerAppService innerAppService;
 
-    @GetMapping("/getToken")
+    @GetMapping("/api/getToken")
     public ServiceResult getToken() throws ApiException {
         return ServiceResult.success(innerAppService.getToken());
     }
 
-    @GetMapping("/getSchoolDeptIds")
+    @GetMapping("/api/getSchoolDeptIds")
     public ServiceResult getSchoolDeptIds() throws ApiException{
         return ServiceResult.success(innerAppService.getSchoolDeptIds());
     }

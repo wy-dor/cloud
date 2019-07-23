@@ -21,17 +21,17 @@ public class CourseTypeController {
     @Autowired
     private CourseTypeService courseTypeService;
 
-    @GetMapping("/getSchoolCourseType")
+    @GetMapping("/api/getSchoolCourseType")
     public JsonResult getSchoolCourseType(@RequestParam(value="schoolId",required = true) Long schoolId) throws Exception{
         return courseTypeService.getSchoolCourseType(schoolId);
     }
 
-    @PostMapping("/addSchoolCourseType")
+    @PostMapping("/api/addSchoolCourseType")
     public JsonResult addSchoolCourseType(CourseType courseType) throws Exception{
         return courseTypeService.addSchoolCourseType(courseType);
     }
 
-    @GetMapping("/deleteCourseType")
+    @GetMapping("/api/deleteCourseType")
     public JsonResult deleteCourseType(@RequestParam(value="id",required = true) Long id) throws Exception{
         return courseTypeService.deleteCourseType(id);
     }
