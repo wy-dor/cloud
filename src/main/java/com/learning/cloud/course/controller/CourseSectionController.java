@@ -20,37 +20,37 @@ public class CourseSectionController {
     @Autowired
     private CourseSectionService courseSectionService;
 
-    @PostMapping("/api/addSection")
+    @PostMapping("/addSection")
     public JsonResult addSection(CourseSection courseSection)throws Exception{
         return courseSectionService.addSection(courseSection);
     }
 
-    @PostMapping("/api/editSection")
+    @PostMapping("/editSection")
     public JsonResult editSection(CourseSection courseSection)throws Exception{
         return courseSectionService.editSection(courseSection);
     }
 
-    @GetMapping("/api/getSchoolSection")
+    @GetMapping("/getSchoolSection")
     public JsonResult getSchoolSection(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return courseSectionService.getSchoolSection(schoolId);
     }
 
-    @PostMapping("/api/saveSectionArray")
+    @PostMapping("/saveSectionArray")
     public JsonResult saveSectionArray(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return courseSectionService.saveSectionArray(schoolId);
     }
 
-    @PostMapping("/api/deleteSection")
+    @PostMapping("/deleteSection")
     public JsonResult deleteSection(@RequestParam(value="id",required = true) Long id)throws Exception{
         return courseSectionService.deleteSection(id);
     }
 
-    @PostMapping("/api/deleteSchoolSection")
+    @PostMapping("/deleteSchoolSection")
     public JsonResult deleteSchoolSection(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return courseSectionService.deleteSchoolSection(schoolId);
     }
 
-    @GetMapping("/api/getSchoolSectionArray")
+    @GetMapping("/getSchoolSectionArray")
     public JsonResult getSchoolSectionArray(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return courseSectionService.getSchoolSectionArray(schoolId);
     }

@@ -13,7 +13,7 @@ public class SchoolController {
     private SchoolService schoolService;
 
     //根据corpId获取schoolId
-    @GetMapping("/api/getSchoolIdByCorpId")
+    @GetMapping("/getSchoolIdByCorpId")
     public JsonResult getSchoolIdByCorpId(String corpId){
         return schoolService.getSchoolIdByCorpId(corpId);
     }

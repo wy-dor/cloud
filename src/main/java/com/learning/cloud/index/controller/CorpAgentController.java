@@ -13,7 +13,7 @@ public class CorpAgentController {
     @Autowired
     private CorpAgentService corpAgentService;
 
-    @GetMapping("/api/getAgentId")
+    @GetMapping("/getAgentId")
     public JsonResult getAgentId(String corpId) {
         String agentId = corpAgentService.getAgentId(corpId);
         return JsonResultUtil.success(agentId);

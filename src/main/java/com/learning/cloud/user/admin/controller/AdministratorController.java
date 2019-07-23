@@ -13,12 +13,12 @@ public class AdministratorController {
     @Autowired
     private AdministratorService administratorService;
 
-    @GetMapping("/api/getRoleList")
+    @GetMapping("/getRoleList")
     public ServiceResult getRoleList(String accessToken) throws ApiException {
         return ServiceResult.success(administratorService.getRoleList(accessToken));
     }
 
-    @GetMapping("/api/getRoleSimpleList")
+    @GetMapping("/getRoleSimpleList")
     public ServiceResult getRoleSimpleList(long roleId, String accessToken) throws ApiException{
         return administratorService.getRoleSimpleList(roleId,accessToken);
     }

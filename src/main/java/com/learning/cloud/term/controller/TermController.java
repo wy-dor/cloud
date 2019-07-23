@@ -18,12 +18,12 @@ public class TermController {
     @Autowired
     private TermService termService;
 
-    @GetMapping("/api/getSchoolTerm")
+    @GetMapping("/getSchoolTerm")
     public JsonResult getSchoolTerm(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
         return termService.getSchoolTerm(schoolId);
     }
 
-    @PostMapping("/api/editSchoolTerm")
+    @PostMapping("/editSchoolTerm")
     public JsonResult editSchoolTerm(Term term)throws Exception{
         return termService.editSchoolTerm(term);
     }

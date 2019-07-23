@@ -25,7 +25,7 @@ public class PictureController {
     @Autowired
     private PictureService pictureService;
 
-    @GetMapping("/api/getPicById")
+    @GetMapping("/getPicById")
     public void getPicById(@RequestParam(value="picId") Long picId, HttpServletResponse response)throws Exception{
 
         Picture picture = pictureService.getPicById(picId);
@@ -43,7 +43,7 @@ public class PictureController {
         out.close();
     }
 
-    @PostMapping("/api/addPic")
+    @PostMapping("/addPic")
     public JsonResult addPic(@RequestParam(value="file") MultipartFile file)throws Exception{
 
         return pictureService.addPic(file);
