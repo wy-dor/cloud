@@ -14,12 +14,12 @@ public class ScoreRecordController {
     @Autowired
     private ScoreRecordService scoreRecordService;
 
-    @PostMapping("/api/addScoreRecord")
+    @PostMapping("/addScoreRecord")
     public JsonResult addScoreRecord(ScoreRecord scoreRecord)throws Exception{
         return scoreRecordService.addScoreRecord(scoreRecord);
     }
 
-    @GetMapping("/api/getUserScore")
+    @GetMapping("/getUserScore")
     public JsonResult getUserScore(@RequestParam(value="userId",required = true) String userId)throws Exception{
         return scoreRecordService.getUserScore(userId);
     }

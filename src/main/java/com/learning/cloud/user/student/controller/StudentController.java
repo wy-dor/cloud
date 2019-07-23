@@ -16,25 +16,25 @@ public class StudentController {
     private StudentService studentService;
 
     /*根据用户id获取学生信息*/
-    @GetMapping("/api/getStudentByUserId")
+    @GetMapping("/getStudentByUserId")
     public ServiceResult getStudentByUserId(String userId) {
         return studentService.getByUserId(userId);
     }
 
     /*获取指定班级的学生数量*/
-    @GetMapping("/api/getClassStudentNum")
+    @GetMapping("/getClassStudentNum")
     public JsonResult getClassStudentNum(Integer classId){
         return studentService.getClassStudentNum(classId);
     }
 
     /*获取指定班级下的学生列表*/
-    @GetMapping("/api/getClassStudents")
+    @GetMapping("/getClassStudents")
     public JsonResult getClassStudents(GradeClass gradeClass){
         return studentService.getClassStudents(gradeClass);
     }
 
     /*对学生姓名进行模糊查询*/
-    @GetMapping("/api/getStudentsByName")
+    @GetMapping("/getStudentsByName")
     public JsonResult getStudentsByName(Student student){
         return studentService.getStudentsByName(student);
     }

@@ -14,13 +14,13 @@ public class ParentController {
     private ParentService parentService;
 
     /*根据用户id获取家长信息*/
-    @GetMapping("/api/getParentByUserId")
+    @GetMapping("/getParentByUserId")
     public ServiceResult getParentByUserId(String userId) {
         return parentService.getByUserId(userId);
     }
 
     /*获取指定班级的家长数量*/
-    @GetMapping("/api/getClassParentNum")
+    @GetMapping("/getClassParentNum")
     public JsonResult getClassParentNum(Integer classId){
         return parentService.getClassParentNum(classId);
     }
