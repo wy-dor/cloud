@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.course.dao.PreLessonDao">
+  <insert id="insert" parameterType="com.learning.cloud.course.entity.PreLesson">
+    insert into lessons_preparation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="termName != null">
+        term_name,
+      </if>
+      <if test="teacherName != null">
+        teacher_name,
+      </if>
+      <if test="gradeName != null">
+        grade_name,
+      </if>
+      <if test="className != null">
+        class_name,
+      </if>
+      <if test="courseType != null">
+        course_type,
+      </if>
+      <if test="teachingTopic != null">
+        teaching_topic,
+      </if>
+      <if test="planHour != null">
+        plan_hour,
+      </if>
+      <if test="isPerformed != null">
+        is_performed,
+      </if>
+      <if test="performTime != null">
+        perform_time,
+      </if>
+      <if test="teachingPlanType != null">
+        teaching_plan_type,
+      </if>
+      <if test="teachingPicId != null">
+        teaching_pic_id,
+      </if>
+      <if test="teachingGoal != null">
+        teaching_goal,
+      </if>
+      <if test="teachingPoint != null">
+        teaching_point,
+      </if>
+      <if test="teachingPreparation != null">
+        teaching_preparation,
+      </if>
+      <if test="teachingProcess != null">
+        teaching_process,
+      </if>
+      <if test="isUploadResources != null">
+        is_upload_resources,
+      </if>
+      <if test="courseAttachUrl != null">
+        course_attach_url,
+      </if>
+      <if test="otherAttachUrl != null">
+        other_attach_url,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=VARCHAR},
+      </if>
+      <if test="termName != null">
+        #{termName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null">
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeName != null">
+        #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null">
+        #{courseType,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingTopic != null">
+        #{teachingTopic,jdbcType=VARCHAR},
+      </if>
+      <if test="planHour != null">
+        #{planHour,jdbcType=VARCHAR},
+      </if>
+      <if test="isPerformed != null">
+        #{isPerformed,jdbcType=SMALLINT},
+      </if>
+      <if test="performTime != null">
+        #{performTime,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingPlanType != null">
+        #{teachingPlanType,jdbcType=SMALLINT},
+      </if>
+      <if test="teachingPicId != null">
+        #{teachingPicId,jdbcType=BIGINT},
+      </if>
+      <if test="teachingGoal != null">
+        #{teachingGoal,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingPoint != null">
+        #{teachingPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingPreparation != null">
+        #{teachingPreparation,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingProcess != null">
+        #{teachingProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="isUploadResources != null">
+        #{isUploadResources,jdbcType=SMALLINT},
+      </if>
+      <if test="courseAttachUrl != null">
+        #{courseAttachUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="otherAttachUrl != null">
+        #{otherAttachUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>
