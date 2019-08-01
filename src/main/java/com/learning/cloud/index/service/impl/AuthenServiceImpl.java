@@ -67,13 +67,13 @@ public class AuthenServiceImpl implements AuthenService {
     @Override
     public String getAccessToken(String authCorpId) throws ApiException {
         AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
-        String suiteTicket = byCorpId.getSuiteTicket();
         String accessToken = byCorpId.getCorpAccessToken();
         Date updateTime = byCorpId.getUpdateTime();
         Date now = new Date();
         /*accessToken两小时过期*/
         long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
         if(minutes >= 120){
+            String suiteTicket = byCorpId.getSuiteTicket();
             accessToken = getURLAccessToken(authCorpId,suiteTicket);
             byCorpId.setCorpAccessToken(accessToken);
             byCorpId.setUpdateTime(new Date());

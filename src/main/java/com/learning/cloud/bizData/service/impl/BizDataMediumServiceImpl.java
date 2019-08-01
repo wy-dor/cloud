@@ -98,7 +98,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
 
                 if(syncAction.equals("user_add_org")){
-                    userDao.insert(user);
+                    User byUnionId = userDao.getByUnionId(unionId);
+                    if(byUnionId == null){
+                        userDao.insert(user);
+                    }
                 }else{
                     //todo
                     //角色修改所致结构变化
@@ -111,8 +114,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 if (syncAction.equals("org_dept_remove")) {
                     continue;
                 }
+                String deptId = ((Integer) bizDataParse.get("id")).toString();
                 Department dept = new Department();
-                dept.setDeptId(((Integer) bizDataParse.get("id")).toString());
+                dept.setDeptId(deptId);
                 dept.setCorpId(corpId);
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
@@ -129,7 +133,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
                 //部门同步
                 if(syncAction.equals("org_dept_create")){
-                    departmentDao.insert(dept);
+                    Department byDeptId = departmentDao.getByDeptId(deptId);
+                    if(byDeptId == null){
+                        departmentDao.insert(dept);
+                    }
                 }else if(syncAction.equals("org_dept_modify")){
                     departmentDao.update(dept);
                 }
