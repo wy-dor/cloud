@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.grade.dao.GradeModuleDao">
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.grade.entity.GradeModule">
+        select *
+        from grade_module
+        where id = #{id}
+        limit 1
+    </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.grade.entity.GradeModule">
+    insert into grade_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="term != null">
+        term,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="scoringRoles != null">
+        scoring_roles,
+      </if>
+      <if test="rankModule != null">
+        rank_module,
+      </if>
+      <if test="subjects != null">
+        subjects,
+      </if>
+      <if test="classesStr != null">
+        classes_strs,
+      </if>
+      <if test="visibleRange != null">
+        visible_range,
+      </if>
+      <if test="notifyToEntry != null">
+        notify_to_entry,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="term != null">
+        #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="scoringRoles != null">
+        #{scoringRoles,jdbcType=SMALLINT},
+      </if>
+      <if test="rankModule != null">
+        #{rankModule,jdbcType=SMALLINT},
+      </if>
+      <if test="subjects != null">
+        #{subjects,jdbcType=VARCHAR},
+      </if>
+      <if test="classesStr != null">
+        #{classesStr,jdbcType=VARCHAR},
+      </if>
+      <if test="visibleRange != null">
+        #{visibleRange,jdbcType=SMALLINT},
+      </if>
+      <if test="notifyToEntry != null">
+        #{notifyToEntry,jdbcType=SMALLINT},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

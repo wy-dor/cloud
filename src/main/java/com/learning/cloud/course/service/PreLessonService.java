@@ -4,5 +4,5 @@ import com.learning.cloud.course.entity.PreLesson;
 import com.learning.domain.JsonResult;
 
 public interface PreLessonService {
-    JsonResult addPreLession(PreLesson preLesson);
+    JsonResult addPreLesson(PreLesson preLesson);
 }
