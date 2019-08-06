@@ -1,9 +1,12 @@
 package com.learning.cloud.news.entity;
 
 import com.learning.domain.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
+
+@Data
 public class News extends BaseEntity {
     private Long id;
 
@@ -13,69 +16,12 @@ public class News extends BaseEntity {
 
     private String origin;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String uploadTime;
 
-    private String updateTime;
+    private Date updateTime;
 
     private byte[] detail;
 
-    @Getter
-    @Setter
     private Integer status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
-    }
-
-    public Long getPicId() {
-        return picId;
-    }
-
-    public void setPicId(Long picId) {
-        this.picId = picId;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin == null ? null : origin.trim();
-    }
-
-    public String getUploadTime() {
-        return uploadTime;
-    }
-
-    public void setUploadTime(String uploadTime) {
-        this.uploadTime = uploadTime == null ? null : uploadTime.trim();
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime == null ? null : updateTime.trim();
-    }
-
-    public byte[] getDetail() {
-        return detail;
-    }
-
-    public void setDetail(byte[] detail) {
-        this.detail = detail;
-    }
 }
