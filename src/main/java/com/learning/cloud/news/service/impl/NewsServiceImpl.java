@@ -25,7 +25,7 @@ public class NewsServiceImpl implements NewsService {
     private QuestionService questionService;
 
     @Override
-    public JsonResult addNews(News news, MultipartFile file) throws Exception {
+    public JsonResult addNews(MultipartFile file, News news) throws Exception {
         if(file != null){
             Long picId = questionService.reduceImg(file);
             news.setPicId(picId);
@@ -44,5 +44,27 @@ public class NewsServiceImpl implements NewsService {
     public JsonResult getNewsById(long id) {
         News news = newsDao.getNewsById(id);
         return JsonResultUtil.success(news);
+    }
+
+    @Override
+    public JsonResult removeNewsById(Long id) {
+        int i = newsDao.removeNewsById(id);
+        return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult deleteNewsById(Long id) {
+        int i = newsDao.deleteNewsById(id);
+        return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult updateNews(MultipartFile file, News news) throws Exception {
+        if(news.getPicId() == null){
+            Long picId = questionService.reduceImg(file);
+            news.setPicId(picId);
+        }
+        int update = newsDao.update(news);
+        return JsonResultUtil.success();
     }
 }

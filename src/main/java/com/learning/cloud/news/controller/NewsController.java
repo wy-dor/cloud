@@ -27,6 +27,21 @@ public class NewsController {
 
     @PostMapping("/addNews")
     public JsonResult addNews(@RequestParam(value="file",required = false) MultipartFile file, News news) throws Exception {
-        return newsService.addNews(news,file);
+        return newsService.addNews(file, news);
+    }
+
+    @PostMapping("/updateNews")
+    public JsonResult updateNews(@RequestParam(value = "file",required = false)MultipartFile file,News news)  throws Exception{
+        return newsService.updateNews(file,news);
+    }
+
+    @GetMapping("removeNewsById")
+    public JsonResult removeNewsById(Long id){
+        return newsService.removeNewsById(id);
+    }
+
+    @GetMapping("/deleteNewsById")
+    public JsonResult deleteNewsById(Long id){
+        return newsService.deleteNewsById(id);
     }
 }

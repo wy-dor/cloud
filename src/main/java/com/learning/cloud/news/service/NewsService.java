@@ -5,9 +5,15 @@ import com.learning.domain.JsonResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface NewsService {
-    JsonResult addNews(News news, MultipartFile file) throws Exception;
+    JsonResult addNews(MultipartFile file, News news) throws Exception;
 
     JsonResult getAllNews();
 
     JsonResult getNewsById(long id);
+
+    JsonResult removeNewsById(Long id);
+
+    JsonResult deleteNewsById(Long id);
+
+    JsonResult updateNews(MultipartFile file, News news) throws Exception;
 }

@@ -12,8 +12,18 @@
     select *
     from news
     where status = 1
-
   </select>
+
+  <update id="removeNewsById" parameterType="java.lang.Long">
+    update news
+    set status = 0
+    where id = #{id}
+  </update>
+
+  <delete id="deleteNewsById" parameterType="java.lang.Long">
+    delete from news
+    where id = #{id}
+  </delete>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.news.entity.News">
     insert into news
@@ -64,4 +74,29 @@
       </if>
     </trim>
   </insert>
+
+  <update id="update" parameterType="com.learning.cloud.news.entity.News">
+    update news
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="picId != null">
+        picId = #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id =  #{id,jdbcType=BIGINT}
+  </update>
 </mapper>
