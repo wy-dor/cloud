@@ -15,6 +15,6 @@ public class PreLessonController {
 
     @PostMapping("/addPreLesson")
     public JsonResult addPreLesson(PreLesson preLesson){
-        return preLessonService.addPreLession(preLesson);
+        return preLessonService.addPreLesson(preLesson);
     }
 }

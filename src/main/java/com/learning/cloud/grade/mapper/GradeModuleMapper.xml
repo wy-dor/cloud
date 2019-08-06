@@ -39,7 +39,7 @@
         subjects,
       </if>
       <if test="classesStr != null">
-        classes_strs,
+        classes_str,
       </if>
       <if test="visibleRange != null">
         visible_range,

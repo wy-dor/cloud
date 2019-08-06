@@ -1,6 +1,8 @@
 package com.learning.cloud.course.entity;
 
-public class PreLesson {
+import com.learning.domain.BaseEntity;
+
+public class PreLesson extends BaseEntity {
     private Long id;
 
     private String uploadTime;
