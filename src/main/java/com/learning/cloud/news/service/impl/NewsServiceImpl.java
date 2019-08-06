@@ -60,7 +60,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public JsonResult updateNews(MultipartFile file, News news) throws Exception {
-        if(news.getPicId() == null){
+        if(news.getPicId() != null && news.getPicId() == 0){
             Long picId = questionService.reduceImg(file);
             news.setPicId(picId);
         }
