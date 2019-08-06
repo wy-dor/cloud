@@ -1,6 +1,5 @@
 package com.learning.cloud.news.controller;
 
-import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.news.entity.News;
 import com.learning.cloud.news.service.NewsService;
 import com.learning.domain.JsonResult;
@@ -27,7 +26,7 @@ public class NewsController {
     }
 
     @PostMapping("/addNews")
-    public JsonResult addNews(@RequestParam(value="file",required = false) MultipartFile file, News news){
+    public JsonResult addNews(@RequestParam(value="file",required = false) MultipartFile file, News news) throws Exception {
         return newsService.addNews(news,file);
     }
 }
