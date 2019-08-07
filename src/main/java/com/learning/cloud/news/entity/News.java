@@ -24,4 +24,6 @@ public class News extends BaseEntity {
     private byte[] detail;
 
     private Integer status;
+
+    private Integer schoolId;
 }

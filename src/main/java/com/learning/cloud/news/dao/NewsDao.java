@@ -11,7 +11,7 @@ import java.util.List;
 public interface NewsDao {
     int insert(News record);
 
-    List<News> getAllNews();
+    List<News> getAllNews(News news);
 
     News getNewsById(long id);
 

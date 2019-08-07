@@ -37,6 +37,9 @@
       <if test="picId != null">
         pic_id,
       </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
       <if test="origin != null">
         origin,
       </if>
@@ -56,6 +59,9 @@
       </if>
       <if test="picId != null">
         #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
       </if>
       <if test="origin != null">
         #{origin,jdbcType=VARCHAR},
@@ -80,9 +86,6 @@
       </if>
       <if test="origin != null">
         origin = #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="uploadTime != null">
-        upload_time = #{uploadTime,jdbcType=VARCHAR},
       </if>
       <if test="detail != null">
         detail = #{detail,jdbcType=LONGVARBINARY},

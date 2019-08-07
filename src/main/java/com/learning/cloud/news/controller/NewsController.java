@@ -16,8 +16,8 @@ public class NewsController {
     private NewsService newsService;
 
     @GetMapping("/getAllNews")
-    public JsonResult getAllNews(){
-        return newsService.getAllNews();
+    public JsonResult getAllNews(News news){
+        return newsService.getAllNews(news);
     }
 
     @GetMapping("/getNewsById")
@@ -26,7 +26,7 @@ public class NewsController {
     }
 
     @PostMapping("/addNews")
-    public JsonResult addNews(@RequestParam(value="file",required = false) MultipartFile file, News news) throws Exception {
+    public JsonResult addNews(@RequestParam(value="file",required = false)MultipartFile file, News news) throws Exception {
         return newsService.addNews(file, news);
     }
 

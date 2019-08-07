@@ -35,8 +35,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public JsonResult getAllNews() {
-        List<News> newsList = newsDao.getAllNews();
+    public JsonResult getAllNews(News news) {
+        List<News> newsList = newsDao.getAllNews(news);
         return JsonResultUtil.success(new PageEntity<>(newsList));
     }
 
