@@ -45,3 +45,4 @@ public class NewsController {
         return newsService.deleteNewsById(id);
     }
 }
+
