@@ -8,7 +8,7 @@
     limit 1
   </select>
 
-  <select id="getAllNews" resultType="com.learning.cloud.news.entity.News">
+  <select id="getAllNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
     select *
     from news
     where status = 1
