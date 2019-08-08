@@ -21,7 +21,7 @@ public class News extends BaseEntity {
 
     private Date updateTime;
 
-    private byte[] detail;
+    private String detail;
 
     private Integer status;
 

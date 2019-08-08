@@ -12,6 +12,7 @@
     select *
     from news
     where status = 1
+    order by upload_time desc
   </select>
 
   <update id="removeNewsById" parameterType="java.lang.Long">
@@ -70,7 +71,7 @@
         #{uploadTime,jdbcType=VARCHAR},
       </if>
       <if test="detail != null">
-        #{detail,jdbcType=LONGVARBINARY},
+        #{detail,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -82,13 +83,13 @@
         title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="picId != null">
-        picId = #{picId,jdbcType=BIGINT},
+        pic_id = #{picId,jdbcType=BIGINT},
       </if>
       <if test="origin != null">
         origin = #{origin,jdbcType=VARCHAR},
       </if>
       <if test="detail != null">
-        detail = #{detail,jdbcType=LONGVARBINARY},
+        detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id =  #{id,jdbcType=BIGINT}
