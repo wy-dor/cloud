@@ -12,4 +12,6 @@ public interface UserDao {
     User getByUnionId(String unionId);
 
     int update(User user);
+
+    User getByUserId(String userId);
 }

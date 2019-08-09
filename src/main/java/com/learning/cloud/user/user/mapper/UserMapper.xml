@@ -8,6 +8,14 @@
     limit 1
   </select>
 
+  <select id="getByUserId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+    select *
+    from user
+    where user_id = #{userId}
+    order by id desc
+    limit 1
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">

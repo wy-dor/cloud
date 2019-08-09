@@ -1,12 +1,15 @@
-package com.learning.cloud.innerAppTest.service.impl;
+package com.learning.cloud.innerApp.service.impl;
 
 import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
+import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.learning.cloud.dept.manage.service.DeptService;
-import com.learning.cloud.innerAppTest.config.InnerAppContanst;
-import com.learning.cloud.innerAppTest.service.InnerAppService;
+import com.learning.cloud.innerApp.config.InnerAppContanst;
+import com.learning.cloud.innerApp.service.InnerAppService;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,17 @@ public class InnerAppServiceImpl implements InnerAppService {
             }
         }
         return ServiceResult.success(map);
+    }
+
+    @Override
+    public String getUserId(String accessToken, String authCode) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
+        OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
+        request.setCode(authCode);
+        request.setHttpMethod("GET");
+        OapiUserGetuserinfoResponse response = client.execute(request, accessToken);
+        String userId = response.getUserid();
+        return userId;
     }
 
     private void getSchoolDepts(Map<String,String> map, List<OapiDepartmentListResponse.Department> deptList, String deptIdStr) {
