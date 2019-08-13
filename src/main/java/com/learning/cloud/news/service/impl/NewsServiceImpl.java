@@ -24,14 +24,15 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private QuestionService questionService;
 
+    //状态 0:未提交，1:审核中，2:已驳回，3:已发布，4:已撤销
     @Override
     public JsonResult addNews(MultipartFile file, News news) throws Exception {
-        if(file != null){
+        if (file != null) {
             Long picId = questionService.reduceImg(file);
             news.setPicId(picId);
         }
-        newsDao.insert(news);
-        return JsonResultUtil.success();
+        int i = newsDao.insert(news);
+        return JsonResultUtil.success("成功增加" + i + "条数据");
     }
 
     @Override
@@ -60,11 +61,11 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public JsonResult updateNews(MultipartFile file, News news) throws Exception {
-        if(news.getPicId() != null && news.getPicId() == 0){
+        if (news.getPicId() != null && news.getPicId() == 0) {
             Long picId = questionService.reduceImg(file);
             news.setPicId(picId);
         }
-        int update = newsDao.update(news);
-        return JsonResultUtil.success();
+        int i = newsDao.update(news);
+        return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 }

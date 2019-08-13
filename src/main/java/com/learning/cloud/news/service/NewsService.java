@@ -16,4 +16,5 @@ public interface NewsService {
     JsonResult deleteNewsById(Long id);
 
     JsonResult updateNews(MultipartFile file, News news) throws Exception;
+
 }

@@ -44,5 +44,6 @@ public class NewsController {
     public JsonResult deleteNewsById(Long id){
         return newsService.deleteNewsById(id);
     }
+
 }
 

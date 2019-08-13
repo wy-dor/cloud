@@ -20,4 +20,5 @@ public interface NewsDao {
     int removeNewsById(Long id);
 
     int deleteNewsById(Long id);
+
 }
