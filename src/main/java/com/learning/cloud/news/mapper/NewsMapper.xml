@@ -50,6 +50,12 @@
       <if test="detail != null">
         detail,
       </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -73,6 +79,12 @@
       <if test="detail != null">
         #{detail,jdbcType=LONGVARCHAR},
       </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
 
@@ -90,6 +102,9 @@
       </if>
       <if test="detail != null">
         detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
     </set>
     where id =  #{id,jdbcType=BIGINT}

@@ -26,4 +26,6 @@ public class News extends BaseEntity {
     private Integer status;
 
     private Integer schoolId;
+
+    private Integer typeId;
 }
