@@ -21,4 +21,6 @@ public interface NewsTypeDao {
     int deleteByParentId(Integer typeId);
 
     int update(NewsType newsType);
+
+    List<NewsType> getAllNewsType(NewsType newsType);
 }

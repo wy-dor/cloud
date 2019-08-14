@@ -13,6 +13,11 @@
     where parent_id = #{parentId}
   </select>
 
+  <select id="getAllNewsType" parameterType="com.learning.cloud.news.entity.NewsType" resultType="com.learning.cloud.news.entity.NewsType">
+    select *
+    from news_type
+  </select>
+
   <delete id="deleteByTypeId" parameterType="java.lang.Integer">
     delete from news_type
     where id = #{typeId}

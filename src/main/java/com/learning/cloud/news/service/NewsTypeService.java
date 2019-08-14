@@ -13,4 +13,6 @@ public interface NewsTypeService {
     JsonResult deleteNewsType(Integer typeId);
 
     JsonResult updateNewsType(NewsType newsType);
+
+    JsonResult getAllNewsType(NewsType newsType);
 }

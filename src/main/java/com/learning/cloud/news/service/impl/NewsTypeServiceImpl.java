@@ -22,7 +22,7 @@ public class NewsTypeServiceImpl implements NewsTypeService {
     @Override
     public JsonResult addNewsType(NewsType newsType) {
         int i = newsTypeDao.insert(newsType);
-        return JsonResultUtil.success("成功增加" + i + "条数据");
+        return JsonResultUtil.success("成功增加" + i + "条数据  id:" + newsType.getId());
     }
 
     @Override
@@ -41,9 +41,9 @@ public class NewsTypeServiceImpl implements NewsTypeService {
     public JsonResult deleteNewsType(Integer typeId) {
         NewsType byTypeId = newsTypeDao.getByTypeId(typeId);
         int i = 0;
-        if(byTypeId.getParentId() == 0){
+        if (byTypeId.getParentId() == 0) {
             i = newsTypeDao.deleteByParentId(typeId);
-        }else{
+        } else {
             i = newsTypeDao.deleteByTypeId(typeId);
         }
         return JsonResultUtil.success("成功删除" + i + "条数据");
@@ -53,6 +53,12 @@ public class NewsTypeServiceImpl implements NewsTypeService {
     public JsonResult updateNewsType(NewsType newsType) {
         int i = newsTypeDao.update(newsType);
         return JsonResultUtil.success("成功修改" + i + "条数据");
+    }
+
+    @Override
+    public JsonResult getAllNewsType(NewsType newsType) {
+        List<NewsType> newsTypeList = newsTypeDao.getAllNewsType(newsType);
+        return JsonResultUtil.success(new PageEntity<>(newsTypeList));
     }
 
 

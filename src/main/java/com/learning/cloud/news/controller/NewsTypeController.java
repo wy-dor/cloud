@@ -39,4 +39,9 @@ public class NewsTypeController {
     public JsonResult deleteNewsType(Integer typeId){
         return newsTypeService.deleteNewsType(typeId);
     }
+
+    @GetMapping("/getAllNewsType")
+    public JsonResult getAllNewsType(NewsType newsType){
+        return newsTypeService.getAllNewsType(newsType);
+    }
 }
