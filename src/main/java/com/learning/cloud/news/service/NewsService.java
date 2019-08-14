@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface NewsService {
     JsonResult addNews(MultipartFile file, News news) throws Exception;
 
-    JsonResult getAllNews(News news);
+    JsonResult getNews(News news);
 
     JsonResult getNewsById(long id);
 
@@ -17,4 +17,9 @@ public interface NewsService {
 
     JsonResult updateNews(MultipartFile file, News news) throws Exception;
 
+    JsonResult getAllValidNews(News news);
+
+    JsonResult updateTopping(Long newsId);
+
+    JsonResult batchUpdateNews(String ids, Integer status);
 }

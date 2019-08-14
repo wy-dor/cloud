@@ -15,9 +15,19 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @GetMapping("/getAllNews")
-    public JsonResult getAllNews(News news){
-        return newsService.getAllNews(news);
+    @GetMapping("/getNews")
+    public JsonResult getNews(News news){
+        return newsService.getNews(news);
+    }
+
+    @GetMapping("/getAllValidNews")
+    public JsonResult getAllValidNews(News news){
+        return newsService.getAllValidNews(news);
+    }
+
+    @GetMapping("/updateTopping")
+    public JsonResult updateTopping(Long id){
+        return newsService.updateTopping(id);
     }
 
     @GetMapping("/getNewsById")
@@ -43,6 +53,11 @@ public class NewsController {
     @GetMapping("/deleteNewsById")
     public JsonResult deleteNewsById(Long id){
         return newsService.deleteNewsById(id);
+    }
+
+    @PostMapping("/batchUpdateNews")
+    public JsonResult batchUpdateNews(String ids,Integer status){
+        return newsService.batchUpdateNews(ids,status);
     }
 
 }

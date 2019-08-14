@@ -7,17 +7,41 @@
     where id = #{id}
     limit 1
   </select>
+  
+  <select id="getNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
+    select * 
+    from news
+    <where>
+      <if test="schoolId != null">
+        and school_id = #{schoolId}
+      </if>
+      <if test="bureauId != null">
+        and bureau_id = #{bureauId}
+      </if>
+      <if test="typeId != null">
+        and type_id = #{typeId}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="topping != null">
+        and topping = #{topping}
+      </if>
+    </where>
+    order by upload_time desc
+  </select>
 
-  <select id="getAllNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
+  <select id="getAllValidNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
     select *
     from news
-    where status = 1
-    order by upload_time desc
+    where bureau_id = #{bureauId}
+    and status = 3
+    order by topping desc,upload_time desc
   </select>
 
   <update id="removeNewsById" parameterType="java.lang.Long">
     update news
-    set status = 0
+    set status = 4
     where id = #{id}
   </update>
 
@@ -105,6 +129,9 @@
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="topping != null">
+        topping = #{topping,jdbcType=INTEGER},
       </if>
     </set>
     where id =  #{id,jdbcType=BIGINT}
