@@ -52,7 +52,7 @@ logging:
   file: myLog.log
 
 server:
-  port: 8080
+  port: 80
 
 #配置项目运行的钉钉应用信息
 dingding:
@@ -65,7 +65,7 @@ dingding:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://106.15.232.47:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://106.15.232.47:3306/edu_user?useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
   suiteId: 6453002
@@ -77,7 +77,7 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://106.15.232.47:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://106.15.232.47:3306/edu_user?useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
   suiteId: 6453002
@@ -89,8 +89,8 @@ spring:
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://rm-bp1e42m37x3a83d26.mysql.rds.aliyuncs.com:3306/edu_user?useAffectedRows=true&serverTimezone=Asia/Shanghai
-    username: ding_user
+    url: jdbc:mysql://rm-bp1e42m37x3a83d26.mysql.rds.aliyuncs.com:3306/edu_user?useSSL=false&useAffectedRows=true&serverTimezone=Asia/Shanghai
+    username: ding_java
     password: Lsm131452
   suiteId: 6298012
   suiteKey: suitets3egysydvw6xhns
