@@ -8,6 +8,7 @@ import com.dingtalk.api.request.OapiSsoGetuserinfoRequest;
 import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
+import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.bureau.service.BureauService;
 import com.learning.cloud.school.dao.SchoolDao;
@@ -31,6 +32,9 @@ public class LoginController {
 
     @Autowired
     private SchoolDao schoolDao;
+
+    @Autowired
+    private BureauDao bureauDao;
 
     //应用管理后台免登
     @GetMapping("/oaLogin")
@@ -58,16 +62,19 @@ public class LoginController {
         OapiSsoGetuserinfoResponse response = client.execute(request,accessToken);
         if(response.isSuccess()){
             if(response.getIsSys()){
-                School byCorpId = schoolDao.getSchoolByCorpId(response.getCorpInfo().getCorpid());
+                String corp_id = response.getCorpInfo().getCorpid();
+                School byCorpId = schoolDao.getSchoolByCorpId(corp_id);
                 Map<String, Object> result = new HashMap<>();
+                Bureau bureau = bureauDao.getByCorpId(response.getCorpInfo().getCorpid());
+                Integer bureauId = bureau.getId();
                 if(byCorpId == null){
-
                     result.put("isSchool",false);
                     result.put("body",response.getBody());
                 }else {
                     result.put("isSchool",true);
                     result.put("body",response.getBody());
                 }
+                result.put("bureauId",bureauId);
                 return JsonResultUtil.success(result);
             }else {
                 return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_NOT_SYS);
