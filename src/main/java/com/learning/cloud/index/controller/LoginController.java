@@ -65,12 +65,14 @@ public class LoginController {
                 String corp_id = response.getCorpInfo().getCorpid();
                 School byCorpId = schoolDao.getSchoolByCorpId(corp_id);
                 Map<String, Object> result = new HashMap<>();
-                Bureau bureau = bureauDao.getByCorpId(response.getCorpInfo().getCorpid());
-                Integer bureauId = bureau.getId();
+                Integer bureauId;
                 if(byCorpId == null){
+                    Bureau bureau = bureauDao.getByCorpId(corp_id);
+                    bureauId = bureau.getId();
                     result.put("isSchool",false);
                     result.put("body",response.getBody());
                 }else {
+                    bureauId = byCorpId.getBureauId();
                     result.put("isSchool",true);
                     result.put("body",response.getBody());
                 }
