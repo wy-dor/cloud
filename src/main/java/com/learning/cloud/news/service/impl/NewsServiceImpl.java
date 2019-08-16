@@ -126,4 +126,10 @@ public class NewsServiceImpl implements NewsService {
         }
         return JsonResultUtil.success("成功更新" + i + "条信息");
     }
+
+    @Override
+    public JsonResult getBureauNews(News news) {
+        List<News> NewsList = newsDao.getBureauNews(news);
+        return JsonResultUtil.success(new PageEntity<>(NewsList));
+    }
 }

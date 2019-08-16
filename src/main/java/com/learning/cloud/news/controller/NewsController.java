@@ -20,6 +20,11 @@ public class NewsController {
         return newsService.getNews(news);
     }
 
+    // 教育局获取所有学校提交的，审批后以及已撤销的新闻
+    @GetMapping("/getBureauNews")
+    public JsonResult getBureauNews(News news){
+        return newsService.getBureauNews(news);
+    }
     @GetMapping("/getAllValidNews")
     public JsonResult getAllValidNews(News news){
         return newsService.getAllValidNews(news);

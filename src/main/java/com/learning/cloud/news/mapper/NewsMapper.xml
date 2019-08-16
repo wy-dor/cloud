@@ -31,6 +31,14 @@
     order by upload_time desc
   </select>
 
+  <select id="getBureauNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
+    select *
+    from news
+    where bureau_id = #{bureauId}
+    and status &lt;&gt; 0
+    order by upload_time desc
+  </select>
+
   <select id="getAllValidNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
     select *
     from news
@@ -80,6 +88,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -108,6 +119,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

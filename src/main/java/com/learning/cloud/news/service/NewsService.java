@@ -22,4 +22,6 @@ public interface NewsService {
     JsonResult updateTopping(Long newsId);
 
     JsonResult batchUpdateNews(String ids, Integer status);
+
+    JsonResult getBureauNews(News news);
 }
