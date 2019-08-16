@@ -36,12 +36,12 @@ public class NewsServiceImpl implements NewsService {
             Long picId = questionService.reduceImg(file);
             news.setPicId(picId);
         }
-        Integer schoolId = news.getSchoolId();
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        Integer bureauId = bySchoolId.getBureauId();
-        if (bureauId != null) {
-            news.setBureauId(bureauId);
-        }
+//        Integer schoolId = news.getSchoolId();
+//        School bySchoolId = schoolDao.getBySchoolId(schoolId);
+//        Integer bureauId = bySchoolId.getBureauId();
+//        if (bureauId != null) {
+//            news.setBureauId(bureauId);
+//        }
         int i = newsDao.insert(news);
         return JsonResultUtil.success("成功增加" + i + "条数据");
     }
