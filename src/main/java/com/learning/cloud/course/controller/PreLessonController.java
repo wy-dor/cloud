@@ -4,6 +4,7 @@ import com.learning.cloud.course.entity.PreLesson;
 import com.learning.cloud.course.service.PreLessonService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,4 +18,20 @@ public class PreLessonController {
     public JsonResult addPreLesson(PreLesson preLesson){
         return preLessonService.addPreLesson(preLesson);
     }
+
+    @GetMapping("/deletePreLesson")
+    public JsonResult deletePreLesson(Long id){
+        return preLessonService.deletePreLesson(id);
+    }
+
+    @GetMapping("/getPreLessonById")
+    public JsonResult getPreLessonById(Long id){
+        return preLessonService.getPreLessonById(id);
+    }
+
+    @GetMapping("/getAllPreLessons")
+    public JsonResult getAllPreLessons(PreLesson preLesson){
+        return preLessonService.getAllPreLessons(preLesson);
+    }
+
 }

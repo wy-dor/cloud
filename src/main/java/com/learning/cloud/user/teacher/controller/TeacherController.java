@@ -46,4 +46,9 @@ public class TeacherController {
         return teacherService.removeTeacherFromClass(teacherId,classId);
     }
 
+    @GetMapping("/getTeachersInSchool")
+    public JsonResult getTeachersInSchool(Integer schoolId){
+        return teacherService.getTeachersInSchool(schoolId);
+    }
+
 }

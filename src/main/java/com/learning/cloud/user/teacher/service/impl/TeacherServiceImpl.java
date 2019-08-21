@@ -80,4 +80,10 @@ public class TeacherServiceImpl implements TeacherService {
         teacherDao.update(t);
         return JsonResultUtil.success("更新成功");
     }
+
+    @Override
+    public JsonResult getTeachersInSchool(Integer schoolId) {
+        List<Teacher> teacherList = teacherDao.getTeachersInSchool(schoolId);
+        return JsonResultUtil.success(teacherList);
+    }
 }

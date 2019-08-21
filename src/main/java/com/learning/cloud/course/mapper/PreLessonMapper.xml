@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.PreLessonDao">
+
+  <select id="getPreLessonById" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.PreLesson">
+    select *
+    from lessons_preparation
+    where id = #{id}
+  </select>
+
+  <select id="getAllPreLessons" resultType="com.learning.cloud.course.entity.PreLesson">
+    select *
+    from lessons_preparation
+  </select>
+
+  <delete id="deletePreLesson" parameterType="java.lang.Long">
+    delete from lessons_preparation
+    where id = #{id}
+  </delete>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.PreLesson">
     insert into lessons_preparation
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -21,11 +21,11 @@ public class PreLesson extends BaseEntity {
 
     private String planHour;
 
-    private Short isPerformed;
+    private Integer isPerformed;
 
     private String performTime;
 
-    private Short teachingPlanType;
+    private Integer teachingPlanType;
 
     private Long teachingPicId;
 
@@ -37,13 +37,13 @@ public class PreLesson extends BaseEntity {
 
     private String teachingProcess;
 
-    private Short isUploadResources;
+    private Integer isUploadResources;
 
     private String courseAttachUrl;
 
     private String otherAttachUrl;
 
-    private Short status;
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -117,11 +117,11 @@ public class PreLesson extends BaseEntity {
         this.planHour = planHour == null ? null : planHour.trim();
     }
 
-    public Short getIsPerformed() {
+    public Integer getIsPerformed() {
         return isPerformed;
     }
 
-    public void setIsPerformed(Short isPerformed) {
+    public void setIsPerformed(Integer isPerformed) {
         this.isPerformed = isPerformed;
     }
 
@@ -133,11 +133,11 @@ public class PreLesson extends BaseEntity {
         this.performTime = performTime == null ? null : performTime.trim();
     }
 
-    public Short getTeachingPlanType() {
+    public Integer getTeachingPlanType() {
         return teachingPlanType;
     }
 
-    public void setTeachingPlanType(Short teachingPlanType) {
+    public void setTeachingPlanType(Integer teachingPlanType) {
         this.teachingPlanType = teachingPlanType;
     }
 
@@ -181,11 +181,11 @@ public class PreLesson extends BaseEntity {
         this.teachingProcess = teachingProcess == null ? null : teachingProcess.trim();
     }
 
-    public Short getIsUploadResources() {
+    public Integer getIsUploadResources() {
         return isUploadResources;
     }
 
-    public void setIsUploadResources(Short isUploadResources) {
+    public void setIsUploadResources(Integer isUploadResources) {
         this.isUploadResources = isUploadResources;
     }
 
@@ -205,11 +205,11 @@ public class PreLesson extends BaseEntity {
         this.otherAttachUrl = otherAttachUrl == null ? null : otherAttachUrl.trim();
     }
 
-    public Short getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Short status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

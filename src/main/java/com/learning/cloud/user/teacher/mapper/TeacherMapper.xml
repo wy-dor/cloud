@@ -29,6 +29,12 @@
     and school_id = #{schoolId}
   </select>
 
+  <select id="getTeachersInSchool" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where school_id = #{schoolId}
+  </select>
+
   <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
@@ -39,8 +45,7 @@
           resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
-    where
-    user_id = #{userId}
+    where user_id = #{userId}
     limit 1
   </select>
 

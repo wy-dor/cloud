@@ -25,6 +25,7 @@ public class NewsController {
     public JsonResult getBureauNews(News news){
         return newsService.getBureauNews(news);
     }
+
     @GetMapping("/getAllValidNews")
     public JsonResult getAllValidNews(News news){
         return newsService.getAllValidNews(news);

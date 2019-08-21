@@ -33,4 +33,6 @@ public interface TeacherDao {
     List<Teacher> getTeacherIds(Long classId);
 
     int delete(Integer id);
+
+    List<Teacher> getTeachersInSchool(Integer schoolId);
 }
