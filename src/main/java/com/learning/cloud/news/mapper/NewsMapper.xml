@@ -152,8 +152,17 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
       <if test="topping != null">
         topping = #{topping,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="bureauId != null">
+        bureau_id = #{bureauId,jdbcType=INTEGER},
       </if>
     </set>
     where id =  #{id,jdbcType=BIGINT}
