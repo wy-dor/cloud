@@ -27,7 +27,7 @@ public class PreLesson extends BaseEntity {
 
     private Integer teachingPlanType;
 
-    private Long teachingPicId;
+    private String teachingPicIds;
 
     private String teachingGoal;
 
@@ -141,12 +141,12 @@ public class PreLesson extends BaseEntity {
         this.teachingPlanType = teachingPlanType;
     }
 
-    public Long getTeachingPicId() {
-        return teachingPicId;
+    public String getTeachingPicIds() {
+        return teachingPicIds;
     }
 
-    public void setTeachingPicId(Long teachingPicId) {
-        this.teachingPicId = teachingPicId;
+    public void setTeachingPicIds(String teachingPicIds) {
+        this.teachingPicIds = teachingPicIds;
     }
 
     public String getTeachingGoal() {

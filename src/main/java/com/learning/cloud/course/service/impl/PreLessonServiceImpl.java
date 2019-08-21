@@ -19,7 +19,6 @@ public class PreLessonServiceImpl implements PreLessonService {
     @Autowired
     private PreLessonDao preLessonDao;
 
-
     @Override
     public JsonResult addPreLesson(PreLesson preLesson) {
         preLessonDao.insert(preLesson);

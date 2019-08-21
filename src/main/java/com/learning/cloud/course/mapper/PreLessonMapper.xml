@@ -57,8 +57,8 @@
       <if test="teachingPlanType != null">
         teaching_plan_type,
       </if>
-      <if test="teachingPicId != null">
-        teaching_pic_id,
+      <if test="teachingPicIds != null">
+        teaching_pic_ids,
       </if>
       <if test="teachingGoal != null">
         teaching_goal,
@@ -122,8 +122,8 @@
       <if test="teachingPlanType != null">
         #{teachingPlanType,jdbcType=SMALLINT},
       </if>
-      <if test="teachingPicId != null">
-        #{teachingPicId,jdbcType=BIGINT},
+      <if test="teachingPicIds != null">
+        #{teachingPicIds,jdbcType=VARCHAR},
       </if>
       <if test="teachingGoal != null">
         #{teachingGoal,jdbcType=VARCHAR},
