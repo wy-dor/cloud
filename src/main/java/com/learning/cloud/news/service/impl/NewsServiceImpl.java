@@ -132,4 +132,10 @@ public class NewsServiceImpl implements NewsService {
         List<News> NewsList = newsDao.getBureauNews(news);
         return JsonResultUtil.success(new PageEntity<>(NewsList));
     }
+
+    @Override
+    public JsonResult getToppingNews(Integer bureauId) {
+        News news = newsDao.getToppingNews(bureauId);
+        return JsonResultUtil.success(news);
+    }
 }

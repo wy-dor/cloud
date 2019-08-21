@@ -52,7 +52,14 @@
     <if test="typeId != null">
       and type_id = #{typeId}
     </if>
-    order by topping desc,upload_time desc
+    order by upload_time desc
+  </select>
+
+  <select id="getToppingNews" parameterType="java.lang.Integer" resultType="com.learning.cloud.news.entity.News">
+    select *
+    from news
+    where bureau_id = #{bureauId}
+    and topping = 1
   </select>
 
   <update id="removeNewsById" parameterType="java.lang.Long">

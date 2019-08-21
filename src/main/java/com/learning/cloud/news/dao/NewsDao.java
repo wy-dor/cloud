@@ -24,4 +24,6 @@ public interface NewsDao {
     int deleteNewsById(Long id);
 
     List<News> getBureauNews(News news);
+
+    News getToppingNews(Integer bureauId);
 }

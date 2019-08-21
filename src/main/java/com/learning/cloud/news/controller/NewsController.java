@@ -3,6 +3,7 @@ package com.learning.cloud.news.controller;
 import com.learning.cloud.news.entity.News;
 import com.learning.cloud.news.service.NewsService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,5 +67,9 @@ public class NewsController {
         return newsService.batchUpdateNews(ids,status);
     }
 
+    @GetMapping("/getToppingNews")
+    public JsonResult getToppingNews(Integer bureauId){
+        return newsService.getToppingNews(bureauId);
+    }
 }
 
