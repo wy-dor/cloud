@@ -12,4 +12,6 @@ public interface CourseWareService {
     JsonResult likeThisCourseWare(Long id)throws Exception;
 
     JsonResult getMyCourseWare(Long teacherId)throws Exception;
+
+     String SaveFile(MultipartFile file, Long teacherId);
 }

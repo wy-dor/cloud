@@ -37,7 +37,8 @@ public class CourseWareServiceImpl implements CourseWareService {
         return JsonResultUtil.success(courseWare.getId());
     }
 
-    private String SaveFile(MultipartFile file, Long teacherId) {
+    @Override
+    public String SaveFile(MultipartFile file, Long teacherId) {
         try{
             if(file!=null&&!file.isEmpty()){
                 String fileName = file.getOriginalFilename();

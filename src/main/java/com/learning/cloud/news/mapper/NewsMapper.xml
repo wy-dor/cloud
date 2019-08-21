@@ -49,6 +49,9 @@
     from news
     where bureau_id = #{bureauId}
     and status = 3
+    <if test="typeId != null">
+      and type_id = #{typeId}
+    </if>
     order by topping desc,upload_time desc
   </select>
 
