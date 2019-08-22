@@ -22,7 +22,7 @@ public class PreLessonServiceImpl implements PreLessonService {
     @Override
     public JsonResult addPreLesson(PreLesson preLesson) {
         preLessonDao.insert(preLesson);
-        return JsonResultUtil.success();
+        return JsonResultUtil.success(preLesson.getId());
     }
 
     @Override
