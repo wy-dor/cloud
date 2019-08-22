@@ -1,6 +1,6 @@
-package com.learning.cloud.grade.service;
+package com.learning.cloud.gradeModule.service;
 
-import com.learning.cloud.grade.entity.GradeModule;
+import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.domain.JsonResult;
 
 public interface GradeModuleService {

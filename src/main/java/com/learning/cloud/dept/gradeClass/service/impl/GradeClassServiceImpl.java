@@ -98,6 +98,6 @@ public class GradeClassServiceImpl implements GradeClassService {
     @Override
     public JsonResult getAllGradeName(Integer schoolId) {
         List<String> gradeNameList = gradeClassDao.getAllGradeName(schoolId);
-        return null;
+        return JsonResultUtil.success(gradeNameList);
     }
 }

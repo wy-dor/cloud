@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.learning.cloud.grade.dao.GradeModuleDao">
-    <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.grade.entity.GradeModule">
+<mapper namespace="com.learning.cloud.gradeModule.dao.GradeModuleDao">
+    <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
       select *
       from grade_module
       where id = #{id}
       limit 1
     </select>
 
-  <select id="getAllGradeModule" parameterType="com.learning.cloud.grade.entity.GradeModule" resultType="com.learning.cloud.grade.entity.GradeModule">
+  <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
     select *
     from grade_module
   </select>
@@ -18,7 +18,7 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.grade.entity.GradeModule">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.gradeModule.entity.GradeModule">
     insert into grade_module
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -63,6 +63,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="classesAddingWay != null">
+        classes_adding_way,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -106,6 +109,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="classesAddingWay != null">
+        #{classesAddingWay,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>

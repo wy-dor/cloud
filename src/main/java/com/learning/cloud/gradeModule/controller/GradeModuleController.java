@@ -1,7 +1,7 @@
-package com.learning.cloud.grade.controller;
+package com.learning.cloud.gradeModule.controller;
 
-import com.learning.cloud.grade.entity.GradeModule;
-import com.learning.cloud.grade.service.GradeModuleService;
+import com.learning.cloud.gradeModule.entity.GradeModule;
+import com.learning.cloud.gradeModule.service.GradeModuleService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

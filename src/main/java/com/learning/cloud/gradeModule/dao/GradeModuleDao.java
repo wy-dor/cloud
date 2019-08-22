@@ -1,6 +1,6 @@
-package com.learning.cloud.grade.dao;
+package com.learning.cloud.gradeModule.dao;
 
-import com.learning.cloud.grade.entity.GradeModule;
+import com.learning.cloud.gradeModule.entity.GradeModule;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

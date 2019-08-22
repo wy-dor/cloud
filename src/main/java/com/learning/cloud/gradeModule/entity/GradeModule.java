@@ -1,6 +1,8 @@
-package com.learning.cloud.grade.entity;
+package com.learning.cloud.gradeModule.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GradeModule extends BaseEntity {
     private Long id;
@@ -15,21 +17,29 @@ public class GradeModule extends BaseEntity {
 
     private String type;
 
-    private Short scoringRoles;
+    private Integer scoringRoles;
 
-    private Short rankModule;
+    private Integer rankModule;
 
     private String subjects;
 
     private String classesStr;
 
-    private Short visibleRange;
+    private Integer visibleRange;
 
-    private Short notifyToEntry;
+    private Integer notifyToEntry;
 
     private String deadline;
 
-    private Short status;
+    private Integer status;
+
+    @Getter
+    @Setter
+    private Integer classesAddingWay;
+
+    @Getter
+    @Setter
+    private String gradeNamesStr;
 
     public Long getId() {
         return id;
@@ -79,19 +89,19 @@ public class GradeModule extends BaseEntity {
         this.type = type == null ? null : type.trim();
     }
 
-    public Short getScoringRoles() {
+    public Integer getScoringRoles() {
         return scoringRoles;
     }
 
-    public void setScoringRoles(Short scoringRoles) {
+    public void setScoringRoles(Integer scoringRoles) {
         this.scoringRoles = scoringRoles;
     }
 
-    public Short getRankModule() {
+    public Integer getRankModule() {
         return rankModule;
     }
 
-    public void setRankModule(Short rankModule) {
+    public void setRankModule(Integer rankModule) {
         this.rankModule = rankModule;
     }
 
@@ -111,19 +121,19 @@ public class GradeModule extends BaseEntity {
         this.classesStr = classesStr == null ? null : classesStr.trim();
     }
 
-    public Short getVisibleRange() {
+    public Integer getVisibleRange() {
         return visibleRange;
     }
 
-    public void setVisibleRange(Short visibleRange) {
+    public void setVisibleRange(Integer visibleRange) {
         this.visibleRange = visibleRange;
     }
 
-    public Short getNotifyToEntry() {
+    public Integer getNotifyToEntry() {
         return notifyToEntry;
     }
 
-    public void setNotifyToEntry(Short notifyToEntry) {
+    public void setNotifyToEntry(Integer notifyToEntry) {
         this.notifyToEntry = notifyToEntry;
     }
 
@@ -135,11 +145,11 @@ public class GradeModule extends BaseEntity {
         this.deadline = deadline == null ? null : deadline.trim();
     }
 
-    public Short getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Short status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
