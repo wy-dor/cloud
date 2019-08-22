@@ -19,8 +19,18 @@ public class GradeModuleController {
         return gradeModuleService.addGradeModule(gradeModule);
     }
 
-    @GetMapping("/getById")
-    public JsonResult getById(Integer id){
-        return gradeModuleService.getById(id);
+    @GetMapping("/getGradeModuleById")
+    public JsonResult getGradeModuleById(Long id){
+        return gradeModuleService.getGradeModuleById(id);
+    }
+
+    @GetMapping("/getAllGradeModule")
+    public JsonResult getAllGradeModule(GradeModule gradeModule){
+        return gradeModuleService.getAllGradeModule(gradeModule);
+    }
+
+    @GetMapping("/deleteGradeModule")
+    public JsonResult deleteGradeModule(Long id){
+        return gradeModuleService.deleteGradeModule(id);
     }
 }

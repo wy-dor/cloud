@@ -7,5 +7,9 @@ public interface GradeModuleService {
 
     JsonResult addGradeModule(GradeModule gradeModule);
 
-    JsonResult getById(Integer id);
+    JsonResult getGradeModuleById(Long id);
+
+    JsonResult getAllGradeModule(GradeModule gradeModule);
+
+    JsonResult deleteGradeModule(Long id);
 }
