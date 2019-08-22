@@ -47,5 +47,9 @@ public class GradeClassController {
         return gradeClassService.getGradeClassById(id);
     }
 
+    @GetMapping("getAllGradeName")
+    public JsonResult getAllGradeName(Integer schoolId){
+        return gradeClassService.getAllGradeName(schoolId);
+    }
 
 }

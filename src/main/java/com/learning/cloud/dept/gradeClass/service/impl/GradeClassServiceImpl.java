@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -96,5 +93,11 @@ public class GradeClassServiceImpl implements GradeClassService {
     public JsonResult getGradeClassById(Integer id) {
         GradeClass byId = gradeClassDao.getById(id);
         return JsonResultUtil.success(byId);
+    }
+
+    @Override
+    public JsonResult getAllGradeName(Integer schoolId) {
+        List<String> gradeNameList = gradeClassDao.getAllGradeName(schoolId);
+        return null;
     }
 }

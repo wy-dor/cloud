@@ -18,4 +18,6 @@ public interface GradeClassService {
     JsonResult getByGradeClass(GradeClass gradeClass);
 
     JsonResult getGradeClassById(Integer id);
+
+    JsonResult getAllGradeName(Integer schoolId);
 }
