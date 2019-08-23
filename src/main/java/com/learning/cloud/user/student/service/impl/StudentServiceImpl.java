@@ -1,5 +1,6 @@
 package com.learning.cloud.user.student.service.impl;
 
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
@@ -21,6 +22,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    private GradeClassDao gradeClassDao;
+
 
     @Override
     public ServiceResult getByUserId(String userId) {
@@ -36,6 +40,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public JsonResult getClassStudents(GradeClass gradeClass) {
+        Integer id = gradeClass.getId();
+        if(id == null){
+            List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gradeClass);
+            if(byGradeClass != null && byGradeClass.size() > 0){
+                id = byGradeClass.get(0).getId();
+                gradeClass.setId(id);
+            }
+        }
         List<Student> studentList = studentDao.getClassStudents(gradeClass);
         return JsonResultUtil.success(new PageEntity<>(studentList));
     }

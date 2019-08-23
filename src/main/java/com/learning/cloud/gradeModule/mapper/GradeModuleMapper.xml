@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.gradeModule.dao.GradeModuleDao">
-    <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+  <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
       select *
       from grade_module
       where id = #{id}
@@ -66,6 +66,9 @@
       <if test="classesAddingWay != null">
         classes_adding_way,
       </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -112,6 +115,9 @@
       </if>
       <if test="classesAddingWay != null">
         #{classesAddingWay,jdbcType=SMALLINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

@@ -41,6 +41,10 @@ public class GradeModule extends BaseEntity {
     @Setter
     private String gradeNamesStr;
 
+    @Getter
+    @Setter
+    private Integer schoolId;
+
     public Long getId() {
         return id;
     }
