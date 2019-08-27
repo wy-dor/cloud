@@ -364,7 +364,6 @@ public class DeptServiceImpl implements DeptService {
         /*"department": "[[117451249, 117656244, 117680160, 117597295, 117425251, -7, 1]]"*/
 
         if (department .equals("[]")){
-            roleName = "学生";
             Student byUserId = studentDao.getByUserId(userId);
             if(byUserId == null){
                 map.put("roleName","无");
@@ -416,8 +415,8 @@ public class DeptServiceImpl implements DeptService {
                     break;
                 }
             }
+            map.put("roleName",roleName);
         }
-        map.put("roleName",roleName);
         return map;
     }
 
