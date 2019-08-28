@@ -7,7 +7,23 @@
       from grade_entry
       where id = #{id}
       limit 1
-    </select>
+   </select>
+
+  <select id="getByClassModule" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
+    select *
+      from grade_entry
+      where module_id = #{moduleId}
+      and class_id = #{classId}
+  </select>
+
+  <select id="getByStudentModule" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
+    select *
+      from grade_entry
+      where module_id = #{moduleId}
+      and class_id = #{classId}
+      and student_id = #{studentId}
+      and student_name = #{studentName}
+  </select>
 
   <select id="getAllGradeEntry" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
     select *

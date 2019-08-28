@@ -17,6 +17,7 @@ import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import com.taobao.api.ApiException;
+import org.apache.ibatis.mapping.ResultMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +151,22 @@ public class IndexController {
 		return response;
 	}
 
+	@GetMapping("/getApiUserInfo")
+	public ServiceResult getApiUserInfo(String corpId, String requestAuthCode) throws ApiException {
+		Map<String,Object> resultMap = new HashMap<>();
+		Long start = System.currentTimeMillis();
+		//获取accessToken,注意正是代码要有异常流处理
+		String accessToken = authenService.getAccessToken(corpId);
+		//获取用户信息
+		OapiUserGetuserinfoResponse oapiUserGetuserinfoResponse = getOapiUserGetuserinfo(accessToken,requestAuthCode);
+
+		//3.查询得到当前用户的userId
+		// 获得到userId之后应用应该处理应用自身的登录会话管理（session）,避免后续的业务交互（前端到应用服务端）每次都要重新获取用户身份，提升用户体验
+		String userId = oapiUserGetuserinfoResponse.getUserid();
+		resultMap.put("userId",userId);
+		resultMap.put("corpId",corpId);
+		return ServiceResult.success(resultMap);
+	}
 
 
 	/**
