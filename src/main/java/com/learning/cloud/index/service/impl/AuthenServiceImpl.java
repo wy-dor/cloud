@@ -8,6 +8,7 @@ import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.config.ApiUrlConstant;
 import com.learning.cloud.config.Constant;
+import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.*;
 import com.learning.cloud.index.entity.AuthAppInfo;
 import com.learning.cloud.index.entity.AuthCorpInfo;
@@ -18,6 +19,8 @@ import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +58,12 @@ public class AuthenServiceImpl implements AuthenService {
 
     @Autowired
     private AdministratorDao administratorDao;
+
+    @Autowired
+    private DeptService deptService;
+
+    @Autowired
+    private UserDao userDao;
 
     @Value("${spring.suiteKey}")
     private String suiteKey;
@@ -141,12 +150,33 @@ public class AuthenServiceImpl implements AuthenService {
                     List<OapiRoleSimplelistResponse.OpenEmpSimple> list = rsp1.getResult().getList();
                     for (OapiRoleSimplelistResponse.OpenEmpSimple openEmpSimple : list) {
                         Administrator a = new Administrator();
-                        a.setName(openEmpSimple.getName());
-                        a.setUserId(openEmpSimple.getUserid());
+                        String username = openEmpSimple.getName();
+                        String userid = openEmpSimple.getUserid();
+                        a.setName(username);
+                        a.setUserId(userid);
                         a.setSchoolId(schoolId);
                         Administrator byAdm = administratorDao.getByAdm(a);
                         if(byAdm == null){
                             administratorDao.insert(a);
+                            //更新user数据
+                            OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
+                            String unionid = userDetailResp.getUnionid();
+                            User user = new User();
+                            user.setUnionId(unionid);
+                            user.setSchoolId(schoolId);
+                            user.setRoleType(1);
+                            User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                            if(byUnionId == null){
+                                user.setUserId(userid);
+                                user.setUserName(username);
+                                user.setAvatar(userDetailResp.getAvatar());
+                                if(userDetailResp.getActive()){
+                                    user.setActive((short)1);
+                                }else{
+                                    user.setActive((short)0);
+                                }
+                                userDao.insert(user);
+                            }
                         }
                     }
                 }

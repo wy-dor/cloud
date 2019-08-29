@@ -14,4 +14,6 @@ public interface UserDao {
     int update(User user);
 
     User getByUserId(String userId);
+
+    User getBySchoolRoleIdentity(User user);
 }

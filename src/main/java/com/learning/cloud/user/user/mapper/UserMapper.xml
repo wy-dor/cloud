@@ -16,6 +16,14 @@
     limit 1
   </select>
 
+  <select id="getBySchoolRoleIdentity" parameterType="com.learning.cloud.user.user.entity.User" resultType="com.learning.cloud.user.user.entity.User">
+    select *
+    from user
+    where union_id = #{unionId}
+    and school_id = #{schoolId}
+    and role_type = #{schoolType}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">

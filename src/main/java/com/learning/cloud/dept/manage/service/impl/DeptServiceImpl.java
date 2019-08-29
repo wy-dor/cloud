@@ -236,7 +236,8 @@ public class DeptServiceImpl implements DeptService {
                         teacherDao.update(t);
                         teacherClassIdMap2.put(t.getId(),classIds);
                     }
-                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
+                    unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
                     User u1 = userDao.getByUnionId(unionId);
@@ -246,6 +247,12 @@ public class DeptServiceImpl implements DeptService {
                         u.setRoleType(roleType);
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
+                        u.setAvatar(userDetail.getAvatar());
+                        if(userDetail.getActive()){
+                            u.setActive((short)1);
+                        }else{
+                            u.setActive((short)0);
+                        }
                         userDao.insert(u);
                     }
                 }
@@ -268,7 +275,8 @@ public class DeptServiceImpl implements DeptService {
                         parentIdList2.add(p.getId());
                         parentDao.update(parent);
                     }
-                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
+                    unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
                     User u1 = userDao.getByUnionId(unionId);
@@ -278,6 +286,12 @@ public class DeptServiceImpl implements DeptService {
                         u.setRoleType(roleType);
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
+                        u.setAvatar(userDetail.getAvatar());
+                        if(userDetail.getActive()){
+                            u.setActive((short)1);
+                        }else{
+                            u.setActive((short)0);
+                        }
                         userDao.insert(u);
                     }
                 }
@@ -300,7 +314,8 @@ public class DeptServiceImpl implements DeptService {
                         studentIdList2.add(s.getId());
                         studentDao.update(student);
                     }
-                    unionId = getUserDetail(userId, corpId).getUnionid();
+                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
+                    unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
                     User u1 = userDao.getByUnionId(unionId);
@@ -310,6 +325,12 @@ public class DeptServiceImpl implements DeptService {
                         u.setRoleType(roleType);
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
+                        u.setAvatar(userDetail.getAvatar());
+                        if(userDetail.getActive()){
+                            u.setActive((short)1);
+                        }else{
+                            u.setActive((short)0);
+                        }
                         userDao.insert(u);
                     }
                 }
