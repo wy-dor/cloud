@@ -31,8 +31,8 @@ public class SupervisionController {
         return supervisionService.getAllValidSupervision(supervision);
     }
 
-    @GetMapping("/updateTopping")
-    public JsonResult updateTopping(Long id){
+    @GetMapping("/updateToppingInSupervision")
+    public JsonResult updateToppingInSupervision(Long id){
         return supervisionService.updateTopping(id);
     }
 

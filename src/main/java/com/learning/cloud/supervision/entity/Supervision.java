@@ -7,8 +7,6 @@ import java.util.Date;
 public class Supervision extends BaseEntity {
     private Long id;
 
-    private Integer schoolId;
-
     private String title;
 
     private Long picId;
@@ -37,14 +35,6 @@ public class Supervision extends BaseEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getSchoolId() {
-        return schoolId;
-    }
-
-    public void setSchoolId(Integer schoolId) {
-        this.schoolId = schoolId;
     }
 
     public String getTitle() {

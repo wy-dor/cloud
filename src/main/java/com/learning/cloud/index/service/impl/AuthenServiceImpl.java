@@ -243,6 +243,7 @@ public class AuthenServiceImpl implements AuthenService {
     }
 
     /*获取角色下的员工列表*/
+    @Override
     public OapiRoleSimplelistResponse getRoleSimpleList(long roleId,String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/simplelist");
         OapiRoleSimplelistRequest request = new OapiRoleSimplelistRequest();
@@ -254,6 +255,7 @@ public class AuthenServiceImpl implements AuthenService {
     }
 
     /*获取所有的角色列表*/
+    @Override
     public OapiRoleListResponse getRoleList(String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/list");
         OapiRoleListRequest request = new OapiRoleListRequest();

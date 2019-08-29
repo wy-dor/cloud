@@ -19,9 +19,19 @@
   <select id="getBySchoolRoleIdentity" parameterType="com.learning.cloud.user.user.entity.User" resultType="com.learning.cloud.user.user.entity.User">
     select *
     from user
-    where union_id = #{unionId}
+    where
+    <choose>
+      <when test="unionId != null">
+        union_id = #{unionId}
+      </when>
+      <otherwise>
+        user_id = #{userId}
+      </otherwise>
+    </choose>
     and school_id = #{schoolId}
-    and role_type = #{schoolType}
+    <if test="roleType != null">
+        and role_type = #{roleType}
+    </if>
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">

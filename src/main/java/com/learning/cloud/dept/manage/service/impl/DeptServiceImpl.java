@@ -166,6 +166,32 @@ public class DeptServiceImpl implements DeptService {
             if(i > 1){
                 campusDao.updateCampusType(schoolId);
             }
+
+            //添加没有身份的用户信息
+            OapiUserSimplelistResponse deptUserListResponse = getDeptUserList("1", accessToken);
+            List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
+            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                String userId = uList.getUserid();
+                OapiUserGetResponse userDetailResp = getUserDetail(userId, corpId);
+                String unionId = userDetailResp.getUnionid();
+                User user = new User();
+                user.setUnionId(unionId);
+                user.setSchoolId(schoolId);
+                user.setRoleType(1);
+                User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                if(byUnionId == null){
+                    user.setUserId(userId);
+                    user.setUserName(userDetailResp.getName());
+                    user.setAvatar(userDetailResp.getAvatar());
+                    if(userDetailResp.getActive()){
+                        user.setActive((short)1);
+                    }else{
+                        user.setActive((short)0);
+                    }
+                    userDao.insert(user);
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

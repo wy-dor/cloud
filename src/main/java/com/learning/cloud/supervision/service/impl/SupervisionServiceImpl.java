@@ -24,9 +24,6 @@ public class SupervisionServiceImpl implements SupervisionService {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private SchoolDao schoolDao;
-
     //状态 0:未提交，1:审核中，2:已驳回，3:已发布，4:已撤销
     @Override
     public JsonResult addSupervision(MultipartFile file, Supervision supervision) throws Exception {
@@ -34,12 +31,6 @@ public class SupervisionServiceImpl implements SupervisionService {
             Long picId = questionService.reduceImg(file);
             supervision.setPicId(picId);
         }
-//        Integer schoolId = supervision.getSchoolId();
-//        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-//        Integer bureauId = bySchoolId.getBureauId();
-//        if (bureauId != null) {
-//            supervision.setBureauId(bureauId);
-//        }
         int i = supervisionDao.insert(supervision);
         return JsonResultUtil.success("成功增加" + i + "条数据");
     }
@@ -66,7 +57,7 @@ public class SupervisionServiceImpl implements SupervisionService {
     @Override
     public JsonResult deleteSupervisionById(Long id) {
         int i = supervisionDao.deleteSupervisionById(id);
-        return JsonResultUtil.success();
+        return JsonResultUtil.success("成功删除" + i + "条数据");
     }
 
     @Override
@@ -82,9 +73,7 @@ public class SupervisionServiceImpl implements SupervisionService {
     //获取所有已发布新闻
     @Override
     public JsonResult getAllValidSupervision(Supervision supervision) {
-        Integer schoolId = supervision.getSchoolId();
-        Integer bureauId = schoolDao.getBySchoolId(schoolId).getBureauId();
-        supervision.setBureauId(bureauId);
+        supervision.setBureauId(supervision.getBureauId());
         List<Supervision> allValidSupervision = supervisionDao.getAllValidSupervision(supervision);
         return JsonResultUtil.success(new PageEntity<>(allValidSupervision));
     }

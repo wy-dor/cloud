@@ -3,11 +3,13 @@ package com.learning.schedule;
 import com.alibaba.fastjson.JSON;
 import com.dingtalk.api.response.OapiRoleListResponse;
 import com.dingtalk.api.response.OapiRoleSimplelistResponse;
+import com.dingtalk.api.response.OapiUserGetResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.dao.AuthCorpInfoDao;
 import com.learning.cloud.index.dao.AuthUserInfoDao;
@@ -24,6 +26,7 @@ import com.learning.cloud.score.dao.ScoreboardDao;
 import com.learning.cloud.score.entity.ClassScoreboard;
 import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
@@ -33,6 +36,8 @@ import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
 import com.learning.cloud.bizData.entity.SyncBizDataMedium;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,6 +97,15 @@ public class MultiThreadScheduleTask {
 
     @Autowired
     private BizDataMediumService bizDataMediumService;
+
+    @Autowired
+    private DeptService deptService;
+
+    @Autowired
+    private AdministratorDao administratorDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Value("${spring.suiteId}")
     private String suiteId;
@@ -245,6 +259,8 @@ public class MultiThreadScheduleTask {
                 Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
                 String syncAction = (String)parse_0.get("syncAction");
                 if("org_suite_auth".equals(syncAction)){
+                    Integer schoolId = null;
+                    String accessToken = "";
                     //更新授权企业表
                     Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
                     AuthCorpInfo authCorpInfo = new AuthCorpInfo();
@@ -270,30 +286,10 @@ public class MultiThreadScheduleTask {
                         List<School> bySchool = schoolDao.getBySchool(school);
                         if(bySchool == null || bySchool.size() == 0){
                             schoolDao.insert(school);
+                            schoolId = school.getId();
+                        }else{
+                            schoolId = bySchool.get(0).getId();
                         }
-
-                        //todo
-                        /*更新管理员表*/
-                    /*OapiRoleListResponse rsp = getRoleList(accessToken);
-                    List<OapiRoleListResponse.OpenRole> roles = rsp.getResult().getList().get(0).getRoles();
-                    for (OapiRoleListResponse.OpenRole role : roles) {
-                        *//*更新管理员信息*//*
-                        if(role.getName().contains("管理员")){
-                            Long roleId = role.getId();
-                            OapiRoleSimplelistResponse rsp1 = getRoleSimpleList(roleId, accessToken);
-                            List<OapiRoleSimplelistResponse.OpenEmpSimple> list = rsp1.getResult().getList();
-                            for (OapiRoleSimplelistResponse.OpenEmpSimple openEmpSimple : list) {
-                                Administrator a = new Administrator();
-                                a.setName(openEmpSimple.getName());
-                                a.setUserId(openEmpSimple.getUserid());
-                                a.setSchoolId(schoolId);
-                                Administrator byAdm = administratorDao.getByAdm(a);
-                                if(byAdm == null){
-                                    administratorDao.insert(a);
-                                }
-                            }
-                        }
-                    }*/
 
                     }else if(industry.equals("教育行政机构")){
                         authCorpInfo.setIndustryType(2);
@@ -341,7 +337,7 @@ public class MultiThreadScheduleTask {
                     if(forSuiteTicket != null){
                         Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                         String suiteTicket = parse.get("suiteTicket");
-                        String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
+                        accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
                         AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
                         AuthAppInfo authAppInfo = new AuthAppInfo();
                         authAppInfo.setCorpId(corpId);
@@ -370,6 +366,54 @@ public class MultiThreadScheduleTask {
                     }
                     if(k == 1){
                         System.out.println("授权用户信息保存成功");
+                    }
+
+                    /*更新管理员表*/
+                    OapiRoleListResponse rsp = authenService.getRoleList(accessToken);
+                    List<OapiRoleListResponse.OpenRole> roles = rsp.getResult().getList().get(0).getRoles();
+                    for (OapiRoleListResponse.OpenRole role : roles) {
+                        //更新管理员信息
+                        if(role.getName().contains("管理员")){
+                            Long roleId = role.getId();
+                            OapiRoleSimplelistResponse rsp1 = authenService.getRoleSimpleList(roleId, accessToken);
+                            List<OapiRoleSimplelistResponse.OpenEmpSimple> list = rsp1.getResult().getList();
+                            for (OapiRoleSimplelistResponse.OpenEmpSimple openEmpSimple : list) {
+                                Administrator a = new Administrator();
+                                String username = openEmpSimple.getName();
+                                String userid = openEmpSimple.getUserid();
+                                a.setName(username);
+                                a.setUserId(userid);
+                                a.setSchoolId(schoolId);
+                                Administrator byAdm = administratorDao.getByAdm(a);
+                                if(byAdm == null){
+                                    administratorDao.insert(a);
+                                    //更新user数据
+                                    OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
+                                    String unionid = userDetailResp.getUnionid();
+                                    User user = new User();
+                                    user.setUnionId(unionid);
+                                    user.setSchoolId(schoolId);
+                                    user.setRoleType(1);
+                                    User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                                    if(byUnionId == null){
+                                        user.setUserId(userid);
+                                        user.setUserName(username);
+                                        user.setAvatar(userDetailResp.getAvatar());
+                                        if(userDetailResp.getActive()){
+                                            user.setActive((short)1);
+                                        }else{
+                                            user.setActive((short)0);
+                                        }
+                                        userDao.insert(user);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //初始化一次班级数据
+                    if(schoolId != null){
+                        deptService.init(schoolId);
                     }
                 }
                 syncBizDataDao.updateStatus(id);
