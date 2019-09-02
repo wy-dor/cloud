@@ -1,7 +1,6 @@
 package com.learning.cloud.supervision.service.impl;
 
 import com.learning.cloud.ding.question.service.QuestionService;
-import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.supervision.dao.SupervisionDao;
 import com.learning.cloud.supervision.entity.Supervision;
 import com.learning.cloud.supervision.service.SupervisionService;

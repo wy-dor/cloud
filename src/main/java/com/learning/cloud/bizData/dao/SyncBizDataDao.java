@@ -15,7 +15,7 @@ public interface SyncBizDataDao {
 
     List<SyncBizData> getBizData(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
 
-    SyncBizData getForSuiteTicket();
+    SyncBizData getForSuiteTicket(String corpId);
 
     List<SyncBizData> getAllBizData();
 

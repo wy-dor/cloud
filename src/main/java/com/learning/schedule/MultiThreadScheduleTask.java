@@ -330,10 +330,48 @@ public class MultiThreadScheduleTask {
                             corpAgentDao.update(ca);
                         }
                         System.out.println("保存应用信息成功！");
+
+                        /*更新管理员表*/
+                        List<String> adminList = (List<String>) a.get("admin_list");
+                        for (String userId : adminList) {
+                            OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
+                            Administrator a1 = new Administrator();
+                            String username = userDetail.getName();
+                            String userid = userDetail.getUserid();
+                            a1.setName(username);
+                            a1.setUserId(userid);
+                            if(schoolId != null){
+                                a1.setSchoolId(schoolId);
+                            }
+                            Administrator byAdm = administratorDao.getByAdm(a1);
+                            if(byAdm == null){
+                                administratorDao.insert(a1);
+                                //更新user表数据
+                                String unionid = userDetail.getUnionid();
+                                User user = new User();
+                                user.setUnionId(unionid);
+                                if(schoolId != null){
+                                    user.setSchoolId(schoolId);
+                                }
+                                user.setRoleType(1);
+                                User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                                if(byUnionId == null){
+                                    user.setUserId(userid);
+                                    user.setUserName(username);
+                                    user.setAvatar(userDetail.getAvatar());
+                                    if(userDetail.getActive()){
+                                        user.setActive((short)1);
+                                    }else{
+                                        user.setActive((short)0);
+                                    }
+                                    userDao.insert(user);
+                                }
+                            }
+                        }
                     }
 
                     //更新授权应用表
-                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket(corpId);
                     if(forSuiteTicket != null){
                         Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                         String suiteTicket = parse.get("suiteTicket");
@@ -350,6 +388,7 @@ public class MultiThreadScheduleTask {
                         }else{
                             authAppInfoDao.update(authAppInfo);
                         }
+                        syncBizDataDao.updateStatus(forSuiteTicket.getId());
                     }
 
                     //保存授权用户信息
@@ -366,49 +405,6 @@ public class MultiThreadScheduleTask {
                     }
                     if(k == 1){
                         System.out.println("授权用户信息保存成功");
-                    }
-
-                    /*更新管理员表*/
-                    OapiRoleListResponse rsp = authenService.getRoleList(accessToken);
-                    List<OapiRoleListResponse.OpenRole> roles = rsp.getResult().getList().get(0).getRoles();
-                    for (OapiRoleListResponse.OpenRole role : roles) {
-                        //更新管理员信息
-                        if(role.getName().contains("管理员")){
-                            Long roleId = role.getId();
-                            OapiRoleSimplelistResponse rsp1 = authenService.getRoleSimpleList(roleId, accessToken);
-                            List<OapiRoleSimplelistResponse.OpenEmpSimple> list = rsp1.getResult().getList();
-                            for (OapiRoleSimplelistResponse.OpenEmpSimple openEmpSimple : list) {
-                                Administrator a = new Administrator();
-                                String username = openEmpSimple.getName();
-                                String userid = openEmpSimple.getUserid();
-                                a.setName(username);
-                                a.setUserId(userid);
-                                a.setSchoolId(schoolId);
-                                Administrator byAdm = administratorDao.getByAdm(a);
-                                if(byAdm == null){
-                                    administratorDao.insert(a);
-                                    //更新user数据
-                                    OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
-                                    String unionid = userDetailResp.getUnionid();
-                                    User user = new User();
-                                    user.setUnionId(unionid);
-                                    user.setSchoolId(schoolId);
-                                    user.setRoleType(1);
-                                    User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                                    if(byUnionId == null){
-                                        user.setUserId(userid);
-                                        user.setUserName(username);
-                                        user.setAvatar(userDetailResp.getAvatar());
-                                        if(userDetailResp.getActive()){
-                                            user.setActive((short)1);
-                                        }else{
-                                            user.setActive((short)0);
-                                        }
-                                        userDao.insert(user);
-                                    }
-                                }
-                            }
-                        }
                     }
 
                     //初始化一次班级数据
