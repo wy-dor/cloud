@@ -1,6 +1,8 @@
 package com.learning.cloud.supervision.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -28,6 +30,10 @@ public class Supervision extends BaseEntity {
     private Integer bureauId;
 
     private String detail;
+
+    @Getter
+    @Setter
+    private Integer schoolId;
 
     public Long getId() {
         return id;
