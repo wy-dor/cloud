@@ -359,10 +359,13 @@ public class MultiThreadScheduleTask {
                                     user.setUserId(userid);
                                     user.setUserName(username);
                                     user.setAvatar(userDetail.getAvatar());
-                                    if(userDetail.getActive()){
-                                        user.setActive((short)1);
-                                    }else{
-                                        user.setActive((short)0);
+                                    Boolean active = userDetail.getActive();
+                                    if(active != null){
+                                        if(active){
+                                            user.setActive((short)1);
+                                        }else{
+                                            user.setActive((short)0);
+                                        }
                                     }
                                     userDao.insert(user);
                                 }

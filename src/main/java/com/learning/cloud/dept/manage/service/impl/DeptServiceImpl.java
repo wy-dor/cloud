@@ -274,10 +274,13 @@ public class DeptServiceImpl implements DeptService {
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
                         u.setAvatar(userDetail.getAvatar());
-                        if(userDetail.getActive()){
-                            u.setActive((short)1);
-                        }else{
-                            u.setActive((short)0);
+                        Boolean active = userDetail.getActive();
+                        if(active != null){
+                            if(active){
+                                u.setActive((short)1);
+                            }else{
+                                u.setActive((short)0);
+                            }
                         }
                         userDao.insert(u);
                     }
@@ -313,10 +316,13 @@ public class DeptServiceImpl implements DeptService {
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
                         u.setAvatar(userDetail.getAvatar());
-                        if(userDetail.getActive()){
-                            u.setActive((short)1);
-                        }else{
-                            u.setActive((short)0);
+                        Boolean active = userDetail.getActive();
+                        if(active != null){
+                            if(active){
+                                u.setActive((short)1);
+                            }else{
+                                u.setActive((short)0);
+                            }
                         }
                         userDao.insert(u);
                     }
@@ -352,10 +358,13 @@ public class DeptServiceImpl implements DeptService {
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
                         u.setAvatar(userDetail.getAvatar());
-                        if(userDetail.getActive()){
-                            u.setActive((short)1);
-                        }else{
-                            u.setActive((short)0);
+                        Boolean active = userDetail.getActive();
+                        if(active != null){
+                            if(active){
+                                u.setActive((short)1);
+                            }else{
+                                u.setActive((short)0);
+                            }
                         }
                         userDao.insert(u);
                     }
