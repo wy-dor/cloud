@@ -26,7 +26,6 @@
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data
     WHERE biz_type = 2
-    and corp_id = #{corpId}
     and status = 0
     limit 1
   </select>
