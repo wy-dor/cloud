@@ -1,7 +1,6 @@
 package com.learning.cloud.bizData.dao;
 
 import com.learning.cloud.bizData.entity.SyncBizData;
-import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,7 @@ public interface SyncBizDataDao {
 
     List<SyncBizData> getBizData(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
 
-    SyncBizData getForSuiteTicket(String corpId);
+    SyncBizData getForSuiteTicket();
 
     List<SyncBizData> getAllBizData();
 

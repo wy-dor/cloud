@@ -1,8 +1,6 @@
 package com.learning.schedule;
 
 import com.alibaba.fastjson.JSON;
-import com.dingtalk.api.response.OapiRoleListResponse;
-import com.dingtalk.api.response.OapiRoleSimplelistResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
@@ -33,12 +31,9 @@ import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.bizData.dao.SyncBizDataDao;
-import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
-import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
-import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -374,7 +369,7 @@ public class MultiThreadScheduleTask {
                     }
 
                     //更新授权应用表
-                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket(corpId);
+                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
                     if(forSuiteTicket != null){
                         Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                         String suiteTicket = parse.get("suiteTicket");

@@ -2,6 +2,7 @@ package com.learning.cloud.supervision.controller;
 
 import com.learning.cloud.supervision.entity.Supervision;
 import com.learning.cloud.supervision.service.SupervisionService;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,5 +70,10 @@ public class SupervisionController {
     @GetMapping("/getToppingSupervision")
     public JsonResult getToppingSupervision(Integer bureauId){
         return supervisionService.getToppingSupervision(bureauId);
+    }
+
+    @PostMapping("/setSupervisor")
+    public JsonResult setSupervisor(User user){
+        return supervisionService.setSupervisor(user);
     }
 }

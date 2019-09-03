@@ -28,8 +28,8 @@ public class InnerAppController {
         String userId = innerAppService.getUserId(accessToken,authCode);
         map.put("userId",userId);
         //todo
-        //userId是否会出现对应多个schoolId的情况
-        //若出现如何处理数据
+        //        //userId是否会出现对应多个schoolId的情况
+        //        //若出现如何处理数据
         User user = userDao.getByUserId(userId);
         if(user != null){
             schoolId = user.getSchoolId();

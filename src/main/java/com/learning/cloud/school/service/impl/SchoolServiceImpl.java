@@ -4,6 +4,7 @@ import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
 import com.learning.domain.JsonResult;
+import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public List<School> getBySchool(School school) {
-        return schoolDao.getBySchool(school);
+    public JsonResult getBySchool(School school) {
+        List<School> schoolList = schoolDao.getBySchool(school);
+        return JsonResultUtil.success(new PageEntity<>(schoolList));
     }
 
     @Override

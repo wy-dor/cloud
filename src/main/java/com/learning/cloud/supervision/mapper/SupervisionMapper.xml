@@ -35,12 +35,18 @@
     select *
     from supervision
     where bureau_id = #{bureauId}
+    <if test="typeId != null">
+    and type_id = #{typeId}
+    </if>
     and status &lt;&gt; 0 and school_id is not null
     union all
     select *
     from supervision
     where bureau_id = #{bureauId}
-      and school_id is null
+    <if test="typeId != null">
+        and type_id = #{typeId}
+    </if>
+    and school_id is null
     order by upload_time desc
   </select>
 

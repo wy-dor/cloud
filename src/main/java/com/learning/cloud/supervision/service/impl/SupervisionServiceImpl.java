@@ -4,6 +4,8 @@ import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.supervision.dao.SupervisionDao;
 import com.learning.cloud.supervision.entity.Supervision;
 import com.learning.cloud.supervision.service.SupervisionService;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
@@ -22,6 +24,9 @@ public class SupervisionServiceImpl implements SupervisionService {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private UserDao userDao;
 
     //状态 0:未提交，1:审核中，2:已驳回，3:已发布，4:已撤销
     @Override
@@ -124,5 +129,11 @@ public class SupervisionServiceImpl implements SupervisionService {
     public JsonResult getToppingSupervision(Integer bureauId) {
         Supervision supervision = supervisionDao.getToppingSupervision(bureauId);
         return JsonResultUtil.success(supervision);
+    }
+
+    @Override
+    public JsonResult setSupervisor(User user) {
+        int i = userDao.updateToBeSupervisor(user);
+        return JsonResultUtil.success("成功设置" + i +"个督学");
     }
 }

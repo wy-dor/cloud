@@ -120,4 +120,11 @@
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
   </update>
+
+  <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">
+    update user
+    set supervisor = 1
+    where user_id = #{userId}
+    and schoolId = #{schoolId}
+  </update>
 </mapper>
