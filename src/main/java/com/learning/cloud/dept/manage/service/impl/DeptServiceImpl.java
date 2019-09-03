@@ -177,12 +177,12 @@ public class DeptServiceImpl implements DeptService {
                 User user = new User();
                 user.setUnionId(unionId);
                 user.setSchoolId(schoolId);
-                user.setRoleType(1);
                 User byUnionId = userDao.getBySchoolRoleIdentity(user);
                 if(byUnionId == null){
                     user.setUserId(userId);
                     user.setUserName(userDetailResp.getName());
                     user.setAvatar(userDetailResp.getAvatar());
+                    user.setCorpId(corpId);
                     if(userDetailResp.getActive()){
                         user.setActive((short)1);
                     }else{
@@ -266,23 +266,26 @@ public class DeptServiceImpl implements DeptService {
                     unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
-                    User u1 = userDao.getByUnionId(unionId);
-                    if(u1 == null){
-                        u.setUserName(userName);
-                        u.setUserId(userId);
-                        u.setRoleType(roleType);
-                        u.setSchoolId(schoolId);
-                        u.setCampusId(campusId);
-                        u.setAvatar(userDetail.getAvatar());
-                        Boolean active = userDetail.getActive();
-                        if(active != null){
-                            if(active){
-                                u.setActive((short)1);
-                            }else{
-                                u.setActive((short)0);
-                            }
+                    u.setRoleType(roleType);
+                    u.setSchoolId(schoolId);
+                    User u1 = userDao.getBySchoolRoleIdentity(u);
+                    u.setUserName(userName);
+                    u.setUserId(userId);
+                    u.setCampusId(campusId);
+                    u.setCorpId(corpId);
+                    u.setAvatar(userDetail.getAvatar());
+                    Boolean active = userDetail.getActive();
+                    if(active != null){
+                        if(active){
+                            u.setActive((short)1);
+                        }else{
+                            u.setActive((short)0);
                         }
+                    }
+                    if(u1 == null){
                         userDao.insert(u);
+                    }else{
+                        userDao.update(u);
                     }
                 }
             }else if(userRole.equals("家长")){
@@ -308,13 +311,14 @@ public class DeptServiceImpl implements DeptService {
                     unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
-                    User u1 = userDao.getByUnionId(unionId);
+                    u.setRoleType(roleType);
+                    u.setSchoolId(schoolId);
+                    User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
                         u.setUserName(userName);
                         u.setUserId(userId);
-                        u.setRoleType(roleType);
-                        u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
+                        u.setCorpId(corpId);
                         u.setAvatar(userDetail.getAvatar());
                         Boolean active = userDetail.getActive();
                         if(active != null){
@@ -325,6 +329,9 @@ public class DeptServiceImpl implements DeptService {
                             }
                         }
                         userDao.insert(u);
+                    }else{
+                        u1.setCorpId(corpId);
+                        userDao.update(u1);
                     }
                 }
             }else if(userRole.equals("学生")){
@@ -357,6 +364,7 @@ public class DeptServiceImpl implements DeptService {
                         u.setRoleType(roleType);
                         u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
+                        u.setCorpId(corpId);
                         u.setAvatar(userDetail.getAvatar());
                         Boolean active = userDetail.getActive();
                         if(active != null){
@@ -367,6 +375,9 @@ public class DeptServiceImpl implements DeptService {
                             }
                         }
                         userDao.insert(u);
+                    }else{
+                        u1.setCorpId(corpId);
+                        userDao.update(u1);
                     }
                 }
             }

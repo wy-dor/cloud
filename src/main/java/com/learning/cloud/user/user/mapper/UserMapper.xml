@@ -28,7 +28,14 @@
         user_id = #{userId}
       </otherwise>
     </choose>
-    and school_id = #{schoolId}
+    <choose>
+      <when test="schoolId != null">
+        and school_id = #{schoolId}
+      </when>
+      <otherwise>
+        and school_id is null
+      </otherwise>
+    </choose>
     <if test="roleType != null">
         and role_type = #{roleType}
     </if>
@@ -64,6 +71,9 @@
       <if test="active != null">
         active,
       </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -93,6 +103,9 @@
       <if test="active != null">
         #{active,jdbcType=SMALLINT},
       </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 
@@ -105,20 +118,28 @@
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
       <if test="campusId != null">
         campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="roleType != null">
-        role_type = #{roleType,jdbcType=INTEGER},
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=INTEGER},
       </if>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
+    <choose>
+      <when test="schoolId != null">
+        and school_id = #{schoolId}
+      </when>
+      <otherwise>
+        and school_id is null
+      </otherwise>
+    </choose>
+    <if test="roleType != null">
+      and role_type = #{roleType}
+    </if>
   </update>
 
   <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">

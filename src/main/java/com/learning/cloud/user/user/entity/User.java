@@ -35,6 +35,10 @@ public class User extends BaseEntity {
     @Setter
     private Integer supervisor;
 
+    @Getter
+    @Setter
+    private String corpId;
+
     public Long getId() {
         return id;
     }

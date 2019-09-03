@@ -77,7 +77,6 @@ public class SupervisionServiceImpl implements SupervisionService {
     //获取所有已发布新闻
     @Override
     public JsonResult getAllValidSupervision(Supervision supervision) {
-        supervision.setBureauId(supervision.getBureauId());
         List<Supervision> allValidSupervision = supervisionDao.getAllValidSupervision(supervision);
         return JsonResultUtil.success(new PageEntity<>(allValidSupervision));
     }
