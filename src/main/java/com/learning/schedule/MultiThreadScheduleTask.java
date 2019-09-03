@@ -42,7 +42,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -308,30 +307,6 @@ public class MultiThreadScheduleTask {
                         System.out.println("保存授权企业信息成功");
                     }
 
-                    //保存应用信息
-                    Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
-                    List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
-                    //用于更新管理员表
-                    List<String> adminList = new ArrayList<>();
-                    for (Map<String, Object> a : agent) {
-                        CorpAgent ca = new CorpAgent();
-                        ca.setAgentId(((Integer)a.get("agentid")).toString());
-                        ca.setCorpId(corpId);
-                        ca.setAgentName((String)a.get("agent_name"));
-                        ca.setAppId(((Integer)a.get("appid")).toString());
-                        ca.setLogoUrl((String)a.get("logo_url"));
-                        ca.setUpdateTime(new Date());
-                        CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
-                        if(byCorpId == null){
-                            corpAgentDao.insert(ca);
-                        }else{
-                            corpAgentDao.update(ca);
-                        }
-                        System.out.println("保存应用信息成功！");
-                        //管理员列表信息
-                        adminList = (List<String>) a.get("admin_list");
-                    }
-
                     //更新授权应用表
                     SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
                     if(forSuiteTicket != null){
@@ -353,45 +328,73 @@ public class MultiThreadScheduleTask {
                         syncBizDataDao.updateStatus(forSuiteTicket.getId());
                     }
 
-                    //更新管理员表
-                    for (String userId : adminList) {
-                        OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
-                        Administrator a1 = new Administrator();
-                        String username = userDetail.getName();
-                        String userid = userDetail.getUserid();
-                        a1.setName(username);
-                        a1.setUserId(userid);
-                        if(schoolId != null){
-                            a1.setSchoolId(schoolId);
+                    //保存应用信息
+                    Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
+                    List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
+                    for (Map<String, Object> a : agent) {
+                        CorpAgent ca = new CorpAgent();
+                        ca.setAgentId(((Integer)a.get("agentid")).toString());
+                        ca.setCorpId(corpId);
+                        ca.setAgentName((String)a.get("agent_name"));
+                        ca.setAppId(((Integer)a.get("appid")).toString());
+                        ca.setLogoUrl((String)a.get("logo_url"));
+                        ca.setUpdateTime(new Date());
+                        CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+                        if(byCorpId == null){
+                            corpAgentDao.insert(ca);
+                        }else{
+                            corpAgentDao.update(ca);
                         }
-                        Administrator byAdm = administratorDao.getByAdm(a1);
-                        if(byAdm == null){
-                            administratorDao.insert(a1);
-                            //更新user表数据
-                            String unionid = userDetail.getUnionid();
-                            User user = new User();
-                            user.setUnionId(unionid);
+                        System.out.println("保存应用信息成功！");
+                        List<String> adminList = (List<String>) a.get("admin_list");
+                        //更新管理员表
+                        for (String userId : adminList) {
+                            OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
+                            Administrator a1 = new Administrator();
+                            String username = userDetail.getName();
+                            String userid = userDetail.getUserid();
+                            a1.setName(username);
+                            a1.setUserId(userid);
                             if(schoolId != null){
-                                user.setSchoolId(schoolId);
+                                a1.setSchoolId(schoolId);
                             }
-                            user.setRoleType(1);
-                            User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                            if(byUnionId == null){
-                                user.setUserId(userid);
-                                user.setUserName(username);
-                                user.setAvatar(userDetail.getAvatar());
-                                Boolean active = userDetail.getActive();
-                                if(active != null){
-                                    if(active){
-                                        user.setActive((short)1);
-                                    }else{
-                                        user.setActive((short)0);
-                                    }
+                            Administrator byAdm = administratorDao.getByAdm(a1);
+                            if(byAdm == null){
+                                administratorDao.insert(a1);
+                                //更新user表数据
+                                String unionid = userDetail.getUnionid();
+                                User user = new User();
+                                user.setUnionId(unionid);
+                                if(schoolId != null){
+                                    user.setSchoolId(schoolId);
                                 }
-                                userDao.insert(user);
+                                user.setRoleType(1);
+                                User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                                if(byUnionId == null){
+                                    user.setUserId(userid);
+                                    user.setUserName(username);
+                                    user.setCorpId(corpId);
+                                    user.setAvatar(userDetail.getAvatar());
+                                    Boolean active = userDetail.getActive();
+                                    if(active != null){
+                                        if(active){
+                                            user.setActive((short)1);
+                                        }else{
+                                            user.setActive((short)0);
+                                        }
+                                    }
+                                    userDao.insert(user);
+                                }else{
+                                    byUnionId.setCorpId(corpId);
+                                    userDao.update(byUnionId);
+                                }
                             }
                         }
                     }
+
+
+
+
 
                     //保存授权用户信息
                     Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
