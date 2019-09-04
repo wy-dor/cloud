@@ -29,4 +29,6 @@ public interface SupervisionService {
     JsonResult getToppingSupervision(Integer bureauId);
 
     JsonResult setSupervisor(User user);
+
+    JsonResult getSupervisorIdentity(User user);
 }
