@@ -159,24 +159,24 @@ public class AuthenServiceImpl implements AuthenService {
                         if(byAdm == null){
                             administratorDao.insert(a);
                             //更新user数据
-                            OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
-                            String unionid = userDetailResp.getUnionid();
-                            User user = new User();
-                            user.setUnionId(unionid);
-                            user.setSchoolId(schoolId);
-                            user.setRoleType(1);
-                            User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                            if(byUnionId == null){
-                                user.setUserId(userid);
-                                user.setUserName(username);
-                                user.setAvatar(userDetailResp.getAvatar());
-                                if(userDetailResp.getActive()){
-                                    user.setActive((short)1);
-                                }else{
-                                    user.setActive((short)0);
-                                }
-                                userDao.insert(user);
+                        }
+                        OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
+                        String unionid = userDetailResp.getUnionid();
+                        User user = new User();
+                        user.setUnionId(unionid);
+                        user.setSchoolId(schoolId);
+                        user.setRoleType(1);
+                        User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                        if(byUnionId == null){
+                            user.setUserId(userid);
+                            user.setUserName(username);
+                            user.setAvatar(userDetailResp.getAvatar());
+                            if(userDetailResp.getActive()){
+                                user.setActive((short)1);
+                            }else{
+                                user.setActive((short)0);
                             }
+                            userDao.insert(user);
                         }
                     }
                 }
