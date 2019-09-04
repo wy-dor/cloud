@@ -4,14 +4,13 @@ import com.learning.cloud.courseWare.entity.CourseWare;
 import com.learning.cloud.courseWare.service.CourseWareService;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
-import com.learning.exception.PayException;
+import com.learning.exception.MyException;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -58,7 +57,7 @@ public class CourseWareController {
                 file.delete();
             }
         }catch (Exception e){
-            throw new PayException(JsonResultEnum.FILE_DOWNLOAD_ERROR);
+            throw new MyException(JsonResultEnum.FILE_DOWNLOAD_ERROR);
         }finally {
             if(out!=null){
                 out.close();

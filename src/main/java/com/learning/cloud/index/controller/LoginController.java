@@ -1,28 +1,27 @@
 package com.learning.cloud.index.controller;
 
-import com.dingtalk.api.DefaultDingTalkClient;
-import com.dingtalk.api.DingTalkClient;
-import com.dingtalk.api.request.OapiSnsGetuserinfoBycodeRequest;
-import com.dingtalk.api.request.OapiSsoGettokenRequest;
-import com.dingtalk.api.request.OapiSsoGetuserinfoRequest;
-import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
-import com.dingtalk.api.response.OapiSsoGettokenResponse;
-import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
+import com.dingtalk.api.response.OapiUserGetResponse;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
-import com.learning.cloud.bureau.service.BureauService;
+import com.learning.cloud.index.entity.SysUserInfo;
+import com.learning.cloud.index.entity.UserInfo;
 import com.learning.cloud.school.dao.SchoolDao;
-import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
-import com.learning.exception.PayException;
+import com.learning.exception.MyException;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.learning.cloud.dingCommon.DingUtils.*;
 
 /**
  * 免登
@@ -36,68 +35,98 @@ public class LoginController {
     @Autowired
     private BureauDao bureauDao;
 
-    //应用管理后台免登
-    @GetMapping("/oaLogin")
-    public JsonResult oaLogin(String code)throws Exception{
-        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sso/gettoken");
-        OapiSsoGettokenRequest request = new OapiSsoGettokenRequest();
-        request.setCorpid("dingc5fa8a42960b8d6d35c2f4657eb6378f");
-        request.setCorpsecret("alPGrVK4bsLEJFS2CxAHHD7Th9HlVvhhCfcbTVIdibFMRmaJ8dpcjGuRC6Olah4R");
-        request.setHttpMethod("GET");
-        OapiSsoGettokenResponse response = client.execute(request);
-        if(response.isSuccess()){
-            String accessToken = response.getAccessToken();
-            JsonResult jsonResult = getAdministrator(code, accessToken);
-            return JsonResultUtil.success(jsonResult);
-        }else {
-            return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_ERROR);
-        }
+    @Autowired
+    private UserDao userDao;
+
+    /**
+     * 应用管理后台免登
+     * 1.配置微应用后台地址
+     * 2.获取免登过程中密钥（SSOSecret）
+     * 3.1获取免登授权码
+     *
+     */
+    @PostMapping("/oaLogin")
+    public JsonResult oaLogin(@RequestParam(value="code",required = true) String code)throws Exception{
+        return getAdministrator(code);
     }
 
-    private JsonResult getAdministrator(String code, String accessToken) throws Exception{
-        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sso/getuserinfo");
-        OapiSsoGetuserinfoRequest request = new OapiSsoGetuserinfoRequest();
-        request.setCode(code);
-        request.setHttpMethod("GET");
-        OapiSsoGetuserinfoResponse response = client.execute(request,accessToken);
-        if(response.isSuccess()){
-            if(response.getIsSys()){
-                String corp_id = response.getCorpInfo().getCorpid();
-                School byCorpId = schoolDao.getSchoolByCorpId(corp_id);
-                Map<String, Object> result = new HashMap<>();
-                Integer bureauId;
-                if(byCorpId == null){
-                    Bureau bureau = bureauDao.getByCorpId(corp_id);
-                    bureauId = bureau.getId();
-                    result.put("isSchool",false);
-                    result.put("body",response.getBody());
-                }else {
-                    bureauId = byCorpId.getBureauId();
-                    result.put("isSchool",true);
-                    result.put("body",response.getBody());
-                }
-                result.put("bureauId",bureauId);
-                return JsonResultUtil.success(result);
-            }else {
-                return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_NOT_SYS);
+    /**
+     * 小程序免登
+     * 1.前端获取免登授权码authCode（授权码，有效期5分钟，且只能使用一次）
+     * userid
+     */
+    @PostMapping("/miniThirdPartyLogin")
+    public JsonResult miniThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode, @RequestParam(value="corpid",required = true) String corpid) throws Exception{
+        return getUserInfo(authCode, corpid);
+    }
+
+    /**
+     * 扫码登录第三方网站
+     * 1.获取appId及appSecret
+     * 2.构造扫码登录页面
+     * 3.服务端通过临时授权码获取授权用户的个人信息
+     * openid
+     */
+    @PostMapping("/scanCodeThirdPartyLogin")
+    public JsonResult scanCodeThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode) throws Exception{
+        return getUserInfoByCode(authCode);
+    }
+
+    /**
+     * 获取用户在当前系统的角色
+     */
+    @GetMapping("/getSysUserRole")
+    public JsonResult getSysUserRole(String userid, String unionid, String corpid)throws Exception{
+        // 返回值
+        UserInfo userInfo = new UserInfo();
+        List<User> users = new ArrayList<>();
+        // 扫码登录
+        if(corpid.isEmpty()&&!unionid.isEmpty()){
+            //unionid 取数据库数据
+            users = userDao.getByUnionId(unionid);
+            userid = users.get(0).getUserId();
+            corpid = users.get(0).getCorpId();
+        }
+        // 钉钉第三方登录
+        else if(!corpid.isEmpty()&&!userid.isEmpty()){
+            //参数正常
+        }
+        // 管理后台登录
+        else if(!corpid.isEmpty()&&!unionid.isEmpty()){
+            //获取userid
+            userid = getUseridByUnionid(unionid, corpid);
+        }
+        else {
+            throw new MyException(JsonResultEnum.NO_USER);
+        }
+        // 当用户处在多个组织时
+        List<SysUserInfo> sysUserInfos = new ArrayList<>();
+        for(int i=0;i<users.size();i++){
+            User user = users.get(i);
+            OapiUserGetResponse userGetResponse = getUserByUserid(userid, corpid);
+            if(i==0){
+                userInfo.setAvatar(userGetResponse.getAvatar());
+                userInfo.setName(userGetResponse.getName());
+                userInfo.setUnionid(unionid);
+
             }
-        }else {
-            return JsonResultUtil.error(JsonResultEnum.OA_LOGIN_ERROR);
+            SysUserInfo sysUserInfo = new SysUserInfo();
+            sysUserInfo.setCropid(user.getCorpId());
+            sysUserInfo.setUserid(user.getUserId());
+            sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
+            sysUserInfo.setRole(user.getRoleType());
+            sysUserInfo.setId(user.getId());
+            if(user.getSchoolId()==-1){
+                // 获取教育局id
+                Bureau bureau = bureauDao.getByCorpId(corpid);
+                sysUserInfo.setBureauId(bureau.getId());
+            }else {
+                sysUserInfo.setSchoolId(user.getSchoolId());
+            }
+            sysUserInfos.add(sysUserInfo);
         }
+        userInfo.setSysUserInfos(sysUserInfos);
+        return JsonResultUtil.success(userInfo);
+
     }
-
-
-    @GetMapping("/getUserInfoByCode")
-    public JsonResult getUserInfoByCode(String code)throws Exception{
-        DefaultDingTalkClient  client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sns/getuserinfo_bycode");
-        OapiSnsGetuserinfoBycodeRequest req = new OapiSnsGetuserinfoBycodeRequest();
-        req.setTmpAuthCode(code);
-        OapiSnsGetuserinfoBycodeResponse response = client.execute(req,"dingoa751853q8xqbn9tlp","2R7Wpl7TXy0WR64osQXlPmosBbLVzTjM6e0nGKXcGO-NbMo4_EfWJg4i0EQ5BM-X");
-        if(response.isSuccess()){
-            return JsonResultUtil.success(response);
-        }else {
-            return JsonResultUtil.error(JsonResultEnum.THIRD_LOGIN_ERROR);
-        }
-    }
-
 }

@@ -27,6 +27,7 @@ public enum JsonResultEnum {
     FILE_UPLOAD_ERROR(1021,"文件上传失败！"),
     FILE_DOWNLOAD_ERROR(1022,"文件下载失败！"),
 
+    NO_USER(1035,"没有用户唯一标识，请检查登录方式"),
     OA_LOGIN_ERROR(1031,"OA免登出错"),
     OA_LOGIN_NOT_SYS(1032,"OA免登出错,不是管理员"),
     THIRD_LOGIN_ERROR(1033,"第三方登录出错"),
