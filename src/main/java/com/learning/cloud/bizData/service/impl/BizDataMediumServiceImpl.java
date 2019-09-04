@@ -1,13 +1,18 @@
 package com.learning.cloud.bizData.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.dingtalk.api.response.OapiDepartmentGetResponse;
 import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.dept.department.dao.DepartmentDao;
 import com.learning.cloud.dept.department.entity.Department;
+import com.learning.cloud.dept.manage.service.DeptService;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.admin.dao.AdministratorDao;
+import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
@@ -34,6 +39,15 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
 
     @Autowired
     private SchoolDao schoolDao;
+
+    @Autowired
+    private AdministratorDao administratorDao;
+
+    @Autowired
+    private DeptService deptService;
+
+    @Autowired
+    private AuthenService authenService;
 
     public JsonResult initBizDataMedium() throws Exception {
 
@@ -73,23 +87,35 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 Integer roleType = 0;
                 if(isAdmin){
                     roleType = 1;
+                    Administrator a = new Administrator();
+                    a.setName(userName);
+                    a.setUserId(userId);
+                    a.setSchoolId(schoolId);
+                    Administrator byAdm = administratorDao.getByAdm(a);
+                    if(byAdm == null){
+                        administratorDao.insert(a);
+                    }
                 }
                 //设置角色类型
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
-                for (Integer deptId : departmentList) {
-                    Department byDeptId = departmentDao.getByDeptId(deptId.toString());
-                    if(byDeptId != null){
-                        String deptName = byDeptId.getName();
-                        if(deptName.equals("老师")){
-                            roleType = 3;
-                        }else if(deptName.equals("学生")){
-                            roleType = 4;
-                        }else if(deptName.equals("家长")){
-                            roleType = 2;
-                        }
+                int size = departmentList.size();
+                Integer lastDeptId = departmentList.get(size - 1);
+                if(size == 1 && !isAdmin && (lastDeptId == 1)){
+                    roleType = 0;
+                }else{
+                    String accessToken = authenService.getAccessToken(corpId);
+                    OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
+                    String deptName = deptDetail.getName();
+                    if(deptName.equals("老师")){
+                        roleType = 3;
+                    }else if(deptName.equals("学生")){
+                        roleType = 4;
+                    }else if(deptName.equals("家长")){
+                        roleType = 2;
+                    }else{
+                        roleType = 5;
                     }
                 }
-                user.setRoleType(roleType);
                 user.setAvatar((String) bizDataParse.get("avatar"));
                 if((Boolean) bizDataParse.get("active")){
                     user.setActive((short)1);
@@ -98,8 +124,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
 
                 if(syncAction.equals("user_add_org")){
-                    List<User> userList = userDao.getByUnionId(unionId);
-                    if(userList == null || userList.size() == 0){
+                    User user1 = userDao.getBySchoolRoleIdentity(user);
+                    if(user1 == null){
+                        user.setRoleType(roleType);
                         userDao.insert(user);
                     }
                 }else{

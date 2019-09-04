@@ -393,9 +393,6 @@ public class MultiThreadScheduleTask {
                     }
 
 
-
-
-
                     //保存授权用户信息
                     Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
                     AuthUserInfo userInfo = new AuthUserInfo();
