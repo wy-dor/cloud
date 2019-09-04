@@ -1,9 +1,11 @@
 package com.learning.cloud.user.student.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 public class Student extends BaseEntity {
     private Integer id;
 
@@ -15,55 +17,10 @@ public class Student extends BaseEntity {
 
     private Integer campusId;
 
-    @Setter
-    @Getter
+    //后添加
     private Integer schoolId;
 
-    @Setter
-    @Getter
     private Integer bureauId;
 
-    @Getter
-    @Setter
     private String avatar;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName == null ? null : studentName.trim();
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
-    }
-
-    public Integer getClassId() {
-        return classId;
-    }
-
-    public void setClassId(Integer classId) {
-        this.classId = classId;
-    }
-
-    public Integer getCampusId() {
-        return campusId;
-    }
-
-    public void setCampusId(Integer campusId) {
-        this.campusId = campusId;
-    }
 }

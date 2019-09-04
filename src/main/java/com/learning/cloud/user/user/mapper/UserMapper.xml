@@ -5,7 +5,6 @@
     select *
     from user
     where union_id = #{unionId}
-    limit 1
   </select>
 
   <select id="getByUserId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">

@@ -1,9 +1,11 @@
 package com.learning.cloud.dept.campus.entity;
 
 import com.learning.domain.BaseEntity;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 public class Campus extends BaseEntity {
     private Integer id;
 
@@ -15,47 +17,6 @@ public class Campus extends BaseEntity {
 
     private Integer state;
 
-    @Getter
-    @Setter
+    //后添加
     private Long deptId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCampusName() {
-        return campusName;
-    }
-
-    public void setCampusName(String campusName) {
-        this.campusName = campusName == null ? null : campusName.trim();
-    }
-
-    public Integer getSchoolId() {
-        return schoolId;
-    }
-
-    public void setSchoolId(Integer schoolId) {
-        this.schoolId = schoolId;
-    }
-
-    public Integer getCampusType() {
-        return campusType;
-    }
-
-    public void setCampusType(Integer campusType) {
-        this.campusType = campusType;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
 }

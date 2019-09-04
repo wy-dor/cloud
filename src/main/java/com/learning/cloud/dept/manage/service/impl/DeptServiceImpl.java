@@ -357,12 +357,12 @@ public class DeptServiceImpl implements DeptService {
                     unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
-                    User u1 = userDao.getByUnionId(unionId);
+                    u.setSchoolId(schoolId);
+                    u.setRoleType(roleType);
+                    User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
                         u.setUserName(userName);
                         u.setUserId(userId);
-                        u.setRoleType(roleType);
-                        u.setSchoolId(schoolId);
                         u.setCampusId(campusId);
                         u.setCorpId(corpId);
                         u.setAvatar(userDetail.getAvatar());

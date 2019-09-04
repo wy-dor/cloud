@@ -98,8 +98,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
 
                 if(syncAction.equals("user_add_org")){
-                    User byUnionId = userDao.getByUnionId(unionId);
-                    if(byUnionId == null){
+                    List<User> userList = userDao.getByUnionId(unionId);
+                    if(userList == null || userList.size() == 0){
                         userDao.insert(user);
                     }
                 }else{
