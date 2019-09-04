@@ -20,13 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DingUtils {
 
-    private static String APP_ID = "dingoaepbjx8gzjpeygbsp";
-    private static String APP_SECRET = "htPSCWHI8KFvTKXc9ugPRALbcgiZ-jrlY7hGkJwgz3UoXPCJm7dhkKbiYrP7Dp7C";
     private static String CORP_ID = "dingc5fa8a42960b8d6d35c2f4657eb6378f";
     private static String CORP_SECRET = "alPGrVK4bsLEJFS2CxAHHD7Th9HlVvhhCfcbTVIdibFMRmaJ8dpcjGuRC6Olah4R";
-
-    private static String TAPP_ID = "dingoa751853q8xqbn9tlp";
-    private static String TAPP_SECRET = "2R7Wpl7TXy0WR64osQXlPmosBbLVzTjM6e0nGKXcGO-NbMo4_EfWJg4i0EQ5BM-X";
 
     private static AuthenService authenService;
 
@@ -76,11 +71,11 @@ public class DingUtils {
     }
 
     // 第三方扫码登录，用户授权的临时授权码code，获取用户信息openid
-    public static JsonResult getUserInfoByCode(String authCode)throws Exception{
+    public static JsonResult getUserInfoByCode(String authCode,String appId, String appSecret)throws Exception{
         DefaultDingTalkClient  client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sns/getuserinfo_bycode");
         OapiSnsGetuserinfoBycodeRequest req = new OapiSnsGetuserinfoBycodeRequest();
         req.setTmpAuthCode(authCode);
-        OapiSnsGetuserinfoBycodeResponse response = client.execute(req,TAPP_ID,TAPP_SECRET);
+        OapiSnsGetuserinfoBycodeResponse response = client.execute(req,appId,appSecret);
         return JsonResultUtil.success(response);
     }
 

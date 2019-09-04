@@ -68,8 +68,10 @@ public class LoginController {
      * openid
      */
     @PostMapping("/scanCodeThirdPartyLogin")
-    public JsonResult scanCodeThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode) throws Exception{
-        return getUserInfoByCode(authCode);
+    public JsonResult scanCodeThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode,
+                                              @RequestParam(value="appId",required = true) String appId,
+                                              @RequestParam(value="appSecret",required = true) String appSecret) throws Exception{
+        return getUserInfoByCode(authCode, appId, appSecret);
     }
 
     /**
