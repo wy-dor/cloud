@@ -12,6 +12,8 @@ import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @Author: yyt
  * @Date: 2019-09-03 11:02
@@ -23,14 +25,15 @@ public class DingUtils {
     private static String CORP_ID = "dingc5fa8a42960b8d6d35c2f4657eb6378f";
     private static String CORP_SECRET = "alPGrVK4bsLEJFS2CxAHHD7Th9HlVvhhCfcbTVIdibFMRmaJ8dpcjGuRC6Olah4R";
 
-    private static AuthenService authenService;
-
     @Autowired
-    public static void setAuthenService(AuthenService authenService) {
-        DingUtils.authenService = authenService;
+    private AuthenService service;
+
+    public static AuthenService authenService;
+
+    @PostConstruct
+    public void init(){
+        authenService = service;
     }
-
-    @Autowired
 
 
     // 获取用户所在企业的token
