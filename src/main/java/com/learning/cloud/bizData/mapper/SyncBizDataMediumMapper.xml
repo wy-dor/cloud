@@ -28,7 +28,7 @@
   </select>
 
   <update id="updateStatus" parameterType="java.lang.Long">
-    update ding_cloud_push.open_sync_biz_data
+    update ding_cloud_push.open_sync_biz_data_medium
     set status = 1
     where id = #{id}
   </update>

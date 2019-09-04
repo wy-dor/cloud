@@ -393,9 +393,6 @@ public class MultiThreadScheduleTask {
                     }
 
 
-
-
-
                     //保存授权用户信息
                     Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
                     AuthUserInfo userInfo = new AuthUserInfo();
@@ -460,7 +457,7 @@ public class MultiThreadScheduleTask {
     }
 
     @Async
-    @Scheduled(cron = "0 0 6,18 * * ?")//每天的早上六点和下午六点
+    @Scheduled(cron = "0 0 6,12,18 * * ?")//每天的早上六点，中午十二点和下午六点
     public void queryBizDataMedium() throws Exception{
         bizDataMediumService.initBizDataMedium();
     }
