@@ -11,6 +11,7 @@ import lombok.Data;
 public class SysUserInfo {
     private String userid;
     private String cropid;
+    private String cropName;
     private boolean isAdmin;
     private Integer role;
     private Integer schoolId;
