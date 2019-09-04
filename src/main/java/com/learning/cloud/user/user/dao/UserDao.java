@@ -19,5 +19,5 @@ public interface UserDao {
 
     User getBySchoolRoleIdentity(User user);
 
-    int updateToBeSupervisor(User user);
+    int updateSupervisor(User user);
 }

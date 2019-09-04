@@ -361,33 +361,33 @@ public class MultiThreadScheduleTask {
                             Administrator byAdm = administratorDao.getByAdm(a1);
                             if(byAdm == null){
                                 administratorDao.insert(a1);
-                                //更新user表数据
-                                String unionid = userDetail.getUnionid();
-                                User user = new User();
-                                user.setUnionId(unionid);
-                                if(schoolId != null){
-                                    user.setSchoolId(schoolId);
-                                }
-                                user.setRoleType(1);
-                                User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                                if(byUnionId == null){
-                                    user.setUserId(userid);
-                                    user.setUserName(username);
-                                    user.setCorpId(corpId);
-                                    user.setAvatar(userDetail.getAvatar());
-                                    Boolean active = userDetail.getActive();
-                                    if(active != null){
-                                        if(active){
-                                            user.setActive((short)1);
-                                        }else{
-                                            user.setActive((short)0);
-                                        }
+                            }
+                            //更新user表数据
+                            String unionid = userDetail.getUnionid();
+                            User user = new User();
+                            user.setUnionId(unionid);
+                            if(schoolId != null){
+                                user.setSchoolId(schoolId);
+                            }
+                            user.setRoleType(1);
+                            User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
+                            if(bySchoolRoleIdentity == null){
+                                user.setUserId(userid);
+                                user.setUserName(username);
+                                user.setCorpId(corpId);
+                                user.setAvatar(userDetail.getAvatar());
+                                Boolean active = userDetail.getActive();
+                                if(active != null){
+                                    if(active){
+                                        user.setActive((short)1);
+                                    }else{
+                                        user.setActive((short)0);
                                     }
-                                    userDao.insert(user);
-                                }else{
-                                    byUnionId.setCorpId(corpId);
-                                    userDao.update(byUnionId);
                                 }
+                                userDao.insert(user);
+                            }else{
+                                bySchoolRoleIdentity.setCorpId(corpId);
+                                userDao.update(bySchoolRoleIdentity);
                             }
                         }
                     }

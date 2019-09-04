@@ -132,7 +132,15 @@ public class SupervisionServiceImpl implements SupervisionService {
 
     @Override
     public JsonResult setSupervisor(User user) {
-        int i = userDao.updateToBeSupervisor(user);
+        int i = userDao.updateSupervisor(user);
         return JsonResultUtil.success("成功设置" + i +"个督学");
     }
+
+    @Override
+    public JsonResult getSupervisorIdentity(User user) {
+        User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
+        return JsonResultUtil.success(bySchoolRoleIdentity);
+    }
+
+
 }

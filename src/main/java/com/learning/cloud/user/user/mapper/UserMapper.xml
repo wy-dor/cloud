@@ -143,7 +143,7 @@
 
   <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">
     update user
-    set supervisor = 1
+    set supervisor = #{supervisor}
     where user_id = #{userId}
     and schoolId = #{schoolId}
   </update>

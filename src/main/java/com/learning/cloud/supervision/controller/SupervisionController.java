@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class SupervisionController {
+
     @Autowired
     private SupervisionService supervisionService;
 
@@ -75,5 +76,10 @@ public class SupervisionController {
     @PostMapping("/setSupervisor")
     public JsonResult setSupervisor(User user){
         return supervisionService.setSupervisor(user);
+    }
+
+    @PostMapping("/getSupervisorIdentity")
+    public JsonResult getSupervisorIdentity(User user){
+        return supervisionService.getSupervisorIdentity(user);
     }
 }
