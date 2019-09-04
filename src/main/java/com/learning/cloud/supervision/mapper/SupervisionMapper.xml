@@ -51,7 +51,7 @@
   </select>
 
     <select id="getAllValidSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-        select *
+        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
         from supervision
         where bureau_id = #{bureauId}
         and status = 3
