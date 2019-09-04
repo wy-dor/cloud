@@ -6,6 +6,7 @@ import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.index.entity.SysUserInfo;
 import com.learning.cloud.index.entity.UserInfo;
 import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
@@ -68,8 +69,10 @@ public class LoginController {
      * openid
      */
     @PostMapping("/scanCodeThirdPartyLogin")
-    public JsonResult scanCodeThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode) throws Exception{
-        return getUserInfoByCode(authCode);
+    public JsonResult scanCodeThirdPartyLogin(@RequestParam(value="authCode",required = true) String authCode,
+                                              @RequestParam(value="appId",required = true) String appId,
+                                              @RequestParam(value="appSecret",required = true) String appSecret) throws Exception{
+        return getUserInfoByCode(authCode, appId, appSecret);
     }
 
     /**
@@ -108,7 +111,6 @@ public class LoginController {
                 userInfo.setAvatar(userGetResponse.getAvatar());
                 userInfo.setName(userGetResponse.getName());
                 userInfo.setUnionid(unionid);
-
             }
             SysUserInfo sysUserInfo = new SysUserInfo();
             sysUserInfo.setCropid(user.getCorpId());
@@ -116,13 +118,18 @@ public class LoginController {
             sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
             sysUserInfo.setRole(user.getRoleType());
             sysUserInfo.setId(user.getId());
+            String cropName = "";
             if(user.getSchoolId()==-1){
                 // 获取教育局id
                 Bureau bureau = bureauDao.getByCorpId(corpid);
                 sysUserInfo.setBureauId(bureau.getId());
+                cropName = bureau.getBureauName();
             }else {
+                School school = schoolDao.getSchoolByCorpId(corpid);
+                cropName = school.getSchoolName();
                 sysUserInfo.setSchoolId(user.getSchoolId());
             }
+            sysUserInfo.setCropName(cropName);
             sysUserInfos.add(sysUserInfo);
         }
         userInfo.setSysUserInfos(sysUserInfos);
