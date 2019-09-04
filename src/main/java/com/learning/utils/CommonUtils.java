@@ -68,4 +68,20 @@ public class CommonUtils {
         }
         return result;
     }
+
+    /**
+     * 两个字符串List比较返回第一个字符串List的唯一值
+     */
+    public static List<String> removeStringDupsInList(List<String> l1, List<String> l2) {
+        List<String> l3 = new ArrayList<>();
+        OUTERMOST:
+        for (String e1 : l1) {
+            for (String e2 : l2) {
+                if (e1.equals(e2))
+                    continue OUTERMOST;
+            }
+            l3.add(e1);
+        }
+        return l3;
+    }
 }

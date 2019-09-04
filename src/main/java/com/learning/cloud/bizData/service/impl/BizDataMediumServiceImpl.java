@@ -106,7 +106,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     String accessToken = authenService.getAccessToken(corpId);
                     OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
                     String deptName = deptDetail.getName();
-                    if(deptName.equals("老师")){
+                    if(isAdmin){
+                        roleType = 1;
+                    }else if(deptName.equals("老师")){
                         roleType = 3;
                     }else if(deptName.equals("学生")){
                         roleType = 4;
@@ -127,6 +129,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     User user1 = userDao.getBySchoolRoleIdentity(user);
                     if(user1 == null){
                         user.setRoleType(roleType);
+                        user.setCorpId(corpId);
                         userDao.insert(user);
                     }
                 }else{

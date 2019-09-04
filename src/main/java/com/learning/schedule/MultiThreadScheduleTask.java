@@ -416,7 +416,7 @@ public class MultiThreadScheduleTask {
                 }
                 syncBizDataDao.updateStatus(id);
                 //授权后更新一次数据
-                bizDataMediumService.initBizDataMedium();
+//                bizDataMediumService.initBizDataMedium();
 
             }
         }
