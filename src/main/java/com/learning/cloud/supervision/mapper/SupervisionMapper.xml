@@ -9,7 +9,7 @@
   </select>
 
     <select id="getSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-        select *
+        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
         from supervision
         <where>
             <if test="schoolId != null">
@@ -32,7 +32,7 @@
     </select>
 
     <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select *
+    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
     from supervision
     where bureau_id = #{bureauId}
     <if test="typeId != null">
@@ -62,7 +62,7 @@
     </select>
 
     <select id="getToppingSupervision" parameterType="java.lang.Integer" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select *
+    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
     from supervision
     where bureau_id = #{bureauId}
     and topping = 1
