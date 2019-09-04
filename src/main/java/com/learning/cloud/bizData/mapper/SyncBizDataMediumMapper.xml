@@ -13,7 +13,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
 
-  <select id="getBizData" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+  <select id="getBizDataMedium" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data_medium
     WHERE subscribe_id = #{subscribeId}

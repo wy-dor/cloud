@@ -12,7 +12,7 @@ import java.util.List;
 public interface SyncBizDataMediumDao {
     int insert(SyncBizDataMedium record);
 
-    List<SyncBizDataMedium> getBizData(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
+    List<SyncBizDataMedium> getBizDataMedium(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
 
     List<SyncBizDataMedium> getAllBizDataMedium();
 
