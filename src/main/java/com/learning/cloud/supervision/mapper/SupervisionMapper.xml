@@ -40,7 +40,7 @@
     </if>
     and status &lt;&gt; 0 and school_id is not null
     union all
-    select *
+    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
     from supervision
     where bureau_id = #{bureauId}
     <if test="typeId != null">
