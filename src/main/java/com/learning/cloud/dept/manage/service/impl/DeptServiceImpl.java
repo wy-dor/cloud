@@ -177,12 +177,12 @@ public class DeptServiceImpl implements DeptService {
                 User user = new User();
                 user.setUnionId(unionId);
                 user.setSchoolId(schoolId);
+                user.setRoleType(5);
                 User byUnionId = userDao.getBySchoolRoleIdentity(user);
                 if(byUnionId == null){
                     user.setUserId(userId);
                     user.setUserName(userDetailResp.getName());
                     user.setAvatar(userDetailResp.getAvatar());
-                    user.setRoleType(5);
                     user.setCorpId(corpId);
                     if(userDetailResp.getActive()){
                         user.setActive((short)1);
@@ -268,9 +268,9 @@ public class DeptServiceImpl implements DeptService {
                     User u = new User();
                     u.setUnionId(unionId);
                     u.setSchoolId(schoolId);
+                    u.setRoleType(roleType);
                     User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
-                        u.setRoleType(roleType);
                         u.setUserName(userName);
                         u.setUserId(userId);
                         u.setCampusId(campusId);
@@ -288,7 +288,7 @@ public class DeptServiceImpl implements DeptService {
                     }else{
                         u1.setRoleType(roleType);
                         u1.setCorpId(corpId);
-                        userDao.update(u1);
+                        userDao.updateWithSpecificRole(u1);
                     }
                 }
             }else if(userRole.equals("家长")){
@@ -315,10 +315,10 @@ public class DeptServiceImpl implements DeptService {
                     User u = new User();
                     u.setUnionId(unionId);
                     u.setSchoolId(schoolId);
+                    u.setRoleType(roleType);
                     User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
                         u.setUserName(userName);
-                        u.setRoleType(roleType);
                         u.setUserId(userId);
                         u.setCampusId(campusId);
                         u.setCorpId(corpId);
@@ -335,7 +335,7 @@ public class DeptServiceImpl implements DeptService {
                     }else{
                         u1.setRoleType(roleType);
                         u1.setCorpId(corpId);
-                        userDao.update(u1);
+                        userDao.updateWithSpecificRole(u1);
                     }
                 }
             }else if(userRole.equals("学生")){

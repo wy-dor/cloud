@@ -38,6 +38,7 @@
     <if test="roleType != null">
         and role_type = #{roleType}
     </if>
+    limit 1
   </select>
 
   <select id="getUserByUserIdAndCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
@@ -145,6 +146,37 @@
         and school_id is null
       </otherwise>
     </choose>
+  </update>
+
+  <update id="updateWithSpecificRole" parameterType="com.learning.cloud.user.user.entity.User">
+    update user
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="campusId != null">
+        campus_id = #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=INTEGER},
+      </if>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where union_id = #{unionId,jdbcType=VARCHAR}
+    <choose>
+      <when test="schoolId != null">
+        and school_id = #{schoolId}
+      </when>
+      <otherwise>
+        and school_id is null
+      </otherwise>
+    </choose>
+    and role_type = #{roleType}
   </update>
 
   <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">

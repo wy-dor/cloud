@@ -127,19 +127,18 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     user.setActive((short)0);
                 }
 
+                user.setRoleType(roleType);
                 if(syncAction.equals("user_add_org")){
                     User user1 = userDao.getBySchoolRoleIdentity(user);
                     if(user1 == null){
-                        user.setRoleType(roleType);
                         user.setCorpId(corpId);
                         userDao.insert(user);
                     }
                 }else{
                     //todo
                     //角色修改所致结构变化
-                    user.setRoleType(roleType);
                     user.setCorpId(corpId);
-                    userDao.update(user);
+                    userDao.updateWithSpecificRole(user);
                 }
 
             }else if(bizType == 14){

@@ -254,7 +254,7 @@ public class MultiThreadScheduleTask {
                 Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
                 String syncAction = (String)parse_0.get("syncAction");
                 if("org_suite_auth".equals(syncAction)){
-                    Integer schoolId = null;
+                    Integer schoolId = -1;
                     String accessToken = "";
                     //更新授权企业表
                     Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
@@ -355,9 +355,7 @@ public class MultiThreadScheduleTask {
                             String userid = userDetail.getUserid();
                             a1.setName(username);
                             a1.setUserId(userid);
-                            if(schoolId != null){
-                                a1.setSchoolId(schoolId);
-                            }
+                            a1.setSchoolId(schoolId);
                             Administrator byAdm = administratorDao.getByAdm(a1);
                             if(byAdm == null){
                                 administratorDao.insert(a1);
@@ -366,9 +364,7 @@ public class MultiThreadScheduleTask {
                             String unionid = userDetail.getUnionid();
                             User user = new User();
                             user.setUnionId(unionid);
-                            if(schoolId != null){
-                                user.setSchoolId(schoolId);
-                            }
+                            user.setSchoolId(schoolId);
                             user.setRoleType(1);
                             User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
                             if(bySchoolRoleIdentity == null){
@@ -387,7 +383,7 @@ public class MultiThreadScheduleTask {
                                 userDao.insert(user);
                             }else{
                                 bySchoolRoleIdentity.setCorpId(corpId);
-                                userDao.update(bySchoolRoleIdentity);
+                                userDao.updateWithSpecificRole(bySchoolRoleIdentity);
                             }
                         }
                     }
@@ -410,7 +406,7 @@ public class MultiThreadScheduleTask {
                     }
 
                     //初始化一次班级数据
-                    if(schoolId != null){
+                    if(schoolId != -1){
                         deptService.init(schoolId);
                     }
                 }
