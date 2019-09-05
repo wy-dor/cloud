@@ -85,7 +85,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 user.setUnionId(unionId);
                 user.setUserName(userName);
                 user.setSchoolId(schoolId);
-                Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
+                Boolean isAdmin = false;
+                isAdmin = (Boolean) bizDataParse.get("isAdmin");
                 Integer roleType = 0;
                 if(isAdmin){
                     Administrator a = new Administrator();
@@ -93,11 +94,14 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     a.setUserId(userId);
                     a.setSchoolId(schoolId);
                     Administrator byAdm = administratorDao.getByAdm(a);
+                    //todo
                     if(byAdm == null){
                         administratorDao.insert(a);
                     }
                 }
                 //设置角色类型
+                //todo
+                //deptId范围
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
                 Integer lastDeptId = departmentList.get(size - 1);
@@ -153,7 +157,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 dept.setCorpId(corpId);
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
-                if((Boolean) bizDataParse.get("outerDept")){
+                Boolean outerDept = false;
+                outerDept = (Boolean) bizDataParse.get("outerDept");
+                if(outerDept){
                     dept.setOuterDept((short)1);
                 }else{
                     dept.setOuterDept((short)0);

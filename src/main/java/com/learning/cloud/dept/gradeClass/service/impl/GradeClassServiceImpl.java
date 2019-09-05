@@ -45,7 +45,9 @@ public class GradeClassServiceImpl implements GradeClassService {
         String[] idList = classIds.split(",");
         for (String idStr : idList) {
             GradeClass byId = gradeClassDao.getById(Integer.parseInt(idStr));
-            classList.add(byId);
+            if(byId != null){
+                classList.add(byId);
+            }
         }
         return ServiceResult.success(new PageEntity<>(classList));
     }
