@@ -19,9 +19,11 @@ public class Constant {
 
     public static final String SUITE_KEY="suitets3egysydvw6xhns";
 
+    public static final String SUITE_KEY_1="suiterqkbrudxk2jqayay";
+
     public static final String SUITE_SECRET="hZ1Qn3Sq0-ug2ySUXWdf_kjlODNVysS1CoRuDOFhpEzmx5ueGbOPl3Bg9e9w2Mod";
 
-//    public static final String ENCODING_AES_KEY = "hk98aa59ej5t880vll61gw9n3gzkm8ua1fbzq0v0czb";
+    public static final String ENCODING_AES_KEY = "hk98aa59ej5t880vll61gw9n3gzkm8ua1fbzq0v0czb";
 
-//    public static final String TOKEN = "ddedu";
+    public static final String TOKEN = "ddedu";
 }
