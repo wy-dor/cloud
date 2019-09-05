@@ -100,7 +100,7 @@
         #{campusId,jdbcType=INTEGER},
       </if>
       <if test="roleType != null">
-        #{roleType,jdbcType=INTEGER},
+        #{roleType,jdbcType=SMALLINT},
       </if>
       <if test="avatar != null">
         #{avatar,jdbcType=INTEGER},
@@ -133,7 +133,7 @@
         corp_id = #{corpId,jdbcType=VARCHAR},
       </if>
       <if test="roleType != null">
-        and role_type = #{roleType}
+        role_type = #{roleType,jdbcType=SMALLINT}
       </if>
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
