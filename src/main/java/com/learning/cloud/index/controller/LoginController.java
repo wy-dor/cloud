@@ -84,7 +84,7 @@ public class LoginController {
         UserInfo userInfo = new UserInfo();
         List<User> users = new ArrayList<>();
         // 扫码登录
-        if(corpid.isEmpty()&&!unionid.isEmpty()){
+        if((corpid==null||corpid.isEmpty())&&!unionid.isEmpty()){
             //unionid 取数据库数据
             users = userDao.getByUnionId(unionid);
             userid = users.get(0).getUserId();
