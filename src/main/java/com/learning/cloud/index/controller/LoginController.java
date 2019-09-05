@@ -90,9 +90,11 @@ public class LoginController {
             userid = users.get(0).getUserId();
             corpid = users.get(0).getCorpId();
         }
-        // 钉钉第三方登录
+        // 钉钉第三方登录,管理后台登录
         else if(!corpid.isEmpty()&&!userid.isEmpty()){
             //参数正常
+            User user = userDao.getUserByUserIdAndCropId(userid, corpid);
+            users.add(user);
         }
         // 管理后台登录
         else if(!corpid.isEmpty()&&!unionid.isEmpty()){

@@ -40,6 +40,12 @@
     </if>
   </select>
 
+  <select id="getUserByUserIdAndCropId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+    select * from user
+    where user_id = #{userId}
+    and crop_id = #{cropId}
+  </select>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
