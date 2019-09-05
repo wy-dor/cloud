@@ -119,7 +119,7 @@ public class LoginController {
             sysUserInfo.setRole(user.getRoleType());
             sysUserInfo.setId(user.getId());
             String cropName = "";
-            if(user.getSchoolId()==-1){
+            if(user.getSchoolId()==null||user.getSchoolId()==-1){
                 // 获取教育局id
                 Bureau bureau = bureauDao.getByCorpId(corpid);
                 sysUserInfo.setBureauId(bureau.getId());
