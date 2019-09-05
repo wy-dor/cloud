@@ -86,7 +86,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 user.setUserName(userName);
                 user.setSchoolId(schoolId);
                 Boolean isAdmin = false;
-                isAdmin = (Boolean) bizDataParse.get("isAdmin");
+                if(bizDataParse.get("isAdmin") != null){
+                    isAdmin = (Boolean) bizDataParse.get("isAdmin");
+                }
                 Integer roleType = 0;
                 if(isAdmin){
                     Administrator a = new Administrator();
@@ -158,7 +160,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
                 Boolean outerDept = false;
-                outerDept = (Boolean) bizDataParse.get("outerDept");
+                if(bizDataParse.get("outerDept") != null){
+                    outerDept = (Boolean) bizDataParse.get("outerDept");
+                }
                 if(outerDept){
                     dept.setOuterDept((short)1);
                 }else{
