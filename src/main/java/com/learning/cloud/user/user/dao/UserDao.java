@@ -22,5 +22,5 @@ public interface UserDao {
 
     int updateSupervisor(User user);
 
-    User getUserByUserIdAndCropId(@Param("userId") String userId, @Param("cropId") String cropId);
+    User getUserByUserIdAndCorpId(@Param("userId") String userId, @Param("corpId") String corpId);
 }
