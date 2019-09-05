@@ -135,6 +135,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }else{
                     //todo
                     //角色修改所致结构变化
+                    user.setRoleType(roleType);
+                    user.setCorpId(corpId);
                     userDao.update(user);
                 }
 
