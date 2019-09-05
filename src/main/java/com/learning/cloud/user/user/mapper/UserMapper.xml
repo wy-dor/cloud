@@ -132,6 +132,9 @@
       <if test="corpId != null">
         corp_id = #{corpId,jdbcType=VARCHAR},
       </if>
+      <if test="roleType != null">
+        and role_type = #{roleType}
+      </if>
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
     <choose>
@@ -142,9 +145,6 @@
         and school_id is null
       </otherwise>
     </choose>
-    <if test="roleType != null">
-      and role_type = #{roleType}
-    </if>
   </update>
 
   <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">
