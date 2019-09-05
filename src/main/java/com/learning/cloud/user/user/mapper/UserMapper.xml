@@ -40,7 +40,7 @@
     </if>
   </select>
 
-  <select id="getUserByUserIdAndCropId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+  <select id="getUserByUserIdAndCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
     select * from user
     where user_id = #{userId}
     and corp_id = #{corpId}
