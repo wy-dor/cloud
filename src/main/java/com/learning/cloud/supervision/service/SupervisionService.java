@@ -31,4 +31,6 @@ public interface SupervisionService {
     JsonResult setSupervisor(User user);
 
     JsonResult getSupervisorIdentity(User user);
+
+    JsonResult unsetToppingInSupervision(Long id);
 }

@@ -142,5 +142,14 @@ public class SupervisionServiceImpl implements SupervisionService {
         return JsonResultUtil.success(bySchoolRoleIdentity);
     }
 
+    @Override
+    public JsonResult unsetToppingInSupervision(Long id) {
+        Supervision supervision = new Supervision();
+        supervision.setId(id);
+        supervision.setTopping(0);
+        supervisionDao.update(supervision);
+        return JsonResultUtil.success("取消置顶成功");
+    }
+
 
 }

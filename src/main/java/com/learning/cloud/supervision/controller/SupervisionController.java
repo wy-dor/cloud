@@ -82,4 +82,10 @@ public class SupervisionController {
     public JsonResult getSupervisorIdentity(User user){
         return supervisionService.getSupervisorIdentity(user);
     }
+
+    //取消置顶
+    @GetMapping("/unsetToppingInSupervision")
+    public JsonResult unsetToppingInSupervision(Long id){
+        return supervisionService.unsetToppingInSupervision(id);
+    }
 }
