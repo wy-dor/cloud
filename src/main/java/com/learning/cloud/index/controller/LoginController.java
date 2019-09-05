@@ -90,9 +90,11 @@ public class LoginController {
             userid = users.get(0).getUserId();
             corpid = users.get(0).getCorpId();
         }
-        // 钉钉第三方登录
+        // 钉钉第三方登录,管理后台登录
         else if(!corpid.isEmpty()&&!userid.isEmpty()){
             //参数正常
+            User user = userDao.getUserByUserIdAndCorpId(userid, corpid);
+            users.add(user);
         }
         // 管理后台登录
         else if(!corpid.isEmpty()&&!unionid.isEmpty()){
@@ -119,7 +121,7 @@ public class LoginController {
             sysUserInfo.setRole(user.getRoleType());
             sysUserInfo.setId(user.getId());
             String cropName = "";
-            if(user.getSchoolId()==-1){
+            if(user.getSchoolId()==null||user.getSchoolId()==-1){
                 // 获取教育局id
                 Bureau bureau = bureauDao.getByCorpId(corpid);
                 sysUserInfo.setBureauId(bureau.getId());
