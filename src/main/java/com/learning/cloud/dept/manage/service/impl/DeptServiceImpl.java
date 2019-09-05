@@ -167,7 +167,7 @@ public class DeptServiceImpl implements DeptService {
                 campusDao.updateCampusType(schoolId);
             }
 
-            //添加没有身份的用户信息
+            //添加在部门里其他身份的用户信息
             OapiUserSimplelistResponse deptUserListResponse = getDeptUserList("1", accessToken);
             List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
             for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
@@ -267,26 +267,28 @@ public class DeptServiceImpl implements DeptService {
                     unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
-                    u.setRoleType(roleType);
                     u.setSchoolId(schoolId);
                     User u1 = userDao.getBySchoolRoleIdentity(u);
-                    u.setUserName(userName);
-                    u.setUserId(userId);
-                    u.setCampusId(campusId);
-                    u.setCorpId(corpId);
-                    u.setAvatar(userDetail.getAvatar());
-                    Boolean active = userDetail.getActive();
-                    if(active != null){
-                        if(active){
-                            u.setActive((short)1);
-                        }else{
-                            u.setActive((short)0);
-                        }
-                    }
                     if(u1 == null){
+                        u.setRoleType(roleType);
+                        u.setUserName(userName);
+                        u.setUserId(userId);
+                        u.setCampusId(campusId);
+                        u.setCorpId(corpId);
+                        u.setAvatar(userDetail.getAvatar());
+                        Boolean active = userDetail.getActive();
+                        if(active != null){
+                            if(active){
+                                u.setActive((short)1);
+                            }else{
+                                u.setActive((short)0);
+                            }
+                        }
                         userDao.insert(u);
                     }else{
-                        userDao.update(u);
+                        u1.setRoleType(roleType);
+                        u1.setCorpId(corpId);
+                        userDao.update(u1);
                     }
                 }
             }else if(userRole.equals("家长")){
@@ -312,11 +314,11 @@ public class DeptServiceImpl implements DeptService {
                     unionId = userDetail.getUnionid();
                     User u = new User();
                     u.setUnionId(unionId);
-                    u.setRoleType(roleType);
                     u.setSchoolId(schoolId);
                     User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
                         u.setUserName(userName);
+                        u.setRoleType(roleType);
                         u.setUserId(userId);
                         u.setCampusId(campusId);
                         u.setCorpId(corpId);
@@ -331,6 +333,7 @@ public class DeptServiceImpl implements DeptService {
                         }
                         userDao.insert(u);
                     }else{
+                        u1.setRoleType(roleType);
                         u1.setCorpId(corpId);
                         userDao.update(u1);
                     }
@@ -359,12 +362,12 @@ public class DeptServiceImpl implements DeptService {
                     User u = new User();
                     u.setUnionId(unionId);
                     u.setSchoolId(schoolId);
-                    u.setRoleType(roleType);
                     User u1 = userDao.getBySchoolRoleIdentity(u);
                     if(u1 == null){
                         u.setUserName(userName);
                         u.setUserId(userId);
                         u.setCampusId(campusId);
+                        u.setRoleType(roleType);
                         u.setCorpId(corpId);
                         u.setAvatar(userDetail.getAvatar());
                         Boolean active = userDetail.getActive();
@@ -377,6 +380,7 @@ public class DeptServiceImpl implements DeptService {
                         }
                         userDao.insert(u);
                     }else{
+                        u1.setRoleType(roleType);
                         u1.setCorpId(corpId);
                         userDao.update(u1);
                     }

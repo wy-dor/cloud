@@ -86,7 +86,6 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
                 Integer roleType = 0;
                 if(isAdmin){
-                    roleType = 1;
                     Administrator a = new Administrator();
                     a.setName(userName);
                     a.setUserId(userId);
@@ -100,7 +99,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
                 Integer lastDeptId = departmentList.get(size - 1);
-                if(size == 1 && !isAdmin && (lastDeptId == 1)){
+                if(!isAdmin && (lastDeptId == 1)){
                     roleType = 0;
                 }else{
                     String accessToken = authenService.getAccessToken(corpId);
@@ -119,6 +118,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     }
                 }
                 user.setAvatar((String) bizDataParse.get("avatar"));
+                user.setCorpId(corpId);
                 if((Boolean) bizDataParse.get("active")){
                     user.setActive((short)1);
                 }else{
