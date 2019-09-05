@@ -71,5 +71,11 @@ public class NewsController {
     public JsonResult getToppingNews(Integer bureauId){
         return newsService.getToppingNews(bureauId);
     }
+
+    //取消置顶
+    @GetMapping("/unsetToppingInNews")
+    public JsonResult unsetToppingInNews(Long id){
+        return newsService.unsetToppingInNews(id);
+    }
 }
 

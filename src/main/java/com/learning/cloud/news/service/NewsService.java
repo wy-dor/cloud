@@ -26,4 +26,6 @@ public interface NewsService {
     JsonResult getBureauNews(News news);
 
     JsonResult getToppingNews(Integer bureauId);
+
+    JsonResult unsetToppingInNews(Long id);
 }

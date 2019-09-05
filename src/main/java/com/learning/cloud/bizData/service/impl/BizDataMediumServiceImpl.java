@@ -57,6 +57,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         }
         for (SyncBizDataMedium syncBizDataMedium : allBizDataMedium) {
             Long id = syncBizDataMedium.getId();
+            //先标志已操作，不管任意类型
+            syncBizDataMediumDao.updateStatus(id);
             String corpId = syncBizDataMedium.getCorpId();
             Integer schoolId;
             School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
@@ -177,7 +179,6 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //企业同步
 
             }
-            syncBizDataMediumDao.updateStatus(id);
         }
         return JsonResultUtil.success();
     }

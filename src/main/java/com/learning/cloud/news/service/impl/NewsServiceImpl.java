@@ -138,4 +138,13 @@ public class NewsServiceImpl implements NewsService {
         News news = newsDao.getToppingNews(bureauId);
         return JsonResultUtil.success(news);
     }
+
+    @Override
+    public JsonResult unsetToppingInNews(Long id) {
+        News news = new News();
+        news.setId(id);
+        news.setTopping(0);
+        newsDao.update(news);
+        return JsonResultUtil.success("取消置顶成功");
+    }
 }
