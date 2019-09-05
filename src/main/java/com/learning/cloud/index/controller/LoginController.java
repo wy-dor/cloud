@@ -129,6 +129,7 @@ public class LoginController {
             }else {
                 School school = schoolDao.getSchoolByCorpId(corpid);
                 cropName = school.getSchoolName();
+                sysUserInfo.setBureauId(school.getBureauId());
                 sysUserInfo.setSchoolId(user.getSchoolId());
             }
             sysUserInfo.setCropName(cropName);
