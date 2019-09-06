@@ -141,10 +141,11 @@ public class DeptServiceImpl implements DeptService {
                                 }else{
                                     GradeClass gc = classList.get(0);
                                     classId = gc.getId();
-                                    classIdList2.add(classId);
                                     gradeClass.setId(classId);
                                     gradeClassDao.update(gradeClass);
                                 }
+                                classIdList2.add(classId);
+
                                 //删除班级记录同步
                                 List<Integer> classIdList3 = CommonUtils.removeArrayDups(classIdList1, classIdList2);
                                 if(classIdList3.size() > 0){
@@ -206,12 +207,12 @@ public class DeptServiceImpl implements DeptService {
         //教师表删除同步记录
         Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
         Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
-//        //学生表删除同步记录
-//        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
-//        List<Integer> studentIdList2 = new ArrayList<>();
-//        //家长表删除同步记录
-//        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
-//        List<Integer> parentIdList2 = new ArrayList<>();
+        //学生表删除同步记录
+        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
+        List<Integer> studentIdList2 = new ArrayList<>();
+        //家长表删除同步记录
+        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
+        List<Integer> parentIdList2 = new ArrayList<>();
         GradeClass byId = gradeClassDao.getById(classId);
         Integer schoolId = byId.getSchoolId();
         Integer bureauId = byId.getBureauId();
@@ -239,6 +240,8 @@ public class DeptServiceImpl implements DeptService {
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     userName = user.getName();
                     userId = user.getUserid();
+                    Integer teacherId = 0;
+                    String classIds = "";
                     roleType = 3;
                     String classIdStr = classId + "";
                     Teacher teacher = new Teacher();
@@ -249,11 +252,14 @@ public class DeptServiceImpl implements DeptService {
                     teacher.setBureauId(bureauId);
                     Teacher t = teacherDao.getTeacherInSchool(teacher);
                     if(t == null){
+                        classIds = classIdStr;
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
+                        teacherId = teacher.getId();
                     }else{
                         //判断老师所在班级是否存在
-                        String classIds = t.getClassIds();
+                        teacherId = t.getId();
+                        classIds = t.getClassIds();
                         String idsStr = "," + t.getClassIds() + ",";
                         if(!idsStr.contains("," + classIdStr + ",")){
                             StringBuilder sb = new StringBuilder(classIds);
@@ -261,8 +267,10 @@ public class DeptServiceImpl implements DeptService {
                             t.setClassIds(sb.toString());
                         }
                         teacherDao.update(t);
-                        teacherClassIdMap2.put(t.getId(),classIds);
                     }
+
+                    teacherClassIdMap2.put(teacherId,classIds);
+
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
                     User u = new User();
@@ -295,6 +303,7 @@ public class DeptServiceImpl implements DeptService {
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     userName = user.getName();
                     userId = user.getUserid();
+                    Integer parentId = 0;
                     roleType = 2;
                     Parent parent = new Parent();
                     parent.setUserId(userId);
@@ -306,10 +315,13 @@ public class DeptServiceImpl implements DeptService {
                     Parent p = parentDao.getParentInClass(parent);
                     if(p == null){
                         parentDao.insert(parent);
+                        parentId = parent.getId();
                     }else{
-//                        parentIdList2.add(p.getId());
+                        parentId = p.getId();
                         parentDao.update(parent);
                     }
+                    parentIdList2.add(parentId);
+
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
                     User u = new User();
@@ -342,6 +354,7 @@ public class DeptServiceImpl implements DeptService {
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     userName = user.getName();
                     userId = user.getUserid();
+                    Integer studentId = 0;
                     roleType = 4;
                     Student student = new Student();
                     student.setUserId(userId);
@@ -353,10 +366,13 @@ public class DeptServiceImpl implements DeptService {
                     Student s = studentDao.getByUserId(userId);
                     if(s == null){
                         studentDao.insert(student);
+                        studentId = student.getId();
                     }else{
-//                        studentIdList2.add(s.getId());
+                        studentId = s.getId();
                         studentDao.update(student);
                     }
+                    studentIdList2.add(studentId);
+
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
                     User u = new User();
@@ -387,20 +403,21 @@ public class DeptServiceImpl implements DeptService {
                 }
             }
         }
-//        //学生表删除数据同步
-//        if(studentIdList1 != null && studentIdList1.size() > 0){
-//            List<Integer> studentIdList = CommonUtils.removeArrayDups(studentIdList1, studentIdList2);
-//            for (Integer id : studentIdList) {
-//                studentDao.delete(id);
-//            }
-//        }
-//        //家长表删除数据同步
-//        if(parentIdList1 != null && parentIdList1.size() > 0){
-//            List<Integer> parentIdList = CommonUtils.removeArrayDups(parentIdList1, parentIdList2);
-//            for (Integer id : parentIdList) {
-//                parentDao.delete(id);
-//            }
-//        }
+        //学生表删除数据同步
+        if(studentIdList1 != null && studentIdList1.size() > 0){
+            List<Integer> studentIdList = CommonUtils.removeArrayDups(studentIdList1, studentIdList2);
+            for (Integer id : studentIdList) {
+                studentDao.delete(id);
+            }
+        }
+        //家长表删除数据同步
+        if(parentIdList1 != null && parentIdList1.size() > 0){
+            List<Integer> parentIdList = CommonUtils.removeArrayDups(parentIdList1, parentIdList2);
+            for (Integer id : parentIdList) {
+                parentDao.delete(id);
+            }
+        }
+
         //老师表删除数据同步
         if(teacherClassIdMap1 != null && teacherClassIdMap2.size() > 0){
             Set<Integer> strings1 = teacherClassIdMap1.keySet();
