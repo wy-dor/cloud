@@ -190,8 +190,8 @@ public class DeptServiceImpl implements DeptService {
             if(classIdList3 != null && classIdList3.size() > 0){
                 for (Integer cId : classIdList3) {
                     gradeClassDao.delete(cId);
-                    studentDao.deleteByClassId(cId);
-                    parentDao.deleteByClassId(cId);
+//                    studentDao.deleteByClassId(cId);
+//                    parentDao.deleteByClassId(cId);
                 }
             }
 
