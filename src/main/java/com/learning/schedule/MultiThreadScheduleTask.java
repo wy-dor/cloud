@@ -359,6 +359,8 @@ public class MultiThreadScheduleTask {
                             Administrator byAdm = administratorDao.getByAdm(a1);
                             if(byAdm == null){
                                 administratorDao.insert(a1);
+                            }else{
+                                administratorDao.updateName(a1);
                             }
                             //更新user表数据
                             String unionid = userDetail.getUnionid();
