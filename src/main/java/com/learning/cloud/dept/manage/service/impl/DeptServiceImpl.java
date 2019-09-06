@@ -146,16 +146,6 @@ public class DeptServiceImpl implements DeptService {
                                 }
                                 classIdList2.add(classId);
 
-                                //删除班级记录同步
-                                List<Integer> classIdList3 = CommonUtils.removeArrayDups(classIdList1, classIdList2);
-                                if(classIdList3.size() > 0){
-                                    for (Integer cId : classIdList3) {
-                                        gradeClassDao.delete(cId);
-                                        studentDao.deleteByClassId(cId);
-                                        parentDao.deleteByClassId(cId);
-                                    }
-                                }
-
                                 /*班级结构数据同步*/
                                 saveUserInClass(classId);
                             }
@@ -163,6 +153,7 @@ public class DeptServiceImpl implements DeptService {
                     }
                 }
             }
+
             /*多校区则更新对应标识*/
             if(i > 1){
                 campusDao.updateCampusType(schoolId);
@@ -191,6 +182,16 @@ public class DeptServiceImpl implements DeptService {
                         user.setActive((short)0);
                     }
                     userDao.insert(user);
+                }
+            }
+
+            //删除班级记录同步
+            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
+            if(classIdList3 != null && classIdList3.size() > 0){
+                for (Integer cId : classIdList3) {
+                    gradeClassDao.delete(cId);
+                    studentDao.deleteByClassId(cId);
+                    parentDao.deleteByClassId(cId);
                 }
             }
 
@@ -312,7 +313,7 @@ public class DeptServiceImpl implements DeptService {
                     parent.setCampusId(campusId);
                     parent.setSchoolId(schoolId);
                     parent.setBureauId(bureauId);
-                    Parent p = parentDao.getParentInClass(parent);
+                    Parent p = parentDao.getByUserId(userId);
                     if(p == null){
                         parentDao.insert(parent);
                         parentId = parent.getId();
@@ -405,14 +406,14 @@ public class DeptServiceImpl implements DeptService {
         }
         //学生表删除数据同步
         if(studentIdList1 != null && studentIdList1.size() > 0){
-            List<Integer> studentIdList = CommonUtils.removeArrayDups(studentIdList1, studentIdList2);
+            List<Integer> studentIdList = CommonUtils.removeIntegerDupsInList(studentIdList1, studentIdList2);
             for (Integer id : studentIdList) {
                 studentDao.delete(id);
             }
         }
         //家长表删除数据同步
         if(parentIdList1 != null && parentIdList1.size() > 0){
-            List<Integer> parentIdList = CommonUtils.removeArrayDups(parentIdList1, parentIdList2);
+            List<Integer> parentIdList = CommonUtils.removeIntegerDupsInList(parentIdList1, parentIdList2);
             for (Integer id : parentIdList) {
                 parentDao.delete(id);
             }

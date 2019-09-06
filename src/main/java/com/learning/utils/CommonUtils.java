@@ -7,7 +7,7 @@ public class CommonUtils {
     /**
      * 两个数组比较返回第一个数组的唯一值
      */
-    public static List<Integer> removeArrayDups(List<Integer> list1, List<Integer> list2) {
+    public static List<Integer> removeIntegerDupsInList(List<Integer> list1, List<Integer> list2) {
         List<Integer> list3 = new ArrayList<>();
         OUTERMOST:
         for (Integer e1 : list1) {

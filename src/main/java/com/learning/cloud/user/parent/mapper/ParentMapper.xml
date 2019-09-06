@@ -23,6 +23,7 @@
     from user_parent
     where user_id = #{userId}
     and class_id = #{classId}
+    limit 1
   </select>
 
   <select id="getParentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
