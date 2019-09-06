@@ -10,4 +10,6 @@ public interface AdministratorDao {
     int insert(Administrator record);
 
     Administrator getByAdm(Administrator administrator);
+
+    int updateName(Administrator administrator);
 }

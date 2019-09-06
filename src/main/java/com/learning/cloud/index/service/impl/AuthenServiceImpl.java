@@ -158,7 +158,8 @@ public class AuthenServiceImpl implements AuthenService {
                         Administrator byAdm = administratorDao.getByAdm(a);
                         if(byAdm == null){
                             administratorDao.insert(a);
-                            //更新user数据
+                        }else{
+                            administratorDao.updateName(a);
                         }
                         OapiUserGetResponse userDetailResp = deptService.getUserDetail(userid, corpId);
                         String unionid = userDetailResp.getUnionid();

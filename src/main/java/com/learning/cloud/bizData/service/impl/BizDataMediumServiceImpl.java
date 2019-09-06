@@ -99,6 +99,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     //todo
                     if(byAdm == null){
                         administratorDao.insert(a);
+                    }else{
+                        administratorDao.updateName(a);
                     }
                 }
                 //设置角色类型

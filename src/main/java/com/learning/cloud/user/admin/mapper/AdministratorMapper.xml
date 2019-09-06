@@ -53,4 +53,11 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateName" parameterType="com.learning.cloud.user.admin.entity.Administrator">
+    update administrator
+    set name = #{name}
+    where user_id = #{userId}
+    and school_id = #{schoolId}
+  </update>
 </mapper>
