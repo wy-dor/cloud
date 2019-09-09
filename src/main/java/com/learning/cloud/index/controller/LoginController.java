@@ -108,7 +108,7 @@ public class LoginController {
         List<SysUserInfo> sysUserInfos = new ArrayList<>();
         for(int i=0;i<users.size();i++){
             User user = users.get(i);
-            OapiUserGetResponse userGetResponse = getUserByUserid(userid, corpid);
+            OapiUserGetResponse userGetResponse = getUserByUserid(user.getUserId(), user.getCorpId());
             if(i==0){
                 userInfo.setAvatar(userGetResponse.getAvatar());
                 userInfo.setName(userGetResponse.getName());
@@ -123,11 +123,11 @@ public class LoginController {
             String cropName = "";
             if(user.getSchoolId()==null||user.getSchoolId()==-1){
                 // 获取教育局id
-                Bureau bureau = bureauDao.getByCorpId(corpid);
+                Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
                 sysUserInfo.setBureauId(bureau.getId());
                 cropName = bureau.getBureauName();
             }else {
-                School school = schoolDao.getSchoolByCorpId(corpid);
+                School school = schoolDao.getSchoolByCorpId(user.getCorpId());
                 cropName = school.getSchoolName();
                 sysUserInfo.setBureauId(school.getBureauId());
                 sysUserInfo.setSchoolId(user.getSchoolId());
