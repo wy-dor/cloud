@@ -83,32 +83,25 @@ public class LoginController {
         // 返回值
         UserInfo userInfo = new UserInfo();
         List<User> users = new ArrayList<>();
-        // 扫码登录
-        if((corpid==null||corpid.isEmpty())&&!unionid.isEmpty()){
-            //unionid 取数据库数据
-            users = userDao.getByUnionId(unionid);
-            userid = users.get(0).getUserId();
-            corpid = users.get(0).getCorpId();
-        }
-        // 钉钉第三方登录,管理后台登录
-        else if(!corpid.isEmpty()&&!userid.isEmpty()){
-            //参数正常
-            User user = userDao.getUserByUserIdAndCorpId(userid, corpid);
-            users.add(user);
-        }
-        // 管理后台登录
-        else if(!corpid.isEmpty()&&!unionid.isEmpty()){
-            //获取userid
-            userid = getUseridByUnionid(unionid, corpid);
-        }
-        else {
-            throw new MyException(JsonResultEnum.NO_USER);
+        // 第三方扫码
+        if(corpid==null||corpid.isEmpty()){
+            if(!unionid.isEmpty()){
+                users = userDao.getByUnionId(unionid);
+            }else {
+                throw new MyException(JsonResultEnum.NO_USER);
+            }
+        } else {
+            if(!userid.isEmpty()){
+                users = userDao.getUserByUserIdAndCorpId(userid, corpid);
+            }else {
+                throw new MyException(JsonResultEnum.NO_USER);
+            }
         }
         // 当用户处在多个组织时
         List<SysUserInfo> sysUserInfos = new ArrayList<>();
         for(int i=0;i<users.size();i++){
             User user = users.get(i);
-            OapiUserGetResponse userGetResponse = getUserByUserid(userid, corpid);
+            OapiUserGetResponse userGetResponse = getUserByUserid(user.getUserId(), user.getCorpId());
             if(i==0){
                 userInfo.setAvatar(userGetResponse.getAvatar());
                 userInfo.setName(userGetResponse.getName());
@@ -123,11 +116,11 @@ public class LoginController {
             String cropName = "";
             if(user.getSchoolId()==null||user.getSchoolId()==-1){
                 // 获取教育局id
-                Bureau bureau = bureauDao.getByCorpId(corpid);
+                Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
                 sysUserInfo.setBureauId(bureau.getId());
                 cropName = bureau.getBureauName();
             }else {
-                School school = schoolDao.getSchoolByCorpId(corpid);
+                School school = schoolDao.getSchoolByCorpId(user.getCorpId());
                 cropName = school.getSchoolName();
                 sysUserInfo.setBureauId(school.getBureauId());
                 sysUserInfo.setSchoolId(user.getSchoolId());
