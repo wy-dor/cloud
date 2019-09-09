@@ -1,5 +1,6 @@
 package com.learning.cloud.bizData.controller;
 
+import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ public class BizDataMediumController {
     private BizDataMediumService bizDataMediumService;
 
     @GetMapping("/initBizDataMedium")
-    public JsonResult initBizDataMedium(@RequestParam(value = "corpId",required = false) String corpId) throws Exception{
-        return bizDataMediumService.initBizDataMedium(corpId);
+    public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception{
+        return bizDataMediumService.initBizDataMedium(syncBizDataMedium);
     }
 
 }

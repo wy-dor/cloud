@@ -50,17 +50,14 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     private AuthenService authenService;
 
     @Override
-    public JsonResult initBizDataMedium(String corpId) throws Exception {
-
-        List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(corpId);
+    public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception {
+        List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(syncBizDataMedium);
         if(allBizDataMedium == null || allBizDataMedium.size() == 0){
             return null;
         }
-        for (SyncBizDataMedium syncBizDataMedium : allBizDataMedium) {
-            Long id = syncBizDataMedium.getId();
-            //先标志已操作，不管任意类型
-            syncBizDataMediumDao.updateStatus(id);
-            String corpId_1 = syncBizDataMedium.getCorpId();
+        for (SyncBizDataMedium sbdm : allBizDataMedium) {
+            Long id = sbdm.getId();
+            String corpId_1 = sbdm.getCorpId();
             Integer schoolId;
             School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId_1);
             if(schoolByCorpId == null){
@@ -68,8 +65,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             }else{
                 schoolId = schoolByCorpId.getId();
             }
-            Integer bizType = syncBizDataMedium.getBizType();
-            Map<String, Object> bizDataParse = (Map<String, Object>) JSON.parse(syncBizDataMedium.getBizData());
+            Integer bizType = sbdm.getBizType();
+            Map<String, Object> bizDataParse = (Map<String, Object>) JSON.parse(sbdm.getBizData());
             String syncAction = (String) bizDataParse.get("syncAction");
             if(bizType == 13){
                 //员工同步
@@ -116,9 +113,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     String accessToken = authenService.getAccessToken(corpId_1);
                     OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
                     String deptName = deptDetail.getName();
-                    if(isAdmin){
-                        roleType = 1;
-                    }else if(deptName.equals("老师")){
+                    if(deptName.equals("老师")){
                         roleType = 3;
                     }else if(deptName.equals("学生")){
                         roleType = 4;
@@ -186,6 +181,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //企业同步
 
             }
+            //标志已操作
+            syncBizDataMediumDao.updateStatus(id);
         }
         return JsonResultUtil.success();
     }

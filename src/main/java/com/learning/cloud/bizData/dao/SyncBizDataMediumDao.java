@@ -14,7 +14,7 @@ public interface SyncBizDataMediumDao {
 
     List<SyncBizDataMedium> getBizDataMedium(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
 
-    List<SyncBizDataMedium> getAllBizDataMedium(String corpId);
+    List<SyncBizDataMedium> getAllBizDataMedium(SyncBizDataMedium syncBizDataMedium);
 
     int updateStatus(Long id);
 }
