@@ -63,8 +63,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void init(Integer schoolId) throws ApiException {
-        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
-        List<Integer> classIdList2 = new ArrayList<>();
+//        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
+//        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
         //todo
@@ -144,7 +144,7 @@ public class DeptServiceImpl implements DeptService {
                                     gradeClass.setId(classId);
                                     gradeClassDao.update(gradeClass);
                                 }
-                                classIdList2.add(classId);
+//                                classIdList2.add(classId);
 
                                 /*班级结构数据同步*/
                                 saveUserInClass(classId);
@@ -186,14 +186,14 @@ public class DeptServiceImpl implements DeptService {
             }
 
             //删除班级记录同步
-            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
-            if(classIdList3 != null && classIdList3.size() > 0){
-                for (Integer cId : classIdList3) {
-                    gradeClassDao.delete(cId);
-//                    studentDao.deleteByClassId(cId);
-//                    parentDao.deleteByClassId(cId);
-                }
-            }
+//            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
+//            if(classIdList3 != null && classIdList3.size() > 0){
+//                for (Integer cId : classIdList3) {
+//                    gradeClassDao.delete(cId);
+////                    studentDao.deleteByClassId(cId);
+////                    parentDao.deleteByClassId(cId);
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,15 +205,15 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void saveUserInClass(int classId) throws ApiException {
-        //教师表删除同步记录
-        Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
-        Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
-        //学生表删除同步记录
-        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
-        List<Integer> studentIdList2 = new ArrayList<>();
-        //家长表删除同步记录
-        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
-        List<Integer> parentIdList2 = new ArrayList<>();
+//        //教师表删除同步记录
+//        Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
+//        Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
+//        //学生表删除同步记录
+//        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
+//        List<Integer> studentIdList2 = new ArrayList<>();
+//        //家长表删除同步记录
+//        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
+//        List<Integer> parentIdList2 = new ArrayList<>();
         GradeClass byId = gradeClassDao.getById(classId);
         Integer schoolId = byId.getSchoolId();
         Integer bureauId = byId.getBureauId();
@@ -253,13 +253,13 @@ public class DeptServiceImpl implements DeptService {
                     teacher.setBureauId(bureauId);
                     Teacher t = teacherDao.getTeacherInSchool(teacher);
                     if(t == null){
-                        classIds = classIdStr;
+//                        classIds = classIdStr;
                         teacher.setClassIds(classIdStr);
                         teacherDao.insert(teacher);
-                        teacherId = teacher.getId();
+//                        teacherId = teacher.getId();
                     }else{
                         //判断老师所在班级是否存在
-                        teacherId = t.getId();
+//                        teacherId = t.getId();
                         classIds = t.getClassIds();
                         String idsStr = "," + t.getClassIds() + ",";
                         if(!idsStr.contains("," + classIdStr + ",")){
@@ -270,7 +270,7 @@ public class DeptServiceImpl implements DeptService {
                         teacherDao.update(t);
                     }
 
-                    teacherClassIdMap2.put(teacherId,classIds);
+//                    teacherClassIdMap2.put(teacherId,classIds);
 
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
@@ -316,12 +316,12 @@ public class DeptServiceImpl implements DeptService {
                     Parent p = parentDao.getByUserId(userId);
                     if(p == null){
                         parentDao.insert(parent);
-                        parentId = parent.getId();
+//                        parentId = parent.getId();
                     }else{
-                        parentId = p.getId();
+//                        parentId = p.getId();
                         parentDao.update(parent);
                     }
-                    parentIdList2.add(parentId);
+//                    parentIdList2.add(parentId);
 
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
@@ -367,12 +367,12 @@ public class DeptServiceImpl implements DeptService {
                     Student s = studentDao.getByUserId(userId);
                     if(s == null){
                         studentDao.insert(student);
-                        studentId = student.getId();
+//                        studentId = student.getId();
                     }else{
-                        studentId = s.getId();
+//                        studentId = s.getId();
                         studentDao.update(student);
                     }
-                    studentIdList2.add(studentId);
+//                    studentIdList2.add(studentId);
 
                     OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
                     unionId = userDetail.getUnionid();
@@ -404,44 +404,44 @@ public class DeptServiceImpl implements DeptService {
                 }
             }
         }
-        //学生表删除数据同步
-        if(studentIdList1 != null && studentIdList1.size() > 0){
-            List<Integer> studentIdList = CommonUtils.removeIntegerDupsInList(studentIdList1, studentIdList2);
-            for (Integer id : studentIdList) {
-                studentDao.delete(id);
-            }
-        }
-        //家长表删除数据同步
-        if(parentIdList1 != null && parentIdList1.size() > 0){
-            List<Integer> parentIdList = CommonUtils.removeIntegerDupsInList(parentIdList1, parentIdList2);
-            for (Integer id : parentIdList) {
-                parentDao.delete(id);
-            }
-        }
+//        //学生表删除数据同步
+//        if(studentIdList1 != null && studentIdList1.size() > 0){
+//            List<Integer> studentIdList = CommonUtils.removeIntegerDupsInList(studentIdList1, studentIdList2);
+//            for (Integer id : studentIdList) {
+//                studentDao.delete(id);
+//            }
+//        }
+//        //家长表删除数据同步
+//        if(parentIdList1 != null && parentIdList1.size() > 0){
+//            List<Integer> parentIdList = CommonUtils.removeIntegerDupsInList(parentIdList1, parentIdList2);
+//            for (Integer id : parentIdList) {
+//                parentDao.delete(id);
+//            }
+//        }
 
-        //老师表删除数据同步
-        if(teacherClassIdMap1 != null && teacherClassIdMap2.size() > 0){
-            Set<Integer> strings1 = teacherClassIdMap1.keySet();
-            String[] idStrArray1 =  (String[])strings1.toArray();
-            Set<Integer> strings2 = teacherClassIdMap2.keySet();
-            String[] idStrArray2 =  (String[])strings2.toArray();
-            String[] classIdStrArr1 = CommonUtils.removeStringDups(idStrArray1, idStrArray2);
-            for (String s : classIdStrArr1) {
-                teacherDao.delete(Integer.parseInt(s));
-            }
-            String[] classIdStrArr2 = CommonUtils.retainStringDups(idStrArray1, idStrArray2);
-            for (String s : classIdStrArr2) {
-                int id = Integer.parseInt(s);
-                String[] classIdStrs1 = teacherClassIdMap1.get(id).split(",");
-                String[] classIdStrs2 = teacherClassIdMap2.get(id).split(",");
-                String[] classIdStrs3 = CommonUtils.retainStringDups(classIdStrs1, classIdStrs2);
-                Teacher teacher = new Teacher();
-                teacher.setId(id);
-                teacher.setClassIds(Arrays.toString(classIdStrs3));
-                teacherDao.update(teacher);
-            }
+//        //老师表删除数据同步
+//        if(teacherClassIdMap1 != null && teacherClassIdMap2.size() > 0){
+//            Set<Integer> strings1 = teacherClassIdMap1.keySet();
+//            String[] idStrArray1 =  (String[])strings1.toArray();
+//            Set<Integer> strings2 = teacherClassIdMap2.keySet();
+//            String[] idStrArray2 =  (String[])strings2.toArray();
+//            String[] classIdStrArr1 = CommonUtils.removeStringDups(idStrArray1, idStrArray2);
+//            for (String s : classIdStrArr1) {
+//                teacherDao.delete(Integer.parseInt(s));
+//            }
+//            String[] classIdStrArr2 = CommonUtils.retainStringDups(idStrArray1, idStrArray2);
+//            for (String s : classIdStrArr2) {
+//                int id = Integer.parseInt(s);
+//                String[] classIdStrs1 = teacherClassIdMap1.get(id).split(",");
+//                String[] classIdStrs2 = teacherClassIdMap2.get(id).split(",");
+//                String[] classIdStrs3 = CommonUtils.retainStringDups(classIdStrs1, classIdStrs2);
+//                Teacher teacher = new Teacher();
+//                teacher.setId(id);
+//                teacher.setClassIds(Arrays.toString(classIdStrs3));
+//                teacherDao.update(teacher);
+//            }
 
-        }
+//        }
     }
 
     @Override

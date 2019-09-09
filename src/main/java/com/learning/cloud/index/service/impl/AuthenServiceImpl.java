@@ -166,7 +166,7 @@ public class AuthenServiceImpl implements AuthenService {
                         User user = new User();
                         user.setUnionId(unionid);
                         user.setSchoolId(schoolId);
-                        user.setRoleType(1);
+                        user.setRoleType(5);
                         User byUnionId = userDao.getBySchoolRoleIdentity(user);
                         if(byUnionId == null){
                             user.setUserId(userid);

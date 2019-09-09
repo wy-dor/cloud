@@ -367,7 +367,7 @@ public class MultiThreadScheduleTask {
                             User user = new User();
                             user.setUnionId(unionid);
                             user.setSchoolId(schoolId);
-                            user.setRoleType(1);
+                            user.setRoleType(5);
                             User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
                             if(bySchoolRoleIdentity == null){
                                 user.setUserId(userid);
