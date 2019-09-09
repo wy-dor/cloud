@@ -49,9 +49,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     @Autowired
     private AuthenService authenService;
 
-    public JsonResult initBizDataMedium() throws Exception {
+    @Override
+    public JsonResult initBizDataMedium(String corpId) throws Exception {
 
-        List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium();
+        List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(corpId);
         if(allBizDataMedium == null || allBizDataMedium.size() == 0){
             return null;
         }
@@ -59,9 +60,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             Long id = syncBizDataMedium.getId();
             //先标志已操作，不管任意类型
             syncBizDataMediumDao.updateStatus(id);
-            String corpId = syncBizDataMedium.getCorpId();
+            String corpId_1 = syncBizDataMedium.getCorpId();
             Integer schoolId;
-            School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
+            School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId_1);
             if(schoolByCorpId == null){
                 schoolId = -1;
             }else{
@@ -112,7 +113,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 if(!isAdmin && (lastDeptId == 1)){
                     roleType = 0;
                 }else{
-                    String accessToken = authenService.getAccessToken(corpId);
+                    String accessToken = authenService.getAccessToken(corpId_1);
                     OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
                     String deptName = deptDetail.getName();
                     if(isAdmin){
@@ -128,7 +129,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     }
                 }
                 user.setAvatar((String) bizDataParse.get("avatar"));
-                user.setCorpId(corpId);
+                user.setCorpId(corpId_1);
                 if((Boolean) bizDataParse.get("active")){
                     user.setActive((short)1);
                 }else{
@@ -136,16 +137,13 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
 
                 user.setRoleType(roleType);
-                if(syncAction.equals("user_add_org")){
-                    User user1 = userDao.getBySchoolRoleIdentity(user);
-                    if(user1 == null){
-                        user.setCorpId(corpId);
-                        userDao.insert(user);
-                    }
+                user.setCorpId(corpId_1);
+                User user1 = userDao.getBySchoolRoleIdentity(user);
+                if(user1 == null){
+                    userDao.insert(user);
                 }else{
                     //todo
                     //角色修改所致结构变化
-                    user.setCorpId(corpId);
                     userDao.updateWithSpecificRole(user);
                 }
 
@@ -158,7 +156,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 String deptId = ((Integer) bizDataParse.get("id")).toString();
                 Department dept = new Department();
                 dept.setDeptId(deptId);
-                dept.setCorpId(corpId);
+                dept.setCorpId(corpId_1);
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
                 Boolean outerDept = false;
@@ -177,11 +175,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     dept.setGroupContainSubDept((short)0);
                 }
                 //部门同步
-                if(syncAction.equals("org_dept_create")){
-                    Department byDeptId = departmentDao.getByDeptId(deptId);
-                    if(byDeptId == null){
-                        departmentDao.insert(dept);
-                    }
+                Department byDeptId = departmentDao.getByDeptId(deptId);
+                if(byDeptId == null){
+                    departmentDao.insert(dept);
                 }else if(syncAction.equals("org_dept_modify")){
                     departmentDao.update(dept);
                 }

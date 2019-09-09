@@ -4,6 +4,7 @@ import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,8 +14,8 @@ public class BizDataMediumController {
     private BizDataMediumService bizDataMediumService;
 
     @GetMapping("/initBizDataMedium")
-    public JsonResult initBizDataMedium() throws Exception{
-        return bizDataMediumService.initBizDataMedium();
+    public JsonResult initBizDataMedium(@RequestParam(value = "corpId",required = false) String corpId) throws Exception{
+        return bizDataMediumService.initBizDataMedium(corpId);
     }
 
 }

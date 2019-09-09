@@ -24,7 +24,11 @@
   <select id="getAllBizDataMedium" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data_medium
+    <if test="corpId != null">
+      corp_id = #{corpId}
+    </if>
     where status = 0
+    order by id
   </select>
 
   <update id="updateStatus" parameterType="java.lang.Long">
