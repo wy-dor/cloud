@@ -92,8 +92,7 @@ public class LoginController {
             }
         } else {
             if(!userid.isEmpty()){
-                User user = userDao.getUserByUserIdAndCorpId(userid, corpid);
-                users.add(user);
+                users = userDao.getUserByUserIdAndCorpId(userid, corpid);
             }else {
                 throw new MyException(JsonResultEnum.NO_USER);
             }

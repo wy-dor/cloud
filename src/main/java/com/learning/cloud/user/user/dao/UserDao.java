@@ -22,7 +22,7 @@ public interface UserDao {
 
     int updateSupervisor(User user);
 
-    User getUserByUserIdAndCorpId(@Param("userId") String userId, @Param("corpId") String corpId);
+    List<User> getUserByUserIdAndCorpId(@Param("userId") String userId, @Param("corpId") String corpId);
 
     int updateWithSpecificRole(User user);
 }
