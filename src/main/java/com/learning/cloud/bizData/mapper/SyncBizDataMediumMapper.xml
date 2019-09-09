@@ -21,7 +21,7 @@
     and status = 0
   </select>
 
-  <select id="getAllBizDataMedium" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
+  <select id="getAllBizDataMedium" parameterType="java.lang.String" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data_medium
     <if test="corpId != null">
