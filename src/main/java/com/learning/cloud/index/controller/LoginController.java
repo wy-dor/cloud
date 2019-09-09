@@ -83,26 +83,20 @@ public class LoginController {
         // 返回值
         UserInfo userInfo = new UserInfo();
         List<User> users = new ArrayList<>();
-        // 扫码登录
-        if((corpid==null||corpid.isEmpty())&&!unionid.isEmpty()){
-            //unionid 取数据库数据
-            users = userDao.getByUnionId(unionid);
-            userid = users.get(0).getUserId();
-            corpid = users.get(0).getCorpId();
-        }
-        // 钉钉第三方登录,管理后台登录
-        else if(!corpid.isEmpty()&&!userid.isEmpty()){
-            //参数正常
-            User user = userDao.getUserByUserIdAndCorpId(userid, corpid);
-            users.add(user);
-        }
-        // 管理后台登录
-        else if(!corpid.isEmpty()&&!unionid.isEmpty()){
-            //获取userid
-            userid = getUseridByUnionid(unionid, corpid);
-        }
-        else {
-            throw new MyException(JsonResultEnum.NO_USER);
+        // 第三方扫码
+        if(corpid==null||corpid.isEmpty()){
+            if(!unionid.isEmpty()){
+                users = userDao.getByUnionId(unionid);
+            }else {
+                throw new MyException(JsonResultEnum.NO_USER);
+            }
+        } else {
+            if(!userid.isEmpty()){
+                User user = userDao.getUserByUserIdAndCorpId(userid, corpid);
+                users.add(user);
+            }else {
+                throw new MyException(JsonResultEnum.NO_USER);
+            }
         }
         // 当用户处在多个组织时
         List<SysUserInfo> sysUserInfos = new ArrayList<>();
