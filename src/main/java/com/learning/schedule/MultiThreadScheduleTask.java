@@ -398,7 +398,7 @@ public class MultiThreadScheduleTask {
                         if(schoolId == -1){
                             try {
                                 String deptId = "1";
-                                recurseGetUser(deptId, "95c5d15a968637e39a8451f889b1851d", corpId,schoolId);
+                                recurseGetUser(deptId, accessToken, corpId,schoolId);
 
                                 //添加在部门里其他身份的用户信息
                                 OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
