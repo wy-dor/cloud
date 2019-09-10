@@ -102,31 +102,33 @@ public class LoginController {
         for(int i=0;i<users.size();i++){
             User user = users.get(i);
             OapiUserGetResponse userGetResponse = getUserByUserid(user.getUserId(), user.getCorpId());
-            if(i==0){
-                userInfo.setAvatar(userGetResponse.getAvatar());
-                userInfo.setName(userGetResponse.getName());
-                userInfo.setUnionid(unionid);
+            if(userGetResponse!=null){
+                if(i==0){
+                    userInfo.setAvatar(userGetResponse.getAvatar());
+                    userInfo.setName(userGetResponse.getName());
+                    userInfo.setUnionid(unionid);
+                }
+                SysUserInfo sysUserInfo = new SysUserInfo();
+                sysUserInfo.setCropid(user.getCorpId());
+                sysUserInfo.setUserid(user.getUserId());
+                sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
+                sysUserInfo.setRole(user.getRoleType());
+                sysUserInfo.setId(user.getId());
+                String cropName = "";
+                if(user.getSchoolId()==null||user.getSchoolId()==-1){
+                    // 获取教育局id
+                    Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
+                    sysUserInfo.setBureauId(bureau.getId());
+                    cropName = bureau.getBureauName();
+                }else {
+                    School school = schoolDao.getSchoolByCorpId(user.getCorpId());
+                    cropName = school.getSchoolName();
+                    sysUserInfo.setBureauId(school.getBureauId());
+                    sysUserInfo.setSchoolId(user.getSchoolId());
+                }
+                sysUserInfo.setCropName(cropName);
+                sysUserInfos.add(sysUserInfo);
             }
-            SysUserInfo sysUserInfo = new SysUserInfo();
-            sysUserInfo.setCropid(user.getCorpId());
-            sysUserInfo.setUserid(user.getUserId());
-            sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
-            sysUserInfo.setRole(user.getRoleType());
-            sysUserInfo.setId(user.getId());
-            String cropName = "";
-            if(user.getSchoolId()==null||user.getSchoolId()==-1){
-                // 获取教育局id
-                Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
-                sysUserInfo.setBureauId(bureau.getId());
-                cropName = bureau.getBureauName();
-            }else {
-                School school = schoolDao.getSchoolByCorpId(user.getCorpId());
-                cropName = school.getSchoolName();
-                sysUserInfo.setBureauId(school.getBureauId());
-                sysUserInfo.setSchoolId(user.getSchoolId());
-            }
-            sysUserInfo.setCropName(cropName);
-            sysUserInfos.add(sysUserInfo);
         }
         userInfo.setSysUserInfos(sysUserInfos);
         return JsonResultUtil.success(userInfo);
