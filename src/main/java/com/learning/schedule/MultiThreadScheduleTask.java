@@ -45,8 +45,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +108,9 @@ public class MultiThreadScheduleTask {
 
     @Value("${spring.suiteId}")
     private String suiteId;
+
+    private Map<String,Boolean> statusMap = new HashMap<>();
+
 
     @Async
     @Scheduled(cron = "0 0 5 * * ?") //每天5点
@@ -249,12 +252,19 @@ public class MultiThreadScheduleTask {
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")//每隔一分钟
     public void queryBizData() throws Exception {
+        //标志正在操作
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
         List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
         if(bizData_04 != null && bizData_04.size() > 0){
             for (SyncBizData bizData : bizData_04) {
+                String corpId = bizData.getCorpId();
                 Long id = bizData.getId();
+                Boolean  status= statusMap.get(corpId);
+                if(status != null && status == true){
+                    return;
+                }
+                statusMap.put(corpId,true);
                 Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
                 String syncAction = (String)parse_0.get("syncAction");
                 if("org_suite_auth".equals(syncAction)){
@@ -263,7 +273,6 @@ public class MultiThreadScheduleTask {
                     //更新授权企业表
                     Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
                     AuthCorpInfo authCorpInfo = new AuthCorpInfo();
-                    String corpId = (String) auth_corp_info.get("corpid");
                     String corpName = (String) auth_corp_info.get("corp_name");
                     String industry = (String) auth_corp_info.get("industry");
                     authCorpInfo.setCorpId(corpId);
