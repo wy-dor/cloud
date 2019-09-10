@@ -38,7 +38,7 @@
     <if test="roleType != null">
         and role_type = #{roleType}
     </if>
-    group by role_type
+    order by role_type
     limit 1
   </select>
 
