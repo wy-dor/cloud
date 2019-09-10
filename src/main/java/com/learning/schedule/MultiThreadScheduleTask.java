@@ -399,6 +399,32 @@ public class MultiThreadScheduleTask {
                             try {
                                 String deptId = "1";
                                 recurseGetUser(deptId, "95c5d15a968637e39a8451f889b1851d", corpId,schoolId);
+
+                                //添加在部门里其他身份的用户信息
+                                OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
+                                List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
+                                for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                                    String userId = uList.getUserid();
+                                    OapiUserGetResponse userDetailResp = deptService.getUserDetail(userId, corpId);
+                                    String unionId = userDetailResp.getUnionid();
+                                    User user = new User();
+                                    user.setUnionId(unionId);
+                                    user.setSchoolId(schoolId);
+                                    user.setRoleType(5);
+                                    User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                                    if(byUnionId == null){
+                                        user.setUserId(userId);
+                                        user.setUserName(userDetailResp.getName());
+                                        user.setAvatar(userDetailResp.getAvatar());
+                                        user.setCorpId(corpId);
+                                        if(userDetailResp.getActive()){
+                                            user.setActive((short)1);
+                                        }else{
+                                            user.setActive((short)0);
+                                        }
+                                        userDao.insert(user);
+                                    }
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
