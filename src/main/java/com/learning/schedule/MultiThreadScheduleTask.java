@@ -1,11 +1,14 @@
 package com.learning.schedule;
 
 import com.alibaba.fastjson.JSON;
+import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
+import com.learning.cloud.course.entity.Course;
+import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
@@ -35,6 +38,7 @@ import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
+import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -392,29 +396,37 @@ public class MultiThreadScheduleTask {
 
                         //如果是教育局则添加在部门里其他身份的用户信息
                         if(schoolId == -1){
-                            OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
-                            List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
-                            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
-                                String userId = uList.getUserid();
-                                OapiUserGetResponse userDetailResp = deptService.getUserDetail(userId, corpId);
-                                String unionId = userDetailResp.getUnionid();
-                                User user = new User();
-                                user.setUnionId(unionId);
-                                user.setSchoolId(schoolId);
-                                user.setRoleType(5);
-                                User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                                if(byUnionId == null){
-                                    user.setUserId(userId);
-                                    user.setUserName(userDetailResp.getName());
-                                    user.setAvatar(userDetailResp.getAvatar());
-                                    user.setCorpId(corpId);
-                                    if(userDetailResp.getActive()){
-                                        user.setActive((short)1);
-                                    }else{
-                                        user.setActive((short)0);
+                            try {
+                                String deptId = "1";
+                                recurseGetUser(deptId, accessToken, corpId,schoolId);
+
+                                //添加在部门里其他身份的用户信息
+                                OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
+                                List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
+                                for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                                    String userId = uList.getUserid();
+                                    OapiUserGetResponse userDetailResp = deptService.getUserDetail(userId, corpId);
+                                    String unionId = userDetailResp.getUnionid();
+                                    User user = new User();
+                                    user.setUnionId(unionId);
+                                    user.setSchoolId(schoolId);
+                                    user.setRoleType(5);
+                                    User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                                    if(byUnionId == null){
+                                        user.setUserId(userId);
+                                        user.setUserName(userDetailResp.getName());
+                                        user.setAvatar(userDetailResp.getAvatar());
+                                        user.setCorpId(corpId);
+                                        if(userDetailResp.getActive()){
+                                            user.setActive((short)1);
+                                        }else{
+                                            user.setActive((short)0);
+                                        }
+                                        userDao.insert(user);
                                     }
-                                    userDao.insert(user);
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -481,6 +493,44 @@ public class MultiThreadScheduleTask {
             }
         }
 
+    }
+
+    private void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException {
+        OapiDepartmentListResponse resp = deptService.getDeptList(departmentId, accessToken , 0);
+        List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
+        if(departmentList.size() != 0 ){
+            for (OapiDepartmentListResponse.Department department : departmentList) {
+                Long deptId = department.getId();
+                recurseGetUser(deptId.toString(),accessToken,corpId,schoolId);
+            }
+        }else{
+            OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList(departmentId, accessToken);
+            List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
+            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                String userId = uList.getUserid();
+                OapiUserGetResponse userDetailResp = deptService.getUserDetail(userId, corpId);
+                String unionId = userDetailResp.getUnionid();
+                User user = new User();
+                user.setUnionId(unionId);
+                user.setSchoolId(schoolId);
+                user.setRoleType(5);
+                User byUnionId = userDao.getBySchoolRoleIdentity(user);
+                if(byUnionId == null){
+                    user.setUserId(userId);
+                    user.setUserName(userDetailResp.getName());
+                    user.setAvatar(userDetailResp.getAvatar());
+                    user.setCorpId(corpId);
+                    if(userDetailResp.getActive()!=null){
+                        if(userDetailResp.getActive()){
+                            user.setActive((short)1);
+                        }else{
+                            user.setActive((short)0);
+                        }
+                    }
+                    userDao.insert(user);
+                }
+            }
+        }
     }
 
     @Async
