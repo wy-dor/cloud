@@ -27,14 +27,7 @@
         user_id = #{userId}
       </otherwise>
     </choose>
-    <choose>
-      <when test="schoolId != null">
-        and school_id = #{schoolId}
-      </when>
-      <otherwise>
-        and school_id is null
-      </otherwise>
-    </choose>
+    and school_id = #{schoolId}
     <if test="roleType != null">
         and role_type = #{roleType}
     </if>
@@ -46,6 +39,13 @@
     select * from user
     where user_id = #{userId}
     and corp_id = #{corpId}
+  </select>
+
+  <select id="getUserRole234" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+    select * from user
+    where user_id = #{userId}
+    and corp_id = #{corpId}
+    and role_type &lt; 5
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">
@@ -116,7 +116,7 @@
     </trim>
   </insert>
 
-  <update id="update" parameterType="com.learning.cloud.user.user.entity.User">
+  <update id="updateRole5ToOtherRole" parameterType="com.learning.cloud.user.user.entity.User">
     update user
     <set>
       <if test="userId != null">
@@ -139,14 +139,8 @@
       </if>
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
-    <choose>
-      <when test="schoolId != null">
-        and school_id = #{schoolId}
-      </when>
-      <otherwise>
-        and school_id is null
-      </otherwise>
-    </choose>
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    and role_type = 5
   </update>
 
   <update id="updateWithSpecificRole" parameterType="com.learning.cloud.user.user.entity.User">
@@ -169,15 +163,8 @@
       </if>
     </set>
     where union_id = #{unionId,jdbcType=VARCHAR}
-    <choose>
-      <when test="schoolId != null">
-        and school_id = #{schoolId}
-      </when>
-      <otherwise>
-        and school_id is null
-      </otherwise>
-    </choose>
-    and role_type = #{roleType}
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    and role_type = #{roleType,jdbcType=SMALLINT}
   </update>
 
   <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">

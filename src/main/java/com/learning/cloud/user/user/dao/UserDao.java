@@ -14,7 +14,7 @@ public interface UserDao {
 
     List<User> getByUnionId(String unionId);
 
-    int update(User user);
+    int updateRole5ToOtherRole(User user);
 
     User getByUserId(String userId);
 
@@ -23,6 +23,8 @@ public interface UserDao {
     int updateSupervisor(User user);
 
     List<User> getUserByUserIdAndCorpId(@Param("userId") String userId, @Param("corpId") String corpId);
+
+    List<User> getUserRole234(@Param("userId") String userId, @Param("corpId") String corpId);
 
     int updateWithSpecificRole(User user);
 }

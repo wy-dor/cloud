@@ -35,6 +35,8 @@ public enum JsonResultEnum {
 
     NO_SCORE_ACTION(1041,"没有添加积分项，请联系教育局管理员添加"),
 
+    NO_DEPT_USER_LIST(1051,"部门下用户列表为空"),
+
     ;
 
     @Getter private Integer code;

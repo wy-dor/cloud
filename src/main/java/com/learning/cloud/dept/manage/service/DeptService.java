@@ -32,4 +32,6 @@ public interface DeptService {
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException;
 
+    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException;
+
 }

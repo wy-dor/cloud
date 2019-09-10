@@ -22,7 +22,6 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
-import com.learning.utils.CommonUtils;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -164,25 +163,8 @@ public class DeptServiceImpl implements DeptService {
             List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
             for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
                 String userId = uList.getUserid();
-                OapiUserGetResponse userDetailResp = getUserDetail(userId, corpId);
-                String unionId = userDetailResp.getUnionid();
-                User user = new User();
-                user.setUnionId(unionId);
-                user.setSchoolId(schoolId);
-                user.setRoleType(5);
-                User byUnionId = userDao.getBySchoolRoleIdentity(user);
-                if(byUnionId == null){
-                    user.setUserId(userId);
-                    user.setUserName(userDetailResp.getName());
-                    user.setAvatar(userDetailResp.getAvatar());
-                    user.setCorpId(corpId);
-                    if(userDetailResp.getActive()){
-                        user.setActive((short)1);
-                    }else{
-                        user.setActive((short)0);
-                    }
-                    userDao.insert(user);
-                }
+                userSaveByRole(schoolId, corpId, null, userId, 5);
+
             }
 
             //删除班级记录同步
@@ -272,39 +254,14 @@ public class DeptServiceImpl implements DeptService {
 
 //                    teacherClassIdMap2.put(teacherId,classIds);
 
-                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
-                    unionId = userDetail.getUnionid();
-                    User u = new User();
-                    u.setUnionId(unionId);
-                    u.setSchoolId(schoolId);
-                    u.setRoleType(roleType);
-                    User u1 = userDao.getBySchoolRoleIdentity(u);
-                    if(u1 == null){
-                        u.setUserName(userName);
-                        u.setUserId(userId);
-                        u.setCampusId(campusId);
-                        u.setCorpId(corpId);
-                        u.setAvatar(userDetail.getAvatar());
-                        Boolean active = userDetail.getActive();
-                        if(active != null){
-                            if(active){
-                                u.setActive((short)1);
-                            }else{
-                                u.setActive((short)0);
-                            }
-                        }
-                        userDao.insert(u);
-                    }else{
-                        u1.setRoleType(roleType);
-                        u1.setCorpId(corpId);
-                        userDao.updateWithSpecificRole(u1);
-                    }
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
+
                 }
             }else if(userRole.equals("家长")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     userName = user.getName();
                     userId = user.getUserid();
-                    Integer parentId = 0;
+//                    Integer parentId = 0;
                     roleType = 2;
                     Parent parent = new Parent();
                     parent.setUserId(userId);
@@ -323,33 +280,8 @@ public class DeptServiceImpl implements DeptService {
                     }
 //                    parentIdList2.add(parentId);
 
-                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
-                    unionId = userDetail.getUnionid();
-                    User u = new User();
-                    u.setUnionId(unionId);
-                    u.setSchoolId(schoolId);
-                    u.setRoleType(roleType);
-                    User u1 = userDao.getBySchoolRoleIdentity(u);
-                    if(u1 == null){
-                        u.setUserName(userName);
-                        u.setUserId(userId);
-                        u.setCampusId(campusId);
-                        u.setCorpId(corpId);
-                        u.setAvatar(userDetail.getAvatar());
-                        Boolean active = userDetail.getActive();
-                        if(active != null){
-                            if(active){
-                                u.setActive((short)1);
-                            }else{
-                                u.setActive((short)0);
-                            }
-                        }
-                        userDao.insert(u);
-                    }else{
-                        u1.setRoleType(roleType);
-                        u1.setCorpId(corpId);
-                        userDao.updateWithSpecificRole(u1);
-                    }
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
+
                 }
             }else if(userRole.equals("学生")){
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
@@ -374,33 +306,7 @@ public class DeptServiceImpl implements DeptService {
                     }
 //                    studentIdList2.add(studentId);
 
-                    OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
-                    unionId = userDetail.getUnionid();
-                    User u = new User();
-                    u.setUnionId(unionId);
-                    u.setSchoolId(schoolId);
-                    User u1 = userDao.getBySchoolRoleIdentity(u);
-                    if(u1 == null){
-                        u.setUserName(userName);
-                        u.setUserId(userId);
-                        u.setCampusId(campusId);
-                        u.setRoleType(roleType);
-                        u.setCorpId(corpId);
-                        u.setAvatar(userDetail.getAvatar());
-                        Boolean active = userDetail.getActive();
-                        if(active != null){
-                            if(active){
-                                u.setActive((short)1);
-                            }else{
-                                u.setActive((short)0);
-                            }
-                        }
-                        userDao.insert(u);
-                    }else{
-                        u1.setRoleType(roleType);
-                        u1.setCorpId(corpId);
-                        userDao.update(u1);
-                    }
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
                 }
             }
         }
@@ -438,10 +344,71 @@ public class DeptServiceImpl implements DeptService {
 //                Teacher teacher = new Teacher();
 //                teacher.setId(id);
 //                teacher.setClassIds(Arrays.toString(classIdStrs3));
-//                teacherDao.update(teacher);
+//                teacherDao.updateRole5ToOtherRole(teacher);
 //            }
 
 //        }
+    }
+
+    //对用户角色进行判断存储
+    @Override
+    public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException {
+        //其他身份不覆盖主要角色
+        if(roleType == 5){
+            List<User> userRole234 = userDao.getUserRole234(userId, corpId);
+            if(userRole234.size() > 0){
+                return;
+            }
+        }
+
+        User bySchoolRoleIdentity_5 = null;
+        User u = new User();
+        u.setUserId(userId);
+        u.setSchoolId(schoolId);
+
+        //获取消息信息
+        OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
+        u.setUnionId(userDetail.getUnionid());
+        u.setUserName(userDetail.getName());
+        u.setUserId(userDetail.getUserid());
+        u.setCampusId(campusId);
+        u.setCorpId(corpId);
+        u.setAvatar(userDetail.getAvatar());
+        Boolean active = userDetail.getActive();
+        if(active != null){
+            if(active){
+                u.setActive((short)1);
+            }else{
+                u.setActive((short)0);
+            }
+        }
+
+        u.setRoleType(5);
+        bySchoolRoleIdentity_5 = userDao.getBySchoolRoleIdentity(u);
+
+        if(roleType == 5){
+            //若为其他身份按照常规操作
+            if(bySchoolRoleIdentity_5 == null){
+                userDao.insert(u);
+            }else{
+                userDao.updateWithSpecificRole(u);
+            }
+        }else{
+            //若为通讯录下角色则且无其他身份则常规保存
+            u.setRoleType(roleType);
+            if(bySchoolRoleIdentity_5 == null){
+                User bySchoolRoleIdentity_s = userDao.getBySchoolRoleIdentity(u);
+                if(bySchoolRoleIdentity_s == null){
+                    userDao.insert(u);
+                }else{
+                    userDao.updateWithSpecificRole(u);
+                }
+            }else{
+                //若为通讯录下角色还有其他身份则取消其他身份
+                userDao.updateRole5ToOtherRole(u);
+            }
+        }
+
     }
 
     @Override
