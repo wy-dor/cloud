@@ -22,6 +22,8 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
+import com.learning.enums.JsonResultEnum;
+import com.learning.exception.MyException;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,82 +76,88 @@ public class DeptServiceImpl implements DeptService {
         String corpId = school.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
         try {
-            OapiDepartmentListResponse resp = getDeptList("", accessToken , 1);
-            List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
+            OapiDepartmentListResponse resp = getDeptList("", accessToken , 0);
+            List<OapiDepartmentListResponse.Department> departmentList_0 = resp.getDepartment();
             int i = 0;
             /*校区表初始化*/
-            for (OapiDepartmentListResponse.Department dept : departmentList) {
-                Long parentDeptId = dept.getParentid();
-                if(parentDeptId == -7){
-                    int campusId;
-                    Long campusDeptId = dept.getId();
-                    Campus campus = new Campus();
-                    campus.setDeptId(campusDeptId);
-                    Campus c = campusDao.getByCampus(campus);
-                    campus.setSchoolId(schoolId);
-                    campus.setCampusName(dept.getName());
-                    if(c == null){
-                        campusDao.insert(campus);
-                        campusId = campus.getId();
-                    }else{
-                        campusId = c.getId();
-                        campus.setId(campusId);
-                        campusDao.update(campus);
-                    }
-                    i++;
-                    /*班级表填充*/
-                    /*得到session_name字段*/
-                    OapiDepartmentListResponse resp1 = getDeptList(campusDeptId.toString(), accessToken, 0);
-                    List<OapiDepartmentListResponse.Department> sessionDeptList = resp1.getDepartment();
-                    for (OapiDepartmentListResponse.Department dept1 : sessionDeptList) {
-                        String sessionName = dept1.getName();
-                        Long sessionDeptId = dept1.getId();
-                        /*grade_name字段*/
-                        OapiDepartmentListResponse resp2 = getDeptList(sessionDeptId.toString(), accessToken, 0);
-                        List<OapiDepartmentListResponse.Department> gradeDeptList = resp2.getDepartment();
-                        for (OapiDepartmentListResponse.Department dept2 : gradeDeptList) {
-                            String gradeName = dept2.getName();
-                            Long gradeDeptId = dept2.getId();
-                            /*class_name字段*/
-                            OapiDepartmentListResponse resp3 = getDeptList(gradeDeptId.toString(), accessToken, 0);
-                            List<OapiDepartmentListResponse.Department> classDeptList = resp3.getDepartment();
-                            for (OapiDepartmentListResponse.Department dept3 : classDeptList) {
-                                String className = dept3.getName();
-                                Long classDeptId = dept3.getId();
-                                /*grade_class表的更新*/
-                                Integer classId;
-                                GradeClass gradeClass = new GradeClass();
-                                gradeClass.setDeptId(classDeptId);
-                                List<GradeClass> classList = gradeClassDao.getByGradeClass(gradeClass);
-                                gradeClass.setCampusId(campusId);
-                                gradeClass.setSessionName(sessionName);
-                                gradeClass.setGradeName(gradeName);
-                                gradeClass.setClassName(className);
-                                gradeClass.setSchoolId(schoolId);
-                                gradeClass.setBureauId(bureauId);
-                                if(classList == null || classList.size() == 0){
-                                    gradeClassDao.insert(gradeClass);
-                                    classId = gradeClass.getId();
-                                    //增加课程
-                                    Course course = new Course();
-                                    course.setSchoolId(schoolId.longValue());
-                                    course.setClassId(classId.longValue());
-                                    course.setGradeName(gradeName);
-                                    course.setClassName(className);
-                                    courseDao.addCourse(course);
-                                }else{
-                                    GradeClass gc = classList.get(0);
-                                    classId = gc.getId();
-                                    gradeClass.setId(classId);
-                                    gradeClassDao.update(gradeClass);
-                                }
+            for (OapiDepartmentListResponse.Department dept_0 : departmentList_0) {
+                Long deptId_0 = dept_0.getId();
+                if(deptId_0 == -7){
+                    OapiDepartmentListResponse resp_1 = getDeptList("-7", accessToken , 0);
+                    List<OapiDepartmentListResponse.Department> departmentList_1 = resp_1.getDepartment();
+                    for (OapiDepartmentListResponse.Department dept_1 : departmentList_1) {
+                        Long campusDeptId = dept_1.getId();
+                        int campusId;
+                        Campus campus = new Campus();
+                        campus.setDeptId(campusDeptId);
+                        Campus c = campusDao.getByCampus(campus);
+                        campus.setSchoolId(schoolId);
+                        campus.setCampusName(dept_1.getName());
+                        if(c == null){
+                            campusDao.insert(campus);
+                            campusId = campus.getId();
+                        }else{
+                            campusId = c.getId();
+                            campus.setId(campusId);
+                            campusDao.update(campus);
+                        }
+                        i++;
+                        /*班级表填充*/
+                        /*得到session_name字段*/
+                        OapiDepartmentListResponse resp1 = getDeptList(campusDeptId.toString(), accessToken, 0);
+                        List<OapiDepartmentListResponse.Department> sessionDeptList = resp1.getDepartment();
+                        for (OapiDepartmentListResponse.Department dept1 : sessionDeptList) {
+                            String sessionName = dept1.getName();
+                            Long sessionDeptId = dept1.getId();
+                            /*grade_name字段*/
+                            OapiDepartmentListResponse resp2 = getDeptList(sessionDeptId.toString(), accessToken, 0);
+                            List<OapiDepartmentListResponse.Department> gradeDeptList = resp2.getDepartment();
+                            for (OapiDepartmentListResponse.Department dept2 : gradeDeptList) {
+                                String gradeName = dept2.getName();
+                                Long gradeDeptId = dept2.getId();
+                                /*class_name字段*/
+                                OapiDepartmentListResponse resp3 = getDeptList(gradeDeptId.toString(), accessToken, 0);
+                                List<OapiDepartmentListResponse.Department> classDeptList = resp3.getDepartment();
+                                for (OapiDepartmentListResponse.Department dept3 : classDeptList) {
+                                    String className = dept3.getName();
+                                    Long classDeptId = dept3.getId();
+                                    /*grade_class表的更新*/
+                                    Integer classId;
+                                    GradeClass gradeClass = new GradeClass();
+                                    gradeClass.setDeptId(classDeptId);
+                                    List<GradeClass> classList = gradeClassDao.getByGradeClass(gradeClass);
+                                    gradeClass.setCampusId(campusId);
+                                    gradeClass.setSessionName(sessionName);
+                                    gradeClass.setGradeName(gradeName);
+                                    gradeClass.setClassName(className);
+                                    gradeClass.setSchoolId(schoolId);
+                                    gradeClass.setBureauId(bureauId);
+                                    if(classList == null || classList.size() == 0){
+                                        gradeClassDao.insert(gradeClass);
+                                        classId = gradeClass.getId();
+                                        //增加课程
+                                        Course course = new Course();
+                                        course.setSchoolId(schoolId.longValue());
+                                        course.setClassId(classId.longValue());
+                                        course.setGradeName(gradeName);
+                                        course.setClassName(className);
+                                        courseDao.addCourse(course);
+                                    }else{
+                                        GradeClass gc = classList.get(0);
+                                        classId = gc.getId();
+                                        gradeClass.setId(classId);
+                                        gradeClassDao.update(gradeClass);
+                                    }
 //                                classIdList2.add(classId);
 
-                                /*班级结构数据同步*/
-                                saveUserInClass(classId);
+                                    /*班级结构数据同步*/
+                                    saveUserInClass(classId);
+                                }
                             }
                         }
                     }
+                }else{
+                    recurseGetUser(deptId_0.toString(), accessToken, corpId,schoolId);
                 }
             }
 
@@ -177,12 +185,13 @@ public class DeptServiceImpl implements DeptService {
 //                }
 //            }
 
+            school.setState((short)1);
+            schoolDao.update(school);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         //标记已初始化
-        school.setState((short)1);
-        schoolDao.update(school);
     }
 
     @Override
@@ -350,6 +359,27 @@ public class DeptServiceImpl implements DeptService {
 //        }
     }
 
+    public void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException {
+        OapiDepartmentListResponse resp = getDeptList(departmentId, accessToken , 0);
+        List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
+        if(departmentList.size() > 0 ){
+            for (OapiDepartmentListResponse.Department department : departmentList) {
+                Long deptId = department.getId();
+                recurseGetUser(deptId.toString(),accessToken,corpId,schoolId);
+            }
+        }else{
+            OapiUserSimplelistResponse deptUserListResponse = getDeptUserList(departmentId, accessToken);
+            List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
+            if(userListInfo.size() <= 0){
+                throw new MyException(JsonResultEnum.NO_DEPT_USER_LIST);
+            }
+            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                String userId = uList.getUserid();
+                userSaveByRole(schoolId, corpId, null, userId, 5);
+            }
+        }
+    }
+
     //对用户角色进行判断存储
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException {
@@ -425,11 +455,11 @@ public class DeptServiceImpl implements DeptService {
             if(byUserId == null){
                 map.put("roleName","无");
             }else{
-            Integer classId = byUserId.getClassId();
-            map.put("roleName","学生");
-            map.put("classId",classId + "");
-            byUserId.setAvatar(avatar);
-            studentDao.update(byUserId);
+                Integer classId = byUserId.getClassId();
+                map.put("roleName","学生");
+                map.put("classId",classId + "");
+                byUserId.setAvatar(avatar);
+                studentDao.update(byUserId);
             }
         }else{
             /*"department": "[[117451247, 117656244, 117680160, 117597295, 117425251, -7, 1],

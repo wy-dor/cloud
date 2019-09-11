@@ -259,131 +259,152 @@ public class MultiThreadScheduleTask {
         if(bizData_04 != null && bizData_04.size() > 0){
             for (SyncBizData bizData : bizData_04) {
                 String corpId = bizData.getCorpId();
-                Long id = bizData.getId();
-                Boolean  status= statusMap.get(corpId);
-                if(status != null && status == true){
-                    return;
-                }
-                statusMap.put(corpId,true);
-                Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
-                String syncAction = (String)parse_0.get("syncAction");
-                if("org_suite_auth".equals(syncAction)){
-                    Integer schoolId = -1;
-                    String accessToken = "";
-                    //更新授权企业表
-                    Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
-                    AuthCorpInfo authCorpInfo = new AuthCorpInfo();
-                    String corpName = (String) auth_corp_info.get("corp_name");
-                    String industry = (String) auth_corp_info.get("industry");
-                    authCorpInfo.setCorpId(corpId);
-                    authCorpInfo.setCorpName(corpName);
-                    authCorpInfo.setIndustry(industry);
-                    authCorpInfo.setAuthLevel((Integer) auth_corp_info.get("auth_level"));
-                    authCorpInfo.setInviteUrl((String) auth_corp_info.get("invite_url"));
-                    if((Boolean) auth_corp_info.get("is_authenticated")){
-                        authCorpInfo.setIsAuthenticated((short)1);
-                    }else{
-                        authCorpInfo.setIsAuthenticated((short)0);
+                try {
+                    Long id = bizData.getId();
+                    Boolean  status= statusMap.get(corpId);
+                    if(status != null && status == true){
+                        return;
                     }
-                    authCorpInfo.setLicenseCode((String) auth_corp_info.get("license_code"));
-                    if(industry.equals("初中等教育")){
-                        School school = new School();
-                        authCorpInfo.setIndustryType(1);
-                        school.setSchoolName(corpName);
-                        school.setCorpId(corpId);
-                        List<School> bySchool = schoolDao.getBySchool(school);
-                        if(bySchool == null || bySchool.size() == 0){
-                            schoolDao.insert(school);
-                            schoolId = school.getId();
+                    statusMap.put(corpId,true);
+                    Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
+                    String syncAction = (String)parse_0.get("syncAction");
+                    if("org_suite_auth".equals(syncAction)){
+                        Integer schoolId = -1;
+                        String accessToken = "";
+                        //更新授权企业表
+                        Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
+                        AuthCorpInfo authCorpInfo = new AuthCorpInfo();
+                        String corpName = (String) auth_corp_info.get("corp_name");
+                        String industry = (String) auth_corp_info.get("industry");
+                        authCorpInfo.setCorpId(corpId);
+                        authCorpInfo.setCorpName(corpName);
+                        authCorpInfo.setIndustry(industry);
+                        authCorpInfo.setAuthLevel((Integer) auth_corp_info.get("auth_level"));
+                        authCorpInfo.setInviteUrl((String) auth_corp_info.get("invite_url"));
+                        if((Boolean) auth_corp_info.get("is_authenticated")){
+                            authCorpInfo.setIsAuthenticated((short)1);
                         }else{
-                            schoolId = bySchool.get(0).getId();
+                            authCorpInfo.setIsAuthenticated((short)0);
                         }
-
-                    }else if(industry.equals("教育行政机构")){
-                        authCorpInfo.setIndustryType(2);
-                        Bureau byBureauName = bureauDao.getByBureauName(corpName);
-                        if(byBureauName == null){
-                            Bureau bureau = new Bureau();
-                            bureau.setBureauName(corpName);
-                            bureau.setCorpId(corpId);
-                            bureauDao.insert(bureau);
-                        }
-                    }
-                    AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
-                    int i = 0;
-                    if(corpInfoByCorpId == null){
-                        i = authCorpInfoDao.insert(authCorpInfo);
-                    }else{
-                        i = authCorpInfoDao.update(authCorpInfo);
-                    }
-                    if(i == 1){
-                        System.out.println("保存授权企业信息成功");
-                    }
-
-                    //更新授权应用表
-                    SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-                    if(forSuiteTicket != null){
-                        Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
-                        String suiteTicket = parse.get("suiteTicket");
-                        accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                        AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
-                        AuthAppInfo authAppInfo = new AuthAppInfo();
-                        authAppInfo.setCorpId(corpId);
-                        authAppInfo.setCorpName(corpName);
-                        authAppInfo.setSuiteTicket(suiteTicket);
-                        authAppInfo.setCorpAccessToken(accessToken);
-                        if(info == null){
-                            authAppInfo.setCreatedTime(new Date());
-                            authAppInfoDao.insert(authAppInfo);
-                        }else{
-                            authAppInfoDao.update(authAppInfo);
-                        }
-                        syncBizDataDao.updateStatus(forSuiteTicket.getId());
-                    }
-
-                    //保存应用信息
-                    Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
-                    List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
-                    for (Map<String, Object> a : agent) {
-                        CorpAgent ca = new CorpAgent();
-                        ca.setAgentId(((Integer)a.get("agentid")).toString());
-                        ca.setCorpId(corpId);
-                        ca.setAgentName((String)a.get("agent_name"));
-                        ca.setAppId(((Integer)a.get("appid")).toString());
-                        ca.setLogoUrl((String)a.get("logo_url"));
-                        ca.setUpdateTime(new Date());
-                        CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
-                        if(byCorpId == null){
-                            corpAgentDao.insert(ca);
-                        }else{
-                            corpAgentDao.update(ca);
-                        }
-                        System.out.println("保存应用信息成功！");
-                        List<String> adminList = (List<String>) a.get("admin_list");
-                        //更新管理员表
-                        for (String userId : adminList) {
-                            OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
-                            Administrator a1 = new Administrator();
-                            a1.setName(userDetail.getName());
-                            a1.setUserId(userDetail.getUserid());
-                            a1.setSchoolId(schoolId);
-                            Administrator byAdm = administratorDao.getByAdm(a1);
-                            if(byAdm == null){
-                                administratorDao.insert(a1);
+                        authCorpInfo.setLicenseCode((String) auth_corp_info.get("license_code"));
+                        if(industry.equals("初中等教育")){
+                            School school = new School();
+                            authCorpInfo.setIndustryType(1);
+                            school.setSchoolName(corpName);
+                            school.setCorpId(corpId);
+                            List<School> bySchool = schoolDao.getBySchool(school);
+                            if(bySchool == null || bySchool.size() == 0){
+                                schoolDao.insert(school);
+                                schoolId = school.getId();
                             }else{
-                                administratorDao.updateName(a1);
+                                schoolId = bySchool.get(0).getId();
                             }
-                            //user表同步
-                            deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
+
+                        }else if(industry.equals("教育行政机构")){
+                            authCorpInfo.setIndustryType(2);
+                            Bureau byBureauName = bureauDao.getByBureauName(corpName);
+                            if(byBureauName == null){
+                                Bureau bureau = new Bureau();
+                                bureau.setBureauName(corpName);
+                                bureau.setCorpId(corpId);
+                                bureauDao.insert(bureau);
+                            }
+                        }
+                        AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
+                        int i = 0;
+                        if(corpInfoByCorpId == null){
+                            i = authCorpInfoDao.insert(authCorpInfo);
+                        }else{
+                            i = authCorpInfoDao.update(authCorpInfo);
+                        }
+                        if(i == 1){
+                            System.out.println("保存授权企业信息成功");
                         }
 
-                        //如果是教育局则添加在部门里其他身份的用户信息
+                        //更新授权应用表
+                        SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                        if(forSuiteTicket != null){
+                            Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
+                            String suiteTicket = parse.get("suiteTicket");
+                            accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
+                            AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
+                            AuthAppInfo authAppInfo = new AuthAppInfo();
+                            authAppInfo.setCorpId(corpId);
+                            authAppInfo.setCorpName(corpName);
+                            authAppInfo.setSuiteTicket(suiteTicket);
+                            authAppInfo.setCorpAccessToken(accessToken);
+                            if(info == null){
+                                authAppInfo.setCreatedTime(new Date());
+                                authAppInfoDao.insert(authAppInfo);
+                            }else{
+                                authAppInfoDao.update(authAppInfo);
+                            }
+                            syncBizDataDao.updateStatus(forSuiteTicket.getId());
+                        }
+
+                        //保存应用信息
+                        Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
+                        List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
+                        for (Map<String, Object> a : agent) {
+                            CorpAgent ca = new CorpAgent();
+                            ca.setAgentId(((Integer)a.get("agentid")).toString());
+                            ca.setCorpId(corpId);
+                            ca.setAgentName((String)a.get("agent_name"));
+                            ca.setAppId(((Integer)a.get("appid")).toString());
+                            ca.setLogoUrl((String)a.get("logo_url"));
+                            ca.setUpdateTime(new Date());
+                            CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
+                            if(byCorpId == null){
+                                corpAgentDao.insert(ca);
+                            }else{
+                                corpAgentDao.update(ca);
+                            }
+                            System.out.println("保存应用信息成功！");
+                            List<String> adminList = (List<String>) a.get("admin_list");
+                            //更新管理员表
+                            for (String userId : adminList) {
+                                OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
+                                Administrator a1 = new Administrator();
+                                a1.setName(userDetail.getName());
+                                a1.setUserId(userDetail.getUserid());
+                                a1.setSchoolId(schoolId);
+                                Administrator byAdm = administratorDao.getByAdm(a1);
+                                if(byAdm == null){
+                                    administratorDao.insert(a1);
+                                }else{
+                                    administratorDao.updateName(a1);
+                                }
+                                //user表同步
+                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
+                            }
+
+                        }
+
+
+                        //保存授权用户信息
+                        Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
+                        AuthUserInfo userInfo = new AuthUserInfo();
+                        userInfo.setUserId((String) auth_user_info.get("userId"));
+                        userInfo.setCorpId(corpId);
+                        AuthUserInfo byCorpId = authUserInfoDao.getByCorpId(corpId);
+                        int k = 0;
+                        if(byCorpId == null){
+                            k = authUserInfoDao.insert(userInfo);
+                        }else{
+                            k = authUserInfoDao.update(userInfo);
+                        }
+                        if(k == 1){
+                            System.out.println("授权用户信息保存成功");
+                        }
+
+                        //如果为教育局则添加除通讯录外的用户信息
                         if(schoolId == -1){
                             try {
+                                //添加处于部门下的用户身份信息
                                 String deptId = "1";
-                                recurseGetUser(deptId, accessToken, corpId,schoolId);
+                                deptService.recurseGetUser(deptId, accessToken, corpId,schoolId);
 
-                                //添加在部门里其他身份的用户信息
+                                //添加不在部门里的用户信息
                                 OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
                                 List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
                                 for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
@@ -394,33 +415,18 @@ public class MultiThreadScheduleTask {
                                 e.printStackTrace();
                             }
                         }
-                    }
 
-
-                    //保存授权用户信息
-                    Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
-                    AuthUserInfo userInfo = new AuthUserInfo();
-                    userInfo.setUserId((String) auth_user_info.get("userId"));
-                    userInfo.setCorpId(corpId);
-                    AuthUserInfo byCorpId = authUserInfoDao.getByCorpId(corpId);
-                    int k = 0;
-                    if(byCorpId == null){
-                        k = authUserInfoDao.insert(userInfo);
-                    }else{
-                        k = authUserInfoDao.update(userInfo);
+                        //初始化一次班级数据
+                        if(schoolId != -1){
+                            deptService.init(schoolId);
+                        }
                     }
-                    if(k == 1){
-                        System.out.println("授权用户信息保存成功");
-                    }
-
-                    //初始化一次班级数据
-                    if(schoolId != -1){
-                        deptService.init(schoolId);
-                    }
-                }
-                syncBizDataDao.updateStatus(id);
-                //授权后更新一次数据
+                    syncBizDataDao.updateStatus(id);
+                    //授权后更新一次数据
 //                bizDataMediumService.initBizDataMedium();
+                } catch (ApiException e) {
+                    statusMap.put(corpId,false);
+                }
 
             }
         }
@@ -458,27 +464,6 @@ public class MultiThreadScheduleTask {
             }
         }
 
-    }
-
-    private void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException {
-        OapiDepartmentListResponse resp = deptService.getDeptList(departmentId, accessToken , 0);
-        List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
-        if(departmentList.size() > 0 ){
-            for (OapiDepartmentListResponse.Department department : departmentList) {
-                Long deptId = department.getId();
-                recurseGetUser(deptId.toString(),accessToken,corpId,schoolId);
-            }
-        }else{
-            OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList(departmentId, accessToken);
-            List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
-            if(userListInfo.size() <= 0){
-                throw new MyException(JsonResultEnum.NO_DEPT_USER_LIST);
-            }
-            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
-                String userId = uList.getUserid();
-                deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
-            }
-        }
     }
 
     @Async

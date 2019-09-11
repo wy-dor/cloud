@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface ParentDao {
-    Parent getByUserId(String userid);
+    Parent getByUserId(String userId);
 
     Integer getClassParentNum(Integer classId);
 

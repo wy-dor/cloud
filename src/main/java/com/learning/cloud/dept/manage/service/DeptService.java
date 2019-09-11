@@ -34,4 +34,6 @@ public interface DeptService {
 
     void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException;
 
+    void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException;
+
 }
