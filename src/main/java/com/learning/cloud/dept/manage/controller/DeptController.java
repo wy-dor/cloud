@@ -55,6 +55,12 @@ public class DeptController {
         return ServiceResult.success("更新成功");
     }
 
+    @GetMapping("/recurseGetUser")
+    public ServiceResult recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException{
+        deptService.recurseGetUser(departmentId,accessToken,corpId,schoolId);
+        return ServiceResult.success("保存成功");
+    }
+
     /*获取部门列表*/
     @GetMapping("/getDeptList")
     public ServiceResult getDeptList(String pDeptId, String accessToken, Integer isFetchChild) throws ApiException {

@@ -359,6 +359,8 @@ public class DeptServiceImpl implements DeptService {
 //        }
     }
 
+
+    @Override
     public void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException {
         OapiDepartmentListResponse resp = getDeptList(departmentId, accessToken , 0);
         List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
@@ -398,9 +400,13 @@ public class DeptServiceImpl implements DeptService {
 
         //获取消息信息
         OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
-        u.setUnionId(userDetail.getUnionid());
+        String userDetailUnionid = userDetail.getUnionid();
+        if(userDetailUnionid == null){
+            return;
+        }
+        u.setUnionId(userDetailUnionid);
         u.setUserName(userDetail.getName());
-        u.setUserId(userDetail.getUserid());
+        u.setUserId(userId);
         u.setCampusId(campusId);
         u.setCorpId(corpId);
         u.setAvatar(userDetail.getAvatar());

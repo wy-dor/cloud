@@ -45,6 +45,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +110,7 @@ public class MultiThreadScheduleTask {
     @Value("${spring.suiteId}")
     private String suiteId;
 
-    private Map<String,Boolean> statusMap = new HashMap<>();
+    private Map<String, Boolean> statusMap = new HashMap<>();
 
 
     @Async
@@ -118,7 +119,7 @@ public class MultiThreadScheduleTask {
         //刷新学校的积分
         //1。获取是所有学校
         List<School> schools = schoolDao.getSchools();
-        for(School school : schools){
+        for (School school : schools) {
             double teacherAvg = 0.0;
             double parentAvg = 0.0;
             //获取所有老师
@@ -126,45 +127,45 @@ public class MultiThreadScheduleTask {
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();
-            if(ts>0){
-                for(Teacher te: teachers){
+            if (ts > 0) {
+                for (Teacher te : teachers) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
                     sum_teacher_score += score;
                 }
-                teacherAvg = sum_teacher_score/ts;
-            }else{
+                teacherAvg = sum_teacher_score / ts;
+            } else {
                 teacherAvg = 0.0;
             }
             //取家长最新积分
             List<Parent> parents = parentDao.getParents(school.getId().longValue());
             Long sum_parent_score = new Long(0);
             int ps = parents.size();
-            if(ps>0){
-                for(Parent pa : parents){
+            if (ps > 0) {
+                for (Parent pa : parents) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
-                    if(score!=0){
+                    if (score != 0) {
                         sum_parent_score += score;
-                    }else {
+                    } else {
                         ps--;
                     }
                 }
-                if(ps>0){
-                    parentAvg = sum_parent_score/ps;
+                if (ps > 0) {
+                    parentAvg = sum_parent_score / ps;
                 }
-            }else {
+            } else {
                 parentAvg = 0.0;
             }
 
             //计算最终的积分
-            double score = teacherAvg*0.8 + parentAvg*0.2;
+            double score = teacherAvg * 0.8 + parentAvg * 0.2;
             //保存到数据库表中
             SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
             schoolScoreboard.setSchoolId(school.getId().longValue());
@@ -181,7 +182,7 @@ public class MultiThreadScheduleTask {
         //刷新班级的积分
         //1。获取所有班级
         List<GradeClass> gradeClasses = gradeClassDao.getAllClass();
-        for(GradeClass gd : gradeClasses){
+        for (GradeClass gd : gradeClasses) {
             double teacherAvg = 0.0;
             double parentAvg = 0.0;
             //获取所有老师
@@ -189,44 +190,44 @@ public class MultiThreadScheduleTask {
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();
-            if(ts>0){
-                for(Teacher te: teachers){
+            if (ts > 0) {
+                for (Teacher te : teachers) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
                     sum_teacher_score += score;
                 }
-                teacherAvg = sum_teacher_score/ts;
-            }else{
+                teacherAvg = sum_teacher_score / ts;
+            } else {
                 teacherAvg = 0.0;
             }
             //取家长最新积分
             List<Parent> parents = parentDao.getParents(gd.getId().longValue());
             Long sum_parent_score = new Long(0);
             int ps = parents.size();
-            if(ps>0){
-                for(Parent pa : parents){
+            if (ps > 0) {
+                for (Parent pa : parents) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
-                    if(score!=0){
+                    if (score != 0) {
                         sum_parent_score += score;
-                    }else {
+                    } else {
                         ps--;
                     }
                 }
-                if(ps>0){
-                    parentAvg = sum_parent_score/ps;
+                if (ps > 0) {
+                    parentAvg = sum_parent_score / ps;
                 }
-            }else {
+            } else {
                 parentAvg = 0.0;
             }
             //计算最终的积分
-            double score = teacherAvg*0.8 + parentAvg*0.2;
+            double score = teacherAvg * 0.8 + parentAvg * 0.2;
             //保存到数据库表中
             ClassScoreboard classScoreboard = new ClassScoreboard();
             classScoreboard.setClassId(gd.getId().longValue());
@@ -256,23 +257,23 @@ public class MultiThreadScheduleTask {
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
         List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
-        if(bizData_04 != null && bizData_04.size() > 0){
+        if (bizData_04 != null && bizData_04.size() > 0) {
             for (SyncBizData bizData : bizData_04) {
                 String corpId = bizData.getCorpId();
                 try {
                     Long id = bizData.getId();
-                    Boolean  status= statusMap.get(corpId);
-                    if(status != null && status == true){
+                    Boolean status = statusMap.get(corpId);
+                    if (status != null && status == true) {
                         return;
                     }
-                    statusMap.put(corpId,true);
+                    statusMap.put(corpId, true);
                     Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData.getBizData());
-                    String syncAction = (String)parse_0.get("syncAction");
-                    if("org_suite_auth".equals(syncAction)){
+                    String syncAction = (String) parse_0.get("syncAction");
+                    if ("org_suite_auth".equals(syncAction)) {
                         Integer schoolId = -1;
                         String accessToken = "";
                         //更新授权企业表
-                        Map<String,Object> auth_corp_info = (Map<String,Object>) parse_0.get("auth_corp_info");
+                        Map<String, Object> auth_corp_info = (Map<String, Object>) parse_0.get("auth_corp_info");
                         AuthCorpInfo authCorpInfo = new AuthCorpInfo();
                         String corpName = (String) auth_corp_info.get("corp_name");
                         String industry = (String) auth_corp_info.get("industry");
@@ -281,29 +282,29 @@ public class MultiThreadScheduleTask {
                         authCorpInfo.setIndustry(industry);
                         authCorpInfo.setAuthLevel((Integer) auth_corp_info.get("auth_level"));
                         authCorpInfo.setInviteUrl((String) auth_corp_info.get("invite_url"));
-                        if((Boolean) auth_corp_info.get("is_authenticated")){
-                            authCorpInfo.setIsAuthenticated((short)1);
-                        }else{
-                            authCorpInfo.setIsAuthenticated((short)0);
+                        if ((Boolean) auth_corp_info.get("is_authenticated")) {
+                            authCorpInfo.setIsAuthenticated((short) 1);
+                        } else {
+                            authCorpInfo.setIsAuthenticated((short) 0);
                         }
                         authCorpInfo.setLicenseCode((String) auth_corp_info.get("license_code"));
-                        if(industry.equals("初中等教育")){
+                        if (industry.equals("初中等教育")) {
                             School school = new School();
                             authCorpInfo.setIndustryType(1);
                             school.setSchoolName(corpName);
                             school.setCorpId(corpId);
                             List<School> bySchool = schoolDao.getBySchool(school);
-                            if(bySchool == null || bySchool.size() == 0){
+                            if (bySchool == null || bySchool.size() == 0) {
                                 schoolDao.insert(school);
                                 schoolId = school.getId();
-                            }else{
+                            } else {
                                 schoolId = bySchool.get(0).getId();
                             }
 
-                        }else if(industry.equals("教育行政机构")){
+                        } else if (industry.equals("教育行政机构")) {
                             authCorpInfo.setIndustryType(2);
                             Bureau byBureauName = bureauDao.getByBureauName(corpName);
-                            if(byBureauName == null){
+                            if (byBureauName == null) {
                                 Bureau bureau = new Bureau();
                                 bureau.setBureauName(corpName);
                                 bureau.setCorpId(corpId);
@@ -312,18 +313,18 @@ public class MultiThreadScheduleTask {
                         }
                         AuthCorpInfo corpInfoByCorpId = authCorpInfoDao.getCorpInfoByCorpId(corpId);
                         int i = 0;
-                        if(corpInfoByCorpId == null){
+                        if (corpInfoByCorpId == null) {
                             i = authCorpInfoDao.insert(authCorpInfo);
-                        }else{
+                        } else {
                             i = authCorpInfoDao.update(authCorpInfo);
                         }
-                        if(i == 1){
+                        if (i == 1) {
                             System.out.println("保存授权企业信息成功");
                         }
 
                         //更新授权应用表
                         SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-                        if(forSuiteTicket != null){
+                        if (forSuiteTicket != null) {
                             Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                             String suiteTicket = parse.get("suiteTicket");
                             accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
@@ -333,30 +334,30 @@ public class MultiThreadScheduleTask {
                             authAppInfo.setCorpName(corpName);
                             authAppInfo.setSuiteTicket(suiteTicket);
                             authAppInfo.setCorpAccessToken(accessToken);
-                            if(info == null){
+                            if (info == null) {
                                 authAppInfo.setCreatedTime(new Date());
                                 authAppInfoDao.insert(authAppInfo);
-                            }else{
+                            } else {
                                 authAppInfoDao.update(authAppInfo);
                             }
                             syncBizDataDao.updateStatus(forSuiteTicket.getId());
                         }
 
                         //保存应用信息
-                        Map<String,Object> auth_info = (Map<String,Object>) parse_0.get("auth_info");
-                        List<Map<String,Object>> agent = (List<Map<String,Object>>) auth_info.get("agent");
+                        Map<String, Object> auth_info = (Map<String, Object>) parse_0.get("auth_info");
+                        List<Map<String, Object>> agent = (List<Map<String, Object>>) auth_info.get("agent");
                         for (Map<String, Object> a : agent) {
                             CorpAgent ca = new CorpAgent();
-                            ca.setAgentId(((Integer)a.get("agentid")).toString());
+                            ca.setAgentId(((Integer) a.get("agentid")).toString());
                             ca.setCorpId(corpId);
-                            ca.setAgentName((String)a.get("agent_name"));
-                            ca.setAppId(((Integer)a.get("appid")).toString());
-                            ca.setLogoUrl((String)a.get("logo_url"));
+                            ca.setAgentName((String) a.get("agent_name"));
+                            ca.setAppId(((Integer) a.get("appid")).toString());
+                            ca.setLogoUrl((String) a.get("logo_url"));
                             ca.setUpdateTime(new Date());
                             CorpAgent byCorpId = corpAgentDao.getByCorpId(corpId);
-                            if(byCorpId == null){
+                            if (byCorpId == null) {
                                 corpAgentDao.insert(ca);
-                            }else{
+                            } else {
                                 corpAgentDao.update(ca);
                             }
                             System.out.println("保存应用信息成功！");
@@ -365,13 +366,19 @@ public class MultiThreadScheduleTask {
                             for (String userId : adminList) {
                                 OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
                                 Administrator a1 = new Administrator();
-                                a1.setName(userDetail.getName());
-                                a1.setUserId(userDetail.getUserid());
+                                //todo
+                                //判断获取的值是否为空，为空则不插入
+                                String userDetailName = userDetail.getName();
+                                if(userDetailName == null){
+                                    continue;
+                                }
+                                a1.setName(userDetailName);
+                                a1.setUserId(userId);
                                 a1.setSchoolId(schoolId);
                                 Administrator byAdm = administratorDao.getByAdm(a1);
-                                if(byAdm == null){
+                                if (byAdm == null) {
                                     administratorDao.insert(a1);
-                                }else{
+                                } else {
                                     administratorDao.updateName(a1);
                                 }
                                 //user表同步
@@ -382,27 +389,27 @@ public class MultiThreadScheduleTask {
 
 
                         //保存授权用户信息
-                        Map<String,Object> auth_user_info = (Map<String,Object>) parse_0.get("auth_user_info");
+                        Map<String, Object> auth_user_info = (Map<String, Object>) parse_0.get("auth_user_info");
                         AuthUserInfo userInfo = new AuthUserInfo();
                         userInfo.setUserId((String) auth_user_info.get("userId"));
                         userInfo.setCorpId(corpId);
                         AuthUserInfo byCorpId = authUserInfoDao.getByCorpId(corpId);
                         int k = 0;
-                        if(byCorpId == null){
+                        if (byCorpId == null) {
                             k = authUserInfoDao.insert(userInfo);
-                        }else{
+                        } else {
                             k = authUserInfoDao.update(userInfo);
                         }
-                        if(k == 1){
+                        if (k == 1) {
                             System.out.println("授权用户信息保存成功");
                         }
 
                         //如果为教育局则添加除通讯录外的用户信息
-                        if(schoolId == -1){
-                            try {
+                        if (schoolId == -1) {
+
                                 //添加处于部门下的用户身份信息
                                 String deptId = "1";
-                                deptService.recurseGetUser(deptId, accessToken, corpId,schoolId);
+                                deptService.recurseGetUser(deptId, accessToken, corpId, schoolId);
 
                                 //添加不在部门里的用户信息
                                 OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
@@ -411,13 +418,10 @@ public class MultiThreadScheduleTask {
                                     String userId = uList.getUserid();
                                     deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
                         }
 
                         //初始化一次班级数据
-                        if(schoolId != -1){
+                        if (schoolId != -1) {
                             deptService.init(schoolId);
                         }
                     }
@@ -425,7 +429,7 @@ public class MultiThreadScheduleTask {
                     //授权后更新一次数据
 //                bizDataMediumService.initBizDataMedium();
                 } catch (ApiException e) {
-                    statusMap.put(corpId,false);
+                    statusMap.put(corpId, false);
                 }
 
             }
@@ -433,7 +437,7 @@ public class MultiThreadScheduleTask {
 
         //更新推送的suite_ticket
         List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
-        if(bizDataList != null && bizDataList.size() != 0){
+        if (bizDataList != null && bizDataList.size() != 0) {
             for (SyncBizData bizData_02 : bizDataList) {
                 Long id = bizData_02.getId();
                 Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
@@ -443,7 +447,7 @@ public class MultiThreadScheduleTask {
                     String corpId = corpInfo.getCorpId();
                     String corpName = corpInfo.getCorpName();
                     String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                    if(accessToken == null){
+                    if (accessToken == null) {
                         continue;
                     }
                     AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
@@ -452,10 +456,10 @@ public class MultiThreadScheduleTask {
                     authAppInfo.setCorpName(corpName);
                     authAppInfo.setSuiteTicket(suiteTicket);
                     authAppInfo.setCorpAccessToken(accessToken);
-                    if(byCorpId == null){
+                    if (byCorpId == null) {
                         authAppInfo.setCreatedTime(new Date());
                         authAppInfoDao.insert(authAppInfo);
-                    }else{
+                    } else {
                         authAppInfoDao.update(authAppInfo);
                     }
                 }
@@ -468,7 +472,7 @@ public class MultiThreadScheduleTask {
 
     @Async
     @Scheduled(cron = "0 0 6,12,18 * * ?")//每天的早上六点，中午十二点和下午六点
-    public void queryBizDataMedium() throws Exception{
+    public void queryBizDataMedium() throws Exception {
         bizDataMediumService.initBizDataMedium(null);
     }
 }
