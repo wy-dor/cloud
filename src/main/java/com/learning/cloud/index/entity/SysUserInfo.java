@@ -17,5 +17,7 @@ public class SysUserInfo {
     private Integer schoolId;
     private Long id;
     private Integer bureauId;
+    private Integer classId;
+    private Integer teacherId;
 
 }

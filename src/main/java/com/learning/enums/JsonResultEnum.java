@@ -32,6 +32,7 @@ public enum JsonResultEnum {
     OA_LOGIN_NOT_SYS(1032,"OA免登出错,不是管理员"),
     THIRD_LOGIN_ERROR(1033,"第三方登录出错"),
     NO_FUNCTION_FOR(1034,"没有管理端功能"),
+    NO_USER_INFO(1036,"获取用户信息失败"),
 
     NO_SCORE_ACTION(1041,"没有添加积分项，请联系教育局管理员添加"),
 

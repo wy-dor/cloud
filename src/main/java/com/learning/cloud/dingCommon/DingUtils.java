@@ -5,10 +5,11 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.learning.cloud.index.service.AuthenService;
-import com.learning.cloud.innerApp.config.InnerAppContanst;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
-import com.taobao.api.ApiException;
+import com.sun.media.jfxmedia.logging.Logger;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
  * @Desc:
  */
 @Component
+@Slf4j
 public class DingUtils {
 
     private static String CORP_ID = "dingc5fa8a42960b8d6d35c2f4657eb6378f";
@@ -89,7 +91,13 @@ public class DingUtils {
         request.setUserid(userid);
         request.setHttpMethod("GET");
         OapiUserGetResponse response = client.execute(request, getAccessToken(corpid));
-        return response;
+        if(response.isSuccess()){
+            return response;
+        }else {
+            log.error("获取用户详情失败");
+            return null;
+        }
+
     }
 
     // unionid换取userid
