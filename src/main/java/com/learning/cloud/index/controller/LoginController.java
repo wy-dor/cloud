@@ -7,6 +7,12 @@ import com.learning.cloud.index.entity.SysUserInfo;
 import com.learning.cloud.index.entity.UserInfo;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.parent.dao.ParentDao;
+import com.learning.cloud.user.parent.entity.Parent;
+import com.learning.cloud.user.student.dao.StudentDao;
+import com.learning.cloud.user.student.entity.Student;
+import com.learning.cloud.user.teacher.dao.TeacherDao;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
@@ -38,6 +44,15 @@ public class LoginController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private StudentDao studentDao;
+
+    @Autowired
+    private ParentDao parentDao;
+
+    @Autowired
+    private TeacherDao teacherDao;
 
     /**
      * 应用管理后台免登
@@ -101,6 +116,7 @@ public class LoginController {
         List<SysUserInfo> sysUserInfos = new ArrayList<>();
         for(int i=0;i<users.size();i++){
             User user = users.get(i);
+            int userRole = user.getRoleType();
             OapiUserGetResponse userGetResponse = getUserByUserid(user.getUserId(), user.getCorpId());
             if(userGetResponse!=null){
                 if(i==0){
@@ -112,7 +128,22 @@ public class LoginController {
                 sysUserInfo.setCropid(user.getCorpId());
                 sysUserInfo.setUserid(user.getUserId());
                 sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
-                sysUserInfo.setRole(user.getRoleType());
+                sysUserInfo.setRole(userRole);
+                // 2: 家长  3: 老师 4: 学生 5:其他
+                if(userRole==2){
+                    Parent parent = parentDao.getByUserId(user.getUserId());
+                    sysUserInfo.setClassId(parent.getClassId());
+                }
+                if(userRole==4){
+                    //获取班级id
+                    Student student = studentDao.getByUserId(user.getUserId());
+                    sysUserInfo.setClassId(student.getClassId());
+                }
+                else if(userRole==3){
+                    //获取老师id
+                    Teacher teacher = teacherDao.getByUserId(user.getUserId());
+                    sysUserInfo.setTeacherId(teacher.getId());
+                }
                 sysUserInfo.setId(user.getId());
                 String cropName = "";
                 if(user.getSchoolId()==null||user.getSchoolId()==-1){
