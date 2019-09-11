@@ -372,12 +372,11 @@ public class DeptServiceImpl implements DeptService {
         }else{
             OapiUserSimplelistResponse deptUserListResponse = getDeptUserList(departmentId, accessToken);
             List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
-            if(userListInfo.size() <= 0){
-                throw new MyException(JsonResultEnum.NO_DEPT_USER_LIST);
-            }
-            for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
-                String userId = uList.getUserid();
-                userSaveByRole(schoolId, corpId, null, userId, 5);
+            if(userListInfo.size() > 0){
+                for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
+                    String userId = uList.getUserid();
+                    userSaveByRole(schoolId, corpId, null, userId, 5);
+                }
             }
         }
     }
