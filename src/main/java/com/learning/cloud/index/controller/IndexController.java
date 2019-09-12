@@ -76,7 +76,7 @@ public class IndexController {
 		resultMap.put("userId",userId);
 		resultMap.put("corpId",corpId);
 
-		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, corpId);
+		OapiUserGetResponse resp1 = deptService.getUserDetail(userId, accessToken);
 		String name = resp1.getName();
 		String avatar = resp1.getAvatar();
 		Boolean isAdmin = resp1.getIsAdmin();

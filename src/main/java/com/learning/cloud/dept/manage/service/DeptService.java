@@ -1,8 +1,10 @@
 package com.learning.cloud.dept.manage.service;
 
 import com.dingtalk.api.response.*;
+import com.learning.cloud.user.admin.entity.Administrator;
 import com.taobao.api.ApiException;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DeptService {
@@ -22,7 +24,7 @@ public interface DeptService {
 
     OapiUserSimplelistResponse getDeptUserList(String deptId, String accessToken) throws ApiException;
 
-    OapiUserGetResponse getUserDetail(String userId, String corpId) throws ApiException;
+    OapiUserGetResponse getUserDetail(String userId, String acessToken) throws ApiException;
 
     OapiUserListbypageResponse getDeptUserListByPage(long deptId, String accessToken) throws ApiException;
 
@@ -30,8 +32,11 @@ public interface DeptService {
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException;
 
-    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException;
+    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType, String accessToken) throws ApiException;
 
     void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException;
 
+    List<Administrator> getURLAdmin(String accessToken) throws ApiException;
+
+    OapiUserGetOrgUserCountResponse  getOrgUserCount(String accessToken) throws ApiException;
 }

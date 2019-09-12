@@ -14,4 +14,7 @@ public class Administrator extends BaseEntity {
     private Integer schoolId;
 
     private Short status;
+
+    //added
+    private Long sysLevel;
 }

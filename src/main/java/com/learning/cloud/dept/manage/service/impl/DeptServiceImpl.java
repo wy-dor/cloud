@@ -14,6 +14,7 @@ import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
@@ -169,7 +170,7 @@ public class DeptServiceImpl implements DeptService {
             List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
             for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
                 String userId = uList.getUserid();
-                userSaveByRole(schoolId, corpId, null, userId, 5);
+                userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
 
             }
 
@@ -262,7 +263,7 @@ public class DeptServiceImpl implements DeptService {
 
 //                    teacherClassIdMap2.put(teacherId,classIds);
 
-                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType, accessToken);
 
                 }
             }else if(userRole.equals("家长")){
@@ -288,7 +289,7 @@ public class DeptServiceImpl implements DeptService {
                     }
 //                    parentIdList2.add(parentId);
 
-                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType, accessToken);
 
                 }
             }else if(userRole.equals("学生")){
@@ -314,7 +315,7 @@ public class DeptServiceImpl implements DeptService {
                     }
 //                    studentIdList2.add(studentId);
 
-                    userSaveByRole(schoolId, corpId, campusId, userId, roleType);
+                    userSaveByRole(schoolId, corpId, campusId, userId, roleType, accessToken);
                 }
             }
         }
@@ -374,7 +375,7 @@ public class DeptServiceImpl implements DeptService {
             if(userListInfo.size() > 0){
                 for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
                     String userId = uList.getUserid();
-                    userSaveByRole(schoolId, corpId, null, userId, 5);
+                    userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
                 }
             }
         }
@@ -382,7 +383,7 @@ public class DeptServiceImpl implements DeptService {
 
     //对用户角色进行判断存储
     @Override
-    public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType) throws ApiException {
+    public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType, String accessToken) throws ApiException {
         //其他身份不覆盖主要角色
         if(roleType == 5){
             List<User> userRole234 = userDao.getUserRole234(userId, corpId);
@@ -397,7 +398,7 @@ public class DeptServiceImpl implements DeptService {
         u.setSchoolId(schoolId);
 
         //获取消息信息
-        OapiUserGetResponse userDetail = getUserDetail(userId, corpId);
+        OapiUserGetResponse userDetail = getUserDetail(userId, accessToken);
         String userDetailUnionid = userDetail.getUnionid();
         if(userDetailUnionid == null){
             return;
@@ -575,8 +576,7 @@ public class DeptServiceImpl implements DeptService {
 
     /*获取用户详情*/
     @Override
-    public OapiUserGetResponse getUserDetail(String userId, String corpId) throws ApiException {
-        String accessToken = authenService.getAccessToken(corpId);
+    public OapiUserGetResponse getUserDetail(String userId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userId);
@@ -618,6 +618,37 @@ public class DeptServiceImpl implements DeptService {
         request.setUserId(userId);
         request.setHttpMethod("GET");
         OapiDepartmentListParentDeptsResponse response = client.execute(request, accessToken);
+        return response;
+    }
+
+    /*查询企业下的管理员列表*/
+    @Override
+    public List<Administrator> getURLAdmin(String accessToken) throws ApiException {
+        List<Administrator> administratorList = new ArrayList<>();
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_admin");
+        OapiUserGetAdminRequest request = new OapiUserGetAdminRequest();
+        request.setHttpMethod("GET");
+        OapiUserGetAdminResponse response = client.execute(request, accessToken);
+        List<OapiUserGetAdminResponse.AdminList> adminList = response.getAdminList();
+        for (OapiUserGetAdminResponse.AdminList admin : adminList) {
+            Administrator a = new Administrator();
+            String userId = admin.getUserid();
+            a.setUserId(userId);
+            a.setSysLevel(admin.getSysLevel());
+            OapiUserGetResponse userDetail = getUserDetail(userId, accessToken);
+            a.setName(userDetail.getName());
+            administratorList.add(a);
+        }
+        return administratorList;
+    }
+
+    @Override
+    public OapiUserGetOrgUserCountResponse getOrgUserCount(String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_org_user_count");
+        OapiUserGetOrgUserCountRequest request = new OapiUserGetOrgUserCountRequest();
+        request.setOnlyActive(1L);
+        request.setHttpMethod("GET");
+        OapiUserGetOrgUserCountResponse response = client.execute(request, accessToken);
         return response;
     }
 

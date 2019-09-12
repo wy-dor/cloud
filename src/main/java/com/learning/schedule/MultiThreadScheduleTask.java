@@ -1,7 +1,6 @@
 package com.learning.schedule;
 
 import com.alibaba.fastjson.JSON;
-import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
@@ -35,8 +34,6 @@ import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
 import com.learning.cloud.user.user.dao.UserDao;
-import com.learning.enums.JsonResultEnum;
-import com.learning.exception.MyException;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +42,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -365,7 +361,7 @@ public class MultiThreadScheduleTask {
                             List<String> adminList = (List<String>) a.get("admin_list");
                             //更新管理员表
                             for (String userId : adminList) {
-                                OapiUserGetResponse userDetail = deptService.getUserDetail(userId, corpId);
+                                OapiUserGetResponse userDetail = deptService.getUserDetail(userId, accessToken);
                                 Administrator a1 = new Administrator();
                                 //todo
                                 //判断获取的值是否为空，为空则不插入
@@ -383,7 +379,7 @@ public class MultiThreadScheduleTask {
                                     administratorDao.updateName(a1);
                                 }
                                 //user表同步
-                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
+                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
                             }
 
                         }
@@ -417,7 +413,7 @@ public class MultiThreadScheduleTask {
                                 List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
                                 for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
                                     String userId = uList.getUserid();
-                                    deptService.userSaveByRole(schoolId, corpId, null, userId, 5);
+                                    deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
                                 }
                         }
 

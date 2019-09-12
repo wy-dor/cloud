@@ -1,6 +1,7 @@
 package com.learning.cloud.dept.manage.controller;
 
 import com.learning.cloud.dept.manage.service.DeptService;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.school.service.SchoolService;
 import com.learning.cloud.term.service.TermService;
@@ -22,6 +23,10 @@ public class DeptController {
 
     @Autowired
     private TermService termService;
+
+    @Autowired
+    private AuthenService authenService;
+
 
     /*关联school与bureau*/
     /*传入id(school的id)和bureauId*/
@@ -88,7 +93,8 @@ public class DeptController {
     /*获取用户详情*/
     @GetMapping("/getUserDetail")
     public ServiceResult getUserDetail(String userId, String corpId) throws ApiException {
-        return ServiceResult.success(deptService.getUserDetail(userId,corpId));
+        String accessToken = authenService.getAccessToken(corpId);
+        return ServiceResult.success(deptService.getUserDetail(userId,accessToken));
     }
 
     /*获取部门用户详情*/
@@ -113,6 +119,18 @@ public class DeptController {
     @GetMapping("/getListParentDeptsByUser")
     public ServiceResult getListParentDeptsByUser(String userId, String accessToken) throws ApiException {
         return ServiceResult.success(deptService.getListParentDeptsByUser(userId,accessToken));
+    }
+
+    /*获取管理员列表*/
+    @GetMapping("/getAdmin")
+    public ServiceResult getAdmin(String accessToken) throws ApiException {
+        return ServiceResult.success(deptService.getURLAdmin(accessToken));
+    }
+
+    /*获取企业员工人数*/
+    @GetMapping("/getOrgUserCount")
+    public ServiceResult getOrgUserCount(String accessToken) throws ApiException {
+        return ServiceResult.success(deptService.getOrgUserCount(accessToken));
     }
 
 }
