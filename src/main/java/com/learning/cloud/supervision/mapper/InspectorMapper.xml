@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.supervision.dao.InspectorDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.supervision.entity.Inspector">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="login" jdbcType="VARCHAR" property="login" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="bureau_id" jdbcType="BIGINT" property="bureauId" />
-  </resultMap>
+
   <sql id="Base_Column_List">
     id, login, password, name, phone, create_time, bureau_id
   </sql>
-  <select id="getInspector" parameterType="com.learning.cloud.supervision.entity.Inspector" resultMap="BaseResultMap">
+  <select id="getInspector" parameterType="com.learning.cloud.supervision.entity.Inspector" resultType="com.learning.cloud.supervision.entity.Inspector">
     select
     <include refid="Base_Column_List" />
     from inspector
     where bureau_id = #{bureauId}
   </select>
 
-  <select id="loginInspector" parameterType="java.lang.String" resultType="BaseResultMap">
+  <select id="loginInspector" parameterType="java.lang.String" resultType="com.learning.cloud.supervision.entity.Inspector">
     select * from inspector
     where login = #{login}
     and password = #{password}
