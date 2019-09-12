@@ -6,6 +6,7 @@ import com.learning.cloud.supervision.service.InspectorService;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.enums.JsonResultEnum;
+import com.learning.exception.MyException;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,11 @@ public class InspectorServiceImpl implements InspectorService {
 
     @Override
     public JsonResult addInspector(Inspector inspector) throws Exception {
+        // 判断不能重名
+        int count = inspectorDao.getInspectorByLogin(inspector);
+        if(count>1){
+            throw new MyException(JsonResultEnum.EXIST_INSPECTOR);
+        }
         int i = inspectorDao.addInspector(inspector);
         if(i>0){
             return JsonResultUtil.success(inspector.getId());
@@ -62,6 +68,17 @@ public class InspectorServiceImpl implements InspectorService {
     @Override
     public JsonResult loginInspector(String login, String password) throws Exception {
         Inspector inspector = inspectorDao.loginInspector(login, password);
-        return null;
+        return JsonResultUtil.success(inspector);
     }
+
+    @Override
+    public JsonResult resetPassword(Inspector inspector) throws Exception {
+        int i = inspectorDao.resetPassword(inspector);
+        if(i>0){
+            return JsonResultUtil.success();
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.RESET_ERROR);
+        }
+    }
+
 }

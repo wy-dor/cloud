@@ -18,4 +18,6 @@ public interface InspectorService {
     JsonResult getInspector(Inspector inspector)throws Exception;
 
     JsonResult loginInspector(String login, String password)throws Exception;
+
+    JsonResult resetPassword(Inspector inspector)throws Exception;
 }

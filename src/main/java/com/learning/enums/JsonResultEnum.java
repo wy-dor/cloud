@@ -38,6 +38,9 @@ public enum JsonResultEnum {
 
     NO_DEPT_USER_LIST(1051,"部门下用户列表为空"),
 
+
+    EXIST_INSPECTOR(1061,"登录名重复，不能新增"),
+    RESET_ERROR(1062,"修改密码出错"),
     ;
 
     @Getter private Integer code;

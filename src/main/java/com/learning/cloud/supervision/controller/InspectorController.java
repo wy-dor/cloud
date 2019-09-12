@@ -52,4 +52,9 @@ public class InspectorController {
         return inspectorService.loginInspector(login, password);
     }
 
+    // 重置密码
+    @PostMapping("/resetPassword")
+    public JsonResult resetPassword(Inspector inspector)throws Exception{
+        return inspectorService.resetPassword(inspector);
+    }
 }

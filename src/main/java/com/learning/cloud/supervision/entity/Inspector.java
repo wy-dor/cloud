@@ -20,4 +20,6 @@ public class Inspector extends BaseEntity {
     private Date createTime;
 
     private Integer bureauId;
+
+    private String newPassword;
 }

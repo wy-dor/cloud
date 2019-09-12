@@ -13,10 +13,17 @@
   </select>
 
   <select id="loginInspector" parameterType="java.lang.String" resultType="com.learning.cloud.supervision.entity.Inspector">
-    select * from inspector
+    select id,name,phone,bureau_id from inspector
     where login = #{login}
     and password = #{password}
   </select>
+
+  <select id="getInspectorByLogin">
+    select count(*) from inspector
+    where login = #{login}
+    and bureau_id = #{bureauId}
+  </select>
+
   <delete id="deleteInspector" parameterType="java.lang.Long">
     delete from inspector
     where id = #{id,jdbcType=BIGINT}
@@ -95,4 +102,10 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <update id="resetPassword" parameterType="com.learning.cloud.supervision.entity.Inspector">
+    update inspector
+    set password = #{newPassword}
+    where id = #{id}
+      and password = #{password}
+  </update>
 </mapper>

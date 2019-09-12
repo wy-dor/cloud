@@ -24,4 +24,8 @@ public interface InspectorDao {
     List<Inspector> getInspector(Inspector inspector);
 
     Inspector loginInspector(@Param("login") String login, @Param("password") String password);
+
+    int getInspectorByLogin(Inspector inspector);
+
+    int resetPassword(Inspector inspector);
 }
