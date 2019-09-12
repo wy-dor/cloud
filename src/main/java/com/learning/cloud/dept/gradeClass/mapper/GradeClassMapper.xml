@@ -18,6 +18,14 @@
     where id = #{id}
   </select>
 
+  <select id="getByDeptId" parameterType="java.lang.Long"
+          resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
+    select *
+    from edu_grade_class
+    where dept_id = #{deptId}
+    limit 1
+  </select>
+
   <select id="getByGradeClass" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
           resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     select *
