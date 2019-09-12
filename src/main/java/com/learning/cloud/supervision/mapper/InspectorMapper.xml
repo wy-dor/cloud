@@ -18,7 +18,7 @@
     and password = #{password}
   </select>
 
-  <select id="getInspectorByLogin">
+  <select id="getInspectorByLogin" parameterType="com.learning.cloud.supervision.entity.Inspector" resultType="java.lang.Integer">
     select count(*) from inspector
     where login = #{login}
     and bureau_id = #{bureauId}
