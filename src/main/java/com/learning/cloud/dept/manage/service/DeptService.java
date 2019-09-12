@@ -1,8 +1,6 @@
 package com.learning.cloud.dept.manage.service;
 
 import com.dingtalk.api.response.*;
-import com.learning.cloud.school.entity.School;
-import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 
 import java.util.Map;
@@ -10,7 +8,7 @@ import java.util.Map;
 public interface DeptService {
     void init(Integer schoolId) throws ApiException;
 
-    void saveUserInClass(int classId) throws ApiException;
+    void saveUserInClass(Long deptId) throws ApiException;
 
     Map<String, String> getUserRole(String userId, String accessToken, String avatar ,String corpId) throws ApiException;
 

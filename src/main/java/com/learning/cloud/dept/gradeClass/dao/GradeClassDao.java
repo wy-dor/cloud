@@ -30,4 +30,6 @@ public interface GradeClassDao {
     int delete(Integer classId);
 
     List<String> getAllGradeName(Integer schoolId);
+
+    GradeClass getByDeptId(Long deptId);
 }

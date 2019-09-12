@@ -22,8 +22,6 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
-import com.learning.enums.JsonResultEnum;
-import com.learning.exception.MyException;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,7 +149,7 @@ public class DeptServiceImpl implements DeptService {
 //                                classIdList2.add(classId);
 
                                     /*班级结构数据同步*/
-                                    saveUserInClass(classId);
+                                    saveUserInClass(classDeptId);
                                 }
                             }
                         }
@@ -195,7 +193,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public void saveUserInClass(int classId) throws ApiException {
+    public void saveUserInClass(Long deptId) throws ApiException {
 //        //教师表删除同步记录
 //        Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
 //        Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
@@ -205,15 +203,16 @@ public class DeptServiceImpl implements DeptService {
 //        //家长表删除同步记录
 //        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
 //        List<Integer> parentIdList2 = new ArrayList<>();
-        GradeClass byId = gradeClassDao.getById(classId);
-        Integer schoolId = byId.getSchoolId();
-        Integer bureauId = byId.getBureauId();
+        GradeClass gc = gradeClassDao.getByDeptId(deptId);
+        Integer classId = gc.getId();
+        Integer schoolId = gc.getSchoolId();
+        Integer bureauId = gc.getBureauId();
         School school = new School();
         school.setId(schoolId);
         String corpId = schoolDao.getBySchool(school).get(0).getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
-        int campusId = byId.getCampusId();
-        Long classDeptId = byId.getDeptId();
+        int campusId = gc.getCampusId();
+        Long classDeptId = gc.getDeptId();
         /*获取老师，学生，家长部门id*/
         OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
         List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();

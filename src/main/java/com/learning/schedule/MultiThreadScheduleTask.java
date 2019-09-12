@@ -45,6 +45,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -426,6 +427,8 @@ public class MultiThreadScheduleTask {
                         }
                     }
                     syncBizDataDao.updateStatus(id);
+                    //实现可重复同步
+                    statusMap.put(corpId, false);
                     //授权后更新一次数据
 //                bizDataMediumService.initBizDataMedium();
                 } catch (ApiException e) {

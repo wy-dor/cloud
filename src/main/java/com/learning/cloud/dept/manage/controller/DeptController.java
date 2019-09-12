@@ -50,8 +50,8 @@ public class DeptController {
 
     /*班级结构数据同步*/
     @GetMapping("/updateUserInClass")
-    public ServiceResult updateUserInClass(int classId) throws ApiException{
-        deptService.saveUserInClass(classId);
+    public ServiceResult updateUserInClass(Long deptId) throws ApiException{
+        deptService.saveUserInClass(deptId);
         return ServiceResult.success("更新成功");
     }
 

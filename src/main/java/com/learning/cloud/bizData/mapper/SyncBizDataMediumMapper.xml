@@ -24,10 +24,10 @@
   <select id="getAllBizDataMedium" parameterType="com.learning.cloud.bizData.entity.SyncBizDataMedium" resultType="com.learning.cloud.bizData.entity.SyncBizDataMedium">
     SELECT *
     FROM ding_cloud_push.open_sync_biz_data_medium
-    <if test="corpId != null">
-      corp_id = #{corpId}
-    </if>
     where status = 0
+    <if test="corpId != null">
+      and corp_id = #{corpId}
+    </if>
     order by id
   </select>
 
