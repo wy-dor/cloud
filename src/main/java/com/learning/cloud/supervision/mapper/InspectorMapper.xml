@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.supervision.dao.InspectorDao">
+
+  <sql id="Base_Column_List">
+    id, login, password, name, phone, create_time, bureau_id
+  </sql>
+  <select id="getInspector" parameterType="com.learning.cloud.supervision.entity.Inspector" resultType="com.learning.cloud.supervision.entity.Inspector">
+    select
+    <include refid="Base_Column_List" />
+    from inspector
+    where bureau_id = #{bureauId}
+  </select>
+
+  <select id="loginInspector" parameterType="java.lang.String" resultType="com.learning.cloud.supervision.entity.Inspector">
+    select id,name,phone,bureau_id from inspector
+    where login = #{login}
+    and password = #{password}
+  </select>
+
+  <select id="getInspectorByLogin">
+    select count(*) from inspector
+    where login = #{login}
+    and bureau_id = #{bureauId}
+  </select>
+
+  <delete id="deleteInspector" parameterType="java.lang.Long">
+    delete from inspector
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="addInspector" keyProperty="id" useGeneratedKeys="true" parameterType="com.learning.cloud.supervision.entity.Inspector">
+    insert into inspector
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="login != null">
+        login,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="login != null">
+        #{login,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateInspector" parameterType="com.learning.cloud.supervision.entity.Inspector">
+    update inspector
+    <set>
+      <if test="login != null">
+        login = #{login,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bureauId != null">
+        bureau_id = #{bureauId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="resetPassword" parameterType="com.learning.cloud.supervision.entity.Inspector">
+    update inspector
+    set password = #{newPassword}
+    where id = #{id}
+      and password = #{password}
+  </update>
+</mapper>
