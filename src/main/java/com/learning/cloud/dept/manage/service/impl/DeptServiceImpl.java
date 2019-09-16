@@ -667,6 +667,7 @@ public class DeptServiceImpl implements DeptService {
         return administratorList;
     }
 
+    /*查询企业员工人数*/
     @Override
     public OapiUserGetOrgUserCountResponse getOrgUserCount(String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_org_user_count");

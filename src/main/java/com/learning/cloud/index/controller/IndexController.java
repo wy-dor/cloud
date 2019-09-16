@@ -109,6 +109,11 @@ public class IndexController {
 		return JsonResultUtil.success(resultMap);
 	}
 
+	@GetMapping("/getAccessToken")
+	public JsonResult getAccessToken(String corpId) throws ApiException {
+		String accessToken = authenService.getAccessToken(corpId);
+		return JsonResultUtil.success(accessToken);
+	}
 
 	@GetMapping("/getURLAccessToken")
 	public JsonResult getURLAccessToken(String authCorpId, String suiteTicket) throws ApiException {
