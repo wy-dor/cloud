@@ -51,22 +51,16 @@ public class AuthenServiceImpl implements AuthenService {
     @Value("${spring.suiteSecret}")
     private String suiteSecret;
 
-    @Value("${spring.suiteId}")
-    private String suiteId;
-
-
     /*获取企业凭证*/
     @Override
     public String getAccessToken(String authCorpId) throws ApiException {
 //        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
 //        String suiteTicket = byCorpId.getSuiteTicket();
-        String subscribeId = suiteId + "_0";
-        List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
-        if (bizDataList == null||bizDataList.size() == 0) {
+        SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+        if (forSuiteTicket == null){
             return "";
         }
-        SyncBizData syncBizData_02 = bizDataList.get(0);
-        Map<String, String> parse = (Map<String, String>) JSON.parse(syncBizData_02.getBizData());
+        Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
         String suiteTicket = parse.get("suiteTicket");
         String accessToken = getURLAccessToken(authCorpId,suiteTicket);
 //        String accessToken = byCorpId.getCorpAccessToken();
