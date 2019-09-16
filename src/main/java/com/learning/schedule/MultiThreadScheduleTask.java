@@ -453,7 +453,7 @@ public class MultiThreadScheduleTask {
     }
 
     @Async
-    @Scheduled(cron = "0 0 6,12,18 * * ?")//每天的早上六点，中午十二点和下午六点
+    @Scheduled(cron = "0 0/2 * * * ?")//每隔两分钟
     public void queryBizDataMedium() throws Exception {
         bizDataMediumService.initBizDataMedium(null);
     }
