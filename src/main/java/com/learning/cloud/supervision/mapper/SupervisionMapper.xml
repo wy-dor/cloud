@@ -35,32 +35,25 @@
     </select>
 
     <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id,user_id
-    from supervision
+    select c.* from
+    (select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+    from supervision a
     where bureau_id = #{bureauId}
     <if test="typeId != null">
     and type_id = #{typeId}
     </if>
-    <choose>
-        <when test="status != null">
-            and status = #{status}
-        </when>
-        <otherwise>
-            and status &lt;&gt; 0
-        </otherwise>
-    </choose>
-    and school_id is not null
+    and status &lt;&gt; 0 and school_id is not null
     union all
-    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id,user_id
-    from supervision
+    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+    from supervision b
     where bureau_id = #{bureauId}
     <if test="typeId != null">
         and type_id = #{typeId}
     </if>
+    and school_id is null) c
     <if test="status != null">
-        and status = #{status}
+        where status = #{status}
     </if>
-    and school_id is null
     order by upload_time desc
   </select>
 
