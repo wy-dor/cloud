@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.duty.dao.DutyCheckTypeMapper">
+
+  <select id="getDutyCheckTypeByTypeId" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyCheckType">
+    select * from duty_check_type
+    where duty_type_id = #{dutyTypeId}
+  </select>
+
+  <select id="getDutyCheckTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyCheckType">
+    select * from duty_check_type
+    where id = #{id}
+  </select>
+
+  <delete id="deleteDutyCheckType" parameterType="java.lang.Long">
+    delete from duty_check_type
+    where id = #{id}
+  </delete>
+
+  <insert id="addDutyCheckType" parameterType="com.learning.cloud.duty.entity.DutyCheckType">
+    insert into duty_check_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dutyTypeId != null">
+        duty_type_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="point != null">
+        point,
+      </if>
+      <if test="plusMinus != null">
+        plus_minus,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="dutyTypeId != null">
+        #{dutyTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null">
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="plusMinus != null">
+        #{plusMinus,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateDutyCheckType" parameterType="com.learning.cloud.duty.entity.DutyCheckType">
+    update duty_check_type
+    <set>
+      <if test="dutyTypeId != null">
+        duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null">
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="plusMinus != null">
+        plus_minus = #{plusMinus,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
