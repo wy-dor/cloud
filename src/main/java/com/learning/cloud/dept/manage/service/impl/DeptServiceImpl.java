@@ -300,7 +300,7 @@ public class DeptServiceImpl implements DeptService {
                 for (OapiUserSimplelistResponse.Userlist user : userList) {
                     userName = user.getName();
                     userId = user.getUserid();
-                    Integer studentId = 0;
+//                    Integer studentId = 0;
                     roleType = 4;
                     Student student = new Student();
                     student.setUserId(userId);
