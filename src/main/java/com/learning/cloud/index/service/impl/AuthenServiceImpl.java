@@ -1,9 +1,12 @@
 package com.learning.cloud.index.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.bizData.dao.SyncBizDataDao;
+import com.learning.cloud.bizData.entity.SyncBizData;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
 import com.learning.cloud.config.ApiUrlConstant;
@@ -36,34 +39,11 @@ import java.util.*;
 @Transactional
 public class AuthenServiceImpl implements AuthenService {
 
-    private AuthAppInfo authAppInfo;
-
     @Autowired
     private AuthAppInfoDao authAppInfoDao;
 
     @Autowired
-    private AuthCorpInfoDao authCorpInfoDao;
-
-    @Autowired
-    private CorpAgentDao corpAgentDao;
-
-    @Autowired
-    private AuthUserInfoDao authUserInfoDao;
-
-    @Autowired
-    private SchoolDao schoolDao;
-
-    @Autowired
-    private BureauDao bureauDao;
-
-    @Autowired
-    private AdministratorDao administratorDao;
-
-    @Autowired
-    private DeptService deptService;
-
-    @Autowired
-    private UserDao userDao;
+    private SyncBizDataDao syncBizDataDao;
 
     @Value("${spring.suiteKey}")
     private String suiteKey;
@@ -71,23 +51,36 @@ public class AuthenServiceImpl implements AuthenService {
     @Value("${spring.suiteSecret}")
     private String suiteSecret;
 
+    @Value("${spring.suiteId}")
+    private String suiteId;
+
 
     /*获取企业凭证*/
     @Override
     public String getAccessToken(String authCorpId) throws ApiException {
-        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
-        String accessToken = byCorpId.getCorpAccessToken();
-        Date updateTime = byCorpId.getUpdateTime();
-        Date now = new Date();
-        /*accessToken两小时过期*/
-        long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
-        if(minutes >= 120){
-            String suiteTicket = byCorpId.getSuiteTicket();
-            accessToken = getURLAccessToken(authCorpId,suiteTicket);
-            byCorpId.setCorpAccessToken(accessToken);
-            byCorpId.setUpdateTime(new Date());
-            authAppInfoDao.update(byCorpId);
+//        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
+//        String suiteTicket = byCorpId.getSuiteTicket();
+        String subscribeId = suiteId + "_0";
+        List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
+        if (bizDataList == null||bizDataList.size() == 0) {
+            return "";
         }
+        SyncBizData syncBizData_02 = bizDataList.get(0);
+        Map<String, String> parse = (Map<String, String>) JSON.parse(syncBizData_02.getBizData());
+        String suiteTicket = parse.get("suiteTicket");
+        String accessToken = getURLAccessToken(authCorpId,suiteTicket);
+//        String accessToken = byCorpId.getCorpAccessToken();
+//        Date updateTime = byCorpId.getUpdateTime();
+//        Date now = new Date();
+//        /*accessToken两小时过期*/
+//        long minutes = (now.getTime() - updateTime.getTime()) / 1000 / 60;
+//        if(minutes >= 120){
+//            String suiteTicket = byCorpId.getSuiteTicket();
+//            accessToken = getURLAccessToken(authCorpId,suiteTicket);
+//            byCorpId.setCorpAccessToken(accessToken);
+//            byCorpId.setUpdateTime(new Date());
+//            authAppInfoDao.update(byCorpId);
+//        }
         return accessToken;
     }
 

@@ -77,4 +77,9 @@
     </set>
     where corp_id = #{corpId,jdbcType=VARCHAR}
   </update>
+
+  <select id="listAuthAppInfo" resultType="com.learning.cloud.index.entity.AuthAppInfo">
+    select *
+    from auth_app_info
+  </select>
 </mapper>
