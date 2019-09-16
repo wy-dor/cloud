@@ -1,6 +1,7 @@
 package com.learning.cloud.duty.service;
 
 import com.learning.cloud.duty.entity.DutyCheckType;
+import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 
 /**
@@ -9,5 +10,13 @@ import com.learning.utils.JsonResultUtil;
  * @Desc:
  */
 public interface DutyCheckTypeService {
-    JsonResultUtil addDutyCheckType(DutyCheckType dutyCheckType)throws Exception;
+    JsonResult addDutyCheckType(DutyCheckType dutyCheckType)throws Exception;
+
+    JsonResult deleteDutyCheckType(Long id)throws Exception;
+
+    JsonResult updateDutyCheckType(DutyCheckType dutyCheckType)throws Exception;
+
+    JsonResult getDutyCheckTypeById(Long id)throws Exception;
+
+    JsonResult getDutyCheckTypeByTypeId(Long dutyTypeId)throws Exception;
 }
