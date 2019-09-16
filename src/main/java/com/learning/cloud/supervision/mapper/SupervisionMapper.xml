@@ -72,6 +72,7 @@
     select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
     from supervision
     where bureau_id = #{bureauId}
+    and status = 3
     and topping = 1
   </select>
 
