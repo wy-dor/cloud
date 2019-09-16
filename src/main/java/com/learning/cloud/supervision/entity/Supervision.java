@@ -35,4 +35,6 @@ public class Supervision extends BaseEntity {
 
     //added
     private Integer schoolId;
+
+    private String userId;
 }

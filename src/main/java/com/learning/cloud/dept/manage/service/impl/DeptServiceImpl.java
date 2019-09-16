@@ -14,6 +14,7 @@ import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
@@ -60,6 +61,9 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private AuthenService authenService;
+
+    @Autowired
+    private AdministratorDao administratorDao;
 
     @Override
     public void init(Integer schoolId) throws ApiException {
@@ -384,6 +388,29 @@ public class DeptServiceImpl implements DeptService {
     //对用户角色进行判断存储
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType, String accessToken) throws ApiException {
+
+        OapiUserGetResponse userDetail = getUserDetail(userId, accessToken);
+
+        Boolean isAdmin = userDetail.getIsAdmin();
+        if(isAdmin != null&&isAdmin == true){
+            Administrator a1 = new Administrator();
+            //todo
+            //判断获取的值是否为空，为空则不插入
+            String userDetailName = userDetail.getName();
+            if(userDetailName != null){
+                a1.setName(userDetailName);
+                a1.setUserId(userId);
+                a1.setSchoolId(schoolId);
+                Administrator byAdm = administratorDao.getByAdm(a1);
+                if (byAdm == null) {
+                    administratorDao.insert(a1);
+                } else {
+                    administratorDao.updateName(a1);
+                }
+            }
+        }
+
+
         //其他身份不覆盖主要角色
         if(roleType == 5){
             List<User> userRole234 = userDao.getUserRole234(userId, corpId);
@@ -397,8 +424,6 @@ public class DeptServiceImpl implements DeptService {
         u.setUserId(userId);
         u.setSchoolId(schoolId);
 
-        //获取消息信息
-        OapiUserGetResponse userDetail = getUserDetail(userId, accessToken);
         String userDetailUnionid = userDetail.getUnionid();
         if(userDetailUnionid == null){
             return;

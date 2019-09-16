@@ -27,6 +27,9 @@
             <if test="topping != null">
                 and topping = #{topping}
             </if>
+            <if test="userId != null">
+                and userId = #{user_id}
+            </if>
         </where>
         order by upload_time desc
     </select>

@@ -8,6 +8,7 @@ import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.dept.department.dao.DepartmentDao;
 import com.learning.cloud.dept.department.entity.Department;
 import com.learning.cloud.dept.manage.service.DeptService;
+import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
@@ -49,6 +50,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     @Autowired
     private AuthenService authenService;
 
+    @Autowired
+    private AuthAppInfoDao authAppInfoDao;
+
     @Override
     public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception {
         List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(syncBizDataMedium);
@@ -57,9 +61,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         }
         for (SyncBizDataMedium sbdm : allBizDataMedium) {
             Long id = sbdm.getId();
-            String corpId_1 = sbdm.getCorpId();
+            String corpId = sbdm.getCorpId();
+            String accessToken = authenService.getAccessToken(corpId);
             Integer schoolId;
-            School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId_1);
+            School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
             if(schoolByCorpId == null){
                 schoolId = -1;
             }else{
@@ -76,71 +81,25 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     continue;
                 }
                 String userId = (String) bizDataParse.get("userid");
-                String userName = (String) bizDataParse.get("name");
-                String unionId = (String) bizDataParse.get("unionid");
-                User user = new User();
-                user.setUserId(userId);
-                user.setUnionId(unionId);
-                user.setUserName(userName);
-                user.setSchoolId(schoolId);
-                Boolean isAdmin = false;
-                if(bizDataParse.get("isAdmin") != null){
-                    isAdmin = (Boolean) bizDataParse.get("isAdmin");
-                }
-                Integer roleType = 0;
-                if(isAdmin){
-                    Administrator a = new Administrator();
-                    a.setName(userName);
-                    a.setUserId(userId);
-                    a.setSchoolId(schoolId);
-                    Administrator byAdm = administratorDao.getByAdm(a);
-                    //todo
-                    if(byAdm == null){
-                        administratorDao.insert(a);
-                    }else{
-                        administratorDao.updateName(a);
-                    }
-                }
+                Integer roleType = 5;
+
                 //设置角色类型
                 //todo
                 //deptId范围
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
                 Integer lastDeptId = departmentList.get(size - 1);
-                if(!isAdmin && (lastDeptId == 1)){
-                    roleType = 0;
-                }else{
-                    String accessToken = authenService.getAccessToken(corpId_1);
-                    OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
-                    String deptName = deptDetail.getName();
-                    if(deptName.equals("老师")){
-                        roleType = 3;
-                    }else if(deptName.equals("学生")){
-                        roleType = 4;
-                    }else if(deptName.equals("家长")){
-                        roleType = 2;
-                    }else{
-                        roleType = 5;
-                    }
-                }
-                user.setAvatar((String) bizDataParse.get("avatar"));
-                user.setCorpId(corpId_1);
-                if((Boolean) bizDataParse.get("active")){
-                    user.setActive((short)1);
-                }else{
-                    user.setActive((short)0);
-                }
 
-                user.setRoleType(roleType);
-                user.setCorpId(corpId_1);
-                User user1 = userDao.getBySchoolRoleIdentity(user);
-                if(user1 == null){
-                    userDao.insert(user);
-                }else{
-                    //todo
-                    //角色修改所致结构变化
-                    userDao.updateWithSpecificRole(user);
+                OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
+                String deptName = deptDetail.getName();
+                if(deptName.equals("老师")){
+                    roleType = 3;
+                }else if(deptName.equals("学生")){
+                    roleType = 4;
+                }else if(deptName.equals("家长")){
+                    roleType = 2;
                 }
+                deptService.userSaveByRole(schoolId,corpId,null,userId,roleType,accessToken);
 
             }else if(bizType == 14){
                 //todo
@@ -151,7 +110,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 String deptId = ((Integer) bizDataParse.get("id")).toString();
                 Department dept = new Department();
                 dept.setDeptId(deptId);
-                dept.setCorpId(corpId_1);
+                dept.setCorpId(corpId);
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
                 Boolean outerDept = false;

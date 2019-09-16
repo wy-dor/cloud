@@ -361,24 +361,7 @@ public class MultiThreadScheduleTask {
                             List<String> adminList = (List<String>) a.get("admin_list");
                             //更新管理员表
                             for (String userId : adminList) {
-                                OapiUserGetResponse userDetail = deptService.getUserDetail(userId, accessToken);
-                                Administrator a1 = new Administrator();
-                                //todo
-                                //判断获取的值是否为空，为空则不插入
-                                String userDetailName = userDetail.getName();
-                                if(userDetailName == null){
-                                    continue;
-                                }
-                                a1.setName(userDetailName);
-                                a1.setUserId(userId);
-                                a1.setSchoolId(schoolId);
-                                Administrator byAdm = administratorDao.getByAdm(a1);
-                                if (byAdm == null) {
-                                    administratorDao.insert(a1);
-                                } else {
-                                    administratorDao.updateName(a1);
-                                }
-                                //user表同步
+                                //administrator表和user表同步
                                 deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
                             }
 
