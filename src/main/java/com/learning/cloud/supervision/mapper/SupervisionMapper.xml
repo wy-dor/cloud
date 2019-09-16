@@ -9,7 +9,7 @@
   </select>
 
     <select id="getSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id,user_id
         from supervision
         <where>
             <if test="schoolId != null">
