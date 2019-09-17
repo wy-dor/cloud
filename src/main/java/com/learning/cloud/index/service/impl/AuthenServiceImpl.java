@@ -27,10 +27,12 @@ import com.learning.cloud.user.user.entity.User;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -58,7 +60,7 @@ public class AuthenServiceImpl implements AuthenService {
 //        String suiteTicket = byCorpId.getSuiteTicket();
         SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
         if (forSuiteTicket == null){
-            return "";
+            throw new ApiException("没有suiteTicket的推送");
         }
         Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
         String suiteTicket = parse.get("suiteTicket");
