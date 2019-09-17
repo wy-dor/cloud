@@ -28,9 +28,10 @@ public class InspectorServiceImpl implements InspectorService {
     public JsonResult addInspector(Inspector inspector) throws Exception {
         // 判断不能重名
         int count = inspectorDao.getInspectorByLogin(inspector);
-        if(count>1){
+        if(count>0){
             throw new MyException(JsonResultEnum.EXIST_INSPECTOR);
         }
+        inspector.setLogin(inspector.getLogin().replaceAll(" ", ""));
         int i = inspectorDao.addInspector(inspector);
         if(i>0){
             return JsonResultUtil.success(inspector.getId());
