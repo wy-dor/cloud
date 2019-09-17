@@ -1,7 +1,9 @@
 package com.learning.cloud.bizData.service.impl;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
 import com.dingtalk.api.response.OapiDepartmentGetResponse;
+import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.bizData.service.BizDataMediumService;
@@ -63,6 +65,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             Long id = sbdm.getId();
             String corpId = sbdm.getCorpId();
             String accessToken = authenService.getAccessToken(corpId);
+            if(accessToken == null){
+                continue;
+            }
             Integer schoolId;
             School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
             if(schoolByCorpId == null){
@@ -80,7 +85,19 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 if(syncAction.equals("user_leave_org")){
                     continue;
                 }
-                String userId = (String) bizDataParse.get("userid");
+                String userId = bizDataParse.get("userid").toString();
+                Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
+                String avatar = bizDataParse.get("avatar").toString();
+                Boolean active = (Boolean) bizDataParse.get("active");
+                String name = bizDataParse.get("name").toString();
+                String unionid = bizDataParse.get("unionid").toString();
+                OapiUserListbypageResponse.Userlist apiUser = new OapiUserListbypageResponse.Userlist();
+                apiUser.setActive(active);
+                apiUser.setAvatar(avatar);
+                apiUser.setIsAdmin(isAdmin);
+                apiUser.setName(name);
+                apiUser.setUnionid(unionid);
+                apiUser.setUserid(userId);
                 Integer roleType = 5;
 
                 //设置角色类型
@@ -99,7 +116,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }else if(deptName.equals("家长")){
                     roleType = 2;
                 }
-                deptService.userSaveByRole(schoolId,corpId,null,userId,roleType,accessToken);
+                deptService.userSaveByRole(schoolId,corpId,null,apiUser,roleType,accessToken);
 
             }else if(bizType == 14){
                 //todo

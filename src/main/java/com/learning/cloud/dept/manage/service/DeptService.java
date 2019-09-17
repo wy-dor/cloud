@@ -22,21 +22,23 @@ public interface DeptService {
 
     OapiUserGetDeptMemberResponse getDeptMember(String deptId, String accessToken) throws ApiException;
 
-    OapiUserSimplelistResponse getDeptUserList(String deptId, String accessToken) throws ApiException;
+    OapiUserSimplelistResponse getDeptUserList(String deptId, Long offset, String accessToken) throws ApiException;
 
-    OapiUserGetResponse getUserDetail(String userId, String acessToken) throws ApiException;
+    OapiUserGetResponse getUserDetail(String userId, String accessToken) throws ApiException;
 
-    OapiUserListbypageResponse getDeptUserListByPage(long deptId, String accessToken) throws ApiException;
+    OapiUserListbypageResponse getDeptUserListByPage(Long deptId, Long offset, String accessToken) throws ApiException;
 
     OapiDepartmentListParentDeptsByDeptResponse getListParentDeptsByDept(String deptId, String accessToken) throws ApiException;
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException;
 
-    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, String userId, int roleType, String accessToken) throws ApiException;
+    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user, int roleType, String accessToken) throws ApiException;
 
-    void recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException;
+    void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId) throws ApiException;
 
     List<Administrator> getURLAdmin(String accessToken) throws ApiException;
 
     OapiUserGetOrgUserCountResponse  getOrgUserCount(String accessToken) throws ApiException;
+
+    int recurseGetUserCount(String departmentId, String accessToken) throws ApiException;
 }

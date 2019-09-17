@@ -40,7 +40,7 @@
     select *
     from news
     where bureau_id = #{bureauId}
-      and school_id is null
+    and school_id is null
     order by upload_time desc
   </select>
 

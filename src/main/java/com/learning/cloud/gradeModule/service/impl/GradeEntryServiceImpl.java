@@ -44,7 +44,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                 String scoreValue =(String)stringObjectMap.get("value");
                 sb.append(subjectName+":"+scoreValue);
             }*/
-            //已录入成绩保存过
+            //已录入成绩保存
             if(entryList != null && entryList.size() > 0){
                 //新录入的成绩
                 List<Map<String,Object>> mapList1 =(List<Map<String,Object>>) JSON.parse(marks);
@@ -66,7 +66,6 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             }else{
                 gradeEntry.setMarks(marks);
                 gradeEntryDao.insert(gradeEntry);
-
             }
         }
         return JsonResultUtil.success(gradeEntry.getModuleId());

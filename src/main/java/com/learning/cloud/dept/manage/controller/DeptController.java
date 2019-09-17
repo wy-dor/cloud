@@ -38,9 +38,9 @@ public class DeptController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(i > 0){
-            deptService.init(school.getId());
-        }else{
+        if (i > 0) {
+            deptService.init(school.getId() );
+        } else {
             return ServiceResult.success("已加入");
         }
         return ServiceResult.success("设置成功");
@@ -55,70 +55,75 @@ public class DeptController {
 
     /*班级结构数据同步*/
     @GetMapping("/updateUserInClass")
-    public ServiceResult updateUserInClass(Long deptId) throws ApiException{
+    public ServiceResult updateUserInClass(Long deptId) throws ApiException {
         deptService.saveUserInClass(deptId);
         return ServiceResult.success("更新成功");
     }
 
     @GetMapping("/recurseGetUser")
-    public ServiceResult recurseGetUser(String departmentId, String accessToken, String corpId,Integer schoolId) throws ApiException{
-        deptService.recurseGetUser(departmentId,accessToken,corpId,schoolId);
+    public ServiceResult recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId) throws ApiException {
+        deptService.recurseGetUser(departmentId, accessToken, corpId, schoolId);
         return ServiceResult.success("保存成功");
+    }
+
+    @GetMapping("/recurseGetUserCount")
+    public ServiceResult recurseGetUserCount(String departmentId, String accessToken) throws ApiException {
+        return ServiceResult.success(deptService.recurseGetUserCount(departmentId, accessToken));
     }
 
     /*获取部门列表*/
     @GetMapping("/getDeptList")
     public ServiceResult getDeptList(String pDeptId, String accessToken, Integer isFetchChild) throws ApiException {
-        return ServiceResult.success(deptService.getDeptList(pDeptId,accessToken,isFetchChild));
+        return ServiceResult.success(deptService.getDeptList(pDeptId, accessToken, isFetchChild));
     }
 
     /*获取部门详情*/
     @GetMapping("/getDeptDetail")
     public ServiceResult getDeptDetail(String deptId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getDeptDetail(deptId,accessToken));
+        return ServiceResult.success(deptService.getDeptDetail(deptId, accessToken));
     }
 
     /*获取部门用户userid列表*/
     @GetMapping("/getDeptMember")
     public ServiceResult getDeptMember(String deptId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getDeptMember(deptId,accessToken));
+        return ServiceResult.success(deptService.getDeptMember(deptId, accessToken));
     }
 
     /*获取部门用户*/
     @GetMapping("/getDeptUserList")
-    public ServiceResult getDeptUserList(String deptId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getDeptUserList(deptId,accessToken));
+    public ServiceResult getDeptUserList(String deptId, Long offset, String accessToken) throws ApiException {
+        return ServiceResult.success(deptService.getDeptUserList(deptId, offset, accessToken));
     }
 
     /*获取用户详情*/
     @GetMapping("/getUserDetail")
     public ServiceResult getUserDetail(String userId, String corpId) throws ApiException {
         String accessToken = authenService.getAccessToken(corpId);
-        return ServiceResult.success(deptService.getUserDetail(userId,accessToken));
+        return ServiceResult.success(deptService.getUserDetail(userId, accessToken));
     }
 
     /*获取部门用户详情*/
     @GetMapping("/getDeptUserListByPage")
-    public ServiceResult getDeptUserListByPage(long deptId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getDeptUserListByPage(deptId,accessToken));
+    public ServiceResult getDeptUserListByPage(Long deptId, Long offset, String accessToken) throws ApiException {
+        return ServiceResult.success(deptService.getDeptUserListByPage(deptId, offset, accessToken));
     }
 
     /*获取子部门id列表*/
     @GetMapping("/getDeptListIds")
     public ServiceResult getDeptListIds(String pDeptId, String accessToken) throws ApiException {
-        return ServiceResult.success(ServiceResult.success(deptService.getDeptListIds(pDeptId,accessToken)));
+        return ServiceResult.success(ServiceResult.success(deptService.getDeptListIds(pDeptId, accessToken)));
     }
 
     /*查询部门的所有上级父部门路径*/
     @GetMapping("/getListParentDepts")
     public ServiceResult getListParentDepts(String deptId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getListParentDeptsByDept(deptId,accessToken));
+        return ServiceResult.success(deptService.getListParentDeptsByDept(deptId, accessToken));
     }
 
     /*查询指定用户的所有上级父部门路径*/
     @GetMapping("/getListParentDeptsByUser")
     public ServiceResult getListParentDeptsByUser(String userId, String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getListParentDeptsByUser(userId,accessToken));
+        return ServiceResult.success(deptService.getListParentDeptsByUser(userId, accessToken));
     }
 
     /*获取管理员列表*/

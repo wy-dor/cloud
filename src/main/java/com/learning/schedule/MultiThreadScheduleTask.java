@@ -1,8 +1,7 @@
 package com.learning.schedule;
 
 import com.alibaba.fastjson.JSON;
-import com.dingtalk.api.response.OapiUserGetResponse;
-import com.dingtalk.api.response.OapiUserSimplelistResponse;
+import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
@@ -13,7 +12,6 @@ import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.dao.AuthCorpInfoDao;
 import com.learning.cloud.index.dao.AuthUserInfoDao;
 import com.learning.cloud.index.dao.CorpAgentDao;
-import com.learning.cloud.index.entity.AuthAppInfo;
 import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.index.entity.AuthUserInfo;
 import com.learning.cloud.index.entity.CorpAgent;
@@ -25,15 +23,12 @@ import com.learning.cloud.score.dao.ScoreboardDao;
 import com.learning.cloud.score.entity.ClassScoreboard;
 import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
-import com.learning.cloud.user.admin.dao.AdministratorDao;
-import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
-import com.learning.cloud.user.user.dao.UserDao;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -314,7 +309,7 @@ public class MultiThreadScheduleTask {
                         }
 
                         //更新授权应用表
-                        SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
+                        /*SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
                         if (forSuiteTicket != null) {
                             Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
                             String suiteTicket = parse.get("suiteTicket");
@@ -332,7 +327,12 @@ public class MultiThreadScheduleTask {
                                 authAppInfoDao.update(authAppInfo);
                             }
                             syncBizDataDao.updateStatus(forSuiteTicket.getId());
-                        }
+                        }else {
+                            throw new Exception("获取不到suiteTicket推送");
+                        }*/
+
+                        //获取企业凭证
+                        accessToken = authenService.getAccessToken(corpId);
 
                         //保存应用信息
                         Map<String, Object> auth_info = (Map<String, Object>) parse_0.get("auth_info");
@@ -352,12 +352,12 @@ public class MultiThreadScheduleTask {
                                 corpAgentDao.update(ca);
                             }
                             System.out.println("保存应用信息成功！");
-                            List<String> adminList = (List<String>) a.get("admin_list");
-                            //更新管理员表
-                            for (String userId : adminList) {
-                                //administrator表和user表同步
-                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
-                            }
+//                            List<String> adminList = (List<String>) a.get("admin_list");
+//                            //更新管理员表
+//                            for (String userId : adminList) {
+//                                //administrator表和user表同步
+//                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
+//                            }
 
                         }
 
@@ -381,17 +381,25 @@ public class MultiThreadScheduleTask {
                         //如果为教育局则添加除通讯录外的用户信息
                         if (schoolId == -1) {
 
-                                //添加处于部门下的用户身份信息
-                                String deptId = "1";
-                                deptService.recurseGetUser(deptId, accessToken, corpId, schoolId);
+                            //添加处于部门下的用户身份信息
+                            Long deptId = 1L;
+                            deptService.recurseGetUser(deptId, accessToken, corpId, schoolId);
 
-                                //添加不在部门里的用户信息
-                                OapiUserSimplelistResponse deptUserListResponse = deptService.getDeptUserList("1", accessToken);
-                                List<OapiUserSimplelistResponse.Userlist> userListInfo = deptUserListResponse.getUserlist();
-                                for (OapiUserSimplelistResponse.Userlist uList : userListInfo) {
-                                    String userId = uList.getUserid();
-                                    deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
+                            //添加不在部门里的用户信息
+                            Boolean flag = true;
+                            Long offset = 0L;
+                            while (flag) {
+                                OapiUserListbypageResponse resp5 = deptService.getDeptUserListByPage(1L, offset, accessToken);
+                                List<OapiUserListbypageResponse.Userlist> userList = resp5.getUserlist();
+                                if (userList.size() < 100) {
+                                    flag = false;
+                                } else {
+                                    offset += 1;
                                 }
+                                for (OapiUserListbypageResponse.Userlist user : userList) {
+                                    deptService.userSaveByRole(schoolId, corpId, null, user, 5, accessToken);
+                                }
+                            }
                         }
 
                         //初始化一次班级数据
@@ -447,7 +455,7 @@ public class MultiThreadScheduleTask {
     }
 
     @Async
-    @Scheduled(cron = "0 0/2 * * * ?")//每隔两分钟
+    @Scheduled(cron = "0 0/30 * * * ?")//每隔半小时
     public void queryBizDataMedium() throws Exception {
         bizDataMediumService.initBizDataMedium(null);
     }
