@@ -84,4 +84,9 @@ public class CommonUtils {
         }
         return l3;
     }
+
+    public static String StringListToString(List<String> list){
+        String str = String.join(",",list);
+        return str;
+    }
 }
