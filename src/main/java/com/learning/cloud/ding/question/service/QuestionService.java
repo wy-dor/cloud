@@ -28,4 +28,6 @@ public interface QuestionService {
     JsonResult deleteBatchQuestions(String questionIds);
 
     Long reduceImg(MultipartFile file)throws Exception;
+
+    JsonResult getQuestionById(Long id);
 }

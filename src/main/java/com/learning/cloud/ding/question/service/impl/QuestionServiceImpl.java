@@ -177,6 +177,12 @@ public class QuestionServiceImpl implements QuestionService {
         return picture.getId();
     }
 
+    @Override
+    public JsonResult getQuestionById(Long id) {
+        Question question = questionDao.getQuestionById(id);
+        return JsonResultUtil.success(question);
+    }
+
     private void inputStreamToFile(InputStream inputStream, File toFile) throws Exception{
         OutputStream outputStream = new FileOutputStream(toFile);
         int bytesRead = 0;

@@ -38,6 +38,11 @@ public class QuestionController {
         return questionService.getQuestion(question);
     }
 
+    @GetMapping("/getQuestionById")
+    public JsonResult getQuestionById(Long id)throws Exception{
+        return questionService.getQuestionById(id);
+    }
+
     /*获取我参与的问题*/
     @GetMapping("/getQuestionIn")
     public JsonResult getQuestionIn(Question question)throws Exception{

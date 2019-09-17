@@ -64,6 +64,13 @@
     order by c.answer_num desc, a.create_time desc
   </select>
 
+  <select id="getQuestionById" parameterType="java.lang.Long" resultType="com.learning.cloud.ding.question.entity.Question">
+    select *
+    from question
+    where id = #{id}
+    limit 1
+  </select>
+
   <update id="deleteQuestion" parameterType="java.lang.Long">
     update question set status = 3
     where id = #{id}

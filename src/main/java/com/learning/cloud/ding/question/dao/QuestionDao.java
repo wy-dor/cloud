@@ -27,4 +27,5 @@ public interface QuestionDao {
 
     int closeQuestion(Long id);
 
+    Question getQuestionById(Long id);
 }
