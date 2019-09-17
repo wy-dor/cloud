@@ -35,4 +35,13 @@ public class GradeClass extends BaseEntity {
     private Integer stuNum;
 
     private Long deptId;
+
+    //added
+    private Long pDeptId;
+
+    private Long sDeptId;
+
+    private Long tDeptId;
+
+
 }

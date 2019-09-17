@@ -105,6 +105,15 @@
       <if test="teacherIds != null">
         teacher_ids,
       </if>
+      <if test="pDeptId != null">
+        p_dept_id,
+      </if>
+      <if test="sDeptId != null">
+        s_dept_id,
+      </if>
+      <if test="tDeptId != null">
+        t_dept_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="className != null">
@@ -133,6 +142,15 @@
       </if>
       <if test="teacherIds != null">
         #{teacherIds,jdbcType=VARCHAR},
+      </if>
+      <if test="pDeptId != null">
+        #{pDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="sDeptId != null">
+        #{sDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="tDeptId != null">
+        #{tDeptId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -170,6 +188,15 @@
       </if>
       <if test="teacherIds != null">
         teacher_ids = #{teacherIds,jdbcType=VARCHAR},
+      </if>
+      <if test="pDeptId != null">
+        p_dept_id = #{pDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="sDeptId != null">
+        s_dept_id = #{sDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="tDeptId != null">
+        t_dept_id = #{tDeptId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

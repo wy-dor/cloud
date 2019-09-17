@@ -29,4 +29,5 @@ public class User extends BaseEntity {
     private Integer supervisor;
 
     private String corpId;
+
 }

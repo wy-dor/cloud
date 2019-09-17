@@ -251,6 +251,7 @@ public class DeptServiceImpl implements DeptService {
                 }
                 /*用户表填充*/
                 if (userRole.equals("老师")) {
+                    gc.setTDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
@@ -289,6 +290,7 @@ public class DeptServiceImpl implements DeptService {
 
                     }
                 } else if (userRole.equals("家长")) {
+                    gc.setPDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
@@ -315,6 +317,7 @@ public class DeptServiceImpl implements DeptService {
 
                     }
                 } else if (userRole.equals("学生")) {
+                    gc.setSDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
@@ -342,6 +345,9 @@ public class DeptServiceImpl implements DeptService {
                 }
             }
         }
+
+        //更新班级下老师，家长，学生的部门id
+        gradeClassDao.update(gc);
 //        //学生表删除数据同步
 //        if(studentIdList1 != null && studentIdList1.size() > 0){
 //            List<Integer> studentIdList = CommonUtils.removeIntegerDupsInList(studentIdList1, studentIdList2);
