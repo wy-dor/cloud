@@ -35,9 +35,10 @@ public class SendMsgServiceImpl implements SendMsgService {
     private CorpAgentDao corpAgentDao;
 
     @Override
-    public JsonResult sendSignLink(Integer classId, MsgInfo msgInfo) throws Exception {
+    public JsonResult sendSignLink(Integer classId, Integer signId, MsgInfo msgInfo) throws Exception {
         GradeClass gradeClass = gradeClassDao.getById(classId);
-        String parentDepId = String.valueOf(gradeClass.getPDeptId());
+//        String parentDepId = String.valueOf(gradeClass.getPDeptId());
+        String parentDepId = String.valueOf(gradeClass.getTDeptId());
         //发送消息
         List<String> ps = new ArrayList<>();
         ps.add(parentDepId);
@@ -55,7 +56,6 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.getLink().setText(msgInfo.getText());
         msg.getLink().setMessageUrl(msgInfo.getMessageUrl());
         msg.getLink().setPicUrl(msgInfo.getPicUrl());
-        SendWorkMsg(workMsg,msg);
-        return JsonResultUtil.success();
+        return SendWorkMsg(workMsg,msg);
     }
 }

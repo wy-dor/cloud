@@ -11,6 +11,9 @@ import com.learning.cloud.index.entity.CorpAgent;
 import com.learning.cloud.sendMsg.entity.GeneralMsg;
 import com.learning.cloud.sendMsg.entity.MsgInfo;
 import com.learning.cloud.sendMsg.entity.WorkMsg;
+import com.learning.domain.JsonResult;
+import com.learning.enums.JsonResultEnum;
+import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -45,11 +48,11 @@ public class SendUtils {
      * 发送工作通知消息
      * 企业工作通知会话中某个微应用的名义推送到员工的通知消息
      */
-    public static void SendWorkMsg(WorkMsg workMsg, OapiMessageCorpconversationAsyncsendV2Request.Msg msg)throws Exception{
+    public static JsonResult SendWorkMsg(WorkMsg workMsg, OapiMessageCorpconversationAsyncsendV2Request.Msg msg)throws Exception{
         DingTalkClient client = new DefaultDingTalkClient(SEND_WORK_MSG_URL);
         OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
         request.setAgentId(Long.valueOf(workMsg.getAgentId()));
-        request.setUseridList(StringListToString(workMsg.getUserIdList()));
+//        request.setUseridList(StringListToString(workMsg.getUserIdList()));
         request.setDeptIdList(StringListToString(workMsg.getDeptIdList()));
         request.setToAllUser(workMsg.getToAllUser());
         request.setMsg(msg);
@@ -57,8 +60,10 @@ public class SendUtils {
         OapiMessageCorpconversationAsyncsendV2Response response = client.execute(request,getAccessToken(workMsg.getCorpId()));
         if(response.isSuccess()){
             log.info("发送消息成功：corpid"+workMsg.getCorpId());
+            return JsonResultUtil.success();
         }else {
             log.info("发送消息失败"+response.getMsg());
+            return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
 

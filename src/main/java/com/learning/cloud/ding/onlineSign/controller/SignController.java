@@ -37,6 +37,11 @@ public class SignController {
         return signService.getAllTasks(parent);
     }
 
+    @GetMapping("/getSignTaskById")
+    public JsonResult getSignTaskById(Integer id)throws Exception{
+        return signService.getSignTaskById(id);
+    }
+
     /*获取有效签字列表,classId*/
     @GetMapping("/getValidTaskList")
     public JsonResult getValidTaskList(Parent parent) throws Exception {

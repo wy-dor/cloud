@@ -101,4 +101,10 @@ public class SignServiceImpl implements SignService {
         List<SignRecord> recordList = signDao.getRecordsBySignId(sign);
         return JsonResultUtil.success(new PageEntity<>(recordList));
     }
+
+    @Override
+    public JsonResult getSignTaskById(Integer id) throws Exception {
+        Sign sign = signDao.getById(id);
+        return JsonResultUtil.success(sign);
+    }
 }
