@@ -60,8 +60,8 @@ public class DutyTypeServiceImpl implements DutyTypeService {
     }
 
     @Override
-    public JsonResultUtil getDutyTypeById(Long id) throws Exception {
+    public JsonResult getDutyTypeById(Long id) throws Exception {
         DutyType dutyType = dutyTypeDao.getDutyTypeById(id);
-        return null;
+        return JsonResultUtil.success(dutyType);
     }
 }

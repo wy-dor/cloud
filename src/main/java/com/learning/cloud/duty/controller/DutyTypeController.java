@@ -42,7 +42,7 @@ public class DutyTypeController {
     }
 
     @GetMapping("/getDutyTypeById")
-    public JsonResultUtil getDutyTypeById(Long id)throws Exception{
+    public JsonResult getDutyTypeById(Long id)throws Exception{
         return dutyTypeService.getDutyTypeById(id);
     }
 }
