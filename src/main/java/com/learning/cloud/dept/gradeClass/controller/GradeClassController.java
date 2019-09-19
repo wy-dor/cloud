@@ -6,6 +6,7 @@ import com.learning.cloud.dept.gradeClass.service.GradeClassService;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +51,17 @@ public class GradeClassController {
     @GetMapping("getAllGradeName")
     public JsonResult getAllGradeName(Integer schoolId){
         return gradeClassService.getAllGradeName(schoolId);
+    }
+
+    @GetMapping("/listGradeClassByTeacherInSchool")
+    public JsonResult listGradeClassByTeacherInSchool(String userId,Integer schoolId){
+        return gradeClassService.listGradeClassByTeacherInSchool(userId, schoolId);
+    }
+
+    @GetMapping("/getCampusIdByUserIdAndSchoolId")
+    public JsonResult getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId){
+        Integer campusId = gradeClassService.getCampusIdByUserIdAndSchoolId(userId, schoolId);
+        return JsonResultUtil.success(campusId);
     }
 
 }

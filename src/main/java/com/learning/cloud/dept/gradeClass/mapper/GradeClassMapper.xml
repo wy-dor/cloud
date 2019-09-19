@@ -58,6 +58,15 @@
       <if test="teacherIds != null">
         and teacher_ids = #{teacherIds}
       </if>
+      <if test="pDeptId != null">
+        and p_dept_id = #{pDeptId,jdbcType=BIGINT}
+      </if>
+      <if test="sDeptId != null">
+        and s_dept_id = #{sDeptId,jdbcType=BIGINT}
+      </if>
+      <if test="tDeptId != null">
+        and t_dept_id = #{tDeptId,jdbcType=BIGINT}
+      </if>
     </where>
   </select>
 
