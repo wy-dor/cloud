@@ -1,12 +1,16 @@
 package com.learning.cloud.duty.controller;
 
-import com.learning.cloud.duty.dao.DutyRecordDao;
 import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.duty.service.DutyRecordService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 
 /**
  * @Author: yyt
@@ -33,10 +37,17 @@ public class DutyRecordController {
         return dutyRecordService.updateDutyRecord(dutyRecord);
     }
 
-    @PostMapping("/getDutyRecordByClassId")
+    @GetMapping("/getDutyRecordByClassId")
     public JsonResult getDutyRecordByClassId(DutyRecord dutyRecord)throws Exception{
         return dutyRecordService.getDutyRecordByClassId(dutyRecord);
     }
+
+    // 批量插入记录
+    @PostMapping("/addDutyRecordList")
+    public JsonResult addDutyRecordList(@RequestBody List<DutyRecord> dutyRecordList)throws Exception{
+        return dutyRecordService.addDutyRecordList(dutyRecordList);
+    }
+
 
 
 }

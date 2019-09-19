@@ -20,7 +20,7 @@ public interface DutyCheckTypeDao {
 
     int updateDutyCheckType(DutyCheckType dutyCheckType);
 
-    List<DutyCheckType> getDutyCheckTypeByTypeId(Long dutyTypeId);
+    List<DutyCheckType> getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType);
 
     DutyCheckType getDutyCheckTypeById(Long id);
 }

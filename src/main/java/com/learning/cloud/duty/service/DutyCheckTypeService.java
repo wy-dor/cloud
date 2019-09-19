@@ -2,7 +2,6 @@ package com.learning.cloud.duty.service;
 
 import com.learning.cloud.duty.entity.DutyCheckType;
 import com.learning.domain.JsonResult;
-import com.learning.utils.JsonResultUtil;
 
 /**
  * @Author: yyt
@@ -18,5 +17,5 @@ public interface DutyCheckTypeService {
 
     JsonResult getDutyCheckTypeById(Long id)throws Exception;
 
-    JsonResult getDutyCheckTypeByTypeId(Long dutyTypeId)throws Exception;
+    JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType)throws Exception;
 }
