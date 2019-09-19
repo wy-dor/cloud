@@ -100,7 +100,7 @@
     insert into duty_record
     (school_id,campus_id,class_id, point_type,time,day,user_id,status)
     values
-    <foreach collection="dutyRecordList" item="item" separator=",">
+    <foreach collection="list" item="item" separator=",">
       <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="schoolId != null">
           #{item.schoolId,jdbcType=BIGINT},

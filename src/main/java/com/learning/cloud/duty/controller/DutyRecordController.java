@@ -44,6 +44,7 @@ public class DutyRecordController {
 
     // 批量插入记录
     @PostMapping("/addDutyRecordList")
+                                      //@RequestBody List<BatchClass> batchClassList
     public JsonResult addDutyRecordList(@RequestBody List<DutyRecord> dutyRecordList)throws Exception{
         return dutyRecordService.addDutyRecordList(dutyRecordList);
     }
