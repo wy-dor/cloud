@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.learning.cloud.duty.dao.DutyCheckTypeMapper">
+<mapper namespace="com.learning.cloud.duty.dao.DutyCheckTypeDao">
 
-  <select id="getDutyCheckTypeByTypeId" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyCheckType">
+  <select id="getDutyCheckTypeByTypeId" parameterType="com.learning.cloud.duty.entity.DutyCheckType" resultType="com.learning.cloud.duty.entity.DutyCheckType">
     select * from duty_check_type
     where duty_type_id = #{dutyTypeId}
+    <if test="plusMinus != null">
+      and plus_minus = #{plusMinus}
+    </if>
   </select>
 
   <select id="getDutyCheckTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyCheckType">

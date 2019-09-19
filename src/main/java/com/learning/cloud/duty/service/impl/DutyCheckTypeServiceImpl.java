@@ -53,8 +53,8 @@ public class DutyCheckTypeServiceImpl implements DutyCheckTypeService {
     }
 
     @Override
-    public JsonResult getDutyCheckTypeByTypeId(Long dutyTypeId) throws Exception {
-        List<DutyCheckType> dutyCheckTypes = dutyCheckTypeDao.getDutyCheckTypeByTypeId(dutyTypeId);
+    public JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType) throws Exception {
+        List<DutyCheckType> dutyCheckTypes = dutyCheckTypeDao.getDutyCheckTypeByTypeId(dutyCheckType);
         return JsonResultUtil.success(dutyCheckTypes);
     }
 

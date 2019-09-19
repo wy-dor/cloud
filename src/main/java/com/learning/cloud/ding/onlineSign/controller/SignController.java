@@ -37,6 +37,11 @@ public class SignController {
         return signService.getAllTasks(parent);
     }
 
+    @GetMapping("/getSignTaskById")
+    public JsonResult getSignTaskById(Integer id)throws Exception{
+        return signService.getSignTaskById(id);
+    }
+
     /*获取有效签字列表,classId*/
     @GetMapping("/getValidTaskList")
     public JsonResult getValidTaskList(Parent parent) throws Exception {
@@ -72,5 +77,11 @@ public class SignController {
     @GetMapping("/getRecordsBySignId")
     public JsonResult getRecordsBySignId(Sign sign) throws Exception{
         return signService.getRecordsBySignId(sign);
+    }
+
+    //判断是否签名
+    @GetMapping("/getIsSignFlag")
+    public JsonResult getIsSignFlag(String userId, Integer signId)throws Exception{
+        return signService.getIsSignFlag(userId, signId);
     }
 }

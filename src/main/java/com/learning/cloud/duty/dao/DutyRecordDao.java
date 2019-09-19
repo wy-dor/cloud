@@ -21,4 +21,6 @@ public interface DutyRecordDao {
     int updateDutyRecord(DutyRecord dutyRecord);
 
     List<DutyRecord> getDutyRecordByClassId(DutyRecord dutyRecord);
+
+    void addDutyRecordList(List<DutyRecord> dutyRecordList);
 }

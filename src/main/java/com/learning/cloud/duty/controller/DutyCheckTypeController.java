@@ -37,8 +37,8 @@ public class DutyCheckTypeController {
     }
 
     @GetMapping("/getDutyCheckTypeByTypeId")
-    public JsonResult getDutyCheckTypeByTypeId(Long dutyTypeId)throws Exception{
-        return dutyCheckTypeService.getDutyCheckTypeByTypeId(dutyTypeId);
+    public JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType)throws Exception{
+        return dutyCheckTypeService.getDutyCheckTypeByTypeId(dutyCheckType);
     }
 
     @GetMapping("/getDutyCheckTypeById")

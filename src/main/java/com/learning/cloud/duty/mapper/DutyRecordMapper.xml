@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.learning.cloud.duty.dao.DutyRecordMapper">
+<mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
 
   <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
     select * from duty_record
     where class_id = #{classId}
+    <trim suffixOverrides=",">
+    <if test="dutyTypeId != null">
+     and duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
+    </if>
+    <if test="name != null">
+      and name = #{name,jdbcType=VARCHAR},
+    </if>
+    <if test="point != null">
+      and point = #{point,jdbcType=INTEGER},
+    </if>
+    <if test="day != null">
+      and day = #{day,jdbcType=DATE},
+    </if>
+    <if test="plusMinus != null">
+      and plus_minus = #{plusMinus,jdbcType=SMALLINT},
+    </if>
+    </trim>
   </select>
 
   <delete id="deleteDutyRecord" parameterType="java.lang.Long">
@@ -74,6 +91,42 @@
     </trim>
   </insert>
 
+  <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
+    insert into duty_record
+    (school_id,campus_id,class_id, point_type,time,day,user_id,status)
+    values
+    <foreach collection="dutyRecordList" item="item" separator=",">
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="schoolId != null">
+          #{item.schoolId,jdbcType=BIGINT},
+        </if>
+        <if test="campusId != null">
+          #{item.campusId,jdbcType=BIGINT},
+        </if>
+        <if test="classId != null">
+          #{item.classId,jdbcType=BIGINT},
+        </if>
+        <if test="pointType != null">
+          #{item.pointType,jdbcType=INTEGER},
+        </if>
+        <if test="time != null">
+          #{item.time,jdbcType=SMALLINT},
+        </if>
+        <if test="day != null">
+          #{item.day,jdbcType=DATE},
+        </if>
+        <if test="userId != null">
+          #{item.userId,jdbcType=BIGINT},
+        </if>
+        <if test="status != null">
+          #{item.status,jdbcType=SMALLINT},
+        </if>
+      </trim>
+    </foreach>
+
+
+  </insert>
+
   <update id="updateDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
     update duty_check_type
     <set>
@@ -81,7 +134,7 @@
         id = #{id,jdbcType=BIGINT},
       </if>
       <if test="dutyTypeId != null">
-        duty_type_id = #{record.dutyTypeId,jdbcType=BIGINT},
+        duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},

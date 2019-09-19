@@ -26,4 +26,7 @@ public interface SignService {
 
     JsonResult getRecordsBySignId(Sign sign) throws Exception;
 
+    JsonResult getSignTaskById(Integer id)throws Exception;
+
+    JsonResult getIsSignFlag(String userId, Integer signId)throws Exception;
 }

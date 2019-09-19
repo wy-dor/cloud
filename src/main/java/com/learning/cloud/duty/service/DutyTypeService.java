@@ -18,5 +18,5 @@ public interface DutyTypeService {
 
     JsonResult getDutyTypeBySchoolId(DutyType dutyType)throws Exception;
 
-    JsonResultUtil getDutyTypeById(Long id)throws Exception;
+    JsonResult getDutyTypeById(Long id)throws Exception;
 }
