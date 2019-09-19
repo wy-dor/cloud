@@ -98,10 +98,10 @@
 
   <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
     insert into duty_record
-    (school_id,campus_id,class_id, point_type,time,day,user_id,status)
+    (school_id,campus_id,class_id, point_type,time,day,user_id)
     values
     <foreach collection="list" item="item" separator=",">
-      <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="item.schoolId != null">
           #{item.schoolId,jdbcType=BIGINT},
         </if>
