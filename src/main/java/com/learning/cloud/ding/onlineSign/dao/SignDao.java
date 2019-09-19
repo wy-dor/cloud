@@ -31,5 +31,5 @@ public interface SignDao {
 
     List<SignRecord> getRecordsBySignId(Sign sign);
 
-    Sign getIsSignFlag(@Param("userId") String userId, @Param("signId") Integer signId);
+    SignRecord getIsSignFlag(@Param("userId") String userId, @Param("signId") Integer signId);
 }

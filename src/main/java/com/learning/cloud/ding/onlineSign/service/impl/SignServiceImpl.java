@@ -110,7 +110,7 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public JsonResult getIsSignFlag(String userId, Integer signId) throws Exception {
-        Sign sign = signDao.getIsSignFlag(userId, signId);
-        return JsonResultUtil.success(sign);
+        SignRecord signRecord = signDao.getIsSignFlag(userId, signId);
+        return JsonResultUtil.success(signRecord);
     }
 }

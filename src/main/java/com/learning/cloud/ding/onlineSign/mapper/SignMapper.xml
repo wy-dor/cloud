@@ -9,7 +9,7 @@
     limit 1
   </select>
 
-  <select id="getIsSignFlag" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+  <select id="getIsSignFlag" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
     select * from sign_record
     where user_id = #{userId} and sign_id = #{signId}
   </select>

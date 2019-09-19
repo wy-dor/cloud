@@ -1,6 +1,7 @@
 package com.learning.cloud.duty.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,6 +19,7 @@ public class DutyRecord {
 
     private Short time;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date day;
 
     private Long userId;
