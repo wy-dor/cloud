@@ -9,8 +9,8 @@
     limit 1
   </select>
 
-  <select id="getIsSignFlag" resultType="java.lang.Integer">
-    select count(*) from sign_record
+  <select id="getIsSignFlag" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+    select * from sign_record
     where user_id = #{userId} and sign_id = #{signId}
   </select>
 

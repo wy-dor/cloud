@@ -5,6 +5,7 @@
   <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
     select * from duty_record
     where class_id = #{classId}
+    <trim suffixOverrides=",">
     <if test="dutyTypeId != null">
      and duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
     </if>
@@ -20,6 +21,7 @@
     <if test="plusMinus != null">
       and plus_minus = #{plusMinus,jdbcType=SMALLINT},
     </if>
+    </trim>
   </select>
 
   <delete id="deleteDutyRecord" parameterType="java.lang.Long">

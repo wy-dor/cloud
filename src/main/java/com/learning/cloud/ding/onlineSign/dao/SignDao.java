@@ -3,7 +3,6 @@ package com.learning.cloud.ding.onlineSign.dao;
 import com.learning.cloud.ding.onlineSign.entity.Sign;
 import com.learning.cloud.ding.onlineSign.entity.SignRecord;
 import com.learning.cloud.user.parent.entity.Parent;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -32,5 +31,5 @@ public interface SignDao {
 
     List<SignRecord> getRecordsBySignId(Sign sign);
 
-    int getIsSignFlag(@Param("userId") String userId, @Param("signId") Integer signId);
+    Sign getIsSignFlag(@Param("userId") String userId, @Param("signId") Integer signId);
 }

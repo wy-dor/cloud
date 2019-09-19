@@ -6,7 +6,7 @@
     select * from duty_check_type
     where duty_type_id = #{dutyTypeId}
     <if test="plusMinus != null">
-      and plus_minus = #{plusMinus},
+      and plus_minus = #{plusMinus}
     </if>
   </select>
 
