@@ -3,24 +3,29 @@
 <mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
 
   <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
-    select * from duty_record
-    where class_id = #{classId}
+    select dr.*, dct.name from duty_record dr
+    left join duty_check_type dct
+    on dr.point_type = dct.id
+    where dr.class_id = #{classId}
     <trim suffixOverrides=",">
-    <if test="dutyTypeId != null">
-     and duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
-    </if>
-    <if test="name != null">
-      and name = #{name,jdbcType=VARCHAR},
-    </if>
-    <if test="point != null">
-      and point = #{point,jdbcType=INTEGER},
-    </if>
-    <if test="day != null">
-      and day = #{day,jdbcType=DATE},
-    </if>
-    <if test="plusMinus != null">
-      and plus_minus = #{plusMinus,jdbcType=SMALLINT},
-    </if>
+      <if test="schoolId != null">
+        and dr.school_id = #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="campusId != null">
+        and dr.campus_id = #{campusId,jdbcType=BIGINT},
+      </if>
+      <if test="pointType != null">
+        and dr.point_type = #{pointType,jdbcType=INTEGER},
+      </if>
+      <if test="day != null">
+        and dr.day = #{day,jdbcType=DATE},
+      </if>
+      <if test="userId != null">
+        and dr.user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        and dr.status = #{status,jdbcType=SMALLINT},
+      </if>
     </trim>
   </select>
 
@@ -123,27 +128,19 @@
         </if>
       </trim>
     </foreach>
-
-
   </insert>
 
   <update id="updateDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
     update duty_check_type
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=BIGINT},
+      <if test="time != null">
+        time = #{time,jdbcType=SMALLINT},
       </if>
-      <if test="dutyTypeId != null">
-        duty_type_id = #{dutyTypeId,jdbcType=BIGINT},
+      <if test="day != null">
+        day = #{day,jdbcType=DATE},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="point != null">
-        point = #{point,jdbcType=INTEGER},
-      </if>
-      <if test="plusMinus != null">
-        plus_minus = #{plusMinus,jdbcType=SMALLINT},
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
