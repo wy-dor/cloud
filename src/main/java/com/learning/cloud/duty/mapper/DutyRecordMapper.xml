@@ -102,28 +102,28 @@
     values
     <foreach collection="list" item="item" separator=",">
       <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="schoolId != null">
+        <if test="item.schoolId != null">
           #{item.schoolId,jdbcType=BIGINT},
         </if>
-        <if test="campusId != null">
+        <if test="item.campusId != null">
           #{item.campusId,jdbcType=BIGINT},
         </if>
-        <if test="classId != null">
+        <if test="item.classId != null">
           #{item.classId,jdbcType=BIGINT},
         </if>
-        <if test="pointType != null">
+        <if test="item.pointType != null">
           #{item.pointType,jdbcType=INTEGER},
         </if>
-        <if test="time != null">
+        <if test="item.time != null">
           #{item.time,jdbcType=SMALLINT},
         </if>
-        <if test="day != null">
+        <if test="item.day != null">
           #{item.day,jdbcType=DATE},
         </if>
-        <if test="userId != null">
+        <if test="item.userId != null">
           #{item.userId,jdbcType=BIGINT},
         </if>
-        <if test="status != null">
+        <if test="item.status != null">
           #{item.status,jdbcType=SMALLINT},
         </if>
       </trim>
