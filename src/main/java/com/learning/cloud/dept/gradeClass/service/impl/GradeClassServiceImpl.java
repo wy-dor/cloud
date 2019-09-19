@@ -9,6 +9,8 @@ import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
@@ -37,6 +39,9 @@ public class GradeClassServiceImpl implements GradeClassService {
 
     @Autowired
     private ParentDao parentDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public ServiceResult getClassesByTeacher(Teacher teacher) {
@@ -101,5 +106,24 @@ public class GradeClassServiceImpl implements GradeClassService {
     public JsonResult getAllGradeName(Integer schoolId) {
         List<String> gradeNameList = gradeClassDao.getAllGradeName(schoolId);
         return JsonResultUtil.success(gradeNameList);
+    }
+
+    @Override
+    public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
+        Integer campusId = getCampusIdByUserIdAndSchoolId(userId, schoolId);
+        GradeClass gradeClass = new GradeClass();
+        gradeClass.setCampusId(campusId);
+        List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gradeClass);
+        return JsonResultUtil.success(byGradeClass);
+    }
+
+    @Override
+    public Integer getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId) {
+        User user = new User();
+        user.setSchoolId(schoolId);
+        user.setUserId(userId);
+        user.setRoleType(3);
+        User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
+        return bySchoolRoleIdentity.getCampusId();
     }
 }
