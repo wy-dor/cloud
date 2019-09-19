@@ -3,9 +3,11 @@
 <mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
 
   <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
-    select dr.*, dct.name from duty_record dr
+    select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point from duty_record dr
     left join duty_check_type dct
     on dr.point_type = dct.id
+    left join duty_type dt
+    on dt.id = dct.duty_type_id
     where dr.class_id = #{classId}
     <trim suffixOverrides=",">
       <if test="schoolId != null">

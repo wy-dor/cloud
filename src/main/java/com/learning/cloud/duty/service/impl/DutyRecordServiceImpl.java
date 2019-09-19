@@ -9,7 +9,7 @@ import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author: yyt
@@ -54,8 +54,23 @@ public class DutyRecordServiceImpl implements DutyRecordService {
 
     @Override
     public JsonResult getDutyRecordByClassId(DutyRecord dutyRecord) throws Exception {
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
         List<DutyRecord> dutyRecords = dutyRecordDao.getDutyRecordByClassId(dutyRecord);
-        return JsonResultUtil.success(dutyRecords);
+        //对结果按时间分组，返回数组
+        HashSet set = new HashSet();
+        for(int i=0;i<dutyRecords.size();i++){
+            c1.setTime(dutyRecords.get(i).getDay());
+            List<DutyRecord> duty = new ArrayList<>();
+            for(int j=0;j<dutyRecords.size();j++){
+                c2.setTime(dutyRecords.get(j).getDay());
+                if(c1.getTime().equals(c2.getTime())){
+                    duty.add(dutyRecords.get(j));
+                }
+            }
+            set.add(duty);
+        }
+        return JsonResultUtil.success(set);
     }
 
     // 批量新增积分记录

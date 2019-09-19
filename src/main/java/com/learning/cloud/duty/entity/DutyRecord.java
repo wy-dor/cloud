@@ -19,11 +19,15 @@ public class DutyRecord {
 
     private Short time;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date day;
 
     private Long userId;
 
     private Short status;
+
+    private String name;
+
+    private Integer point;
 
 }
