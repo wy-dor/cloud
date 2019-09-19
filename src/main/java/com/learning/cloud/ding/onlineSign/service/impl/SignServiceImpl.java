@@ -107,4 +107,14 @@ public class SignServiceImpl implements SignService {
         Sign sign = signDao.getById(id);
         return JsonResultUtil.success(sign);
     }
+
+    @Override
+    public JsonResult getIsSignFlag(String userId, Integer signId) throws Exception {
+        int i = signDao.getIsSignFlag(userId, signId);
+        if(i>0){
+            return JsonResultUtil.success(true);
+        }else {
+            return JsonResultUtil.success(false);
+        }
+    }
 }

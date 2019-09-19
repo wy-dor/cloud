@@ -9,6 +9,11 @@
     limit 1
   </select>
 
+  <select id="getIsSignFlag" resultType="java.lang.Integer">
+    select count(*) from sign_record
+    where user_id = #{userId} and sign_id = #{signId}
+  </select>
+
   <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
           parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
     insert into sign

@@ -78,4 +78,10 @@ public class SignController {
     public JsonResult getRecordsBySignId(Sign sign) throws Exception{
         return signService.getRecordsBySignId(sign);
     }
+
+    //判断是否签名
+    @GetMapping("/getIsSignFlag")
+    public JsonResult getIsSignFlag(String userId, Integer signId)throws Exception{
+        return signService.getIsSignFlag(userId, signId);
+    }
 }
