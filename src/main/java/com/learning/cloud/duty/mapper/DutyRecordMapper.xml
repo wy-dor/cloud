@@ -96,6 +96,7 @@
         #{status,jdbcType=SMALLINT},
       </if>
     </trim>
+    ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id={userId}
   </insert>
 
   <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
@@ -129,6 +130,7 @@
           #{item.status,jdbcType=SMALLINT},
         </if>
       </trim>
+      ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id={userId}
     </foreach>
   </insert>
 
