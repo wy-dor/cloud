@@ -1,4 +1,5 @@
 package com.learning.cloud.bizData.service.impl;
+
 import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
@@ -9,6 +10,8 @@ import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.dept.department.dao.DepartmentDao;
 import com.learning.cloud.dept.department.entity.Department;
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
+import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.service.AuthenService;
@@ -16,6 +19,12 @@ import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
+import com.learning.cloud.user.parent.dao.ParentDao;
+import com.learning.cloud.user.parent.entity.Parent;
+import com.learning.cloud.user.student.dao.StudentDao;
+import com.learning.cloud.user.student.entity.Student;
+import com.learning.cloud.user.teacher.dao.TeacherDao;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
@@ -38,13 +47,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     private DepartmentDao departmentDao;
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
     private SchoolDao schoolDao;
-
-    @Autowired
-    private AdministratorDao administratorDao;
 
     @Autowired
     private DeptService deptService;
@@ -53,38 +56,52 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     private AuthenService authenService;
 
     @Autowired
-    private AuthAppInfoDao authAppInfoDao;
+    private GradeClassDao gradeClassDao;
+
+    @Autowired
+    private StudentDao studentDao;
+
+    @Autowired
+    private ParentDao parentDao;
+
+    @Autowired
+    private TeacherDao teacherDao;
 
     @Override
     public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception {
         List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(syncBizDataMedium);
-        if(allBizDataMedium == null || allBizDataMedium.size() == 0){
+        if (allBizDataMedium == null || allBizDataMedium.size() == 0) {
             return null;
         }
         for (SyncBizDataMedium sbdm : allBizDataMedium) {
             Long id = sbdm.getId();
             String corpId = sbdm.getCorpId();
             String accessToken = authenService.getAccessToken(corpId);
-            if(accessToken == null){
+            if (accessToken == null) {
                 continue;
             }
             Integer schoolId;
             School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
-            if(schoolByCorpId == null){
+            if (schoolByCorpId == null) {
                 schoolId = -1;
-            }else{
+            } else {
                 schoolId = schoolByCorpId.getId();
             }
             Integer bizType = sbdm.getBizType();
             Map<String, Object> bizDataParse = (Map<String, Object>) JSON.parse(sbdm.getBizData());
             String syncAction = (String) bizDataParse.get("syncAction");
-            if(bizType == 13){
+            if (bizType == 13) {
                 //员工同步
                 //todo
                 //员工删除
-                if(syncAction.equals("user_leave_org")){
+                if (syncAction.equals("user_leave_org")) {
+                    syncBizDataMediumDao.updateStatus(id);
                     continue;
                 }
+                //{"errcode":0,"unionid":"SiSRKI4KSk39fTOtTVTnsGwiEiE","syncAction":"user_active_org","userid":"1569277724148",
+                // "isLeaderInDepts":"{114360989:false}","isBoss":false,"isSenior":false,"department":[114360989],
+                // "orderInDepts":"{114360989:176348740195815512}","dingId":"$:LWCP_v1:$thWRYFwvvNF/BmcFZpoIBMKPhdliWOHx",
+                // "errmsg":"ok","active":true,"avatar":"","isAdmin":false,"tags":{"guardian":["114461272"]},"isHide":false,"name":"刘淇妈妈"}
                 String userId = bizDataParse.get("userid").toString();
                 Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
                 String avatar = bizDataParse.get("avatar").toString();
@@ -103,25 +120,98 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //设置角色类型
                 //todo
                 //deptId范围
-                List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
+                List<Long> departmentList = (List<Long>) bizDataParse.get("department");
                 int size = departmentList.size();
-                Integer lastDeptId = departmentList.get(size - 1);
+                Long lastDeptId = departmentList.get(size - 1);
 
                 OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
                 String deptName = deptDetail.getName();
-                if(deptName.equals("老师")){
+                GradeClass gc = new GradeClass();
+                Integer campusId = null;
+                Integer classId = null;
+                Integer bureauId = null;
+                int i = 1;
+                if (deptName.equals("老师")) {
                     roleType = 3;
-                }else if(deptName.equals("学生")){
+                    gc.setTDeptId(lastDeptId);
+                } else if (deptName.equals("学生")) {
                     roleType = 4;
-                }else if(deptName.equals("家长")){
+                    gc.setTDeptId(lastDeptId);
+                } else if (deptName.equals("家长")) {
                     roleType = 2;
+                    gc.setPDeptId(lastDeptId);
+                } else {
+                    i = 0;
                 }
-                deptService.userSaveByRole(schoolId,corpId,null,apiUser,roleType,accessToken);
-
-            }else if(bizType == 14){
+                if (i == 1) {
+                    List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
+                    if (byGradeClass != null && byGradeClass.size() > 0) {
+                        GradeClass gradeClass = byGradeClass.get(0);
+                        campusId = gradeClass.getCampusId();
+                        classId = gradeClass.getId();
+                        bureauId = gradeClass.getBureauId();
+                    }
+                    if(roleType == 3){
+                        String classIds = "";
+                        roleType = 3;
+                        String classIdStr = classId + "";
+                        Teacher teacher = new Teacher();
+                        teacher.setTeacherName(name);
+                        teacher.setUserId(userId);
+                        teacher.setCampusId(campusId);
+                        teacher.setSchoolId(schoolId);
+                        teacher.setBureauId(bureauId);
+                        Teacher t = teacherDao.getTeacherInSchool(teacher);
+                        if (t == null) {
+                            teacher.setClassIds(classIdStr);
+                            teacherDao.insert(teacher);
+                        } else {
+                            //判断老师所在班级是否存在
+                            classIds = t.getClassIds();
+                            String idsStr = "," + t.getClassIds() + ",";
+                            if (!idsStr.contains("," + classIdStr + ",")) {
+                                StringBuilder sb = new StringBuilder(classIds);
+                                sb.append("," + classIdStr);
+                                t.setClassIds(sb.toString());
+                            }
+                            teacherDao.update(t);
+                        }
+                    } else if(roleType == 4){
+                        Student student = new Student();
+                        student.setUserId(userId);
+                        student.setStudentName(name);
+                        student.setClassId(classId);
+                        student.setCampusId(campusId);
+                        student.setSchoolId(schoolId);
+                        student.setBureauId(bureauId);
+                        Student s = studentDao.getByUserId(userId);
+                        if (s == null) {
+                            studentDao.insert(student);
+                        } else {
+                            studentDao.update(student);
+                        }
+                    }else if(roleType == 2){
+                        Parent parent = new Parent();
+                        parent.setUserId(userId);
+                        parent.setParentName(name);
+                        parent.setClassId(classId);
+                        parent.setCampusId(campusId);
+                        parent.setSchoolId(schoolId);
+                        parent.setBureauId(bureauId);
+                        Parent p = parentDao.getByUserId(userId);
+                        if (p == null) {
+                            parentDao.insert(parent);
+                        } else {
+                            parentDao.update(parent);
+                        }
+                    }
+                }
+                deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
+            } else if (bizType == 14) {
                 //todo
                 //部门删除
                 if (syncAction.equals("org_dept_remove")) {
+                    syncBizDataMediumDao.updateStatus(id);
                     continue;
                 }
                 String deptId = ((Integer) bizDataParse.get("id")).toString();
@@ -131,33 +221,32 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 dept.setName((String) bizDataParse.get("name"));
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
                 Boolean outerDept = false;
-                if(bizDataParse.get("outerDept") != null){
+                if (bizDataParse.get("outerDept") != null) {
                     outerDept = (Boolean) bizDataParse.get("outerDept");
                 }
-                if(outerDept){
-                    dept.setOuterDept((short)1);
-                }else{
-                    dept.setOuterDept((short)0);
+                if (outerDept) {
+                    dept.setOuterDept((short) 1);
+                } else {
+                    dept.setOuterDept((short) 0);
                 }
                 dept.setDeptManagerUseridList((String) bizDataParse.get("deptManagerUseridList"));
-                if((Boolean) bizDataParse.get("groupContainSubDept")){
-                    dept.setGroupContainSubDept((short)1);
-                }else{
-                    dept.setGroupContainSubDept((short)0);
+                if ((Boolean) bizDataParse.get("groupContainSubDept")) {
+                    dept.setGroupContainSubDept((short) 1);
+                } else {
+                    dept.setGroupContainSubDept((short) 0);
                 }
                 //部门同步
                 Department byDeptId = departmentDao.getByDeptId(deptId);
-                if(byDeptId == null){
+                if (byDeptId == null) {
                     departmentDao.insert(dept);
-                }else if(syncAction.equals("org_dept_modify")){
+                } else if (syncAction.equals("org_dept_modify")) {
                     departmentDao.update(dept);
                 }
 
-            }else if(bizType == 16){
+            } else if (bizType == 16) {
                 //企业同步
 
             }
-            //标志已操作
             syncBizDataMediumDao.updateStatus(id);
         }
         return JsonResultUtil.success();

@@ -455,7 +455,7 @@ public class MultiThreadScheduleTask {
     }
 
     @Async
-    @Scheduled(cron = "0 0/30 * * * ?")//每隔半小时
+    @Scheduled(cron = "0 0/10 * * * ?")//每隔半小时
     public void queryBizDataMedium() throws Exception {
         bizDataMediumService.initBizDataMedium(null);
     }
