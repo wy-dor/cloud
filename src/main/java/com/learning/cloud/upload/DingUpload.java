@@ -60,7 +60,7 @@ public class DingUpload {
         request.setDuration(10000L);
         request.setHttpMethod("GET");
         OapiCspaceGrantCustomSpaceResponse response = client.execute(request,accessToken);
-        return null;
+        return response.getCode();
     }
 
     //单步文件上传
