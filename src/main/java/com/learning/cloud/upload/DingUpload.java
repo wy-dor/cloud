@@ -63,7 +63,7 @@ public class DingUpload {
         request.setType("add");
         request.setUserid(userId);
         request.setPath("/test/");
-        request.setDuration(10000L);
+        request.setDuration(Long.valueOf(3600));
         request.setHttpMethod("GET");
         OapiCspaceGrantCustomSpaceResponse response = client.execute(request,accessToken);
         if(response.isSuccess()){
