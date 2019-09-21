@@ -39,7 +39,7 @@ public class DeptController {
             e.printStackTrace();
         }
         if (i > 0) {
-            deptService.init(school.getId() );
+            deptService.init(school.getId());
         } else {
             return ServiceResult.success("已加入");
         }

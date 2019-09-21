@@ -1,7 +1,5 @@
 package com.learning.cloud.bizData.service.impl;
 
-import java.util.Date;
-
 import com.alibaba.fastjson.JSON;
 import com.dingtalk.api.response.OapiDepartmentGetResponse;
 import com.dingtalk.api.response.OapiUserListbypageResponse;
@@ -13,20 +11,15 @@ import com.learning.cloud.dept.department.entity.Department;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
-import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
-import com.learning.cloud.user.admin.dao.AdministratorDao;
-import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
-import com.learning.cloud.user.user.dao.UserDao;
-import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,9 +113,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //设置角色类型
                 //todo
                 //deptId范围
-                List<Long> departmentList = (List<Long>) bizDataParse.get("department");
+                List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
-                Long lastDeptId = departmentList.get(size - 1);
+                Long lastDeptId = departmentList.get(size - 1).longValue();
 
                 OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
                 String deptName = deptDetail.getName();
@@ -191,17 +184,28 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             studentDao.update(student);
                         }
                     }else if(roleType == 2){
+                        String classIds = "";
+                        String classIdStr = classId + "";
                         Parent parent = new Parent();
                         parent.setUserId(userId);
                         parent.setParentName(name);
-                        parent.setClassId(classId);
                         parent.setCampusId(campusId);
                         parent.setSchoolId(schoolId);
                         parent.setBureauId(bureauId);
-                        Parent p = parentDao.getByUserId(userId);
+                        Parent p = parentDao.getParentInClass(parent);
                         if (p == null) {
+                            parent.setClassId(classIdStr);
                             parentDao.insert(parent);
+//                        parentId = parent.getId();
                         } else {
+//                        parentId = p.getId();
+                            classIds = p.getClassId();
+                            String idsStr = "," + p.getClassId() + ",";
+                            if (!idsStr.contains("," + classIdStr + ",")) {
+                                StringBuilder sb = new StringBuilder(classIds);
+                                sb.append("," + classIdStr);
+                                p.setClassId(sb.toString());
+                            }
                             parentDao.update(parent);
                         }
                     }

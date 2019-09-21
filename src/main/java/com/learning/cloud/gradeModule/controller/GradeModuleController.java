@@ -14,9 +14,9 @@ public class GradeModuleController {
     @Autowired
     private GradeModuleService gradeModuleService;
 
-    @PostMapping("/addGradeModule")
-    public JsonResult addGradeModule(GradeModule gradeModule){
-        return gradeModuleService.addGradeModule(gradeModule);
+    @PostMapping("/saveGradeModule")
+    public JsonResult saveGradeModule(GradeModule gradeModule){
+        return gradeModuleService.saveGradeModule(gradeModule);
     }
 
     @GetMapping("/getGradeModuleById")

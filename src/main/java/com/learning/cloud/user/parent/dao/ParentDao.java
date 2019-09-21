@@ -11,11 +11,11 @@ import java.util.List;
 public interface ParentDao {
     Parent getByUserId(String userId);
 
-    Integer getClassParentNum(Integer classId);
+    Integer getClassParentNum(String classId);
 
     Parent getParentInClass(Parent parent);
 
-    List<Integer> getParentIdListInClass(Integer classId);
+    List<Integer> getParentIdListInClass(String classId);
 
     List<Parent> getParentsInSchool(Parent parent);
 
@@ -27,5 +27,5 @@ public interface ParentDao {
 
     int delete(Integer id);
 
-    int deleteByClassId(Integer classId);
+    int deleteByClassId(String classId);
 }

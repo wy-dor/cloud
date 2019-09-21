@@ -15,7 +15,7 @@ public class Parent extends BaseEntity {
 
     private Integer studentId;
 
-    private Integer classId;
+    private String classId;
 
     private Integer campusId;
 

@@ -137,7 +137,7 @@ public class LoginController {
                 if(userRole==4){
                     //获取班级id
                     Student student = studentDao.getByUserId(user.getUserId());
-                    sysUserInfo.setClassId(student.getClassId());
+                    sysUserInfo.setClassId(student.getClassId().toString());
                 }
                 else if(userRole==3){
                     //获取老师id

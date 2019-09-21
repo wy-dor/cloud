@@ -233,7 +233,6 @@ public class DeptServiceImpl implements DeptService {
         for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
             String userName = "";
             String userId = "";
-            String unionId = "";
             int roleType = 0;
             String userRole = dept4.getName();
             Long userDeptId = dept4.getId();
@@ -267,7 +266,7 @@ public class DeptServiceImpl implements DeptService {
                         teacher.setBureauId(bureauId);
                         Teacher t = teacherDao.getTeacherInSchool(teacher);
                         if (t == null) {
-//                        classIds = classIdStr;
+//                        classId = classIdStr;
                             teacher.setClassIds(classIdStr);
                             teacherDao.insert(teacher);
 //                        teacherId = teacher.getId();
@@ -284,7 +283,7 @@ public class DeptServiceImpl implements DeptService {
                             teacherDao.update(t);
                         }
 
-//                    teacherClassIdMap2.put(teacherId,classIds);
+//                    teacherClassIdMap2.put(teacherId,classId);
 
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
 
@@ -296,19 +295,28 @@ public class DeptServiceImpl implements DeptService {
                         userId = user.getUserid();
 //                    Integer parentId = 0;
                         roleType = 2;
+                        String classIds = "";
+                        String classIdStr = classId + "";
                         Parent parent = new Parent();
                         parent.setUserId(userId);
                         parent.setParentName(userName);
-                        parent.setClassId(classId);
                         parent.setCampusId(campusId);
                         parent.setSchoolId(schoolId);
                         parent.setBureauId(bureauId);
-                        Parent p = parentDao.getByUserId(userId);
+                        Parent p = parentDao.getParentInClass(parent);
                         if (p == null) {
+                            parent.setClassId(classIdStr);
                             parentDao.insert(parent);
 //                        parentId = parent.getId();
                         } else {
 //                        parentId = p.getId();
+                            classIds = p.getClassId();
+                            String idsStr = "," + p.getClassId() + ",";
+                            if (!idsStr.contains("," + classIdStr + ",")) {
+                                StringBuilder sb = new StringBuilder(classIds);
+                                sb.append("," + classIdStr);
+                                p.setClassId(sb.toString());
+                            }
                             parentDao.update(parent);
                         }
 //                    parentIdList2.add(parentId);
@@ -339,7 +347,6 @@ public class DeptServiceImpl implements DeptService {
                             studentDao.update(student);
                         }
 //                    studentIdList2.add(studentId);
-
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
                     }
                 }
@@ -381,7 +388,7 @@ public class DeptServiceImpl implements DeptService {
 //                String[] classIdStrs3 = CommonUtils.retainStringDups(classIdStrs1, classIdStrs2);
 //                Teacher teacher = new Teacher();
 //                teacher.setId(id);
-//                teacher.setClassIds(Arrays.toString(classIdStrs3));
+//                teacher.setClassId(Arrays.toString(classIdStrs3));
 //                teacherDao.updateRole5ToOtherRole(teacher);
 //            }
 
@@ -556,8 +563,8 @@ public class DeptServiceImpl implements DeptService {
                         continue;
                     }
                     Parent p = parentsInSchool.get(0);
-                    Integer classId = p.getClassId();
-                    map.put("classId", classId + "");
+                    String classIds = p.getClassId();
+                    map.put("classIds", classIds);
                     p.setAvatar(avatar);
                     parentDao.update(p);
                     break;

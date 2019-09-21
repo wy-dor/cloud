@@ -22,14 +22,14 @@
     select *
     from user_parent
     where user_id = #{userId}
-    and class_id = #{classId}
+    and FIND_IN_SET(#{classId},class_id)
     limit 1
   </select>
 
-  <select id="getParentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="getParentIdListInClass" parameterType="java.lang.String" resultType="java.lang.Integer">
     select id
     from user_parent
-    where class_id = #{classId}
+    where FIND_IN_SET(#{classId},class_id)
   </select>
 
   <select id="getParentsInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
@@ -39,10 +39,10 @@
     and school_id = #{schoolId}
   </select>
 
-  <select id="getClassParentNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="getClassParentNum" parameterType="java.lang.String" resultType="java.lang.Integer">
     select count(id)
     from user_parent
-    where class_id = #{classId}
+    where FIND_IN_SET(#{classId},class_id)
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.parent.entity.Parent">
@@ -84,7 +84,7 @@
         #{studentId,jdbcType=INTEGER},
       </if>
       <if test="classId != null">
-        #{classId,jdbcType=INTEGER},
+        #{classId,jdbcType=VARCHAR},
       </if>
       <if test="campusId != null">
         #{campusId,jdbcType=INTEGER},
@@ -126,7 +126,7 @@
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
     <if test="classId != null">
-    and class_id = #{classId,jdbcType=INTEGER}
+    and class_id = #{classId,jdbcType=VARCHAR}
     </if>
     <if test="schoolId != null">
     and school_id = #{schoolId,jdbcType=INTEGER}
@@ -146,10 +146,5 @@
   <delete id="delete" parameterType="java.lang.Integer">
     delete from user_parent
     where id = #{id}
-  </delete>
-
-  <delete id="deleteByClassId" parameterType="java.lang.Integer">
-    delete from user_parent
-    where class_id = #{classId}
   </delete>
 </mapper>

@@ -9,26 +9,33 @@
       limit 1
    </select>
 
-  <select id="getByClassModule" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
+  <select id="getByGradeEntry" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
     select *
-      from grade_entry
-      where module_id = #{moduleId}
-      and class_id = #{classId}
-  </select>
-
-  <select id="getByStudentModule" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
-    select *
-      from grade_entry
-      where module_id = #{moduleId}
-      and class_id = #{classId}
-      and student_id = #{studentId}
-      and student_name = #{studentName}
+    from grade_entry
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="moduleId != null">
+        and module_id = #{moduleId,jdbcType=BIGINT}
+      </if>
+      <if test="studentId != null">
+        and student_id = #{studentId,jdbcType=INTEGER}
+      </if>
+      <if test="studentName != null">
+        and student_name = #{studentName,jdbcType=VARCHAR}
+      </if>
+      <if test="classId != null">
+        and class_id = #{classId,jdbcType=INTEGER}
+      </if>
+    </where>
   </select>
 
   <select id="getAllGradeEntry" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
     select *
     from grade_entry
     where classId = #{classId}
+    and module_id = #{moduleId}
   </select>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry">
@@ -80,4 +87,24 @@
       </if>
     </trim>
   </insert>
+
+  <update id="update" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry">
+    update grade_entry
+    <set>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="marks != null">
+        marks = #{marks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="getClassStrsInModule" parameterType="java.lang.Long" resultType="java.lang.String">
+    select class_id
+    from grade_module
+    where module_id = #{moduleId}
+    group by class_id
+  </select>
 </mapper>

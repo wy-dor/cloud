@@ -18,9 +18,9 @@ public interface GradeClassService {
 
     JsonResult getGradeClassById(Integer id);
 
-    JsonResult getAllGradeName(Integer schoolId);
+    JsonResult getAllGradeName(Integer schoolId, String userId);
 
     JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId);
 
-    Integer getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId);
+    Integer getCampusIdForTeacher(String userId, Integer schoolId);
 }

@@ -72,7 +72,7 @@ public class GradeClassServiceImpl implements GradeClassService {
             gc.setTeacherNum(teacherNum);
             Integer stuNum = studentDao.getClassStuNum(classId);
             gc.setStuNum(stuNum);
-            Integer parentNum = parentDao.getClassParentNum(classId);
+            Integer parentNum = parentDao.getClassParentNum(classId.toString());
             gc.setParentNum(parentNum);
         }
         return ServiceResult.success(new PageEntity<>(classList));
@@ -85,7 +85,7 @@ public class GradeClassServiceImpl implements GradeClassService {
         map.put("teacherNum",teacherNum);
         Integer stuNum = studentDao.getClassStuNum(classId);
         map.put("stuNum",stuNum);
-        Integer parentNum = parentDao.getClassParentNum(classId);
+        Integer parentNum = parentDao.getClassParentNum(classId.toString());
         map.put("parentNum",parentNum);
         return JsonResultUtil.success(map);
     }
@@ -103,14 +103,15 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
-    public JsonResult getAllGradeName(Integer schoolId) {
-        List<String> gradeNameList = gradeClassDao.getAllGradeName(schoolId);
+    public JsonResult getAllGradeName(Integer schoolId, String userId) {
+        Integer campusId = getCampusIdForTeacher(userId, schoolId);
+        List<String> gradeNameList = gradeClassDao.getAllGradeName(campusId);
         return JsonResultUtil.success(gradeNameList);
     }
 
     @Override
     public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
-        Integer campusId = getCampusIdByUserIdAndSchoolId(userId, schoolId);
+        Integer campusId = getCampusIdForTeacher(userId, schoolId);
         GradeClass gradeClass = new GradeClass();
         gradeClass.setCampusId(campusId);
         List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gradeClass);
@@ -118,7 +119,7 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
-    public Integer getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId) {
+    public Integer getCampusIdForTeacher(String userId, Integer schoolId) {
         User user = new User();
         user.setSchoolId(schoolId);
         user.setUserId(userId);

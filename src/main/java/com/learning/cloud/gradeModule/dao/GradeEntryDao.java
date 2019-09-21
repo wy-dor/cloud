@@ -13,9 +13,9 @@ public interface GradeEntryDao {
 
     GradeEntry getById(Long id);
 
-    List<GradeEntry> getAllGradeEntry(GradeEntry gradeEntry);
+    List<GradeEntry> getByGradeEntry(GradeEntry gradeEntry);
 
-    List<GradeEntry> getByClassModule(Long moduleId, Integer classId);
+    int update(GradeEntry gradeEntry);
 
-    GradeEntry getByStudentModule(GradeEntry gradeEntry);
+    List<Integer> getClassIdsInModule(Long moduleId);
 }

@@ -49,8 +49,8 @@ public class GradeClassController {
     }
 
     @GetMapping("getAllGradeName")
-    public JsonResult getAllGradeName(Integer schoolId){
-        return gradeClassService.getAllGradeName(schoolId);
+    public JsonResult getAllGradeName(Integer schoolId, String userId){
+        return gradeClassService.getAllGradeName(schoolId, userId);
     }
 
     @GetMapping("/listGradeClassByTeacherInSchool")
@@ -60,7 +60,7 @@ public class GradeClassController {
 
     @GetMapping("/getCampusIdByUserIdAndSchoolId")
     public JsonResult getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId){
-        Integer campusId = gradeClassService.getCampusIdByUserIdAndSchoolId(userId, schoolId);
+        Integer campusId = gradeClassService.getCampusIdForTeacher(userId, schoolId);
         return JsonResultUtil.success(campusId);
     }
 

@@ -5,7 +5,7 @@ import com.learning.domain.JsonResult;
 
 public interface GradeModuleService {
 
-    JsonResult addGradeModule(GradeModule gradeModule);
+    JsonResult saveGradeModule(GradeModule gradeModule);
 
     JsonResult getGradeModuleById(Long id);
 

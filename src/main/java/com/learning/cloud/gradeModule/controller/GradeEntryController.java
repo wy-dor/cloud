@@ -1,6 +1,7 @@
 package com.learning.cloud.gradeModule.controller;
 
 import com.learning.cloud.gradeModule.entity.GradeEntry;
+import com.learning.cloud.gradeModule.entity.GradeEntryJsonStr;
 import com.learning.cloud.gradeModule.service.GradeEntryService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ public class GradeEntryController {
     @Autowired
     private GradeEntryService gradeEntryService;
     
-    @PostMapping("/addGradeEntry")
-    public JsonResult addGradeEntry(GradeEntry gradeEntry){
-        return gradeEntryService.addGradeEntry(gradeEntry);
+    @PostMapping("/saveGradeEntry")
+    public JsonResult saveGradeEntry(GradeEntryJsonStr gradeEntryJsonStr){
+        return gradeEntryService.saveGradeEntry(gradeEntryJsonStr);
     }
 
     @GetMapping("/getGradeEntryById")
@@ -24,8 +25,8 @@ public class GradeEntryController {
         return gradeEntryService.getGradeEntryById(id);
     }
 
-    @GetMapping("/getAllGradeEntry")
-    public JsonResult getAllGradeEntry(GradeEntry gradeEntry){
-        return gradeEntryService.getAllGradeEntry(gradeEntry);
+    @GetMapping("/getByGradeEntry")
+    public JsonResult getByGradeEntry(GradeEntry gradeEntry){
+        return gradeEntryService.getByGradeEntry(gradeEntry);
     }
 }

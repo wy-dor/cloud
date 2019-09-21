@@ -26,7 +26,7 @@ public class ParentServiceImpl implements ParentService {
 
     @Override
     public JsonResult getClassParentNum(Integer classId) {
-        Integer parentNum = parentDao.getClassParentNum(classId);
+        Integer parentNum = parentDao.getClassParentNum(classId.toString());
         return JsonResultUtil.success(parentNum);
     }
 }

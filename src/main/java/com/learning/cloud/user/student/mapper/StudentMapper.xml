@@ -27,6 +27,7 @@
     select *
     from user_student
     where class_id = #{id}
+    order by id
   </select>
 
   <select id="getStudentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">

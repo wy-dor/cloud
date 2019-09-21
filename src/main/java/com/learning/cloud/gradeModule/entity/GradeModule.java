@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 public class GradeModule extends BaseEntity {
     private Long id;
@@ -38,7 +40,9 @@ public class GradeModule extends BaseEntity {
     //added
     private Integer classesAddingWay;
 
-    private String gradeNamesStr;
+    private List<String> gradeNamesStr;
 
     private Integer schoolId;
+
+    private String userId;
 }
