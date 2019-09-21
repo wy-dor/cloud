@@ -108,7 +108,12 @@ public class CommonUtils {
     }
 
     public static String StringListToString(List<String> list){
-        String str = String.join(",",list);
-        return str;
+        if(list!=null){
+            String str = String.join(",",list);
+            return str;
+        }else {
+            return null;
+        }
+
     }
 }
