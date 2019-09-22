@@ -224,4 +224,10 @@ public class ScoreboardServiceImpl implements ScoreboardService {
         List<ScoreRank> scoreRanks = scoreboardDao.getSchoolRank(scoreRank);
         return JsonResultUtil.success(new PageEntity<>(scoreRanks));
     }
+
+    @Override
+    public JsonResult getPersonnelRank(ScoreRank scoreRank) throws Exception {
+        List<ScoreRank> scoreRanks = scoreboardDao.getPersonnelRank(scoreRank);
+        return JsonResultUtil.success(new PageEntity<>(scoreRanks));
+    }
 }

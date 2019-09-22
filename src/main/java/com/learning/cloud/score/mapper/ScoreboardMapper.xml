@@ -128,7 +128,7 @@
     select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
     ) p
     on f.user_id = p.user_id
-    ORDER BY p.score
+    ORDER BY p.score desc
   </select>
 
   <select id="getSchoolRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
@@ -138,6 +138,22 @@
       select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
       and sc.bureau_id = #{bureauId} )
     ) p on es.id = p.school_id
-    ORDER BY p.score
+    ORDER BY p.score desc
+  </select>
+
+  <select id="getPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
+    SELECT f.user_name name, f.avatar,f.user_id, p.score
+    FROM(
+    SELECT u.user_id, u.user_name ,u.avatar FROM (
+    SELECT user_id, user_name, avatar,corp_id from user GROUP BY user_id, user_name, avatar,corp_id
+    ) u left join edu_school b on u.corp_id = b.corp_id where b.id = #{schoolId}
+    ) f
+    LEFT JOIN
+    (
+    select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
+    ) p
+    on f.user_id = p.user_id
+
+    ORDER BY p.score desc
   </select>
 </mapper>
