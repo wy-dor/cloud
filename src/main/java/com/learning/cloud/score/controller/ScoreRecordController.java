@@ -1,6 +1,7 @@
 package com.learning.cloud.score.controller;
 
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.score.entity.ScoreRecordClass;
 import com.learning.cloud.score.entity.ScoreRecordSchool;
 import com.learning.cloud.score.service.ScoreRecordService;
 import com.learning.domain.JsonResult;
@@ -28,6 +29,11 @@ public class ScoreRecordController {
     @PostMapping("/addScoreRecordSchool")
     public JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool)throws Exception{
         return scoreRecordService.addScoreRecordSchool(scoreRecordSchool);
+    }
+
+    @PostMapping("/addScoreRecordClass")
+    public JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass)throws Exception{
+        return scoreRecordService.addScoreRecordClass(scoreRecordClass);
     }
 
 

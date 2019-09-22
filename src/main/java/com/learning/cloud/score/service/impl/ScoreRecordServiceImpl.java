@@ -2,10 +2,7 @@ package com.learning.cloud.score.service.impl;
 
 import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreTypeDao;
-import com.learning.cloud.score.entity.SchoolScoreboard;
-import com.learning.cloud.score.entity.ScoreRecord;
-import com.learning.cloud.score.entity.ScoreRecordSchool;
-import com.learning.cloud.score.entity.ScoreType;
+import com.learning.cloud.score.entity.*;
 import com.learning.cloud.score.service.ScoreRecordService;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
@@ -77,5 +74,28 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         scoreRecordSchool.setScore(lastScore+scoreType.getScore());
         int i = scoreRecordDao.addScoreRecordSchool(scoreRecordSchool);
         return JsonResultUtil.success(scoreRecordSchool.getId());
+    }
+
+    @Override
+    public JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass) throws Exception {
+        // 获取用户最新的积分记录
+        ScoreRecordClass last = scoreRecordDao.getLastScoreRecordClass(scoreRecordClass.getClassId());
+        Long lastScore = new Long(0);
+        if(last!=null){
+            lastScore = last.getScore();
+        }
+        ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecordClass.getScoreTypeId());
+        if(scoreType==null){
+            return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
+        }
+        // 判断同一项每日加分次数
+        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordClassTimeByType(scoreRecordClass.getScoreTypeId(),scoreRecordClass.getClassId());
+        if(scoreRecords.size()>=scoreType.getTime()){
+            return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
+        }
+        scoreRecordClass.setScoreBeforeRecord(lastScore);
+        scoreRecordClass.setScore(lastScore+scoreType.getScore());
+        int i = scoreRecordDao.addScoreRecordClass(scoreRecordClass);
+        return JsonResultUtil.success(scoreRecordClass.getId());
     }
 }

@@ -83,9 +83,6 @@ public class NewsServiceImpl implements NewsService {
     //获取所有已发布新闻
     @Override
     public JsonResult getAllValidNews(News news) {
-        Integer schoolId = news.getSchoolId();
-        Integer bureauId = schoolDao.getBySchoolId(schoolId).getBureauId();
-        news.setBureauId(bureauId);
         List<News> allValidNews = newsDao.getAllValidNews(news);
         return JsonResultUtil.success(new PageEntity<>(allValidNews));
     }
