@@ -201,12 +201,6 @@ public class ScoreboardServiceImpl implements ScoreboardService {
 
 
     @Override
-    public JsonResult getSchoolRank(Long bureauId) throws Exception {
-        List<SchoolScoreboard> schoolScoreboards = scoreboardDao.getSchoolRank(bureauId);
-        return JsonResultUtil.success(schoolScoreboards);
-    }
-
-    @Override
     public JsonResult getTeacherRank(Long bureauId, Long schoolId) throws Exception{
         List<ScoreRecord> scoreRecords = scoreboardDao.getTeacherRank(bureauId, schoolId);
         return JsonResultUtil.success(scoreRecords);
@@ -218,9 +212,16 @@ public class ScoreboardServiceImpl implements ScoreboardService {
         return JsonResultUtil.success(classScoreboards);
     }
 
+    // 新积分规则
     @Override
     public JsonResult getBureauPersonnelRank(ScoreRank scoreRank) throws Exception {
         List<ScoreRank> scoreRanks = scoreboardDao.getBureauPersonnelRank(scoreRank);
+        return JsonResultUtil.success(new PageEntity<>(scoreRanks));
+    }
+
+    @Override
+    public JsonResult getSchoolRank(ScoreRank scoreRank) throws Exception {
+        List<ScoreRank> scoreRanks = scoreboardDao.getSchoolRank(scoreRank);
         return JsonResultUtil.success(new PageEntity<>(scoreRanks));
     }
 }

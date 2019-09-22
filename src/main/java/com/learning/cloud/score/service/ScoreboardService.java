@@ -13,7 +13,6 @@ public interface ScoreboardService {
 
     JsonResult updateClassScore(Long classId)throws Exception;
 
-    JsonResult getSchoolRank(Long bureauId)throws Exception;
 
     JsonResult getTeacherRank(Long bureauId, Long schoolId)throws Exception;
 
@@ -22,4 +21,6 @@ public interface ScoreboardService {
     JsonResult getClassRank(Long schoolId)throws Exception;
 
     JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception;
+
+    JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception;
 }

@@ -1,6 +1,7 @@
 package com.learning.cloud.score.controller;
 
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.score.entity.ScoreRecordSchool;
 import com.learning.cloud.score.service.ScoreRecordService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class ScoreRecordController {
     @GetMapping("/getUserScore")
     public JsonResult getUserScore(@RequestParam(value="userId",required = true) String userId)throws Exception{
         return scoreRecordService.getUserScore(userId);
+    }
+
+    @PostMapping("/addScoreRecordSchool")
+    public JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool)throws Exception{
+        return scoreRecordService.addScoreRecordSchool(scoreRecordSchool);
     }
 
 

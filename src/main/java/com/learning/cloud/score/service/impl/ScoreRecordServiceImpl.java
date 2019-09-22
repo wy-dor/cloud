@@ -4,6 +4,7 @@ import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreTypeDao;
 import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.score.entity.ScoreRecordSchool;
 import com.learning.cloud.score.entity.ScoreType;
 import com.learning.cloud.score.service.ScoreRecordService;
 import com.learning.cloud.user.parent.dao.ParentDao;
@@ -55,7 +56,26 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         return JsonResultUtil.success(last);
     }
 
-
-
-
+    @Override
+    public JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool) throws Exception {
+        // 获取用户最新的积分记录
+        ScoreRecordSchool last = scoreRecordDao.getLastScoreRecordSchool(scoreRecordSchool.getSchoolId());
+        Long lastScore = new Long(0);
+        if(last!=null){
+            lastScore = last.getScore();
+        }
+        ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecordSchool.getScoreTypeId());
+        if(scoreType==null){
+            return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
+        }
+        // 判断同一项每日加分次数
+        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordSchoolTimeByType(scoreRecordSchool.getScoreTypeId(),scoreRecordSchool.getSchoolId());
+        if(scoreRecords.size()>=scoreType.getTime()){
+            return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
+        }
+        scoreRecordSchool.setScoreBeforeRecord(lastScore);
+        scoreRecordSchool.setScore(lastScore+scoreType.getScore());
+        int i = scoreRecordDao.addScoreRecordSchool(scoreRecordSchool);
+        return JsonResultUtil.success(scoreRecordSchool.getId());
+    }
 }

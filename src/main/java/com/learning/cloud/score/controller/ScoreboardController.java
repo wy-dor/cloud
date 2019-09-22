@@ -34,10 +34,6 @@ public class ScoreboardController {
         return scoreboardService.updateClassScore(classId);
     }
 
-    @GetMapping("/getSchoolRank")
-    public JsonResult getSchoolRank(@RequestParam(value="bureauId",required = true) Long bureauId)throws Exception{
-        return scoreboardService.getSchoolRank(bureauId);
-    }
 
     @GetMapping("/getTeacherRank")
     public JsonResult getTeacherRank(@RequestParam(value="bureauId",required = true) Long bureauId,
@@ -54,5 +50,11 @@ public class ScoreboardController {
     @GetMapping("/getBureauPersonnelRank")
     public JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception{
         return scoreboardService.getBureauPersonnelRank(scoreRank);
+    }
+
+    // 获取学校排名
+    @GetMapping("/getSchoolRank")
+    public JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception{
+        return scoreboardService.getSchoolRank(scoreRank);
     }
 }

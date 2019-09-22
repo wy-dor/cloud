@@ -96,14 +96,6 @@
     on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
   </insert>
 
-  <select id="getSchoolRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.SchoolScoreboard">
-    select sc.*,es.school_name from school_scoreboard sc
-	LEFT JOIN edu_school es
-	on sc.school_id = es.id
-    where sc.bureau_id = #{bureauId}
-    order by score
-  </select>
-
   <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
     select sr.* ,ut.teacher_name from user_teacher ut
     LEFT JOIN (
@@ -136,6 +128,16 @@
     select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
     ) p
     on f.user_id = p.user_id
+    ORDER BY p.score desc
+  </select>
+
+  <select id="getSchoolRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
+    SELECT es.school_name,p.score from edu_school es
+    LEFT JOIN (
+    select sc.school_id,sc.score from score_record_school as sc where not exists(
+      select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
+      and sc.bureau_id = #{bureauId} )
+    ) p on es.id = p.school_id
     ORDER BY p.score desc
   </select>
 </mapper>

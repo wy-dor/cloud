@@ -2,6 +2,7 @@ package com.learning.cloud.score.dao;
 
 import com.learning.cloud.score.entity.SchoolScoreboard;
 import com.learning.cloud.score.entity.ScoreRecord;
+import com.learning.cloud.score.entity.ScoreRecordSchool;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,9 @@ public interface ScoreRecordDao {
 
     List<ScoreRecord> getRecordTimeByType(@Param("scoreTypeId") Long scoreTypeId, @Param("userId") String userId);
 
+    ScoreRecordSchool getLastScoreRecordSchool(Long schoolId);
+
+    List<ScoreRecord> getRecordSchoolTimeByType(@Param("scoreTypeId") Long scoreTypeId, @Param("schoolId") Long schoolId);
+
+    int addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool);
 }

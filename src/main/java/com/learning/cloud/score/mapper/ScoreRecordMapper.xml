@@ -59,5 +59,68 @@
     and date(record_time) = curdate();
   </select>
 
+  <select id="getLastScoreRecordSchool" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecordSchool">
+    select * from score_record_school
+    where school_id = #{schoolId}
+    order by id desc limit 1
+  </select>
+
+  <select id="getRecordSchoolTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
+    select * from score_record_school
+    where score_type_id = #{scoreTypeId}
+      and school_id = #{schoolId}
+      and date(record_time) = curdate();
+  </select>
+
+  <insert id="addScoreRecordSchool" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.score.entity.ScoreRecordSchool">
+    insert into score_record_school
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="recordTime != null">
+        record_time,
+      </if>
+      <if test="scoreTypeId != null">
+        score_type_id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="bureauId != null">
+        bureau_id,
+      </if>
+      <if test="scoreBeforeRecord != null">
+        score_before_record,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scoreTypeId != null">
+        #{scoreTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="bureauId != null">
+        #{bureauId,jdbcType=BIGINT},
+      </if>
+      <if test="scoreBeforeRecord != null">
+        #{scoreBeforeRecord,jdbcType=BIGINT},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
 
 </mapper>
