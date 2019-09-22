@@ -119,7 +119,7 @@
   </select>
 
   <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT f.user_name,f.user_id, f.avatar, p.score
+    SELECT f.user_name name, f.avatar, p.score
     FROM(
     SELECT u.user_id, u.user_name ,u.avatar FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
     ) f
@@ -132,7 +132,7 @@
   </select>
 
   <select id="getSchoolRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT es.school_name,p.score from edu_school es
+    SELECT es.school_name name,p.score from edu_school es
     LEFT JOIN (
     select sc.school_id,sc.score from score_record_school as sc where not exists(
       select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
