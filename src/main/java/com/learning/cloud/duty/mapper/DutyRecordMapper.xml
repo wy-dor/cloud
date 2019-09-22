@@ -3,7 +3,10 @@
 <mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
 
   <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
-    select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point from duty_record dr
+    select *
+    from
+    (select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point from
+    duty_record dr
     left join duty_check_type dct
     on dr.point_type = dct.id
     left join duty_type dt
@@ -19,16 +22,16 @@
       <if test="pointType != null">
         and dr.point_type = #{pointType,jdbcType=INTEGER},
       </if>
-      <if test="day != null">
-        and dr.day = #{day,jdbcType=DATE},
-      </if>
       <if test="userId != null">
         and dr.user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="status != null">
         and dr.status = #{status,jdbcType=SMALLINT},
       </if>
-    </trim>
+    </trim>) a
+    <if test="ymdDay != null">
+        where CONVERT (varchar(10),a.day,120) = #{ymdDay}
+    </if>
   </select>
 
   <delete id="deleteDutyRecord" parameterType="java.lang.Long">

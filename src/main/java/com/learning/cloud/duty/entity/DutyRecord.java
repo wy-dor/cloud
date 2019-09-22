@@ -30,4 +30,7 @@ public class DutyRecord {
 
     private Integer point;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date ymdDay;
+
 }
