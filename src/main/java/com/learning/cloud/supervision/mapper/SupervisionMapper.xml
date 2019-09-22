@@ -30,6 +30,9 @@
             <if test="userId != null">
                 and user_id = #{userId}
             </if>
+            <if test="search != null">
+                and title like CONCAT('%', #{search}, '%')
+            </if>
         </where>
         order by upload_time desc
     </select>

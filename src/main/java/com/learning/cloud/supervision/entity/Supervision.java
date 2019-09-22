@@ -37,4 +37,6 @@ public class Supervision extends BaseEntity {
     private Integer schoolId;
 
     private String userId;
+
+    private String search;
 }
