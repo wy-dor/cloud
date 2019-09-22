@@ -23,4 +23,6 @@ public interface ScoreboardService {
     JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception;
 
     JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception;
+
+    JsonResult getPersonnelRank(ScoreRank scoreRank)throws Exception;
 }

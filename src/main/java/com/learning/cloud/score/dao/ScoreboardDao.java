@@ -29,4 +29,6 @@ public interface ScoreboardDao {
     List<ScoreRank> getBureauPersonnelRank(ScoreRank scoreRank);
 
     List<ScoreRank> getSchoolRank(ScoreRank scoreRank);
+
+    List<ScoreRank> getPersonnelRank(ScoreRank scoreRank);
 }

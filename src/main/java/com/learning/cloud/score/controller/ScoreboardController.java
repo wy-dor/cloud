@@ -57,4 +57,9 @@ public class ScoreboardController {
     public JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception{
         return scoreboardService.getSchoolRank(scoreRank);
     }
+
+    @GetMapping("/getPersonnelRank")
+    public JsonResult getPersonnelRank(ScoreRank scoreRank)throws Exception{
+        return scoreboardService.getPersonnelRank(scoreRank);
+    }
 }
