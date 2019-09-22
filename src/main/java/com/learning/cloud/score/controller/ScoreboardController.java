@@ -48,4 +48,10 @@ public class ScoreboardController {
     public JsonResult getClassRank(@RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
         return scoreboardService.getClassRank(schoolId);
     }
+
+    // 获取教育局内部人员排名
+    @GetMapping("/getBureauPersonnelRank")
+    public JsonResult getBureauPersonnelRank(@RequestParam(value="bureauId",required = true) Long bureauId)throws Exception{
+        return scoreboardService.getBureauPersonnelRank(bureauId);
+    }
 }

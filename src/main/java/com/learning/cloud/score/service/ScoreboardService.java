@@ -20,4 +20,5 @@ public interface ScoreboardService {
 
     JsonResult getClassRank(Long schoolId)throws Exception;
 
+    JsonResult getBureauPersonnelRank(Long bureauId)throws Exception;
 }

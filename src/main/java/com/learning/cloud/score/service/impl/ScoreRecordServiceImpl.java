@@ -43,6 +43,7 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         if(scoreRecords.size()>=scoreType.getTime()){
             return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
         }
+        scoreRecord.setScoreBeforeRecord(lastScore);
         scoreRecord.setScore(lastScore+scoreType.getScore());
         int i = scoreRecordDao.addScoreRecord(scoreRecord);
         return JsonResultUtil.success(scoreRecord.getId());
@@ -53,6 +54,8 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         ScoreRecord last = scoreRecordDao.getLastScoreRecord(userId);
         return JsonResultUtil.success(last);
     }
+
+
 
 
 }

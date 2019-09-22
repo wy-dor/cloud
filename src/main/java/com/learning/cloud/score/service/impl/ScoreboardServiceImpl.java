@@ -219,4 +219,10 @@ public class ScoreboardServiceImpl implements ScoreboardService {
         List<ClassScoreboard> classScoreboards = scoreboardDao.getClassRank(schoolId);
         return JsonResultUtil.success(classScoreboards);
     }
+
+    @Override
+    public JsonResult getBureauPersonnelRank(Long bureauId) throws Exception {
+        List<ScoreRecord> scoreRecords = scoreboardDao.getBureauPersonnelRank(bureauId);
+        return null;
+    }
 }

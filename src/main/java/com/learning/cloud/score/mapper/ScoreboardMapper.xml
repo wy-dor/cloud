@@ -125,4 +125,17 @@
     where cs.school_id = #{schoolId}
     order by score
   </select>
+
+  <select id="getBureauPersonnelRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
+    SELECT f.user_name,f.user_id, p.score
+    FROM(
+    SELECT u.user_id, u.user_name FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
+    ) f
+    LEFT JOIN
+    (
+    select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
+    ) p
+    on f.user_id = p.user_id
+    ORDER BY p.score desc
+  </select>
 </mapper>
