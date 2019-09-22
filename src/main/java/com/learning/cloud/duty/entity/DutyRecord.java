@@ -22,7 +22,7 @@ public class DutyRecord {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date day;
 
-    private Long userId;
+    private String userId;
 
     private Short status;
 
