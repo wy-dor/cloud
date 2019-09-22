@@ -76,7 +76,9 @@ public class DutyRecordServiceImpl implements DutyRecordService {
     // 批量新增积分记录
     @Override
     public JsonResult addDutyRecordList(List<DutyRecord> dutyRecordList) throws Exception {
-        dutyRecordDao.addDutyRecordList(dutyRecordList);
+        for(DutyRecord dutyRecord: dutyRecordList) {
+            dutyRecordDao.addDutyRecord(dutyRecord);
+        }
         return JsonResultUtil.success();
     }
 }
