@@ -130,7 +130,7 @@
           #{item.status,jdbcType=SMALLINT},
         </if>
       </trim>
-      ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id={userId}
+      ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id={item.userId}
     </foreach>
   </insert>
 
