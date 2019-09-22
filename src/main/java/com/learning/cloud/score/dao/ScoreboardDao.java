@@ -2,6 +2,7 @@ package com.learning.cloud.score.dao;
 
 import com.learning.cloud.score.entity.ClassScoreboard;
 import com.learning.cloud.score.entity.SchoolScoreboard;
+import com.learning.cloud.score.entity.ScoreRank;
 import com.learning.cloud.score.entity.ScoreRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,5 +28,5 @@ public interface ScoreboardDao {
 
     List<ClassScoreboard> getClassRank(Long schoolId);
 
-    List<ScoreRecord> getBureauPersonnelRank(Long bureauId);
+    List<ScoreRecord> getBureauPersonnelRank(ScoreRank scoreRank);
 }

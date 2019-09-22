@@ -1,5 +1,6 @@
 package com.learning.cloud.score.controller;
 
+import com.learning.cloud.score.entity.ScoreRank;
 import com.learning.cloud.score.service.ScoreboardService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ScoreboardController {
 
     // 获取教育局内部人员排名
     @GetMapping("/getBureauPersonnelRank")
-    public JsonResult getBureauPersonnelRank(@RequestParam(value="bureauId",required = true) Long bureauId)throws Exception{
-        return scoreboardService.getBureauPersonnelRank(bureauId);
+    public JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception{
+        return scoreboardService.getBureauPersonnelRank(scoreRank);
     }
 }

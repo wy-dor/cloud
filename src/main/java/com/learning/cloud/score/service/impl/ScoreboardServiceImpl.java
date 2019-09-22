@@ -6,16 +6,14 @@ import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.score.dao.ScoreRecordDao;
 import com.learning.cloud.score.dao.ScoreboardDao;
-import com.learning.cloud.score.entity.ClassScoreboard;
-import com.learning.cloud.score.entity.SchoolScoreboard;
-import com.learning.cloud.score.entity.ScoreRecord;
-import com.learning.cloud.score.entity.TeacherScoreboard;
+import com.learning.cloud.score.entity.*;
 import com.learning.cloud.score.service.ScoreboardService;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
+import com.learning.domain.PageEntity;
 import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -221,8 +219,8 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     }
 
     @Override
-    public JsonResult getBureauPersonnelRank(Long bureauId) throws Exception {
-        List<ScoreRecord> scoreRecords = scoreboardDao.getBureauPersonnelRank(bureauId);
-        return null;
+    public JsonResult getBureauPersonnelRank(ScoreRank scoreRank) throws Exception {
+        List<ScoreRecord> scoreRecords = scoreboardDao.getBureauPersonnelRank(scoreRank);
+        return JsonResultUtil.success(new PageEntity<>(scoreRecords));
     }
 }
