@@ -28,5 +28,5 @@ public interface ScoreboardDao {
 
     List<ClassScoreboard> getClassRank(Long schoolId);
 
-    List<ScoreRecord> getBureauPersonnelRank(ScoreRank scoreRank);
+    List<ScoreRank> getBureauPersonnelRank(ScoreRank scoreRank);
 }

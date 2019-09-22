@@ -13,4 +13,8 @@ public class ScoreRank extends BaseEntity {
     private Long bureauId;
     private Long schoolId;
     private Long classId;
+    private String userName;
+    private Long score;
+    private String userId;
+    private String avatar;
 }

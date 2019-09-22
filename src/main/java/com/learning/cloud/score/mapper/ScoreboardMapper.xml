@@ -126,10 +126,10 @@
     order by score
   </select>
 
-  <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    SELECT f.user_name,f.user_id, p.score
+  <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
+    SELECT f.user_name,f.user_id, u.avatar, p.score
     FROM(
-    SELECT u.user_id, u.user_name FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
+    SELECT u.user_id, u.user_name ,u.avatar FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
     ) f
     LEFT JOIN
     (
