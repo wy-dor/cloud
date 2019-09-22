@@ -68,6 +68,9 @@
         <if test="typeId != null">
             and type_id = #{typeId}
         </if>
+        <if test="search != null">
+            and title like CONCAT('%', #{search}, '%')
+        </if>
         order by upload_time desc
     </select>
 
