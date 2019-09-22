@@ -127,7 +127,7 @@
   </select>
 
   <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT f.user_name,f.user_id, u.avatar, p.score
+    SELECT f.user_name,f.user_id, f.avatar, p.score
     FROM(
     SELECT u.user_id, u.user_name ,u.avatar FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
     ) f
