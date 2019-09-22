@@ -36,6 +36,7 @@
     from grade_entry
     where classId = #{classId}
     and module_id = #{moduleId}
+    order by id desc
   </select>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry">
@@ -101,10 +102,11 @@
     where id = #{id}
   </update>
 
-  <select id="getClassStrsInModule" parameterType="java.lang.Long" resultType="java.lang.String">
-    select class_id
-    from grade_module
+  <select id="getDoneClassIdsInModule" parameterType="java.lang.Long" resultType="java.util.Map">
+    select class_id as classId, marks
+    from grade_entry
     where module_id = #{moduleId}
     group by class_id
+    limit 1
   </select>
 </mapper>

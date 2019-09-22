@@ -397,8 +397,13 @@ public class DeptServiceImpl implements DeptService {
 
 
     @Override
-    public void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId) throws ApiException {
-        OapiDepartmentListResponse resp = getDeptList(departmentId.toString(), accessToken, 0);
+    public void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId) {
+        OapiDepartmentListResponse resp = null;
+        try {
+            resp = getDeptList(departmentId.toString(), accessToken, 0);
+        } catch (ApiException e) {
+            return;
+        }
         List<OapiDepartmentListResponse.Department> departmentList = resp.getDepartment();
         if (departmentList != null && departmentList.size() > 0) {
             for (OapiDepartmentListResponse.Department department : departmentList) {
@@ -410,7 +415,12 @@ public class DeptServiceImpl implements DeptService {
             Boolean flag = true;
             Long offset = 0L;
             while (flag) {
-                OapiUserListbypageResponse resp5 = getDeptUserListByPage(departmentId, offset, accessToken);
+                OapiUserListbypageResponse resp5 = null;
+                try {
+                    resp5 = getDeptUserListByPage(departmentId, offset, accessToken);
+                } catch (ApiException e) {
+                    return;
+                }
                 List<OapiUserListbypageResponse.Userlist> userList = resp5.getUserlist();
                 if (userList.size() < 100) {
                     flag = false;
@@ -427,7 +437,7 @@ public class DeptServiceImpl implements DeptService {
     //对用户角色进行判断存储
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user,
-                               int roleType, String accessToken) throws ApiException {
+                               int roleType, String accessToken){
         String userId = user.getUserid();
         Boolean isAdmin = user.getIsAdmin();
         if (isAdmin != null && isAdmin == true) {

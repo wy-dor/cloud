@@ -19,8 +19,8 @@ public class ExportController {
 
     //id,classesStr,subjects,title
     @RequestMapping("/exportExcelModule")
-    public JsonResult exportExcelModule(HttpServletResponse response, GradeModule gradeModule)throws Exception{
-        return exportService.exportExcelModule(response,gradeModule);
+    public JsonResult exportExcelModule(GradeModule gradeModule)throws Exception{
+        return exportService.exportExcelModule(gradeModule);
     }
 
     @PostMapping("/downloadExcelGrade")

@@ -32,9 +32,9 @@ public interface DeptService {
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException;
 
-    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user, int roleType, String accessToken) throws ApiException;
+    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user, int roleType, String accessToken) ;
 
-    void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId) throws ApiException;
+    void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId);
 
     List<Administrator> getURLAdmin(String accessToken) throws ApiException;
 

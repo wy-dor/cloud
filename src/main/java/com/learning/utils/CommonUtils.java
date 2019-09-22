@@ -2,8 +2,19 @@ package com.learning.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CommonUtils {
+
+    /**
+     * 生成I编号
+     * uuid去除"-"
+     */
+    public static String getRandomStr(){
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replace("-","");
+    }
+
     /**
      * 两个数组比较返回第一个数组的唯一值
      */
