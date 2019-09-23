@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.learning.cloud.sendMsg.utils.SendUtils.SendWorkMsg;
@@ -34,14 +35,16 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private CorpAgentDao corpAgentDao;
 
+    //发送消息
     @Override
-    public JsonResult sendSignLink(Integer classId, Integer signId, MsgInfo msgInfo) throws Exception {
-        GradeClass gradeClass = gradeClassDao.getById(classId);
-//        String parentDepId = String.valueOf(gradeClass.getPDeptId());
-        String parentDepId = String.valueOf(gradeClass.getTDeptId());
-        //发送消息
+    public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo) throws Exception {
+        List<String> classes = Arrays.asList(classIds.split(","));
         List<String> ps = new ArrayList<>();
-        ps.add(parentDepId);
+        for(String classId: classes){
+            GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
+            String parentDepId = String.valueOf(gradeClass.getPDeptId());
+            ps.add(parentDepId);
+        }
         // 获取agent_id
         CorpAgent corpAgent = corpAgentDao.getByCorpId(msgInfo.getCorpId());
         WorkMsg workMsg = new WorkMsg();
@@ -54,8 +57,8 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
         msg.getLink().setTitle(msgInfo.getTitle());
         msg.getLink().setText(msgInfo.getText());
-        msg.getLink().setMessageUrl(msgInfo.getMessageUrl());
-        msg.getLink().setPicUrl(msgInfo.getPicUrl());
+        msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId);
+        msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
         return SendWorkMsg(workMsg,msg);
     }
 }

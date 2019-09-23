@@ -9,5 +9,5 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface SendMsgService {
-    JsonResult sendSignLink(Integer classId, Integer signId, MsgInfo msgInfo)throws Exception;
+    JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo)throws Exception;
 }
