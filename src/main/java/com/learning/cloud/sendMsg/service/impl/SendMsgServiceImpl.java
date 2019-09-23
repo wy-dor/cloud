@@ -5,6 +5,8 @@ import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.index.dao.CorpAgentDao;
 import com.learning.cloud.index.entity.CorpAgent;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
 import com.learning.cloud.sendMsg.entity.MsgInfo;
 import com.learning.cloud.sendMsg.entity.WorkMsg;
 import com.learning.cloud.sendMsg.service.SendMsgService;
@@ -35,20 +37,26 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private CorpAgentDao corpAgentDao;
 
+    @Autowired
+    private SchoolDao schoolDao;
+
     //发送消息
     @Override
     public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo) throws Exception {
         List<String> classes = Arrays.asList(classIds.split(","));
         List<String> ps = new ArrayList<>();
+        Integer schoolId = null;
         for(String classId: classes){
             GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
             String parentDepId = String.valueOf(gradeClass.getPDeptId());
             ps.add(parentDepId);
+            schoolId = gradeClass.getSchoolId();
         }
+        School school = schoolDao.getBySchoolId(schoolId);
         // 获取agent_id
-        CorpAgent corpAgent = corpAgentDao.getByCorpId(msgInfo.getCorpId());
+        CorpAgent corpAgent = corpAgentDao.getByCorpId(school.getCorpId());
         WorkMsg workMsg = new WorkMsg();
-        workMsg.setCorpId(msgInfo.getCorpId());
+        workMsg.setCorpId(school.getCorpId());
         workMsg.setDeptIdList(ps);
         workMsg.setAgentId(corpAgent.getAgentId());
         workMsg.setToAllUser(false);
