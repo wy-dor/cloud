@@ -23,8 +23,8 @@ public class SendMsgController {
      * 内容为签字链接，指点打开可以签字
      */
     @PostMapping("/sendSignLink")
-    public JsonResult sendSignLink(Integer classId, Integer signId, MsgInfo msgInfo)throws Exception{
-        return sendMsgService.sendSignLink(classId, signId, msgInfo);
+    public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo)throws Exception{
+        return sendMsgService.sendSignLink(classIds, signId, msgInfo);
 
     }
 
