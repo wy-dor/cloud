@@ -93,7 +93,7 @@
         #{time,jdbcType=SMALLINT},
       </if>
       <if test="day != null">
-        #{day,jdbcType=TIMESTAMP},
+        #{day},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
@@ -147,7 +147,7 @@
         time = #{time,jdbcType=SMALLINT},
       </if>
       <if test="day != null">
-        day = #{day,jdbcType=DATE},
+        day = #{day},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=SMALLINT},

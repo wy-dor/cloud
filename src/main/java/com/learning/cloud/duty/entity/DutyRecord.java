@@ -20,7 +20,7 @@ public class DutyRecord {
     private Short time;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date day;
+    private String day;
 
     private String userId;
 
