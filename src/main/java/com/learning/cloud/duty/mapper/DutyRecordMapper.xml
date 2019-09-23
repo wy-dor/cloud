@@ -12,28 +12,27 @@
     left join duty_type dt
     on dt.id = dct.duty_type_id
     where dr.class_id = #{classId}
-    <trim suffixOverrides=",">
-      <if test="schoolId != null">
-        and dr.school_id = #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="campusId != null">
-        and dr.campus_id = #{campusId,jdbcType=BIGINT},
-      </if>
-      <if test="pointType != null">
-        and dr.point_type = #{pointType,jdbcType=INTEGER},
-      </if>
-      <if test="day != null">
-        and dr.day = #{day},
-      </if>
-      <if test="userId != null">
-        and dr.user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="status != null">
-        and dr.status = #{status,jdbcType=SMALLINT},
-      </if>
-    </trim>) a
+    <if test="schoolId != null">
+      and dr.school_id = #{schoolId,jdbcType=BIGINT}
+    </if>
+    <if test="campusId != null">
+      and dr.campus_id = #{campusId,jdbcType=BIGINT}
+    </if>
+    <if test="pointType != null">
+      and dr.point_type = #{pointType,jdbcType=INTEGER}
+    </if>
+    <if test="day != null">
+      and dr.day = #{day}
+    </if>
+    <if test="userId != null">
+      and dr.user_id = #{userId,jdbcType=BIGINT}
+    </if>
+    <if test="status != null">
+      and dr.status = #{status,jdbcType=SMALLINT}
+    </if>
+    ) a
     <if test="ymdDay != null">
-        where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
+      where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
     </if>
   </select>
 
