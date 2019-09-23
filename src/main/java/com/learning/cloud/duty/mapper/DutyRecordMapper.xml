@@ -33,7 +33,7 @@
       </if>
     </trim>) a
     <if test="ymdDay != null">
-        where CONVERT (varchar(10),a.day,120) = #{ymdDay}
+        where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
     </if>
   </select>
 
