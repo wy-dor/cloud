@@ -37,6 +37,15 @@
         order by upload_time desc
     </select>
 
+    <select id="getPicsForSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="java.lang.Long">
+        select pic_id
+        from supervision
+        where bureau_id = #{bureauId}
+        and status = 3
+        and pic_id is not null
+        order by upload_time desc
+    </select>
+
     <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
     select c.* from
     (select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id

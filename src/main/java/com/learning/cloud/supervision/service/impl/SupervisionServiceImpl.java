@@ -1,5 +1,7 @@
 package com.learning.cloud.supervision.service.impl;
 
+import com.learning.cloud.ding.picture.dao.PictureDao;
+import com.learning.cloud.ding.picture.entity.Picture;
 import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.supervision.dao.SupervisionDao;
 import com.learning.cloud.supervision.entity.Supervision;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +30,9 @@ public class SupervisionServiceImpl implements SupervisionService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PictureDao pictureDao;
 
     //状态 0:未提交，1:审核中，2:已驳回，3:已发布，4:已撤销
     @Override
@@ -149,6 +155,17 @@ public class SupervisionServiceImpl implements SupervisionService {
         supervision.setTopping(0);
         supervisionDao.update(supervision);
         return JsonResultUtil.success("取消置顶成功");
+    }
+
+    @Override
+    public JsonResult getPicsForSupervision(Supervision supervision) {
+        List<Picture> pictureList = new ArrayList<>();
+        List<Long> picIdList = supervisionDao.getPicsForSupervision(supervision);
+        for (Long picId : picIdList) {
+            Picture pic = pictureDao.getPic(picId);
+            pictureList.add(pic);
+        }
+        return JsonResultUtil.success(pictureList);
     }
 
 
