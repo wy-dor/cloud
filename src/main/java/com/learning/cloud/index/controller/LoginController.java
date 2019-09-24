@@ -129,6 +129,21 @@ public class LoginController {
                 sysUserInfo.setUserid(user.getUserId());
                 sysUserInfo.setAdmin(userGetResponse.getIsAdmin());
                 sysUserInfo.setRole(userRole);
+                sysUserInfo.setId(user.getId());
+                String cropName = "";
+                //老师
+                School school = null;
+                if(user.getSchoolId()==null||user.getSchoolId()==-1){
+                    // 获取教育局id
+                    Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
+                    sysUserInfo.setBureauId(bureau.getId());
+                    cropName = bureau.getBureauName();
+                }else {
+                    school =  schoolDao.getSchoolByCorpId(user.getCorpId());
+                    cropName = school.getSchoolName();
+                    sysUserInfo.setBureauId(school.getBureauId());
+                    sysUserInfo.setSchoolId(user.getSchoolId());
+                }
                 // 2: 家长  3: 老师 4: 学生 5:其他
                 if(userRole==2){
                     Parent parent = parentDao.getByUserId(user.getUserId());
@@ -141,22 +156,14 @@ public class LoginController {
                 }
                 else if(userRole==3){
                     //获取老师id
-                    Teacher teacher = teacherDao.getByUserId(user.getUserId());
+                    Teacher teacher = new Teacher();
+                    teacher.setSchoolId(school.getId());
+                    teacher.setUserId(user.getUserId());
+                    teacher = teacherDao.getTeacherInSchool(teacher);
                     sysUserInfo.setTeacherId(teacher.getId());
                 }
-                sysUserInfo.setId(user.getId());
-                String cropName = "";
-                if(user.getSchoolId()==null||user.getSchoolId()==-1){
-                    // 获取教育局id
-                    Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
-                    sysUserInfo.setBureauId(bureau.getId());
-                    cropName = bureau.getBureauName();
-                }else {
-                    School school = schoolDao.getSchoolByCorpId(user.getCorpId());
-                    cropName = school.getSchoolName();
-                    sysUserInfo.setBureauId(school.getBureauId());
-                    sysUserInfo.setSchoolId(user.getSchoolId());
-                }
+
+
                 sysUserInfo.setCropName(cropName);
                 sysUserInfos.add(sysUserInfo);
             }

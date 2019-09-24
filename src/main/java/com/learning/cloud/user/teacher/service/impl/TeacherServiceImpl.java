@@ -86,4 +86,10 @@ public class TeacherServiceImpl implements TeacherService {
         List<Teacher> teacherList = teacherDao.getTeachersInSchool(schoolId);
         return JsonResultUtil.success(teacherList);
     }
+
+    @Override
+    public JsonResult getTeacherById(Integer teacherId) throws Exception {
+        Teacher teacher = teacherDao.getById(teacherId);
+        return JsonResultUtil.success(teacher);
+    }
 }

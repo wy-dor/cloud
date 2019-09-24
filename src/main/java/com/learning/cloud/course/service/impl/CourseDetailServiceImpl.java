@@ -9,6 +9,8 @@ import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,9 +43,14 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     }
 
     @Override
-    public JsonResult getTeacherCourseDetail(Long teacherId, Integer weekDay) throws Exception {
-        List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(teacherId, weekDay);
-        return JsonResultUtil.success(courseDetails);
+    public JsonResult getTeacherCourseDetail(String teacherIds, Integer weekDay) throws Exception {
+        List<String> teachers =  Arrays.asList(teacherIds.split(","));
+        List<CourseDetail> results = new ArrayList<>();
+        for(String teacherId: teachers){
+            List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(Long.parseLong(teacherId), weekDay);
+            results.addAll(courseDetails);
+        }
+        return JsonResultUtil.success(results);
     }
 
     @Override
