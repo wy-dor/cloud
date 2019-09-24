@@ -40,6 +40,4 @@ public class Supervision extends BaseEntity {
     private String userId;
 
     private String search;
-
-    private Picture picture;
 }

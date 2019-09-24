@@ -44,6 +44,7 @@
         and status = 3
         and pic_id is not null
         order by upload_time desc
+        limit 10
     </select>
 
     <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
