@@ -315,7 +315,7 @@ public class DeptServiceImpl implements DeptService {
                             if (!idsStr.contains("," + classIdStr + ",")) {
                                 StringBuilder sb = new StringBuilder(classIds);
                                 sb.append("," + classIdStr);
-                                p.setClassId(sb.toString());
+                                parent.setClassId(sb.toString());
                             }
                             parentDao.update(parent);
                         }
@@ -445,6 +445,7 @@ public class DeptServiceImpl implements DeptService {
             //todo
             //判断获取的值是否为空，为空则不插入
             String userDetailName = user.getName();
+            //管理员表处理
             if (userDetailName != null) {
                 a1.setName(userDetailName);
                 a1.setUserId(userId);
