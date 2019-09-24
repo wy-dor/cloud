@@ -61,7 +61,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
     @Override
     public void saveEntryMarks(GradeEntry gradeEntry, Integer studentId, String marks) {
         Long entryId = gradeEntry.getId();
-        if(entryId == 0){
+        if(entryId == null || entryId == 0){
             gradeEntry.setMarks(marks);
             gradeEntryDao.insert(gradeEntry);
         }else{

@@ -95,12 +95,18 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 // "isLeaderInDepts":"{114360989:false}","isBoss":false,"isSenior":false,"department":[114360989],
                 // "orderInDepts":"{114360989:176348740195815512}","dingId":"$:LWCP_v1:$thWRYFwvvNF/BmcFZpoIBMKPhdliWOHx",
                 // "errmsg":"ok","active":true,"avatar":"","isAdmin":false,"tags":{"guardian":["114461272"]},"isHide":false,"name":"刘淇妈妈"}
+                //返回错误码继续跳过该条
+                Integer errcode = (Integer)bizDataParse.get("errcode");
+                if(errcode != 0){
+                    continue;
+                }
                 String userId = bizDataParse.get("userid").toString();
                 Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
                 String avatar = bizDataParse.get("avatar").toString();
                 Boolean active = (Boolean) bizDataParse.get("active");
                 String name = bizDataParse.get("name").toString();
                 String unionid = bizDataParse.get("unionid").toString();
+
                 OapiUserListbypageResponse.Userlist apiUser = new OapiUserListbypageResponse.Userlist();
                 apiUser.setActive(active);
                 apiUser.setAvatar(avatar);
@@ -143,6 +149,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         campusId = gradeClass.getCampusId();
                         classId = gradeClass.getId();
                         bureauId = gradeClass.getBureauId();
+                    }else{
+                        //当前班级还未同步
                     }
                     if(roleType == 3){
                         String classIds = "";
@@ -165,9 +173,9 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             if (!idsStr.contains("," + classIdStr + ",")) {
                                 StringBuilder sb = new StringBuilder(classIds);
                                 sb.append("," + classIdStr);
-                                t.setClassIds(sb.toString());
+                                teacher.setClassIds(sb.toString());
                             }
-                            teacherDao.update(t);
+                            teacherDao.update(teacher);
                         }
                     } else if(roleType == 4){
                         Student student = new Student();

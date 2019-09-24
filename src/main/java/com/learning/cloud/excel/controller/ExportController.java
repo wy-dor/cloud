@@ -17,7 +17,7 @@ public class ExportController {
     @Autowired
     private ExportService exportService;
 
-    //id,classesStr,subjects,title
+    //id,classesStr,subjects,title,scoringRoles
     @RequestMapping("/exportExcelModule")
     public JsonResult exportExcelModule(GradeModule gradeModule)throws Exception{
         return exportService.exportExcelModule(gradeModule);

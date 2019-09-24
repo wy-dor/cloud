@@ -8,16 +8,18 @@ import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.gradeModule.service.GradeEntryService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.CommonUtils;
+import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Slf4j
@@ -45,8 +47,8 @@ public class ImportServiceImpl implements ImportService {
         Map<String, String> parse = (Map<String, String>) JSON.parse(classesStr);
         Map<String,String> classMap = new HashMap<>();
         Set<String> keySet = parse.keySet();
-        for (String className : keySet) {
-            String classId = parse.get(className);
+        for (String classId : keySet) {
+            String className = parse.get(classId);
             classMap.put(className,classId);
         }
         InputStream in = file.getInputStream();
@@ -64,7 +66,7 @@ public class ImportServiceImpl implements ImportService {
             String subject = rowTitle.getCell(i).getStringCellValue();
             if(gradeModule.getScoringRoles() == 1){
                 int index = subject.indexOf("(");
-                subject = subject.substring(index);
+                subject = subject.substring(0,index);
             }
             subjectList.add(subject);
         }
@@ -80,9 +82,9 @@ public class ImportServiceImpl implements ImportService {
             String classIdStr = classMap.get(className);
             int classId = Integer.parseInt(classIdStr);
             String stuName = r.getCell(1).getStringCellValue().trim();
-            String stuIdStr = r.getCell(2).getStringCellValue().trim();
+            String stuIdStr = getCellValue(r.getCell(2));
             int stuId = Integer.parseInt(stuIdStr);
-            String remark = r.getCell(lastCellNum - 1).getStringCellValue().trim();
+            String remark = getCellValue(r.getCell(lastCellNum - 1));
             ge.setModuleId(moduleId);
             ge.setClassId(classId);
             ge.setStudentId(stuId);
@@ -92,7 +94,7 @@ public class ImportServiceImpl implements ImportService {
             //对成绩进行处理
             for (int i = 3; i < lastCellNum - 1; i++) {
                 Map<String,String> map = new HashMap<>();
-                String value = r.getCell(i).getStringCellValue().trim();
+                String value = getCellValue(r.getCell(i));
                 String courseName = subjectList.get(i - 3);
                 map.put("courseName",courseName);
                 map.put("value",value);
@@ -104,6 +106,46 @@ public class ImportServiceImpl implements ImportService {
             gradeEntryService.saveEntryMarks(ge, stuId, marks);
         }
 
-        return null;
+        return JsonResultUtil.success("录入成功");
+    }
+
+    private static String getCellValue(Cell cell) {
+        String value = "";
+        if (cell != null) {
+            switch (cell.getCellType()) {
+                case HSSFCell.CELL_TYPE_NUMERIC://数字
+                    value = cell.getNumericCellValue() + "";
+                    if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                        Date date = cell.getDateCellValue();
+                        if (date != null) {
+                            value = CommonUtils.timeFormat(date, null);
+                        } else {
+                            value = "";
+                        }
+                    } else {
+                        value = new DecimalFormat("#.##").format(cell.getNumericCellValue());
+                    }
+                    break;
+                case HSSFCell.CELL_TYPE_STRING://字符串
+                    value = cell.getStringCellValue();
+                    break;
+                case HSSFCell.CELL_TYPE_FORMULA://公式
+                    value = cell.getCellFormula() + "";
+                    break;
+                case HSSFCell.CELL_TYPE_BOOLEAN://boolean
+                    value = cell.getBooleanCellValue() + "";
+                    break;
+                case HSSFCell.CELL_TYPE_BLANK://空值
+                    value = "";
+                    break;
+                case HSSFCell.CELL_TYPE_ERROR://错误
+                    value = "非法字符";
+                    break;
+                default:
+                    value = "未知类型";
+                    break;
+            }
+        }
+        return value.trim();
     }
 }

@@ -187,6 +187,7 @@ public class ExportServiceImpl implements ExportService {
 
     @Override
     public JsonResult downloadExcelGrade(HttpServletResponse response, Long moduleId) throws IOException {
+        FileOutputStream out = null;
         String mention = "";
         GradeModule gradeModule = gradeModuleDao.getById(moduleId);
         //根据计分规则进行判断是否需要进行总分拼接
@@ -291,14 +292,19 @@ public class ExportServiceImpl implements ExportService {
             sheet.setColumnWidth(i,widthList.get(i)*256);
         }
 
-        //输出excel文件
-        OutputStream outputStream = response.getOutputStream();
-        response.reset();
-        response.setHeader("Content-disposition", "attachment; filename="+toUtf8String(gradeModule.getTitle()+"-成绩导出.xls"));
-        response.setContentType("application/msexcel");
-        wb.write(outputStream);
-        outputStream.close();
-        return null;
+        String fileName = CommonUtils.getRandomStr()+".xls";//用随机号来存储文件，避免文件名重复
+        // 生成文件 程序所在目录
+        String rootPath = System.getProperty("user.dir");
+        String filePath = (rootPath+"/"+fileName).replace("\\","/");
+
+        out = new FileOutputStream(filePath);
+        wb.write(out);
+        out.flush();
+        out.close();
+        DownloadBean download = new DownloadBean();
+        download.setFilePath(filePath);
+        download.setTitle(gradeModule.getTitle()+"-成绩导出.xls");
+        return JsonResultUtil.success(download);
     }
 
     @Override
