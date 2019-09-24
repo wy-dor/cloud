@@ -1,9 +1,15 @@
 package com.learning.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 public class CommonUtils {
 
     /**
@@ -13,6 +19,31 @@ public class CommonUtils {
     public static String getRandomStr(){
         String uuid = UUID.randomUUID().toString();
         return uuid.replace("-","");
+    }
+
+    /**
+     * 日期格式化
+     * @param time
+     * @param model
+     * @return
+     */
+    public static<T> String timeFormat(T time,String model){
+        String res = "";
+        if(model.equals("")||model==null){
+            model = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat(model);
+        try {
+            Date date = new Date();
+            if(time instanceof String){
+                date = dateFormat.parse(time.toString());
+            }
+            res = dateFormat.format(date);
+        } catch (ParseException e) {
+            log.error("时间解析错误");
+            e.printStackTrace();
+        }
+        return res;
     }
 
     /**
