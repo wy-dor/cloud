@@ -19,7 +19,7 @@ public class GradeClassController {
 
     /*根据老师获取其所任职的班级信息*/
     @GetMapping("/getClassesByTeacherId")
-    public ServiceResult getClassesByTeacherId(Integer teacherId) {
+    public JsonResult getClassesByTeacherId(Integer teacherId) {
         return gradeClassService.getClassesByTeacher(teacherId);
     }
 

@@ -44,7 +44,7 @@ public class GradeClassServiceImpl implements GradeClassService {
     private UserDao userDao;
 
     @Override
-    public ServiceResult getClassesByTeacher(Integer teacherId) {
+    public JsonResult getClassesByTeacher(Integer teacherId) {
         List<GradeClass> classList = new ArrayList<>();
         Teacher teacher = teacherDao.getById(teacherId);
         String[] idList = teacher.getClassIds().split(",");
@@ -54,7 +54,7 @@ public class GradeClassServiceImpl implements GradeClassService {
                 classList.add(byId);
             }
         }
-        return ServiceResult.success(new PageEntity<>(classList));
+        return JsonResultUtil.success(new PageEntity<>(classList));
     }
 
     @Override
