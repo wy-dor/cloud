@@ -37,9 +37,9 @@ public class CourseDetailController {
     }
 
     @GetMapping("/getTeacherCourseDetail")
-    public JsonResult getTeacherCourseDetail(@RequestParam(value="teacherId",required = true) Long teacherId,
+    public JsonResult getTeacherCourseDetail(@RequestParam(value="teacherId",required = true) String teacherIds,
                                              @RequestParam(value="weekDay",required = false) Integer weekDay)throws Exception{
-        return courseDetailService.getTeacherCourseDetail(teacherId, weekDay);
+        return courseDetailService.getTeacherCourseDetail(teacherIds, weekDay);
     }
 
     @GetMapping("/getCourseDetailById")

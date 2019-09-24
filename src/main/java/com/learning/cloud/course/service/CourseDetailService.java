@@ -15,7 +15,7 @@ public interface CourseDetailService {
 
     JsonResult editCourseDetail(CourseDetail courseDetail)throws Exception;
 
-    JsonResult getTeacherCourseDetail(Long teacherId, Integer weekDay)throws Exception;
+    JsonResult getTeacherCourseDetail(String teacherIds, Integer weekDay)throws Exception;
 
     JsonResult getCourseDetailById(Long id)throws Exception;
 

@@ -51,4 +51,9 @@ public class TeacherController {
         return teacherService.getTeachersInSchool(schoolId);
     }
 
+    @GetMapping("/getTeacherById")
+    public JsonResult getTeacherById(Integer teacherId) throws Exception{
+        return teacherService.getTeacherById(teacherId);
+    }
+
 }
