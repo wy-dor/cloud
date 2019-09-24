@@ -22,6 +22,11 @@ public class SupervisionController {
         return supervisionService.getSupervision(supervision);
     }
 
+    @GetMapping("/getPicsForSupervision")
+    public JsonResult getPicsForSupervision(Supervision supervision){
+        return supervisionService.getPicsForSupervision(supervision);
+    }
+
     // 教育局获取所有学校提交的，审批后以及已撤销的新闻
     @GetMapping("/getBureauSupervision")
     public JsonResult getBureauSupervision(Supervision supervision){

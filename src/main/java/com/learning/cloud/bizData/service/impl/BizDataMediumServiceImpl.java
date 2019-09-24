@@ -204,7 +204,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             if (!idsStr.contains("," + classIdStr + ",")) {
                                 StringBuilder sb = new StringBuilder(classIds);
                                 sb.append("," + classIdStr);
-                                p.setClassId(sb.toString());
+                                parent.setClassId(sb.toString());
                             }
                             parentDao.update(parent);
                         }

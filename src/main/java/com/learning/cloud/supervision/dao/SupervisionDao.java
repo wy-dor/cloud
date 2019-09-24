@@ -28,4 +28,6 @@ public interface SupervisionDao {
     Supervision getToppingSupervision(Integer bureauId);
 
     int increaseClick(long id);
+
+    List<Long> getPicsForSupervision(Supervision supervision);
 }
