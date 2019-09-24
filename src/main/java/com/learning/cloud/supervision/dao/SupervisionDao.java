@@ -29,5 +29,5 @@ public interface SupervisionDao {
 
     int increaseClick(long id);
 
-    List<Long> getPicsForSupervision(Supervision supervision);
+    List<Supervision> getPicsForSupervision(Supervision supervision);
 }

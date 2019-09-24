@@ -159,13 +159,14 @@ public class SupervisionServiceImpl implements SupervisionService {
 
     @Override
     public JsonResult getPicsForSupervision(Supervision supervision) {
-        List<Picture> pictureList = new ArrayList<>();
-        List<Long> picIdList = supervisionDao.getPicsForSupervision(supervision);
-        for (Long picId : picIdList) {
-            Picture pic = pictureDao.getPic(picId);
-            pictureList.add(pic);
+        List<Supervision> supervisionList = new ArrayList<>();
+        List<Supervision> sList = supervisionDao.getPicsForSupervision(supervision);
+        for (Supervision s : sList) {
+            Picture pic = pictureDao.getPic(s.getPicId());
+            s.setPicture(pic);
+            supervisionList.add(s);
         }
-        return JsonResultUtil.success(pictureList);
+        return JsonResultUtil.success(supervisionList);
     }
 
 

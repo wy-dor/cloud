@@ -37,8 +37,8 @@
         order by upload_time desc
     </select>
 
-    <select id="getPicsForSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="java.lang.Long">
-        select pic_id
+    <select id="getPicsForSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
+        select id, pic_id, title
         from supervision
         where bureau_id = #{bureauId}
         and status = 3

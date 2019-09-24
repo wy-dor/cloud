@@ -1,5 +1,6 @@
 package com.learning.cloud.supervision.entity;
 
+import com.learning.cloud.ding.picture.entity.Picture;
 import com.learning.domain.BaseEntity;
 import lombok.Data;
 import lombok.Getter;
@@ -39,4 +40,6 @@ public class Supervision extends BaseEntity {
     private String userId;
 
     private String search;
+
+    private Picture picture;
 }
