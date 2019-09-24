@@ -18,9 +18,9 @@ public class GradeClassController {
     private GradeClassService gradeClassService;
 
     /*根据老师获取其所任职的班级信息*/
-    @GetMapping("/getClassesByTeacher")
-    public ServiceResult getClassesByTeacher(Teacher teacher) {
-        return gradeClassService.getClassesByTeacher(teacher);
+    @GetMapping("/getClassesByTeacherId")
+    public ServiceResult getClassesByTeacherId(Integer teacherId) {
+        return gradeClassService.getClassesByTeacher(teacherId);
     }
 
     /*获取学校或分校下的班级列表*/

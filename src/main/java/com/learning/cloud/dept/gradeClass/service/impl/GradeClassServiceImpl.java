@@ -44,10 +44,10 @@ public class GradeClassServiceImpl implements GradeClassService {
     private UserDao userDao;
 
     @Override
-    public ServiceResult getClassesByTeacher(Teacher teacher) {
+    public ServiceResult getClassesByTeacher(Integer teacherId) {
         List<GradeClass> classList = new ArrayList<>();
-        String classIds = teacher.getClassIds();
-        String[] idList = classIds.split(",");
+        Teacher teacher = teacherDao.getById(teacherId);
+        String[] idList = teacher.getClassIds().split(",");
         for (String idStr : idList) {
             GradeClass byId = gradeClassDao.getById(Integer.parseInt(idStr));
             if(byId != null){
