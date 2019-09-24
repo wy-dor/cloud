@@ -7,7 +7,7 @@ import com.learning.domain.JsonResult;
 
 public interface GradeClassService {
 
-    ServiceResult getClassesByTeacher(Integer teacherId);
+    JsonResult getClassesByTeacher(Integer teacherId);
 
     ServiceResult getClassesByCampus(Campus campus);
 
