@@ -132,14 +132,14 @@ public class LoginController {
                 sysUserInfo.setId(user.getId());
                 String cropName = "";
                 //老师
-                School school = new School();
+                School school = null;
                 if(user.getSchoolId()==null||user.getSchoolId()==-1){
                     // 获取教育局id
                     Bureau bureau = bureauDao.getByCorpId(user.getCorpId());
                     sysUserInfo.setBureauId(bureau.getId());
                     cropName = bureau.getBureauName();
                 }else {
-                    school = schoolDao.getSchoolByCorpId(user.getCorpId());
+                    school =  schoolDao.getSchoolByCorpId(user.getCorpId());
                     cropName = school.getSchoolName();
                     sysUserInfo.setBureauId(school.getBureauId());
                     sysUserInfo.setSchoolId(user.getSchoolId());
@@ -158,6 +158,7 @@ public class LoginController {
                     //获取老师id
                     Teacher teacher = new Teacher();
                     teacher.setSchoolId(school.getId());
+                    teacher.setUserId(user.getUserId());
                     teacher = teacherDao.getTeacherInSchool(teacher);
                     sysUserInfo.setTeacherId(teacher.getId());
                 }
