@@ -22,6 +22,8 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
+import com.taobao.api.ApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @Transactional
 public class BizDataMediumServiceImpl implements BizDataMediumService {
@@ -98,6 +101,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //返回错误码继续跳过该条
                 Integer errcode = (Integer)bizDataParse.get("errcode");
                 if(errcode != 0){
+                    syncBizDataMediumDao.updateStatus(id);
                     continue;
                 }
                 String userId = bizDataParse.get("userid").toString();
@@ -123,7 +127,14 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 int size = departmentList.size();
                 Long lastDeptId = departmentList.get(size - 1).longValue();
 
-                OapiDepartmentGetResponse deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
+                OapiDepartmentGetResponse deptDetail = null;
+                try {
+                    deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
+                } catch (ApiException e) {
+                    log.info("biz_data_id:"+id.toString()+"/n"+e.getErrMsg());
+                    syncBizDataMediumDao.updateStatus(id);
+                    continue;
+                }
                 String deptName = deptDetail.getName();
                 GradeClass gc = new GradeClass();
                 Integer campusId = null;
