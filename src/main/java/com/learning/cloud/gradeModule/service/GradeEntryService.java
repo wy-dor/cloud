@@ -12,4 +12,6 @@ public interface GradeEntryService {
     JsonResult getByGradeEntry(GradeEntry gradeEntry);
 
     void saveEntryMarks(GradeEntry gradeEntry, Integer studentId, String marks);
+
+    JsonResult getGradeEntryStatistics(Long moduleId);
 }

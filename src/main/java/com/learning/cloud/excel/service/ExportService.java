@@ -11,5 +11,5 @@ public interface ExportService {
 
     JsonResult exportExcelModule(GradeModule gradeModule) throws IOException;
 
-    JsonResult downloadExcelGrade(HttpServletResponse response, Long moduleId) throws IOException;
+    JsonResult downloadExcelGrade(Long moduleId) throws IOException;
 }

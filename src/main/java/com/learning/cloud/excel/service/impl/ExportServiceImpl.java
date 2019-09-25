@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 
-import static com.learning.utils.CommonUtils.toUtf8String;
-
 @Service
 public class ExportServiceImpl implements ExportService {
 
@@ -186,14 +184,14 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public JsonResult downloadExcelGrade(HttpServletResponse response, Long moduleId) throws IOException {
+    public JsonResult downloadExcelGrade(Long moduleId) throws IOException {
         FileOutputStream out = null;
-        String mention = "";
+        StringBuilder undoneClassMention = new StringBuilder("");
         GradeModule gradeModule = gradeModuleDao.getById(moduleId);
         //根据计分规则进行判断是否需要进行总分拼接
         String classesStr = gradeModule.getClassesStr();
 
-        Map<String, String> undoneclassSubject = (Map<String, String>) JSON.parse(classesStr);
+        StringBuilder undoneSubjectMention = new StringBuilder("");
 
         //所有班级信息
         Map<String, String> classMapByModule = (Map<String, String>) JSON.parse(classesStr);
@@ -213,23 +211,41 @@ public class ExportServiceImpl implements ExportService {
         }
 
         //所有被选择录入过的班级，对应班级中被录入过的科目
-        List<Map<Integer, Object>> doneClassSubjectMapInModule = gradeEntryDao.getDoneClassSubjectMapInModule(moduleId);
+        List<GradeEntry> doneClassSubjectInModule = gradeEntryDao.getDoneClassSubjectInModule(moduleId);
         List<Integer> doneClassIdList = new ArrayList<>();
-        Map<String,String> doneSubjectList = new HashMap<>();
-        for (Map<Integer, Object> integerStringMap : doneClassSubjectMapInModule) {
-            doneClassIdList.add((Integer) integerStringMap.get("classId"));
-
+        //"提示：XXX班的数学，语文成绩还没有录入，请继续录入"
+        for (GradeEntry ge : doneClassSubjectInModule) {
+            Integer classId = ge.getClassId();
+            //已完成成绩录入班级添加
+            doneClassIdList.add(classId);
+            //班级名称，用于拼接
+            String className = classMapByModule.get(classId.toString());
+            List<String> doneSubjectList = new ArrayList<>();
+            String marks = ge.getMarks();
+            List<Map<String, String>> par = (List<Map<String, String>>) JSON.parse(marks);
+            for (Map<String, String> stringStringMap : par) {
+                String courseName = stringStringMap.get("courseName");
+                doneSubjectList.add(courseName);
+            }
+            //对比得出班级中未录入的科目进行提示
+            List<String> undoneSubjectList = CommonUtils.removeStringDupsInList(fullSubjectNameList, doneSubjectList);
+            if(undoneSubjectList != null||undoneSubjectList.size() > 0){
+                undoneSubjectMention.append(className+"中"+undoneSubjectList.toString()+"成绩还没有录入，请继续录入");
+            }
         }
         List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
         List<String> undoneClassNameList = new ArrayList<>();
         for (Integer undoneClassId : undoneClassIdList) {
             undoneClassNameList.add(classMapByModule.get(undoneClassId.toString()));
-
         }
         if(undoneClassIdList != null||undoneClassIdList.size() > 0){
-            mention = undoneClassNameList.toString()+"还没有录入成绩";
+            undoneClassMention.append(undoneClassNameList.toString()+"还没有录入成绩/n");
         }
-        //对对应班级下
+
+        //如果提示均不为空字符串，则返回提示
+        if (!undoneClassMention.toString().equals("") && !undoneSubjectMention.toString().equals("")){
+            return JsonResultUtil.success(undoneSubjectMention.append(undoneSubjectMention).toString());
+        }
 
         //生成模板
         HSSFWorkbook wb = new HSSFWorkbook();

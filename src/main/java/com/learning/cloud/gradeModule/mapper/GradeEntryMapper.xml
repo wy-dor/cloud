@@ -102,11 +102,15 @@
     where id = #{id}
   </update>
 
-  <select id="getDoneClassIdsInModule" parameterType="java.lang.Long" resultType="java.util.Map">
-    select class_id as classId, marks
+  <select id="getDoneClassSubjectInModule" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
+    select g.class_id classId,g.marks
+    from grade_entry g
+    RIGHT JOIN
+    (select class_id,min(id) minId
     from grade_entry
     where module_id = #{moduleId}
-    group by class_id
-    limit 1
+    group by class_id) t
+    on g.class_id = t.class_id
+    and g.id = t.minId;
   </select>
 </mapper>

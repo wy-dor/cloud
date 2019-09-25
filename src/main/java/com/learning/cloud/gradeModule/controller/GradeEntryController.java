@@ -29,4 +29,9 @@ public class GradeEntryController {
     public JsonResult getByGradeEntry(GradeEntry gradeEntry){
         return gradeEntryService.getByGradeEntry(gradeEntry);
     }
+
+    @GetMapping("/getGradeEntryStatistics")
+    public JsonResult getGradeEntryStatistics(Long moduleId){
+        return gradeEntryService.getGradeEntryStatistics(moduleId);
+    }
 }

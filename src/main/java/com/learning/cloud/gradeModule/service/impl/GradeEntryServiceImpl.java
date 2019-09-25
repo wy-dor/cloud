@@ -2,8 +2,10 @@ package com.learning.cloud.gradeModule.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.learning.cloud.gradeModule.dao.GradeEntryDao;
+import com.learning.cloud.gradeModule.dao.GradeModuleDao;
 import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeEntryJsonStr;
+import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.gradeModule.service.GradeEntryService;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
@@ -24,6 +26,9 @@ public class GradeEntryServiceImpl implements GradeEntryService {
 
     @Autowired
     private GradeEntryDao gradeEntryDao;
+
+    @Autowired
+    private GradeModuleDao gradeModuleDao;
 
     @Override
     public JsonResult saveGradeEntry(GradeEntryJsonStr gradeEntryJsonStr) {
@@ -115,6 +120,25 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             gradeEntryDao.update(gradeEntry);
 
         }
+    }
+
+    @Override
+    public JsonResult getGradeEntryStatistics(Long moduleId) {
+        List<Map<String,String>> mapList = new ArrayList<>();
+        GradeModule byId = gradeModuleDao.getById(moduleId);
+        //所有科目信息
+        String subjects = byId.getSubjects();
+        List<Map<String, Object>> subjectMapList = (List<Map<String, Object>>) JSON.parse(subjects);
+        Map<String,String> sumMap = new HashMap<>();
+        for (Map<String, Object> subjectMap : subjectMapList) {
+            Map<String,String> map = new HashMap<>();
+            String courseName = subjectMap.get("courseName").toString();
+            String totalScore = subjectMap.get("totalScore").toString();
+            map.put("courseName",courseName);
+            map.put("totalScore",totalScore);
+        }
+
+        return null;
     }
 
     @Override

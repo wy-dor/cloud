@@ -18,5 +18,5 @@ public interface GradeEntryDao {
 
     int update(GradeEntry gradeEntry);
 
-    List<Map<Integer, Object>> getDoneClassSubjectMapInModule(Long moduleId);
+    List<GradeEntry> getDoneClassSubjectInModule(Long moduleId);
 }
