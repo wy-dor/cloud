@@ -64,4 +64,9 @@ public class GradeClassController {
         return JsonResultUtil.success(campusId);
     }
 
+    @GetMapping("/getAllGradeNameByCampusId")
+    public JsonResult getAllGradeNameByCampusId(Integer campusId){
+        return gradeClassService.getAllGradeNameByCampusId(campusId);
+    }
+
 }

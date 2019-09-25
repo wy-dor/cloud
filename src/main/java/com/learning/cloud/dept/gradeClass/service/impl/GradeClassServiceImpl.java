@@ -110,6 +110,12 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
+    public JsonResult getAllGradeNameByCampusId(Integer campusId) {
+        List<String> gradeNameList = gradeClassDao.getAllGradeName(campusId);
+        return JsonResultUtil.success(gradeNameList);
+    }
+
+    @Override
     public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
         Integer campusId = getCampusIdForTeacher(userId, schoolId);
         GradeClass gradeClass = new GradeClass();

@@ -22,4 +22,6 @@ public interface GradeClassService {
     JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId);
 
     Integer getCampusIdForTeacher(String userId, Integer schoolId);
+
+    JsonResult getAllGradeNameByCampusId(Integer campusId);
 }
