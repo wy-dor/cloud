@@ -27,12 +27,10 @@ import com.learning.cloud.user.user.entity.User;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
-@Transactional
 public class DeptServiceImpl implements DeptService {
 
     @Autowired

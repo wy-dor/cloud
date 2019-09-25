@@ -36,8 +36,14 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             gradeEntry.setModuleId(moduleId);
             gradeEntry.setClassId(classId);
             Long id = null;
-            if(map.get("id") != null){
-                id = Long.parseLong(map.get("id").toString());
+            Object idObj = map.get("id");
+            if(idObj != null){
+                if(idObj instanceof Integer){
+                    int i = (Integer) idObj;
+                    id = Long.valueOf(i);
+                }else if(idObj instanceof Long){
+                    id = (Long)idObj;
+                }
             }
             gradeEntry.setId(id);
             String remark = (String) map.get("remark");
