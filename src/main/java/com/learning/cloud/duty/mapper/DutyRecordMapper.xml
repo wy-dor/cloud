@@ -5,13 +5,19 @@
     <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord"
             resultType="com.learning.cloud.duty.entity.DutyRecord">
       select * from (
-        select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point, u.user_name
-        from duty_record dr
+        select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point, u.user_name from
+        duty_record dr
         left join duty_check_type dct
         on dr.point_type = dct.id
         left join duty_type dt
         on dt.id = dct.duty_type_id
-        left join user u
+        LEFT JOIN (
+        select user_id,user_name,avatar FROM (
+        select b.user_id,b.user_name,b.avatar from duty_record a
+        LEFT JOIN user b
+        on a.user_id = b.user_id)
+        c GROUP BY c.user_id,c.user_name, c.avatar
+        ) u
         on dr.user_id = u.user_id
         where dr.class_id = #{classId}
         <if test="schoolId != null">
