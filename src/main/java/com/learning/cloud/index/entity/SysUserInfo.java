@@ -19,5 +19,6 @@ public class SysUserInfo {
     private Integer bureauId;
     private String classId;
     private Integer teacherId;
+    private String campusId;
 
 }

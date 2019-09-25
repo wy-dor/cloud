@@ -160,6 +160,7 @@ public class LoginController {
                     teacher.setSchoolId(school.getId());
                     teacher.setUserId(user.getUserId());
                     teacher = teacherDao.getTeacherInSchool(teacher);
+                    sysUserInfo.setCampusId(String.valueOf(teacher.getCampusId()));
                     sysUserInfo.setTeacherId(teacher.getId());
                 }
 
