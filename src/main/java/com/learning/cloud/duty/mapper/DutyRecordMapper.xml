@@ -2,157 +2,166 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
 
-  <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord" resultType="com.learning.cloud.duty.entity.DutyRecord">
-    select *
-    from
-    (select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point from
-    duty_record dr
-    left join duty_check_type dct
-    on dr.point_type = dct.id
-    left join duty_type dt
-    on dt.id = dct.duty_type_id
-    where dr.class_id = #{classId}
-    <if test="schoolId != null">
-      and dr.school_id = #{schoolId,jdbcType=BIGINT}
-    </if>
-    <if test="campusId != null">
-      and dr.campus_id = #{campusId,jdbcType=BIGINT}
-    </if>
-    <if test="pointType != null">
-      and dr.point_type = #{pointType,jdbcType=INTEGER}
-    </if>
-    <if test="day != null">
-      and dr.day = #{day}
-    </if>
-    <if test="userId != null">
-      and dr.user_id = #{userId,jdbcType=BIGINT}
-    </if>
-    <if test="status != null">
-      and dr.status = #{status,jdbcType=SMALLINT}
-    </if>
-    ) a
-    <if test="ymdDay != null">
-      where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
-    </if>
-  </select>
+    <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord"
+            resultType="com.learning.cloud.duty.entity.DutyRecord">
+      select * from (
+        select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point, u.user_name from
+        duty_record dr
+        left join duty_check_type dct
+        on dr.point_type = dct.id
+        left join duty_type dt
+        on dt.id = dct.duty_type_id
+        LEFT JOIN (
+        select user_id,user_name,avatar FROM (
+        select b.user_id,b.user_name,b.avatar from duty_record a
+        LEFT JOIN user b
+        on a.user_id = b.user_id)
+        c GROUP BY c.user_id,c.user_name, c.avatar
+        ) u
+        on dr.user_id = u.user_id
+        where dr.class_id = #{classId}
+        <if test="schoolId != null">
+            and dr.school_id = #{schoolId,jdbcType=BIGINT}
+        </if>
+        <if test="campusId != null">
+            and dr.campus_id = #{campusId,jdbcType=BIGINT}
+        </if>
+        <if test="pointType != null">
+            and dr.point_type = #{pointType,jdbcType=INTEGER}
+        </if>
+        <if test="day != null">
+            and dr.day = #{day}
+        </if>
+        <if test="userId != null">
+            and dr.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="status != null">
+            and dr.status = #{status,jdbcType=SMALLINT}
+        </if>
+        ) a
+        <if test="ymdDay != null">
+            where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
+        </if>
+    </select>
 
-  <delete id="deleteDutyRecord" parameterType="java.lang.Long">
-    delete from duty_record
-    where id = #{id}
-  </delete>
+    <delete id="deleteDutyRecord" parameterType="java.lang.Long">
+        delete
+        from duty_record
+        where id = #{id}
+    </delete>
 
-  <insert id="addDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
-    insert into duty_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="campusId != null">
-        campus_id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="pointType != null">
-        point_type,
-      </if>
-      <if test="time != null">
-        time,
-      </if>
-      <if test="day != null">
-        day,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="campusId != null">
-        #{campusId,jdbcType=BIGINT},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=BIGINT},
-      </if>
-      <if test="pointType != null">
-        #{pointType,jdbcType=INTEGER},
-      </if>
-      <if test="time != null">
-        #{time,jdbcType=SMALLINT},
-      </if>
-      <if test="day != null">
-        #{day},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-    </trim>
-    ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id=#{userId}
-  </insert>
+    <insert id="addDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
+        insert into duty_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="campusId != null">
+                campus_id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="pointType != null">
+                point_type,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="day != null">
+                day,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="campusId != null">
+                #{campusId,jdbcType=BIGINT},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=BIGINT},
+            </if>
+            <if test="pointType != null">
+                #{pointType,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=SMALLINT},
+            </if>
+            <if test="day != null">
+                #{day},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id=#{userId}
+    </insert>
 
-  <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
-    insert into duty_record
-    (school_id,campus_id,class_id, point_type,time,day,user_id)
-    values
-    <foreach collection="list" item="item" separator=",">
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="item.schoolId != null">
-          #{item.schoolId,jdbcType=BIGINT},
-        </if>
-        <if test="item.campusId != null">
-          #{item.campusId,jdbcType=BIGINT},
-        </if>
-        <if test="item.classId != null">
-          #{item.classId,jdbcType=BIGINT},
-        </if>
-        <if test="item.pointType != null">
-          #{item.pointType,jdbcType=INTEGER},
-        </if>
-        <if test="item.time != null">
-          #{item.time,jdbcType=SMALLINT},
-        </if>
-        <if test="item.day != null">
-          #{item.day,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.userId != null">
-          #{item.userId,jdbcType=BIGINT},
-        </if>
-        <if test="item.status != null">
-          #{item.status,jdbcType=SMALLINT},
-        </if>
-      </trim>
-      ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id=#{item.userId}
-    </foreach>
-  </insert>
+    <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
+        insert into duty_record
+        (school_id,campus_id,class_id, point_type,time,day,user_id)
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.schoolId != null">
+                    #{item.schoolId,jdbcType=BIGINT},
+                </if>
+                <if test="item.campusId != null">
+                    #{item.campusId,jdbcType=BIGINT},
+                </if>
+                <if test="item.classId != null">
+                    #{item.classId,jdbcType=BIGINT},
+                </if>
+                <if test="item.pointType != null">
+                    #{item.pointType,jdbcType=INTEGER},
+                </if>
+                <if test="item.time != null">
+                    #{item.time,jdbcType=SMALLINT},
+                </if>
+                <if test="item.day != null">
+                    #{item.day,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.userId != null">
+                    #{item.userId,jdbcType=BIGINT},
+                </if>
+                <if test="item.status != null">
+                    #{item.status,jdbcType=SMALLINT},
+                </if>
+            </trim>
+            ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id=#{item.userId}
+        </foreach>
+    </insert>
 
-  <update id="updateDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
-    update duty_check_type
-    <set>
-      <if test="time != null">
-        time = #{time,jdbcType=SMALLINT},
-      </if>
-      <if test="day != null">
-        day = #{day},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    <update id="updateDutyRecord" parameterType="com.learning.cloud.duty.entity.DutyRecord">
+        update duty_check_type
+        <set>
+            <if test="time != null">
+                time = #{time,jdbcType=SMALLINT},
+            </if>
+            <if test="day != null">
+                day = #{day},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 
 </mapper>

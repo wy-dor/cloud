@@ -33,4 +33,6 @@ public class DutyRecord {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date ymdDay;
 
+    private String userName;
+
 }
