@@ -132,6 +132,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     syncBizDataMediumDao.updateStatus(id);
                     continue;
                 }
+                if(deptDetail == null){
+                    syncBizDataMediumDao.updateStatus(id);
+                    continue;
+                }
                 String deptName = deptDetail.getName();
                 GradeClass gc = new GradeClass();
                 Integer campusId = null;
@@ -150,6 +154,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 } else {
                     i = 0;
                 }
+                String classIdStr = "";
                 if (i == 1) {
                     List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
                     if (byGradeClass != null && byGradeClass.size() > 0) {
@@ -157,13 +162,13 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         campusId = gradeClass.getCampusId();
                         classId = gradeClass.getId();
                         bureauId = gradeClass.getBureauId();
+                        classIdStr = classId.toString();
                     }else{
                         //当前班级还未同步
                     }
                     if(roleType == 3){
                         String classIds = "";
                         roleType = 3;
-                        String classIdStr = classId + "";
                         Teacher teacher = new Teacher();
                         teacher.setTeacherName(name);
                         teacher.setUserId(userId);
@@ -175,13 +180,16 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             teacher.setClassIds(classIdStr);
                             teacherDao.insert(teacher);
                         } else {
-                            //判断老师所在班级是否存在
-                            classIds = t.getClassIds();
-                            String idsStr = "," + t.getClassIds() + ",";
-                            if (!idsStr.contains("," + classIdStr + ",")) {
-                                StringBuilder sb = new StringBuilder(classIds);
-                                sb.append("," + classIdStr);
-                                teacher.setClassIds(sb.toString());
+                            //获取到classId才进行更新
+                            if(!classIdStr.equals("")){
+                                //判断老师所在班级是否存在
+                                classIds = t.getClassIds();
+                                String idsStr = "," + t.getClassIds() + ",";
+                                if (!idsStr.contains("," + classIdStr + ",")) {
+                                    StringBuilder sb = new StringBuilder(classIds);
+                                    sb.append("," + classIdStr);
+                                    teacher.setClassIds(sb.toString());
+                                }
                             }
                             teacherDao.update(teacher);
                         }
@@ -201,7 +209,6 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         }
                     }else if(roleType == 2){
                         String classIds = "";
-                        String classIdStr = classId + "";
                         Parent parent = new Parent();
                         parent.setUserId(userId);
                         parent.setParentName(name);
@@ -215,12 +222,16 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
 //                        parentId = parent.getId();
                         } else {
 //                        parentId = p.getId();
-                            classIds = p.getClassId();
-                            String idsStr = "," + p.getClassId() + ",";
-                            if (!idsStr.contains("," + classIdStr + ",")) {
-                                StringBuilder sb = new StringBuilder(classIds);
-                                sb.append("," + classIdStr);
-                                parent.setClassId(sb.toString());
+                            //获取到classId才进行更新
+                            if(!classIdStr.equals("")){
+                                //判断班级是否已存在
+                                classIds = p.getClassId();
+                                String idsStr = "," + p.getClassId() + ",";
+                                if (!idsStr.contains("," + classIdStr + ",")) {
+                                    StringBuilder sb = new StringBuilder(classIds);
+                                    sb.append("," + classIdStr);
+                                    parent.setClassId(sb.toString());
+                                }
                             }
                             parentDao.update(parent);
                         }
