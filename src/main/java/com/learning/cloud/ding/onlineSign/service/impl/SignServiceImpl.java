@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -71,8 +72,11 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public JsonResult getUnsignedTasks(Parent parent) throws Exception{
-        List<Sign> signList = new ArrayList<>();
-        signList = signDao.getUnsignedTasks(parent);
+        String classId = parent.getClassId();
+        String[] split = classId.split(",");
+        List<String> strings = Arrays.asList(split);
+        parent.setClassIdStrList(strings);
+        List<Sign> signList = signDao.getUnsignedTasks(parent);
         return JsonResultUtil.success(new PageEntity<>(signList));
     }
 

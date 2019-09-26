@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 public class Parent extends BaseEntity {
     private Integer id;
@@ -26,4 +28,7 @@ public class Parent extends BaseEntity {
     private String phone;
 
     private String avatar;
+
+    //added
+    private List<String> classIdStrList;
 }
