@@ -156,4 +156,23 @@
     on f.user_id = p.user_id
     ORDER BY p.score desc
   </select>
+
+  <select id="getClassRankFromDuty" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
+    select CONCAT(b.grade_name, b.class_name) name, c.score
+    from edu_grade_class b
+           LEFT JOIN
+           (SELECT a.class_id,SUM(a.showPoint) score
+            from (
+                   SELECT class_id,(point * plus_minus * time) showPoint
+                   from duty_record dr
+                          LEFT JOIN duty_check_type dct on
+                       dr.point_type = dct.id
+                   where TO_DAYS(day) = TO_DAYS(#{day})
+                     and school_id = #{schoolId}
+                 ) a
+            GROUP BY a.class_id
+           ) c
+           on b.id = c.class_id
+             and b.school_id = #{schoolId}
+  </select>
 </mapper>
