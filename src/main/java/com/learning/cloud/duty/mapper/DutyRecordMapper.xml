@@ -20,6 +20,7 @@
         ) u
         on dr.user_id = u.user_id
         where dr.class_id = #{classId}
+          and dr.time>0
         <if test="schoolId != null">
             and dr.school_id = #{schoolId,jdbcType=BIGINT}
         </if>
@@ -38,9 +39,9 @@
         <if test="status != null">
             and dr.status = #{status,jdbcType=SMALLINT}
         </if>
-        ) a
+        ) temp
         <if test="ymdDay != null">
-            where TO_DAYS(a.day) = TO_DAYS(#{ymdDay})
+            where TO_DAYS(temp.day) = TO_DAYS(#{ymdDay})
         </if>
     </select>
 
