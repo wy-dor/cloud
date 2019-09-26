@@ -41,10 +41,10 @@ public class ScoreboardController {
         return scoreboardService.getTeacherRank(bureauId, schoolId);
     }
 
-    @GetMapping("/getClassRank")
-    public JsonResult getClassRank(@RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
-        return scoreboardService.getClassRank(schoolId);
-    }
+//    @GetMapping("/getClassRank")
+//    public JsonResult getClassRank(@RequestParam(value="schoolId",required = false) Long schoolId)throws Exception{
+//        return scoreboardService.getClassRank(schoolId);
+//    }
 
     // 获取教育局内部人员排名
     @GetMapping("/getBureauPersonnelRank")
@@ -61,5 +61,11 @@ public class ScoreboardController {
     @GetMapping("/getPersonnelRank")
     public JsonResult getPersonnelRank(ScoreRank scoreRank)throws Exception{
         return scoreboardService.getPersonnelRank(scoreRank);
+    }
+
+    //获取班级积分排名，每日积分
+    @GetMapping("/getClassRankFromDuty")
+    public JsonResult getClassRankFromDuty(ScoreRank scoreRank)throws Exception{
+        return scoreboardService.getClassRankFromDuty(scoreRank);
     }
 }

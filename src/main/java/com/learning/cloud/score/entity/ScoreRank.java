@@ -2,6 +2,9 @@ package com.learning.cloud.score.entity;
 
 import com.learning.domain.BaseEntity;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * @Author: yyt
@@ -16,4 +19,7 @@ public class ScoreRank extends BaseEntity {
     private Long classId;
     private Long score;
     private String avatar;
+    //班级排行查询
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date day;
 }
