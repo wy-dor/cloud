@@ -82,7 +82,9 @@
     from (
 	select s.*
     from sign s
-    where FIND_IN_SET(#{classId} ,class_ids)
+    <foreach collection="classIdStrList" index="index" item="item" open="where " separator=" or">
+      FIND_IN_SET(#{item} ,class_ids)
+    </foreach>
     ) a
 	where a.id not in
 	(
