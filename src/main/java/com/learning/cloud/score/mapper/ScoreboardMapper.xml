@@ -112,7 +112,7 @@
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
     select cs.*,ec.class_name from class_scoreboard cs
-		LEFT JOIN edu_grade_class ec
+		right JOIN edu_grade_class ec
 		on cs.class_id = ec.id
     where cs.school_id = #{schoolId}
     order by score
@@ -145,7 +145,8 @@
     SELECT f.user_name name, f.avatar,f.user_id, p.score
     FROM(
     SELECT user_id, user_name, avatar FROM(
-    select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id where b.id = #{schoolId}
+    select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id and a.role_type=3
+    where b.id = #{schoolId}
     ) c GROUP BY c.user_id,c.user_name, c.avatar
     )f
     left join
