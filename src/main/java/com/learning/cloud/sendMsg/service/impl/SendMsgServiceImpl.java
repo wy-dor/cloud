@@ -65,7 +65,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
         msg.getLink().setTitle(msgInfo.getTitle());
         msg.getLink().setText(msgInfo.getText());
-        msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId);
+        msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId+"&link=true");
         msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
         return SendWorkMsg(workMsg,msg);
     }
