@@ -13,5 +13,7 @@ public interface GradeEntryService {
 
     void saveEntryMarks(GradeEntry gradeEntry, Integer studentId, String marks);
 
-    JsonResult getGradeEntryStatistics(Long moduleId);
+    JsonResult getGradeEntryStatistics(GradeEntry gradeEntry);
+
+    JsonResult getGradeEntryForStudent(Long moduleId, String userId);
 }

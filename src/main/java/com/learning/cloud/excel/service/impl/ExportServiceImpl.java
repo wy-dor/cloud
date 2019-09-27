@@ -131,6 +131,12 @@ public class ExportServiceImpl implements ExportService {
         }
 
         //定义样式
+        CellStyle blackStyle_r1 = wb.createCellStyle();
+        //自动换行
+        blackStyle_r1.setWrapText(true);
+        row1.getCell(0).setCellStyle(blackStyle_r1);
+
+        //定义样式
         CellStyle blueStyle = wb.createCellStyle();
         HSSFFont blueFont = wb.createFont();
         //颜色
@@ -143,14 +149,14 @@ public class ExportServiceImpl implements ExportService {
         row2.getCell(0).setCellStyle(blueStyle);
 
         //定义样式
-        CellStyle blackStyle = wb.createCellStyle();
+        CellStyle blackStyle_r3 = wb.createCellStyle();
         //自动换行
 //        blackStyle.setWrapText(true);
         HSSFFont font = wb.createFont();
         font.setFontName("微软雅黑");
         font.setFontHeightInPoints((short)11);
-        blackStyle.setFont(font);
-        row3.setRowStyle(blackStyle);
+        blackStyle_r3.setFont(font);
+        row3.setRowStyle(blackStyle_r3);
 
         //设置数值类型
         //row3.getCell(4).setCellType(HSSFCell.CELL_TYPE_NUMERIC);
@@ -229,8 +235,10 @@ public class ExportServiceImpl implements ExportService {
             }
             //对比得出班级中未录入的科目进行提示
             List<String> undoneSubjectList = CommonUtils.removeStringDupsInList(fullSubjectNameList, doneSubjectList);
-            if(undoneSubjectList != null||undoneSubjectList.size() > 0){
-                undoneSubjectMention.append(className+"中"+undoneSubjectList.toString()+"成绩还没有录入，请继续录入");
+            if(undoneSubjectList != null && undoneSubjectList.size() > 0){
+                String s = undoneSubjectList.toString();
+                s.substring(1,s.length()-2);
+                undoneSubjectMention.append(className+"中"+ s +"成绩还没有录入，请继续录入/n");
             }
         }
         List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
@@ -238,12 +246,14 @@ public class ExportServiceImpl implements ExportService {
         for (Integer undoneClassId : undoneClassIdList) {
             undoneClassNameList.add(classMapByModule.get(undoneClassId.toString()));
         }
-        if(undoneClassIdList != null||undoneClassIdList.size() > 0){
-            undoneClassMention.append(undoneClassNameList.toString()+"还没有录入成绩/n");
+        if(undoneClassIdList != null && undoneClassIdList.size() > 0){
+            String s = undoneClassNameList.toString();
+            s.substring(1,s.length()-2);
+            undoneClassMention.append(s +"还没有录入成绩/n");
         }
 
         //如果提示均不为空字符串，则返回提示
-        if (!undoneClassMention.toString().equals("") && !undoneSubjectMention.toString().equals("")){
+        if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")){
             return JsonResultUtil.success(undoneSubjectMention.append(undoneSubjectMention).toString());
         }
 
@@ -261,6 +271,12 @@ public class ExportServiceImpl implements ExportService {
             row0.createCell(i+3).setCellValue(fullSubjectNameList.get(i));
         }
         row0.createCell(subjectSize+3).setCellValue("评语");
+        //科目抬头
+        for (int i = 0; i < subjectSize; i++) {
+            String subject = fullSubjectNameList.get(i);
+            row0.createCell(i+3).setCellValue(subject);
+        }
+
         GradeEntry gradeEntry = new GradeEntry();
         gradeEntry.setModuleId(moduleId);
         List<GradeEntry> entryList = gradeEntryDao.getByGradeEntry(gradeEntry);
@@ -274,7 +290,9 @@ public class ExportServiceImpl implements ExportService {
             String remark = ge.getRemark();
             r.createCell(0).setCellValue(className);
             r.createCell(1).setCellValue(studentName);
-            r.createCell(2).setCellValue(studentId);
+            if(studentId != null){
+                r.createCell(2).setCellValue(studentId);
+            }
             r.createCell(subjectSize+3).setCellValue(remark);
             for (int j = 0; j < subjectSize; j++) {
                 String marks = ge.getMarks();
@@ -282,7 +300,8 @@ public class ExportServiceImpl implements ExportService {
                 List<Map<String, String>> markMapList = (List<Map<String, String>>) JSON.parse(marks);
                 for (Map<String, String> markMap : markMapList) {
                     if(markMap.get("courseName").equals(subject)){
-                        row0.createCell(j+3).setCellValue(fullSubjectNameList.get(j));
+                        String value = markMap.get("value");
+                        r.createCell(j+3).setCellValue(value);
                     }
                 }
             }

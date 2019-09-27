@@ -31,7 +31,13 @@ public class GradeEntryController {
     }
 
     @GetMapping("/getGradeEntryStatistics")
-    public JsonResult getGradeEntryStatistics(Long moduleId){
-        return gradeEntryService.getGradeEntryStatistics(moduleId);
+    public JsonResult getGradeEntryStatistics(GradeEntry gradeEntry){
+        return gradeEntryService.getGradeEntryStatistics(gradeEntry);
     }
+
+    @GetMapping("/getGradeEntryForStudent")
+    public JsonResult getGradeEntryForStudent(Long moduleId, String userId){
+        return gradeEntryService.getGradeEntryForStudent(moduleId,userId);
+    }
+
 }

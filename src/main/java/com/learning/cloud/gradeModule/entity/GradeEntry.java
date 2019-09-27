@@ -22,4 +22,6 @@ public class GradeEntry extends BaseEntity {
     //added
     private Integer classId;
 
+    private String term;
+
 }

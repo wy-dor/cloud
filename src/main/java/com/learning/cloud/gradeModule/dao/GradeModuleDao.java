@@ -1,5 +1,6 @@
 package com.learning.cloud.gradeModule.dao;
 
+import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,6 @@ public interface GradeModuleDao {
     int deleteGradeModule(Long id);
 
     int update(GradeModule gradeModule);
+
+    List<GradeModule> getGradeModulesForClass(GradeEntry gradeEntry);
 }

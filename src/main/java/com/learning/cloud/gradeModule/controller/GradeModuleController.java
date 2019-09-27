@@ -1,5 +1,6 @@
 package com.learning.cloud.gradeModule.controller;
 
+import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.gradeModule.service.GradeModuleService;
 import com.learning.domain.JsonResult;
@@ -32,5 +33,15 @@ public class GradeModuleController {
     @GetMapping("/deleteGradeModule")
     public JsonResult deleteGradeModule(Long id){
         return gradeModuleService.deleteGradeModule(id);
+    }
+
+    @GetMapping("/getGradeModulesForClass")
+    public JsonResult getGradeModulesForClass(GradeEntry gradeEntry){
+        return gradeModuleService.getGradeModulesForClass(gradeEntry);
+    }
+
+    @GetMapping("/updateGradeModule")
+    public JsonResult updateGradeModule(GradeModule gradeModule){
+        return gradeModuleService.updateGradeModule(gradeModule);
     }
 }

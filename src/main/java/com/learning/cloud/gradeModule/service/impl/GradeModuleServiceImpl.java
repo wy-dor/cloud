@@ -5,6 +5,7 @@ import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
 import com.learning.cloud.gradeModule.dao.GradeModuleDao;
+import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.gradeModule.service.GradeModuleService;
 import com.learning.domain.JsonResult;
@@ -14,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +79,9 @@ public class GradeModuleServiceImpl implements GradeModuleService {
         }*/
         Long id = gradeModule.getId();
         if(id == null){
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            gradeModule.setCreateTime(dateFormat.format(date));
             gradeModuleDao.insert(gradeModule);
             id = gradeModule.getId();
         }else{
@@ -101,5 +106,23 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     public JsonResult deleteGradeModule(Long id) {
         gradeModuleDao.deleteGradeModule(id);
         return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult getGradeModulesForClass(GradeEntry gradeEntry) {
+        List<GradeModule> gradeModuleList = gradeModuleDao.getGradeModulesForClass(gradeEntry);
+        return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
+    }
+
+    @Override
+    public JsonResult updateGradeModule(GradeModule gradeModule) {
+        Integer status = gradeModule.getStatus();
+        if(status != null && status == 1){
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            gradeModule.setPublishTime(dateFormat.format(date));
+        }
+        gradeModuleDao.update(gradeModule);
+        return JsonResultUtil.success("更新成功");
     }
 }

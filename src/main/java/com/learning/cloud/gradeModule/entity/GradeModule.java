@@ -45,4 +45,9 @@ public class GradeModule extends BaseEntity {
     private Integer schoolId;
 
     private String userId;
+
+    private String publishTime;
+
+    private String createTime;
+
 }
