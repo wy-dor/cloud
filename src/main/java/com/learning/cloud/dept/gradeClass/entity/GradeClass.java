@@ -43,5 +43,12 @@ public class GradeClass extends BaseEntity {
 
     private Long tDeptId;
 
+    private Long topClassId;
+
+    private Long topGradeId;
+
+    private Long topPeriodId;
+
+    private Long topCampusId;
 
 }

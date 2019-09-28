@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.dept.topApi.dao.EduGradeDao">
+  <select id="getByGrade" parameterType="com.learning.cloud.dept.topApi.entity.EduGrade" resultType="com.learning.cloud.dept.topApi.entity.EduGrade">
+    select *
+    from edu_grade
+    <where>
+      <if test="record.id != null">
+        and id = #{record.id,jdbcType=INTEGER}
+      </if>
+      <if test="record.schoolId != null">
+        and school_id = #{record.schoolId,jdbcType=INTEGER}
+      </if>
+      <if test="record.gradeName != null">
+        and grade_name = #{record.gradeName,jdbcType=VARCHAR}
+      </if>
+      <if test="record.topCampusId != null">
+        and top_campus_id = #{record.topCampusId,jdbcType=BIGINT}
+      </if>
+      <if test="record.topPeriodId != null">
+        and top_period_id = #{record.topPeriodId,jdbcType=BIGINT}
+      </if>
+      <if test="record.topGradeId != null">
+        and top_grade_id = #{record.topGradeId,jdbcType=BIGINT}
+      </if>
+      <if test="record.gradeLevel != null">
+        and grade_level = #{record.gradeLevel,jdbcType=BIGINT}
+      </if>
+      <if test="record.startYear != null">
+        and start_year = #{record.startYear,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.topApi.entity.EduGrade">
+    insert into edu_grade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="gradeName != null">
+        grade_name,
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id,
+      </if>
+      <if test="topPeriodId != null">
+        top_period_id,
+      </if>
+      <if test="topGradeId != null">
+        top_grade_id,
+      </if>
+      <if test="gradeLevel != null">
+        grade_level,
+      </if>
+      <if test="startYear != null">
+        start_year,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="topCampusId != null">
+        #{topCampusId,jdbcType=BIGINT},
+      </if>
+      <if test="topPeriodId != null">
+        #{topPeriodId,jdbcType=BIGINT},
+      </if>
+      <if test="topGradeId != null">
+        #{topGradeId,jdbcType=BIGINT},
+      </if>
+      <if test="gradeLevel != null">
+        #{gradeLevel,jdbcType=BIGINT},
+      </if>
+      <if test="startYear != null">
+        #{startYear,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.learning.cloud.dept.topApi.entity.EduGrade">
+    update edu_grade
+    <set>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeName != null">
+        grade_name = #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id = #{topCampusId,jdbcType=BIGINT},
+      </if>
+      <if test="topPeriodId != null">
+        top_period_id = #{topPeriodId,jdbcType=BIGINT},
+      </if>
+      <if test="topGradeId != null">
+        top_grade_id = #{topGradeId,jdbcType=BIGINT},
+      </if>
+      <if test="gradeLevel != null">
+        grade_level = #{gradeLevel,jdbcType=BIGINT},
+      </if>
+      <if test="startYear != null">
+        start_year = #{startYear,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="topPeriodId != null">
+        and top_period_id = #{topPeriodId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </update>
+</mapper>

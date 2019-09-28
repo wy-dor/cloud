@@ -19,4 +19,6 @@ public class Campus extends BaseEntity {
 
     //后添加
     private Long deptId;
+
+    private Long topCampusId;
 }

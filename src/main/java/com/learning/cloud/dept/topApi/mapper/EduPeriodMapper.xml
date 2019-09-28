@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.dept.topApi.dao.EduPeriodDao">
+  <select id="getByPeriod" parameterType="com.learning.cloud.dept.topApi.entity.EduPeriod">
+    select *
+    from edu_period
+    <where>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId}
+      </if>
+      <if test="periodName != null">
+        and period_name = #{periodName}
+      </if>
+      <if test="periodType != null">
+        and period_type = #{periodType}
+      </if>
+      <if test="topCampusId != null">
+        and top_campus_id = #{topCampusId}
+      </if>
+      <if test="topPeriodId != null">
+        and top_period_id = #{topPeriodId}
+      </if>
+    </where>
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.topApi.entity.EduPeriod">
+    insert into edu_period
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="topPeriodId != null">
+        top_period_id,
+      </if>
+      <if test="periodName != null">
+        period_name,
+      </if>
+      <if test="periodType != null">
+        period_type,
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="topPeriodId != null">
+        #{topPeriodId,jdbcType=BIGINT},
+      </if>
+      <if test="periodName != null">
+        #{periodName,jdbcType=VARCHAR},
+      </if>
+      <if test="periodType != null">
+        #{periodType,jdbcType=VARCHAR},
+      </if>
+      <if test="topCampusId != null">
+        #{topCampusId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.learning.cloud.dept.topApi.entity.EduPeriod">
+    update edu_period
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="periodName != null">
+        period_name = #{periodName,jdbcType=VARCHAR},
+      </if>
+      <if test="periodType != null">
+        period_type = #{periodType,jdbcType=VARCHAR},
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id = #{topCampusId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="topPeriodId != null">
+        and top_period_id = #{topPeriodId}
+      </if>
+    </where>
+  </update>
+  
+</mapper>

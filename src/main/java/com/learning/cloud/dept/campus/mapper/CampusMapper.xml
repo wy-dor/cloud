@@ -12,7 +12,20 @@
   <select id="getByCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
     select *
     from edu_campus
-    where dept_id = #{deptId}
+    <where>
+      <if test="deptId != null">
+        and dept_id = #{deptId}
+      </if>
+      <if test="campusName != null">
+        and campus_name = #{campusName}
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId}
+      </if>
+      <if test="topCampusId != null">
+        and top_campus_id = #{topCampusId}
+      </if>
+    </where>
   </select>
 
   <select id="getSchoolCampuses" parameterType="java.lang.Integer" resultType="com.learning.cloud.dept.campus.entity.Campus">
@@ -45,6 +58,9 @@
       <if test="state != null">
         state,
       </if>
+      <if test="topCampusId != null">
+        top_campus_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="campusName != null">
@@ -61,6 +77,9 @@
       </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
+      </if>
+      <if test="topCampusId != null">
+        #{topCampusId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -79,6 +98,9 @@
       </if>
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id = #{topCampusId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

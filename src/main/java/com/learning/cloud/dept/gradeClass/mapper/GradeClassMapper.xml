@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.dept.gradeClass.dao.GradeClassDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.dept.gradeClass.entity.GradeClass">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="class_name" jdbcType="VARCHAR" property="className" />
-    <result column="grade_name" jdbcType="VARCHAR" property="gradeName" />
-    <result column="session_name" jdbcType="VARCHAR" property="sessionName" />
-    <result column="campus_id" jdbcType="INTEGER" property="campusId" />
-    <result column="head_teacher_id" jdbcType="INTEGER" property="headTeacherId" />
-    <result column="teacher_ids" jdbcType="VARCHAR" property="teacherIds" />
-  </resultMap>
-
   <select id="getById" parameterType="java.lang.Integer"
           resultType="com.learning.cloud.dept.gradeClass.entity.GradeClass">
     select *
@@ -66,6 +56,18 @@
       </if>
       <if test="tDeptId != null">
         and t_dept_id = #{tDeptId,jdbcType=BIGINT}
+      </if>
+      <if test="topClassId != null">
+        and top_class_id = #{topClassId,jdbcType=BIGINT}
+      </if>
+      <if test="topGradeId != null">
+        and top_grade_id = #{topGradeId,jdbcType=BIGINT}
+      </if>
+      <if test="topPeriodId != null">
+        and top_period_id = #{topPeriodId,jdbcType=BIGINT}
+      </if>
+      <if test="topCampusId != null">
+        and top_campus_id = #{topCampusId,jdbcType=BIGINT}
       </if>
     </where>
   </select>
@@ -123,6 +125,18 @@
       <if test="tDeptId != null">
         t_dept_id,
       </if>
+      <if test="topClassId != null">
+        top_class_id,
+      </if>
+      <if test="topGradeId != null">
+        top_grade_id,
+      </if>
+      <if test="topPeriodId != null">
+        top_period_id,
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="className != null">
@@ -160,6 +174,18 @@
       </if>
       <if test="tDeptId != null">
         #{tDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="topClassId != null">
+        #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="topGradeId != null">
+        #{topGradeId,jdbcType=BIGINT},
+      </if>
+      <if test="topPeriodId != null">
+        #{topPeriodId,jdbcType=BIGINT},
+      </if>
+      <if test="topCampusId != null">
+        #{topCampusId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -206,6 +232,18 @@
       </if>
       <if test="tDeptId != null">
         t_dept_id = #{tDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="topClassId != null">
+        top_class_id = #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="topGradeId != null">
+        top_grade_id = #{topGradeId,jdbcType=BIGINT},
+      </if>
+      <if test="topPeriodId != null">
+        top_period_id = #{topPeriodId,jdbcType=BIGINT},
+      </if>
+      <if test="topCampusId != null">
+        top_campus_id = #{topCampusId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
