@@ -165,7 +165,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
         List<OapiEduClassListResponse.ClassResponse> allList = null;
         while(flag){
             req.setPageNo(pageNo);
-            req.setPageSize(10L);
+            req.setPageSize(20L);
             OapiEduClassListResponse rsp = client.execute(req, accessToken);
             OapiEduClassListResponse.PageResult result = rsp.getResult();
             List<OapiEduClassListResponse.ClassResponse> list = result.getList();
@@ -204,9 +204,21 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             }
 
         }
-
         return ServiceResult.success(allList);
     }
+
+    @Override
+    public ServiceResult getEduClass(Integer schoolId, Long topClassId) throws ApiException {
+        School bySchoolId = schoolDao.getBySchoolId(schoolId);
+        String corpId = bySchoolId.getCorpId();
+        String accessToken = authenService.getAccessToken(corpId);
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/class/get");
+        OapiEduClassGetRequest req = new OapiEduClassGetRequest();
+        req.setClassId(topClassId);
+        OapiEduClassGetResponse rsp = client.execute(req, accessToken);
+        return ServiceResult.success(rsp);
+    }
+
 
 
 }

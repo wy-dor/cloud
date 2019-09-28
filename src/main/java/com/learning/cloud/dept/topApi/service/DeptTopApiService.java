@@ -13,4 +13,6 @@ public interface DeptTopApiService {
     ServiceResult getAndSaveGradeList(Integer schoolId, Long topPeriodId) throws ApiException;
 
     ServiceResult getAndSaveClassList(Integer schoolId, Long topGradeId) throws ApiException;
+
+    ServiceResult getEduClass(Integer schoolId, Long topClassId) throws ApiException;
 }

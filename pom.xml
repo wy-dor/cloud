@@ -59,7 +59,7 @@
             <artifactId>top-api-sdk-dev</artifactId>
             <version>ding-open-mc-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190608.jar</systemPath>
+            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190926.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.taobao.top</groupId>
