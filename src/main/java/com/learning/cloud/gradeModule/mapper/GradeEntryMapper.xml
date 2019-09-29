@@ -21,7 +21,7 @@
                 and module_id = #{moduleId,jdbcType=BIGINT}
             </if>
             <if test="studentNo != null">
-                and student_no = #{studentNo,jdbcType=INTEGER}
+                and student_no = #{studentNo,jdbcType=VARCHAR}
             </if>
             <if test="studentName != null">
                 and student_name = #{studentName,jdbcType=VARCHAR}
@@ -75,7 +75,7 @@
                 #{moduleId,jdbcType=BIGINT},
             </if>
             <if test="studentNo != null">
-                #{studentNo,jdbcType=INTEGER},
+                #{studentNo,jdbcType=VARCHAR},
             </if>
             <if test="studentName != null">
                 #{studentName,jdbcType=VARCHAR},
@@ -102,7 +102,7 @@
                 marks = #{marks,jdbcType=LONGVARCHAR},
             </if>
             <if test="studentNo != null">
-               student_no = #{studentNo,jdbcType=INTEGER},
+               student_no = #{studentNo,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id}
