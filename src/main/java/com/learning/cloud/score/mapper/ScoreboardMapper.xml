@@ -145,7 +145,7 @@
     SELECT f.user_name name, f.avatar,f.user_id, p.score
     FROM(
     SELECT user_id, user_name, avatar FROM(
-    select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id and a.role_type=3
+    select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id and  (a.role_type=3 or a.role_type=5)
     where b.id = #{schoolId}
     ) c GROUP BY c.user_id,c.user_name, c.avatar
     )f
