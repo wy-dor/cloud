@@ -16,7 +16,7 @@
         and term = #{term}
       </if>
       and status = 1
-      order by create_time desc, end_time desc
+      order by create_time desc, end_time
   </select>
 
   <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
