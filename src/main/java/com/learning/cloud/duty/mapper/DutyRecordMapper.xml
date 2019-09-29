@@ -43,6 +43,7 @@
         <if test="ymdDay != null">
             where TO_DAYS(temp.day) = TO_DAYS(#{ymdDay})
         </if>
+        order by temp.day
     </select>
 
     <delete id="deleteDutyRecord" parameterType="java.lang.Long">
