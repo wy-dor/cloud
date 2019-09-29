@@ -77,7 +77,11 @@ public class GradeEntryServiceImpl implements GradeEntryService {
 
     @Override
     public void saveEntryMarks(GradeEntry gradeEntry, String marks) {
-        Long entryId = gradeEntry.getId();
+        List<GradeEntry> byGradeEntry = gradeEntryDao.getByGradeEntry(gradeEntry);
+        Long entryId = null;
+        if(byGradeEntry != null && byGradeEntry.size() > 0){
+            entryId  = byGradeEntry.get(0).getId();
+        }
         if (entryId == null || entryId == 0) {
             //空字符串替换为"缺考"
             List<Map<String, String>> mapListForReplace = new ArrayList<>();

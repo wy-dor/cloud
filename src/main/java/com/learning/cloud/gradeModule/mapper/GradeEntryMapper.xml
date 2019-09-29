@@ -20,9 +20,6 @@
             <if test="moduleId != null">
                 and module_id = #{moduleId,jdbcType=BIGINT}
             </if>
-            <if test="studentNo != null">
-                and student_no = #{studentNo,jdbcType=VARCHAR}
-            </if>
             <if test="studentName != null">
                 and student_name = #{studentName,jdbcType=VARCHAR}
             </if>
