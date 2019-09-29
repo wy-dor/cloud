@@ -14,8 +14,6 @@ import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.CommonUtils;
 import com.learning.utils.JsonResultUtil;
-import com.mysql.cj.xdevapi.JsonArray;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,22 +45,22 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             gradeEntry.setClassId(classId);
             Long id = null;
             Object idObj = map.get("id");
-            if(idObj != null){
-                if(idObj instanceof Integer){
+            if (idObj != null) {
+                if (idObj instanceof Integer) {
                     int i = (Integer) idObj;
                     id = Long.valueOf(i);
-                }else if(idObj instanceof Long){
-                    id = (Long)idObj;
+                } else if (idObj instanceof Long) {
+                    id = (Long) idObj;
                 }
             }
             gradeEntry.setId(id);
             String remark = (String) map.get("remark");
-            Integer studentId = (Integer) map.get("studentId");
+            String studentNo = (String) map.get("studentNo");
             String studentName = (String) map.get("studentName");
             //List<Map<String, Object>> marksList = (List<Map<String, Object>>) map.get("marks");
             String marks = (String) map.get("marks");
             gradeEntry.setRemark(remark);
-            gradeEntry.setStudentId(studentId);
+            gradeEntry.setStudentNo(studentNo);
             gradeEntry.setStudentName(studentName);
             gradeEntry.setClassId(classId);
             /*StringBuffer sb = new StringBuffer();
@@ -71,19 +69,30 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                 String scoreValue =(String)stringObjectMap.get("value");
                 sb.append(subjectName+":"+scoreValue);
             }*/
-            saveEntryMarks(gradeEntry, studentId, marks);
+            saveEntryMarks(gradeEntry, marks);
 
         }
         return JsonResultUtil.success(moduleId);
     }
 
     @Override
-    public void saveEntryMarks(GradeEntry gradeEntry, Integer studentId, String marks) {
+    public void saveEntryMarks(GradeEntry gradeEntry, String marks) {
         Long entryId = gradeEntry.getId();
-        if(entryId == null || entryId == 0){
+        if (entryId == null || entryId == 0) {
+            //空字符串替换为"缺考"
+            List<Map<String, String>> mapListForReplace = new ArrayList<>();
+            List<Map<String, String>> mapList = (List<Map<String, String>>) JSON.parse(marks);
+            for (Map<String, String> map : mapList) {
+                String value = map.get("value");
+                if (value.equals("")){
+                    map.put("value","缺考");
+                }
+                mapListForReplace.add(map);
+            }
+            marks = JSON.toJSONString(mapListForReplace);
             gradeEntry.setMarks(marks);
             gradeEntryDao.insert(gradeEntry);
-        }else{
+        } else {
             GradeEntry entry = gradeEntryDao.getById(entryId);
             //获取该生之前保存的成绩
             //[{"name":"语文","value":"89"},{"name":"数学","value":"100"},{"name":"英语","value":"95"}]
@@ -91,15 +100,15 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             String m = entry.getMarks();
             List<Map<String, String>> mapList0 = (List<Map<String, String>>) JSON.parse(m);
             List<String> subjectNames0 = new ArrayList<>();
-            Map<String,String> originMap = new HashMap<>();
+            Map<String, String> originMap = new HashMap<>();
             for (Map<String, String> map0 : mapList0) {
                 String name = map0.get("courseName");
                 String value = map0.get("value");
                 subjectNames0.add(name);
-                originMap.put(name,value);
+                originMap.put(name, value);
             }
             //新录入的成绩
-            List<Map<String,String>> mapList1 =(List<Map<String,String>>) JSON.parse(marks);
+            List<Map<String, String>> mapList1 = (List<Map<String, String>>) JSON.parse(marks);
             List<String> subjectNames1 = new ArrayList<>();
             for (Map<String, String> map1 : mapList1) {
                 String name = map1.get("courseName");
@@ -107,13 +116,17 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             }
             //比较得出保留的录入成绩
             List<String> remainSubjects = CommonUtils.removeStringDupsInList(subjectNames0, subjectNames1);
-            List<Map<String,String>> mapList2 = new ArrayList<>();
-            if(subjectNames1.size() != 0){
-                if(subjectNames0.size() != 0){
+            List<Map<String, String>> mapList2 = new ArrayList<>();
+            if (subjectNames1.size() != 0) {
+                if (subjectNames0.size() != 0) {
                     for (String remainSubject : remainSubjects) {
-                        Map<String,String> tempMap = new HashMap<>();
-                        tempMap.put("courseName",remainSubject);
-                        tempMap.put("value",originMap.get(remainSubject));
+                        Map<String, String> tempMap = new HashMap<>();
+                        tempMap.put("courseName", remainSubject);
+                        String value = originMap.get(remainSubject);
+                        if(value.equals("")){
+                            value = "缺考";
+                        }
+                        tempMap.put("value", value);
                         mapList2.add(tempMap);
                     }
                     //保留成绩添加到录入成绩中
@@ -156,10 +169,10 @@ public class GradeEntryServiceImpl implements GradeEntryService {
         Map<String, String>[] statisticMapArr = null;
 
         //分数制
-        if(byId.getScoringRoles() == 1){
-            statisticMapArr = new HashMap[subjectCounts+1];
+        if (byId.getScoringRoles() == 1) {
+            statisticMapArr = new HashMap[subjectCounts + 1];
             //存储科目成绩进行统计
-            List<Double>[] subjectMarksStrListArr = new ArrayList[subjectCounts+1];
+            List<Double>[] subjectMarksStrListArr = new ArrayList[subjectCounts + 1];
 
             //计算总分
             Integer fullScore = 0;
@@ -171,10 +184,10 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             //成绩链表添加
             for (int i = 0; i < subjectCounts; i++) {
                 String courseName = subjectArr[i];
-                Map<String,String> tempMap =  new HashMap<>();
+                Map<String, String> tempMap = new HashMap<>();
                 tempMap.put("courseName", courseName);
                 String totalScore = subjectMapArr[i].get("totalScore").toString();
-                tempMap.put("totalScore",totalScore);
+                tempMap.put("totalScore", totalScore);
                 statisticMapArr[i] = tempMap;
 
                 List<Double> tempList = new ArrayList<>();
@@ -183,9 +196,9 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                     List<Map<String, String>> parse = (List<Map<String, String>>) JSON.parse(marks);
                     for (Map<String, String> courseValueMap : parse) {
                         String course = courseValueMap.get("courseName");
-                        if(courseName.equals(course)){
+                        if (courseName.equals(course)) {
                             String value = courseValueMap.get("value");
-                            if(!value.equals("缺考")){
+                            if (!value.equals("缺考") && ! value.equals("")) {
                                 tempList.add(Double.parseDouble(value));
                             }
                             break;
@@ -206,7 +219,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                 double markSum = 0;
                 for (Map<String, String> courseValueMap : parse) {
                     String value = courseValueMap.get("value");
-                    if (!value.equals("缺考")) {
+                    if (!value.equals("缺考") && !value.equals("")) {
                         double doubleValue = Double.parseDouble(value);
                         markSum += doubleValue;
                     }
@@ -215,12 +228,12 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                 fullTempList.add(markSum);
             }
             subjectMarksStrListArr[subjectCounts] = fullTempList;
-            fullTempMap.put("courseName","总分");
-            fullTempMap.put("totalScore",fullScore.toString());
+            fullTempMap.put("courseName", "总分");
+            fullTempMap.put("totalScore", fullScore.toString());
             statisticMapArr[subjectCounts] = fullTempMap;
 
             //统计数据保留两位有效数字
-            java.text.DecimalFormat df =new java.text.DecimalFormat("#.00");
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
             //用于对应统计数组的统计成绩列表
             for (int i = 0; i < subjectMarksStrListArr.length; i++) {
                 Map<String, String> tempMap = statisticMapArr[i];
@@ -234,18 +247,18 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                 statisticMapArr[i] = tempMap;
             }
 
-        }else{
+        } else {
             //等第制统计个数
             statisticMapArr = new HashMap[subjectCounts];
 
             //等级模板和个数
             Integer rankModule = byId.getRankModule();
             String[] rankStr = new String[subjectCounts];
-            if(rankModule == 1){
-                String[] rank_1 = {"优秀","良好","合格","待合格"};
+            if (rankModule == 1) {
+                String[] rank_1 = {"优秀", "良好", "合格", "待合格"};
                 rankStr = rank_1;
-            }else{
-                String[] rank_2 = {"A","B","C","D"};
+            } else {
+                String[] rank_2 = {"A", "B", "C", "D"};
                 rankStr = rank_2;
             }
 
@@ -253,29 +266,29 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             for (int i = 0; i < subjectCounts; i++) {
                 String courseName = subjectArr[i];
 
-                Map<String,String> tempMap = new HashMap<>();
+                Map<String, String> tempMap = new HashMap<>();
                 tempMap.put("courseName", courseName);
 
                 //每一科的成绩等级个数统计
-                Integer[] rankMarksCount = {0,0,0,0};
+                Integer[] rankMarksCount = {0, 0, 0, 0};
 
                 for (GradeEntry entry : gradeEntries) {
                     String marks = entry.getMarks();
                     List<Map<String, String>> parse = (List<Map<String, String>>) JSON.parse(marks);
                     for (Map<String, String> courseValueMap : parse) {
                         String course = courseValueMap.get("courseName");
-                        if(courseName.equals(course)){
+                        if (courseName.equals(course)) {
                             String value = courseValueMap.get("value");
-                            if(!value.equals("缺考")){
-                                    if (value.equals(rankStr[0])){
-                                        rankMarksCount[0]++;
-                                    }else if (value.equals(rankStr[1])){
-                                        rankMarksCount[1]++;
-                                    }else if (value.equals(rankStr[2])){
-                                        rankMarksCount[2]++;
-                                    }else {
-                                        rankMarksCount[3]++;
-                                    }
+                            if (!value.equals("缺考")) {
+                                if (value.equals(rankStr[0])) {
+                                    rankMarksCount[0]++;
+                                } else if (value.equals(rankStr[1])) {
+                                    rankMarksCount[1]++;
+                                } else if (value.equals(rankStr[2])) {
+                                    rankMarksCount[2]++;
+                                } else {
+                                    rankMarksCount[3]++;
+                                }
                             }
                             break;
                         }
@@ -299,12 +312,15 @@ public class GradeEntryServiceImpl implements GradeEntryService {
     @Override
     public JsonResult getGradeEntryForStudent(Long moduleId, String userId) {
         Student student = studentDao.getByUserId(userId);
+        Integer classId = student.getClassId();
+        String studentName = student.getStudentName();
         GradeEntry ge = new GradeEntry();
         ge.setModuleId(moduleId);
-        ge.setStudentId(student.getId());
+        ge.setClassId(classId);
+        ge.setStudentName(studentName);
         List<GradeEntry> byGradeEntry = gradeEntryDao.getByGradeEntry(ge);
         GradeEntry gradeEntry = null;
-        if(byGradeEntry != null && byGradeEntry.size() > 0){
+        if (byGradeEntry != null && byGradeEntry.size() > 0) {
             gradeEntry = byGradeEntry.get(0);
         }
         return JsonResultUtil.success(gradeEntry);

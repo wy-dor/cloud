@@ -107,7 +107,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
                 Student student = new Student();
                 student.setUserId(studentUserid);
                 student.setTopClassId(classId);
-                student.setTopStudentNo(studentNo);
+                student.setStudentNo(studentNo);
                 student.setStudentName(name);
                 student.setSchoolId(schoolId);
                 if(byUserId != null){

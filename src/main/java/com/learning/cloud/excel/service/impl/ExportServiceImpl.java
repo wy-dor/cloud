@@ -127,7 +127,7 @@ public class ExportServiceImpl implements ExportService {
 
             row_recurse.createCell(0).setCellValue(classMap.get(stuList.get(i).getClassId().toString()));
             row_recurse.createCell(1).setCellValue(stuList.get(i).getStudentName());
-            row_recurse.createCell(2).setCellValue(stuList.get(i).getId());
+            row_recurse.createCell(2).setCellValue(stuList.get(i).getStudentNo());
         }
 
         //定义样式
@@ -163,7 +163,7 @@ public class ExportServiceImpl implements ExportService {
 
         //设置列宽
         List<Integer> widthList=new ArrayList<>();
-        List<Integer> tempList = Arrays.asList(20, 15, 30);
+        List<Integer> tempList = Arrays.asList(20, 15, 20);
         widthList.addAll(tempList);
         for (int i = 0; i < subjectSize; i++) {
             widthList.add(15);
@@ -254,7 +254,8 @@ public class ExportServiceImpl implements ExportService {
 
         //如果提示均不为空字符串，则返回提示
         if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")){
-            return JsonResultUtil.success(undoneSubjectMention.append(undoneSubjectMention).toString());
+            String s = undoneClassMention.append(undoneSubjectMention).toString();
+            return JsonResultUtil.success(s);
         }
 
         //生成模板
@@ -286,13 +287,11 @@ public class ExportServiceImpl implements ExportService {
             Integer classId = ge.getClassId();
             String className = classMapByModule.get(classId + "");
             String studentName = ge.getStudentName();
-            Integer studentId = ge.getStudentId();
+            String studentNo = ge.getStudentNo();
             String remark = ge.getRemark();
             r.createCell(0).setCellValue(className);
             r.createCell(1).setCellValue(studentName);
-            if(studentId != null){
-                r.createCell(2).setCellValue(studentId);
-            }
+            r.createCell(2).setCellValue(studentNo);
             r.createCell(subjectSize+3).setCellValue(remark);
             for (int j = 0; j < subjectSize; j++) {
                 String marks = ge.getMarks();

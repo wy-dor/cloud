@@ -11,7 +11,7 @@ public class GradeEntry extends BaseEntity {
 
     private Long moduleId;
 
-    private Integer studentId;
+    private String studentNo;
 
     private String studentName;
 

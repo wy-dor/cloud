@@ -82,12 +82,13 @@ public class ImportServiceImpl implements ImportService {
             String classIdStr = classMap.get(className);
             int classId = Integer.parseInt(classIdStr);
             String stuName = r.getCell(1).getStringCellValue().trim();
-            String stuIdStr = getCellValue(r.getCell(2));
-            int stuId = Integer.parseInt(stuIdStr);
+            //判断学号，学号能为空
+            //getCellValue中判断如果为空则返回空字符串
+            String stuNo = getCellValue(r.getCell(2));
             String remark = getCellValue(r.getCell(lastCellNum - 1));
             ge.setModuleId(moduleId);
             ge.setClassId(classId);
-            ge.setStudentId(stuId);
+            ge.setStudentNo(stuNo);
             ge.setStudentName(stuName);
             ge.setRemark(remark);
 
@@ -103,7 +104,7 @@ public class ImportServiceImpl implements ImportService {
             String marks = JSON.toJSONString(markMapList);
 
             //保存成绩
-            gradeEntryService.saveEntryMarks(ge, stuId, marks);
+            gradeEntryService.saveEntryMarks(ge, marks);
         }
 
         return JsonResultUtil.success("录入成功");

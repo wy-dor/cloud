@@ -327,7 +327,7 @@ public class DeptServiceImpl implements DeptService {
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
-//                    Integer studentId = 0;
+//                    Integer studentNo = 0;
                         roleType = 4;
                         Student student = new Student();
                         student.setUserId(userId);
@@ -339,12 +339,12 @@ public class DeptServiceImpl implements DeptService {
                         Student s = studentDao.getByUserId(userId);
                         if (s == null) {
                             studentDao.insert(student);
-//                        studentId = student.getId();
+//                        studentNo = student.getId();
                         } else {
-//                        studentId = s.getId();
+//                        studentNo = s.getId();
                             studentDao.update(student);
                         }
-//                    studentIdList2.add(studentId);
+//                    studentIdList2.add(studentNo);
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
                     }
                 }

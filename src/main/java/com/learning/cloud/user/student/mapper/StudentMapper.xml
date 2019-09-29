@@ -66,8 +66,8 @@
       <if test="topClassId != null">
         top_class_id,
       </if>
-      <if test="topStudentNo != null">
-        top_student_no,
+      <if test="studentNo != null">
+        student_no,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -92,8 +92,8 @@
       <if test="topClassId != null">
         #{topClassId,jdbcType=BIGINT},
       </if>
-      <if test="topStudentNo != null">
-       #{topStudentNo,jdbcType=VARCHAR},
+      <if test="studentNo != null">
+       #{studentNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -122,8 +122,8 @@
       <if test="topClassId != null">
         top_class_id = #{topClassId,jdbcType=BIGINT},
       </if>
-      <if test="topStudentNo != null">
-        top_student_no = #{topStudentNo,jdbcType=VARCHAR},
+      <if test="studentNo != null">
+        student_no = #{studentNo,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}

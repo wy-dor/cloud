@@ -26,5 +26,5 @@ public class Student extends BaseEntity {
 
     private Long topClassId;
 
-    private String topStudentNo;
+    private String studentNo;
 }
