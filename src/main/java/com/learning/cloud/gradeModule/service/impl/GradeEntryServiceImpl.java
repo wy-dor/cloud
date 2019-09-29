@@ -84,16 +84,16 @@ public class GradeEntryServiceImpl implements GradeEntryService {
         }
         if (entryId == null || entryId == 0) {
             //空字符串替换为"缺考"
-            List<Map<String, String>> mapListForReplace = new ArrayList<>();
-            List<Map<String, String>> mapList = (List<Map<String, String>>) JSON.parse(marks);
-            for (Map<String, String> map : mapList) {
-                String value = map.get("value");
-                if (value.equals("")){
-                    map.put("value","缺考");
-                }
-                mapListForReplace.add(map);
-            }
-            marks = JSON.toJSONString(mapListForReplace);
+//            List<Map<String, String>> mapListForReplace = new ArrayList<>();
+//            List<Map<String, String>> mapList = (List<Map<String, String>>) JSON.parse(marks);
+//            for (Map<String, String> map : mapList) {
+//                String value = map.get("value");
+//                if (value.equals("")){
+//                    map.put("value","缺考");
+//                }
+//                mapListForReplace.add(map);
+//            }
+//            marks = JSON.toJSONString(mapListForReplace);
             gradeEntry.setMarks(marks);
             gradeEntryDao.insert(gradeEntry);
         } else {
@@ -127,9 +127,9 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                         Map<String, String> tempMap = new HashMap<>();
                         tempMap.put("courseName", remainSubject);
                         String value = originMap.get(remainSubject);
-                        if(value.equals("")){
-                            value = "缺考";
-                        }
+//                        if(value.equals("")){
+//                            value = "缺考";
+//                        }
                         tempMap.put("value", value);
                         mapList2.add(tempMap);
                     }
@@ -202,7 +202,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                         String course = courseValueMap.get("courseName");
                         if (courseName.equals(course)) {
                             String value = courseValueMap.get("value");
-                            if (!value.equals("缺考") && ! value.equals("")) {
+                            if (!value.equals("缺考") && !value.equals("")) {
                                 tempList.add(Double.parseDouble(value));
                             }
                             break;

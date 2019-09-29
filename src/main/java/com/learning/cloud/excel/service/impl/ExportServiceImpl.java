@@ -300,6 +300,9 @@ public class ExportServiceImpl implements ExportService {
                 for (Map<String, String> markMap : markMapList) {
                     if(markMap.get("courseName").equals(subject)){
                         String value = markMap.get("value");
+                        if(value.equals("")){
+                            value = "缺考";
+                        }
                         r.createCell(j+3).setCellValue(value);
                     }
                 }
