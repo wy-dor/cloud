@@ -23,4 +23,8 @@ public class Student extends BaseEntity {
     private Integer bureauId;
 
     private String avatar;
+
+    private Long topClassId;
+
+    private String topStudentNo;
 }

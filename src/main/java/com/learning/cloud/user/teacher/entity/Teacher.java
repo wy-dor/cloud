@@ -30,4 +30,7 @@ public class Teacher extends BaseEntity {
     private String courseName;
 
     private String avatar;
+
+    private Long topClassId;
+
 }

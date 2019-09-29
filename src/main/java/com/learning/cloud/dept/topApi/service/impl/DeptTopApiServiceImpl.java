@@ -21,6 +21,7 @@ import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,10 +45,37 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
     private GradeClassDao gradeClassDao;
 
     @Override
-    public ServiceResult getAndSaveCampusList(Integer schoolId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult initTopClassIdInSchool(Integer schoolId, String accessToken) throws ApiException{
+        List<OapiEduClassListResponse.ClassResponse> allList = new ArrayList<>();
+        List<OapiEduCampusListResponse.CampusResponse> campusList = getAndSaveCampusList(schoolId, accessToken);
+        for (OapiEduCampusListResponse.CampusResponse campusResponse : campusList) {
+            Long campusId = campusResponse.getCampusId();
+            List<OapiEduPeriodListResponse.PeriodResponse> periodList = getAndSavePeriodList(schoolId, accessToken, campusId);
+            for (OapiEduPeriodListResponse.PeriodResponse periodResponse : periodList) {
+                Long periodId = periodResponse.getPeriodId();
+                List<OapiEduGradeListResponse.GradeResponse> gradeList = getAndSaveGradeList(schoolId, accessToken, periodId);
+                for (OapiEduGradeListResponse.GradeResponse gradeResponse : gradeList) {
+                    Long gradeId = gradeResponse.getGradeId();
+                    List<OapiEduClassListResponse.ClassResponse> classList = getAndSaveClassList(schoolId, accessToken, gradeId);
+                    allList.addAll(classList);
+
+                }
+            }
+        }
+        return ServiceResult.success(allList);
+    }
+
+    @Override
+    public ServiceResult getTopCampusList(String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/campus/list");
+        OapiEduCampusListRequest req = new OapiEduCampusListRequest();
+        OapiEduCampusListResponse rsp = client.execute(req, accessToken);
+        List<OapiEduCampusListResponse.CampusResponse> result = rsp.getResult();
+        return ServiceResult.success(result);
+    }
+
+    @Override
+    public List<OapiEduCampusListResponse.CampusResponse> getAndSaveCampusList(Integer schoolId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/campus/list");
         OapiEduCampusListRequest req = new OapiEduCampusListRequest();
         OapiEduCampusListResponse rsp = client.execute(req, accessToken);
@@ -73,7 +101,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             }
 
         }
-        return ServiceResult.success(rsp);
+        return result;
     }
 
     @Override
@@ -89,10 +117,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
     }
 
     @Override
-    public ServiceResult getAndSavePeriodList(Integer schoolId, Long topCampusId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public List<OapiEduPeriodListResponse.PeriodResponse> getAndSavePeriodList(Integer schoolId, String accessToken, Long topCampusId) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/period/list");
         OapiEduPeriodListRequest req = new OapiEduPeriodListRequest();
         req.setCampusId(topCampusId);
@@ -115,14 +140,11 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
                 eduPeriodDao.insert(eduPeriod);
             }
         }
-        return ServiceResult.success(rsp);
+        return result;
     }
 
     @Override
-    public ServiceResult getAndSaveGradeList(Integer schoolId, Long topPeriodId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public List<OapiEduGradeListResponse.GradeResponse> getAndSaveGradeList(Integer schoolId, String accessToken, Long topPeriodId) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/grade/list");
         OapiEduGradeListRequest req = new OapiEduGradeListRequest();
         req.setPeriodId(topPeriodId);
@@ -149,20 +171,17 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
                 eduGradeDao.insert(eduGrade);
             }
         }
-        return ServiceResult.success(rsp);
+        return result;
     }
 
     @Override
-    public ServiceResult getAndSaveClassList(Integer schoolId, Long topGradeId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public List<OapiEduClassListResponse.ClassResponse> getAndSaveClassList(Integer schoolId, String accessToken, Long topGradeId) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/class/list");
         OapiEduClassListRequest req = new OapiEduClassListRequest();
         req.setGradeId(topGradeId);
         Boolean flag = true;
         Long pageNo = 1L;
-        List<OapiEduClassListResponse.ClassResponse> allList = null;
+        List<OapiEduClassListResponse.ClassResponse> allList = new ArrayList<>();
         while(flag){
             req.setPageNo(pageNo);
             req.setPageSize(20L);
@@ -202,9 +221,8 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             }else{
                 flag = false;
             }
-
         }
-        return ServiceResult.success(allList);
+        return allList;
     }
 
     @Override

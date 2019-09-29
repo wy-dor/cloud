@@ -215,7 +215,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         parent.setCampusId(campusId);
                         parent.setSchoolId(schoolId);
                         parent.setBureauId(bureauId);
-                        Parent p = parentDao.getByUserId(userId);
+                        Parent p = parentDao.getParentInSchool(parent);
                         if (p == null) {
                             parent.setClassId(classIdStr);
                             parentDao.insert(parent);

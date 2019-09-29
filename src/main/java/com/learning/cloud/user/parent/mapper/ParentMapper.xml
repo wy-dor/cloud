@@ -33,11 +33,12 @@
     where FIND_IN_SET(#{classId},class_id)
   </select>
 
-  <select id="getParentsInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
+  <select id="getParentInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
     select *
     from user_parent
     where user_id = #{userId}
     and school_id = #{schoolId}
+    limit 1
   </select>
 
   <select id="getClassParentNum" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -73,6 +74,12 @@
       <if test="phone != null">
         phone,
       </if>
+      <if test="topClassId != null">
+        top_class_id,
+      </if>
+      <if test="studentUserId != null">
+        student_user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="parentName != null">
@@ -98,6 +105,12 @@
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="topClassId != null">
+        #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="studentUserId != null">
+        #{studentUserId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -125,6 +138,12 @@
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="topClassId != null">
+        top_class_id = #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="studentUserId != null">
+        student_user_id = #{studentUserId,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}

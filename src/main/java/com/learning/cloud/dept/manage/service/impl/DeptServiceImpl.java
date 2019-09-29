@@ -301,7 +301,7 @@ public class DeptServiceImpl implements DeptService {
                         parent.setCampusId(campusId);
                         parent.setSchoolId(schoolId);
                         parent.setBureauId(bureauId);
-                        Parent p = parentDao.getByUserId(userId);
+                        Parent p = parentDao.getParentInSchool(parent);
                         if (p == null) {
                             parent.setClassId(classIdStr);
                             parentDao.insert(parent);
@@ -567,15 +567,14 @@ public class DeptServiceImpl implements DeptService {
                     parent.setSchoolId(schoolId);
                     //todo
                     //处理家长多个classId返回
-                    List<Parent> parentsInSchool = parentDao.getParentsInSchool(parent);
-                    if (parentsInSchool == null || parentsInSchool.size() == 0) {
+                    Parent parentInSchool = parentDao.getParentInSchool(parent);
+                    if (parent == null ) {
                         continue;
                     }
-                    Parent p = parentsInSchool.get(0);
-                    String classIds = p.getClassId();
+                    String classIds = parentInSchool.getClassId();
                     map.put("classIds", classIds);
-                    p.setAvatar(avatar);
-                    parentDao.update(p);
+                    parentInSchool.setAvatar(avatar);
+                    parentDao.update(parentInSchool);
                     break;
                 }
             }

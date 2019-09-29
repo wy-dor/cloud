@@ -31,4 +31,9 @@ public class Parent extends BaseEntity {
 
     //added
     private List<String> classIdStrList;
+
+    private Long topClassId;
+
+    private String studentUserId;
+
 }

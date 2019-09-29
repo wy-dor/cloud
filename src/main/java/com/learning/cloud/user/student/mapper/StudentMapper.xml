@@ -63,6 +63,12 @@
       <if test="bureauId != null">
         bureau_id,
       </if>
+      <if test="topClassId != null">
+        top_class_id,
+      </if>
+      <if test="topStudentNo != null">
+        top_student_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="studentName != null">
@@ -82,6 +88,12 @@
       </if>
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="topClassId != null">
+        #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="topStudentNo != null">
+       #{topStudentNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -106,6 +118,12 @@
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="topClassId != null">
+        top_class_id = #{topClassId,jdbcType=BIGINT},
+      </if>
+      <if test="topStudentNo != null">
+        top_student_no = #{topStudentNo,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}

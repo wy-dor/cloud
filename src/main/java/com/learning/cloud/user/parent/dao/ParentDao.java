@@ -17,7 +17,7 @@ public interface ParentDao {
 
     List<Integer> getParentIdListInClass(String classId);
 
-    List<Parent> getParentsInSchool(Parent parent);
+    Parent getParentInSchool(Parent parent);
 
     int insert(Parent record);
 

@@ -10,13 +10,16 @@ import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.user.parent.dao.ParentDao;
+import com.learning.cloud.user.parent.entity.Parent;
 import com.learning.cloud.user.student.dao.StudentDao;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.util.ServiceResult;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,10 +57,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        ]
     //    }
     @Override
-    public ServiceResult getEduStudent(Integer schoolId, Long topClassId, String studentUserId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult getEduStudent(Long topClassId, String studentUserId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/student/get");
         OapiEduStudentGetRequest req = new OapiEduStudentGetRequest();
         req.setClassId(topClassId);
@@ -83,26 +83,38 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        "next_cursor":10
     //    }
     @Override
-    public ServiceResult listEduStudent(Integer schoolId, Long topClassId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult listAndSaveEduStudent(Integer schoolId, Long topClassId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/student/list");
         OapiEduStudentListRequest req = new OapiEduStudentListRequest();
         req.setClassId(topClassId);
         Boolean flag = true;
         Long pageNo = 1L;
-        List<OapiEduStudentListResponse.StudentRespone> allList = null;
+        List<OapiEduStudentListResponse.StudentRespone> allList = new ArrayList<>();
         while(flag){
             req.setPageNo(pageNo);
-            req.setPageSize(50L);
+            req.setPageSize(10L);
             OapiEduStudentListResponse rsp = client.execute(req, accessToken);
             OapiEduStudentListResponse.PageResult result = rsp.getResult();
             List<OapiEduStudentListResponse.StudentRespone> list = result.getList();
             for (OapiEduStudentListResponse.StudentRespone studentRespone : list) {
                 //todo
                 //学生学号存储
+                String studentUserid = studentRespone.getStudentUserid();
                 String studentNo = studentRespone.getStudentNo();
+                Long classId = studentRespone.getClassId();
+                String name = studentRespone.getName();
+                Student byUserId = studentDao.getByUserId(studentUserid);
+                Student student = new Student();
+                student.setUserId(studentUserid);
+                student.setTopClassId(classId);
+                student.setTopStudentNo(studentNo);
+                student.setStudentName(name);
+                student.setSchoolId(schoolId);
+                if(byUserId != null){
+                    studentDao.update(student);
+                }else{
+                    studentDao.insert(student);
+                }
             }
             allList.addAll(list);
             if(result.getHasMore()){
@@ -147,10 +159,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        }
     //    ]
     @Override
-    public ServiceResult listEduTeacher(Integer schoolId, Long topClassId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult listEduTeacher(Long topClassId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/teacher/list");
         OapiEduTeacherListRequest req = new OapiEduTeacherListRequest();
         req.setClassId(topClassId);
@@ -166,16 +175,13 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        "relation":"M"
     //    }
     @Override
-    public ServiceResult getEduParent(Integer schoolId, Long topClassId, String parentUserId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public OapiEduGuardianGetResponse getEduParent(Long topClassId, String parentUserId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/guardian/get");
         OapiEduGuardianGetRequest req = new OapiEduGuardianGetRequest();
         req.setClassId(topClassId);
         req.setGuardianUserid(parentUserId);
         OapiEduGuardianGetResponse rsp = client.execute(req, accessToken);
-        return ServiceResult.success(rsp);
+        return rsp;
     }
 
     //查询班级中家长列表信息
@@ -192,22 +198,35 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        "next_cursor":10
     //    }
     @Override
-    public ServiceResult listEduParent(Integer schoolId, Long topClassId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult listAndSaveEduParent(Integer schoolId, Long topClassId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/guardian/list");
         OapiEduGuardianListRequest req = new OapiEduGuardianListRequest();
         req.setClassId(topClassId);
         Boolean flag = true;
         Long pageNo = 1L;
-        List<OapiEduGuardianListResponse.GuardianRespone> allList = null;
+        List<OapiEduGuardianListResponse.GuardianRespone> allList = new ArrayList<>();
         while(flag){
             req.setPageNo(pageNo);
-            req.setPageSize(100L);
+            req.setPageSize(10L);
             OapiEduGuardianListResponse rsp = client.execute(req, accessToken);
             OapiEduGuardianListResponse.PageResult result = rsp.getResult();
             List<OapiEduGuardianListResponse.GuardianRespone> list = result.getList();
+            for (OapiEduGuardianListResponse.GuardianRespone guardianRespone : list) {
+                String guardianUserid = guardianRespone.getGuardianUserid();
+                String studentUserid = guardianRespone.getStudentUserid();
+                String nick = guardianRespone.getNick();
+                Parent parent = new Parent();
+                parent.setUserId(guardianUserid);
+                parent.setSchoolId(schoolId);
+                Parent parentInSchool = parentDao.getParentInSchool(parent);
+                parent.setParentName(nick);
+                parent.setStudentUserId(studentUserid);
+                if(parentInSchool != null){
+                    parentDao.insert(parent);
+                }else{
+                    parentDao.update(parent);
+                }
+            }
             allList.addAll(list);
             if(result.getHasMore()){
                 pageNo += 1;
@@ -228,10 +247,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        "userid":"123345-1234"
     //    }
     @Override
-    public ServiceResult getEduRoles(Integer schoolId, String userId) throws ApiException {
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        String corpId = bySchoolId.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+    public ServiceResult getEduRoles(String userId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/roles/get");
         OapiEduRolesGetRequest req = new OapiEduRolesGetRequest();
         req.setUserid(userId);
