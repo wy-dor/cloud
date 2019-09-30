@@ -166,6 +166,7 @@ public class LoginController {
                     sysUserInfo.setCampusId(String.valueOf(teacher.getCampusId()));
                     sysUserInfo.setClassId(teacher.getClassIds().toString());
                     sysUserInfo.setTeacherId(teacher.getId());
+                    sysUserInfo.setClassId(teacher.getClassIds());
                 }
 
 
