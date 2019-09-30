@@ -20,20 +20,30 @@
   </select>
 
   <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-    select *
-    from grade_module
+    select c.* from
+    (select a.*
+    from grade_module a
+    where visible_range = 1
+    <foreach collection="classIds" item="classId" open="and (" close=")" separator=" or">
+      classes_str like CONCAT('%"',#{classId},'":%')
+    </foreach>
+    union
+    select b.*
+    from grade_module b
+    where visible_range = 2
+    and user_id = #{userId}) c
     <where>
       <if test="status != null">
-        and status = #{status}
+        and c.status = #{status}
       </if>
       <if test="term != null and term != ''">
-        and term = #{term}
+        and c.term = #{term}
       </if>
       <if test="title != null and title != ''">
-        and title like CONCAT('%', #{title}, '%')
+        and c.title like CONCAT('%', #{title}, '%')
       </if>
     </where>
-    order by create_time desc, end_time
+    order by c.create_time desc, c.end_time
   </select>
 
   <delete id="deleteGradeModule" parameterType="java.lang.Long">

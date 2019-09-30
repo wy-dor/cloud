@@ -255,7 +255,7 @@ public class ExportServiceImpl implements ExportService {
         //如果提示均不为空字符串，则返回提示
         if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")){
             String s = undoneClassMention.append(undoneSubjectMention).toString();
-            return JsonResultUtil.success(s);
+            return JsonResultUtil.error(0,s);
         }
 
         //生成模板
