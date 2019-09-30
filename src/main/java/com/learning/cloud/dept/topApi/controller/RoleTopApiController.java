@@ -53,7 +53,7 @@ public class RoleTopApiController {
     @GetMapping("/getStudentUserIdByParent")
     public ServiceResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException{
         GradeClass byId = gradeClassDao.getById(classId);
-        Long topClassId = byId.getTopClassId();
+        Long topClassId = byId.getDeptId();
         Integer schoolId = byId.getSchoolId();
         School bySchoolId = schoolDao.getBySchoolId(schoolId);
         String corpId = bySchoolId.getCorpId();
