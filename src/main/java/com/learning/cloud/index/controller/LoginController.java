@@ -162,6 +162,7 @@ public class LoginController {
                     teacher = teacherDao.getTeacherInSchool(teacher);
                     sysUserInfo.setCampusId(String.valueOf(teacher.getCampusId()));
                     sysUserInfo.setTeacherId(teacher.getId());
+                    sysUserInfo.setClassId(teacher.getClassIds());
                 }
 
 
