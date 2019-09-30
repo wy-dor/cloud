@@ -238,7 +238,7 @@ public class ExportServiceImpl implements ExportService {
             if(undoneSubjectList != null && undoneSubjectList.size() > 0){
                 String s = undoneSubjectList.toString();
                 s.substring(1,s.length()-2);
-                undoneSubjectMention.append(className+"中"+ s +"成绩还没有录入，请继续录入/n");
+                undoneSubjectMention.append(className+"中"+ s +"成绩还没有录入，请继续录入；");
             }
         }
         List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
@@ -249,7 +249,7 @@ public class ExportServiceImpl implements ExportService {
         if(undoneClassIdList != null && undoneClassIdList.size() > 0){
             String s = undoneClassNameList.toString();
             s.substring(1,s.length()-2);
-            undoneClassMention.append(s +"还没有录入成绩/n");
+            undoneClassMention.append(s +"还没有录入成绩；");
         }
 
         //如果提示均不为空字符串，则返回提示
