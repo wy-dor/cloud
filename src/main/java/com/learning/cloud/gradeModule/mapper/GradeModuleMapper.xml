@@ -26,10 +26,10 @@
       <if test="status != null">
         and status = #{status}
       </if>
-      <if test="term != null">
+      <if test="term != null and term != ''">
         and term = #{term}
       </if>
-      <if test="title != null">
+      <if test="title != null and title != ''">
         and title like CONCAT('%', #{title}, '%')
       </if>
     </where>
