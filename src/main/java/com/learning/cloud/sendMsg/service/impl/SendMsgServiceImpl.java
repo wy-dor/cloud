@@ -1,6 +1,7 @@
 package com.learning.cloud.sendMsg.service.impl;
 
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
+import com.dingtalk.api.request.OapiMessageSendToConversationRequest;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.index.dao.CorpAgentDao;
@@ -67,6 +68,36 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.getLink().setText(msgInfo.getText());
         msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId+"&link=true");
         msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
+        return SendWorkMsg(workMsg,msg);
+    }
+
+
+    @Override
+    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception {
+        List<String> classes = Arrays.asList(classIds.split(","));
+        List<String> ps = new ArrayList<>();
+        Integer schoolId = null;
+        for(String classId: classes){
+            GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
+            String teacherDepId = String.valueOf(gradeClass.getTDeptId());
+            ps.add(teacherDepId);
+            schoolId = gradeClass.getSchoolId();
+        }
+        School school = schoolDao.getBySchoolId(schoolId);
+        // 获取agent_id
+        CorpAgent corpAgent = corpAgentDao.getByCorpId(school.getCorpId());
+        WorkMsg workMsg = new WorkMsg();
+        workMsg.setCorpId(school.getCorpId());
+        workMsg.setDeptIdList(ps);
+        workMsg.setAgentId(corpAgent.getAgentId());
+        workMsg.setToAllUser(false);
+        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+        msg.setMsgtype("action_card");
+        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
+        msg.getActionCard().setTitle(msgInfo.getTitle());
+        msg.getActionCard().setMarkdown(msgInfo.getText());
+        msg.getActionCard().setSingleTitle("查看成绩");
+        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId);
         return SendWorkMsg(workMsg,msg);
     }
 }
