@@ -29,8 +29,8 @@
       <if test="term != null">
         and term = #{term}
       </if>
-      <if test="term != null">
-        and title like CONCATE('%',#{title},'%')
+      <if test="title != null">
+        and title like CONCAT('%', #{title}, '%')
       </if>
     </where>
     order by create_time desc, end_time
