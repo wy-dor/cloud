@@ -21,4 +21,6 @@ public interface GradeModuleDao {
     int update(GradeModule gradeModule);
 
     List<GradeModule> getGradeModulesForClass(GradeEntry gradeEntry);
+
+    List<GradeModule> searchForGradeModule(GradeModule gradeModule);
 }

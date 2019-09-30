@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
+import com.learning.cloud.gradeModule.dao.GradeEntryDao;
 import com.learning.cloud.gradeModule.dao.GradeModuleDao;
 import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
@@ -33,6 +34,9 @@ public class GradeModuleServiceImpl implements GradeModuleService {
 
     @Autowired
     private GradeClassService gradeClassService;
+
+    @Autowired
+    private GradeEntryDao gradeEntryDao;
 
     @Override
     public JsonResult saveGradeModule(GradeModule gradeModule) {
@@ -105,6 +109,7 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     @Override
     public JsonResult deleteGradeModule(Long id) {
         gradeModuleDao.deleteGradeModule(id);
+        gradeEntryDao.deleteByModuleId(id);
         return JsonResultUtil.success();
     }
 

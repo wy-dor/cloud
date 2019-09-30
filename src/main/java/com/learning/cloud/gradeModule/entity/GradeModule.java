@@ -50,4 +50,6 @@ public class GradeModule extends BaseEntity {
 
     private String createTime;
 
+    private String userAvatar;
+
 }

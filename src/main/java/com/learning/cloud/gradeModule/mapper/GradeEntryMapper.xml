@@ -38,6 +38,11 @@
     order by id desc
   </select>
 
+    <delete id="deleteByModuleId" parameterType="java.lang.Long">
+        delete from grade_entry
+        where module_id = #{moduleId}
+    </delete>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.gradeModule.entity.GradeEntry">
         insert into grade_entry

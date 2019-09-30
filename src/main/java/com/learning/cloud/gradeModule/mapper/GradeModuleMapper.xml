@@ -22,10 +22,18 @@
   <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
     select *
     from grade_module
-    <if test="status != null">
-      status = #{status}
-    </if>
-    order by create_time desc, end_time desc
+    <where>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="term != null">
+        and term = #{term}
+      </if>
+      <if test="term != null">
+        and title like CONCATE('%',#{title},'%')
+      </if>
+    </where>
+    order by create_time desc, end_time
   </select>
 
   <delete id="deleteGradeModule" parameterType="java.lang.Long">
@@ -85,10 +93,13 @@
         school_id,
       </if>
       <if test="userId != null">
-        user_id
+        user_id,
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="userAvatar != null">
+        user_avatar,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,10 +152,13 @@
         #{schoolId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-        #{user_id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userAvatar != null">
+        #{userAvatar,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -198,10 +212,13 @@
         school_id = #{schoolId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-      userId = #{user_id,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="publishTime != null">
         publish_time = #{publishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userAvatar != null">
+        user_avatar = #{userAvatar,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

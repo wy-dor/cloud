@@ -19,4 +19,6 @@ public interface GradeEntryDao {
     int update(GradeEntry gradeEntry);
 
     List<GradeEntry> getDoneClassSubjectInModule(Long moduleId);
+
+    int deleteByModuleId(Long moduleId);
 }
