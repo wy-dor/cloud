@@ -73,7 +73,7 @@ public class SendMsgServiceImpl implements SendMsgService {
 
 
     @Override
-    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, String userId, MsgInfo msgInfo) throws Exception {
+    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception {
         List<String> classes = Arrays.asList(classIds.split(","));
         List<String> ps = new ArrayList<>();
         Integer schoolId = null;
@@ -97,7 +97,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.getActionCard().setTitle(msgInfo.getTitle());
         msg.getActionCard().setMarkdown(msgInfo.getText());
         msg.getActionCard().setSingleTitle("查看成绩");
-        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId+"&userId="+userId);
+        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId);
         return SendWorkMsg(workMsg,msg);
     }
 }

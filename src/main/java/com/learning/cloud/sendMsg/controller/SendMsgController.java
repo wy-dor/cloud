@@ -29,8 +29,8 @@ public class SendMsgController {
     }
 
     @PostMapping("/sendPerformanceCard")
-    public JsonResult sendPerformanceCard(String classIds, Integer moduleId,String userId, MsgInfo msgInfo)throws Exception{
-        return sendMsgService.sendPerformanceCard(classIds, moduleId, userId,msgInfo);
+    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo)throws Exception{
+        return sendMsgService.sendPerformanceCard(classIds, moduleId, msgInfo);
     }
 
 }
