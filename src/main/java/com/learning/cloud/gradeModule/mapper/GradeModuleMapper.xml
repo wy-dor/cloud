@@ -16,7 +16,7 @@
         and term = #{term}
       </if>
       and status = 1
-      order by create_time desc, end_time
+      order by create_time desc, start_time desc
   </select>
 
   <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
@@ -43,7 +43,7 @@
         and c.title like CONCAT('%', #{title}, '%')
       </if>
     </where>
-    order by c.create_time desc, c.end_time
+    order by c.create_time desc, c.start_time desc
   </select>
 
   <delete id="deleteGradeModule" parameterType="java.lang.Long">
