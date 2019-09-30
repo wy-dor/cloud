@@ -146,8 +146,11 @@ public class LoginController {
                 }
                 // 2: 家长  3: 老师 4: 学生 5:其他
                 if(userRole==2){
-                    Parent parent = parentDao.getByUserId(user.getUserId());
-                    sysUserInfo.setClassId(parent.getClassId());
+                    Parent parent = new Parent();
+                    parent.setSchoolId(school.getId());
+                    parent.setUserId(user.getUserId());
+                    Parent p = parentDao.getParentInSchool(parent);
+                    sysUserInfo.setClassId(p.getClassId());
                 }
                 if(userRole==4){
                     //获取班级id
@@ -161,6 +164,7 @@ public class LoginController {
                     teacher.setUserId(user.getUserId());
                     teacher = teacherDao.getTeacherInSchool(teacher);
                     sysUserInfo.setCampusId(String.valueOf(teacher.getCampusId()));
+                    sysUserInfo.setClassId(teacher.getClassIds().toString());
                     sysUserInfo.setTeacherId(teacher.getId());
                 }
 
