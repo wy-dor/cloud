@@ -118,8 +118,6 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 Integer roleType = 5;
 
                 //设置角色类型
-                //todo
-                //deptId范围
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
                 Long lastDeptId = departmentList.get(size - 1).longValue();

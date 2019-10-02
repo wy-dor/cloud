@@ -71,8 +71,6 @@ public class DeptServiceImpl implements DeptService {
 //        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
-        //todo
-        //
         if (bureauId == null) {
             bureauId = -1;
         }
@@ -440,7 +438,6 @@ public class DeptServiceImpl implements DeptService {
         Boolean isAdmin = user.getIsAdmin();
         if (isAdmin != null && isAdmin == true) {
             Administrator a1 = new Administrator();
-            //todo
             //判断获取的值是否为空，为空则不插入
             String userDetailName = user.getName();
             //管理员表处理
@@ -565,8 +562,6 @@ public class DeptServiceImpl implements DeptService {
                     Parent parent = new Parent();
                     parent.setUserId(userId);
                     parent.setSchoolId(schoolId);
-                    //todo
-                    //处理家长多个classId返回
                     Parent parentInSchool = parentDao.getParentInSchool(parent);
                     if (parent == null ) {
                         continue;

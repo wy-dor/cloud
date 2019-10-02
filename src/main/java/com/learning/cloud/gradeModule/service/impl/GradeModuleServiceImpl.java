@@ -102,6 +102,10 @@ public class GradeModuleServiceImpl implements GradeModuleService {
 
     @Override
     public JsonResult getAllGradeModule(GradeModule gradeModule) {
+        List<Integer> classIds = gradeModule.getClassIds();
+        if(classIds == null || classIds.size() == 0){
+            return JsonResultUtil.success(null);
+        }
         List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
         return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
     }
