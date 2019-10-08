@@ -55,19 +55,17 @@
 
         <!--钉钉开发-->
         <dependency>
-            <groupId>com.taobao.top</groupId>
-            <artifactId>top-api-sdk-dev</artifactId>
-            <version>ding-open-mc-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190926.jar</systemPath>
+            <groupId>com.taobao</groupId>
+            <artifactId>taobao-sdk-java-auto</artifactId>
+            <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.taobao.top</groupId>
-            <artifactId>lippi-oapi-encrpt</artifactId>
-            <version>dingtalk-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.taobao.top</groupId>-->
+            <!--<artifactId>lippi-oapi-encrpt</artifactId>-->
+            <!--<version>dingtalk-SNAPSHOT</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>-->
+        <!--</dependency>-->
 
         <!-- JSON -->
         <dependency>
@@ -197,6 +195,20 @@
         <!--</dependency>-->
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus Repository</name>
+            <url>http://139.196.142.119:8081/repository/maven-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <build>
         <resources>
