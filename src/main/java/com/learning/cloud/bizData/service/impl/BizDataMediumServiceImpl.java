@@ -117,6 +117,31 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 apiUser.setUserid(userId);
                 Integer roleType = 5;
 
+                int i = 1;
+                Integer campusId = null;
+                Integer classId = null;
+                Integer bureauId = null;
+
+                //因为一次可能会有多个部门的变化，所以使用tags判断其身份，对其信息进行保存
+                //一次性添加两个人员在两个部门的变化时
+                Map<String,Object> tagsParse = null;
+                Object tagsMap = bizDataParse.get("tags");
+                //存在tags则一定为老师家长学生角色？
+                if(tagsMap != null){
+                    Map<String, List<String>> parse = (Map<String, List<String>>) JSON.parse(tagsMap.toString());
+                    if(parse.get("teacher") != null){
+                        List<String> teacherDepts = parse.get("teacher");
+                    }
+                    if(parse.get("guardian") != null){
+                        List<String> guardianDepts = parse.get("guardian");
+                    }
+                    if(parse.get("student") != null){
+                        List<String> studentDepts = parse.get("student");
+                    }
+                }else{
+
+                }
+
                 //设置角色类型
                 List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
                 int size = departmentList.size();
@@ -136,10 +161,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 }
                 String deptName = deptDetail.getName();
                 GradeClass gc = new GradeClass();
-                Integer campusId = null;
-                Integer classId = null;
-                Integer bureauId = null;
-                int i = 1;
+
                 if (deptName.equals("老师")) {
                     roleType = 3;
                     gc.setTDeptId(lastDeptId);
