@@ -51,7 +51,8 @@ public class GradeModuleServiceImpl implements GradeModuleService {
                 }
                 if(s.contains("[")){
                     s = s.replace("[","");
-                }else if(s.contains("]")){
+                }
+                if(s.contains("]")){
                     s = s.replace("]","");
                 }
                 //获取分校下指定年级名称的班级列表
