@@ -190,7 +190,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public JsonResult downloadExcelGrade(Long moduleId) throws IOException {
+    public JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException {
         FileOutputStream out = null;
         StringBuilder undoneClassMention = new StringBuilder("");
         GradeModule gradeModule = gradeModuleDao.getById(moduleId);
@@ -205,10 +205,10 @@ public class ExportServiceImpl implements ExportService {
         Set<String> keySet = classMapByModule.keySet();
         for (String key : keySet) {
             //若班级下学生人数为0则不计入统计
-            Integer classId = Integer.parseInt(key);
-            Integer classStuNum = studentDao.getClassStuNum(classId);
+            Integer classId1 = Integer.parseInt(key);
+            Integer classStuNum = studentDao.getClassStuNum(classId1);
             if(classStuNum != null && classStuNum != 0){
-                fullClassIdList.add(classId);
+                fullClassIdList.add(classId1);
             }
         }
 
@@ -226,11 +226,11 @@ public class ExportServiceImpl implements ExportService {
         List<Integer> doneClassIdList = new ArrayList<>();
         //"提示：XXX班的数学，语文成绩还没有录入，请继续录入"
         for (GradeEntry ge : doneClassSubjectInModule) {
-            Integer classId = ge.getClassId();
+            Integer classId2 = ge.getClassId();
             //已完成成绩录入班级添加
-            doneClassIdList.add(classId);
+            doneClassIdList.add(classId2);
             //班级名称，用于拼接
-            String className = classMapByModule.get(classId.toString());
+            String className = classMapByModule.get(classId2.toString());
             List<String> doneSubjectList = new ArrayList<>();
             String marks = ge.getMarks();
             List<Map<String, String>> par = (List<Map<String, String>>) JSON.parse(marks);
@@ -246,16 +246,19 @@ public class ExportServiceImpl implements ExportService {
                 undoneSubjectMention.append(className+"中"+ substring +"成绩还没有录入，请继续录入；");
             }
         }
-        List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
-        List<String> undoneClassNameList = new ArrayList<>();
-        for (Integer undoneClassId : undoneClassIdList) {
-            undoneClassNameList.add(classMapByModule.get(undoneClassId.toString()));
+        if (classId == null){
+            List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
+            List<String> undoneClassNameList = new ArrayList<>();
+            for (Integer undoneClassId : undoneClassIdList) {
+                undoneClassNameList.add(classMapByModule.get(undoneClassId.toString()));
+            }
+            if(undoneClassIdList != null && undoneClassIdList.size() > 0){
+                String s = undoneClassNameList.toString();
+                String substring = s.substring(1, s.length() - 1);
+                undoneClassMention.append(substring +"还没有录入成绩；");
+            }
         }
-        if(undoneClassIdList != null && undoneClassIdList.size() > 0){
-            String s = undoneClassNameList.toString();
-            String substring = s.substring(1, s.length() - 1);
-            undoneClassMention.append(substring +"还没有录入成绩；");
-        }
+
 
         //如果提示均不为空字符串，则返回提示
         if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")){
@@ -285,12 +288,15 @@ public class ExportServiceImpl implements ExportService {
 
         GradeEntry gradeEntry = new GradeEntry();
         gradeEntry.setModuleId(moduleId);
+        if(classId != null){
+            gradeEntry.setClassId(classId);
+        }
         List<GradeEntry> entryList = gradeEntryDao.getByGradeEntry(gradeEntry);
         for (int i = 0; i < entryList.size(); i++) {
             HSSFRow r = sheet.createRow(i + 1);
             GradeEntry ge = entryList.get(i);
-            Integer classId = ge.getClassId();
-            String className = classMapByModule.get(classId + "");
+            Integer classId3 = ge.getClassId();
+            String className = classMapByModule.get(classId3 + "");
             String studentName = ge.getStudentName();
             String studentNo = ge.getStudentNo();
             String remark = ge.getRemark();

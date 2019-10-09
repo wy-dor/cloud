@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface ExportService {
+    JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException;
+
     JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception;
 
     JsonResult exportExcelModule(GradeModule gradeModule) throws IOException;
-
-    JsonResult downloadExcelGrade(Long moduleId) throws IOException;
 }

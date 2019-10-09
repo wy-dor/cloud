@@ -24,8 +24,8 @@ public class ExportController {
     }
 
     @PostMapping("/downloadExcelGrade")
-    public JsonResult downloadExcelGrade(HttpServletResponse response, Long moduleId) throws IOException{
-        return exportService.downloadExcelGrade(moduleId);
+    public JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException{
+        return exportService.downloadExcelGrade(moduleId, classId);
     }
     // 下载账单
     @RequestMapping("/downloadExcelByName")
