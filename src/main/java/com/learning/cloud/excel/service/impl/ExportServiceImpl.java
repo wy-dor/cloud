@@ -204,7 +204,12 @@ public class ExportServiceImpl implements ExportService {
         List<Integer> fullClassIdList = new ArrayList<>();
         Set<String> keySet = classMapByModule.keySet();
         for (String key : keySet) {
-            fullClassIdList.add(Integer.parseInt(key));
+            //若班级下学生人数为0则不计入统计
+            Integer classId = Integer.parseInt(key);
+            Integer classStuNum = studentDao.getClassStuNum(classId);
+            if(classStuNum != null && classStuNum != 0){
+                fullClassIdList.add(classId);
+            }
         }
 
         //所有科目信息
@@ -237,7 +242,7 @@ public class ExportServiceImpl implements ExportService {
             List<String> undoneSubjectList = CommonUtils.removeStringDupsInList(fullSubjectNameList, doneSubjectList);
             if(undoneSubjectList != null && undoneSubjectList.size() > 0){
                 String s = undoneSubjectList.toString();
-                String substring = s.substring(1, s.length() - 2);
+                String substring = s.substring(1, s.length() - 1);
                 undoneSubjectMention.append(className+"中"+ substring +"成绩还没有录入，请继续录入；");
             }
         }
@@ -248,7 +253,7 @@ public class ExportServiceImpl implements ExportService {
         }
         if(undoneClassIdList != null && undoneClassIdList.size() > 0){
             String s = undoneClassNameList.toString();
-            String substring = s.substring(1, s.length() - 2);
+            String substring = s.substring(1, s.length() - 1);
             undoneClassMention.append(substring +"还没有录入成绩；");
         }
 
