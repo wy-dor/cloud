@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Mapper
@@ -18,7 +17,7 @@ public interface GradeEntryDao {
 
     int update(GradeEntry gradeEntry);
 
-    List<GradeEntry> getDoneClassSubjectInModule(Long moduleId);
+    List<GradeEntry> getDoneClassSubjectInModule(GradeEntry gradeEntry);
 
     int deleteByModuleId(Long moduleId);
 }

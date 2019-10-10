@@ -222,8 +222,15 @@ public class ExportServiceImpl implements ExportService {
         }
 
         //所有被选择录入过的班级，对应班级中被录入过的科目
-        List<GradeEntry> doneClassSubjectInModule = gradeEntryDao.getDoneClassSubjectInModule(moduleId);
+        GradeEntry tempEntry = new GradeEntry();
+        tempEntry.setModuleId(moduleId);
+        tempEntry.setClassId(classId);
+        List<GradeEntry> doneClassSubjectInModule = gradeEntryDao.getDoneClassSubjectInModule(tempEntry);
         List<Integer> doneClassIdList = new ArrayList<>();
+        //如果传入classId可该班级没有成绩录入时
+        if(classId != null && (doneClassSubjectInModule == null || doneClassSubjectInModule.size() == 0)){
+            undoneClassMention.append(classMapByModule.get(classId.toString()) +"还没有录入成绩，请录入");
+        }
         //"提示：XXX班的数学，语文成绩还没有录入，请继续录入"
         for (GradeEntry ge : doneClassSubjectInModule) {
             Integer classId2 = ge.getClassId();
@@ -286,12 +293,7 @@ public class ExportServiceImpl implements ExportService {
             row0.createCell(i+3).setCellValue(subject);
         }
 
-        GradeEntry gradeEntry = new GradeEntry();
-        gradeEntry.setModuleId(moduleId);
-        if(classId != null){
-            gradeEntry.setClassId(classId);
-        }
-        List<GradeEntry> entryList = gradeEntryDao.getByGradeEntry(gradeEntry);
+        List<GradeEntry> entryList = gradeEntryDao.getByGradeEntry(tempEntry);
         for (int i = 0; i < entryList.size(); i++) {
             HSSFRow r = sheet.createRow(i + 1);
             GradeEntry ge = entryList.get(i);

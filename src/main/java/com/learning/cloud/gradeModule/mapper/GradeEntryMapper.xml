@@ -110,7 +110,7 @@
         where id = #{id}
     </update>
 
-    <select id="getDoneClassSubjectInModule" parameterType="java.lang.Long"
+    <select id="getDoneClassSubjectInModule" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry"
             resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
     select g.class_id classId,g.marks
     from grade_entry g
@@ -120,6 +120,9 @@
     where module_id = #{moduleId}
     group by class_id) t
     on g.class_id = t.class_id
-    and g.id = t.minId;
+    and g.id = t.minId
+    <if test="classId != null">
+        where g.class_id = #{classId}
+    </if>
   </select>
 </mapper>
