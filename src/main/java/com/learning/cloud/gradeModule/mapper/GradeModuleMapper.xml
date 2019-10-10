@@ -46,6 +46,22 @@
     order by c.create_time desc, c.start_time desc
   </select>
 
+  <select id="getAllGradeModuleForAdministrator" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+    select * from
+    from grade_module a
+    where school_id = #{schoolId}
+    <if test="status != null">
+      and c.status = #{status}
+    </if>
+    <if test="term != null and term != ''">
+      and c.term = #{term}
+    </if>
+    <if test="title != null and title != ''">
+      and c.title like CONCAT('%', #{title}, '%')
+    </if>
+    order by c.create_time desc, c.start_time desc
+  </select>
+
   <delete id="deleteGradeModule" parameterType="java.lang.Long">
     delete from grade_module
     where id = #{id}

@@ -9,6 +9,10 @@ import com.learning.cloud.gradeModule.dao.GradeModuleDao;
 import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.gradeModule.service.GradeModuleService;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
@@ -17,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -37,6 +38,12 @@ public class GradeModuleServiceImpl implements GradeModuleService {
 
     @Autowired
     private GradeEntryDao gradeEntryDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private SchoolDao schoolDao;
 
     @Override
     public JsonResult saveGradeModule(GradeModule gradeModule) {
@@ -103,11 +110,23 @@ public class GradeModuleServiceImpl implements GradeModuleService {
 
     @Override
     public JsonResult getAllGradeModule(GradeModule gradeModule) {
-        List<Integer> classIds = gradeModule.getClassIds();
-        if(classIds == null || classIds.size() == 0){
-            return JsonResultUtil.success(null);
+        List<GradeModule> gradeModuleList = new ArrayList<>();
+        Integer schoolId = gradeModule.getSchoolId();
+        String userId = gradeModule.getUserId();
+        School bySchoolId = schoolDao.getBySchoolId(schoolId);
+        List<User> userByUserIdAndCorpId = userDao.getUserByUserIdAndCorpId(userId, bySchoolId.getCorpId());
+        Integer roleType = userByUserIdAndCorpId.get(0).getRoleType();
+        if(roleType == 5){
+            gradeModuleList = gradeModuleDao.getAllGradeModuleForAdministrator(gradeModule);
+
+        }else{
+            List<Integer> classIds = gradeModule.getClassIds();
+            if(classIds == null || classIds.size() == 0){
+                return JsonResultUtil.success(null);
+            }
+            gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
         }
-        List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
+
         return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
     }
 

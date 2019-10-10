@@ -16,6 +16,8 @@ public interface GradeModuleDao {
 
     List<GradeModule> getAllGradeModule(GradeModule gradeModule);
 
+    List<GradeModule> getAllGradeModuleForAdministrator(GradeModule gradeModule);
+
     int deleteGradeModule(Long id);
 
     int update(GradeModule gradeModule);
