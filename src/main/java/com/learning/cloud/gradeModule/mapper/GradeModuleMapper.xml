@@ -48,18 +48,18 @@
 
   <select id="getAllGradeModuleForAdministrator" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
     select * from
-    from grade_module a
+    from grade_module
     where school_id = #{schoolId}
     <if test="status != null">
-      and c.status = #{status}
+      and status = #{status}
     </if>
     <if test="term != null and term != ''">
-      and c.term = #{term}
+      and term = #{term}
     </if>
     <if test="title != null and title != ''">
-      and c.title like CONCAT('%', #{title}, '%')
+      and title like CONCAT('%', #{title}, '%')
     </if>
-    order by c.create_time desc, c.start_time desc
+    order by create_time desc, start_time desc
   </select>
 
   <delete id="deleteGradeModule" parameterType="java.lang.Long">
