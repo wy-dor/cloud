@@ -20,5 +20,4 @@ public interface GradeModuleService {
 
     JsonResult updateGradeModule(GradeModule gradeModule);
 
-    JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule);
 }
