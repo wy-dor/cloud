@@ -109,24 +109,18 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     }
 
     @Override
+    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule){
+        List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModuleForAdministrator(gradeModule);
+        return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
+    }
+
+    @Override
     public JsonResult getAllGradeModule(GradeModule gradeModule) {
-        List<GradeModule> gradeModuleList = new ArrayList<>();
-        Integer schoolId = gradeModule.getSchoolId();
-        String userId = gradeModule.getUserId();
-        School bySchoolId = schoolDao.getBySchoolId(schoolId);
-        List<User> userByUserIdAndCorpId = userDao.getUserByUserIdAndCorpId(userId, bySchoolId.getCorpId());
-        Integer roleType = userByUserIdAndCorpId.get(0).getRoleType();
-        if(roleType == 5){
-            gradeModuleList = gradeModuleDao.getAllGradeModuleForAdministrator(gradeModule);
-
-        }else{
-            List<Integer> classIds = gradeModule.getClassIds();
-            if(classIds == null || classIds.size() == 0){
-                return JsonResultUtil.success(null);
-            }
-            gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
+        List<Integer> classIds = gradeModule.getClassIds();
+        if(classIds == null || classIds.size() == 0){
+            return JsonResultUtil.success(null);
         }
-
+        List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
         return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
     }
 

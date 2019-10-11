@@ -30,6 +30,11 @@ public class GradeModuleController {
         return gradeModuleService.getAllGradeModule(gradeModule);
     }
 
+    @GetMapping("/getAllGradeModuleForAdministrator")
+    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule){
+        return gradeModuleService.getAllGradeModuleForAdministrator(gradeModule);
+    }
+
     @GetMapping("/deleteGradeModule")
     public JsonResult deleteGradeModule(Long id){
         return gradeModuleService.deleteGradeModule(id);

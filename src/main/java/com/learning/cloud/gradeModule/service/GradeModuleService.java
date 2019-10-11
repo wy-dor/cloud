@@ -10,6 +10,8 @@ public interface GradeModuleService {
 
     JsonResult getGradeModuleById(Long id);
 
+    JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule);
+
     JsonResult getAllGradeModule(GradeModule gradeModule);
 
     JsonResult deleteGradeModule(Long id);
