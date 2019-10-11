@@ -65,6 +65,12 @@
       <if test="state != null">
         state,
       </if>
+      <if test="orgActiveUserCount != null">
+        org_active_user_count,
+      </if>
+      <if test="orgUserCount != null">
+        org_user_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="schoolName != null">
@@ -78,6 +84,12 @@
       </if>
       <if test="state != null">
         #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="orgActiveUserCount != null">
+        #{orgActiveUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserCount != null">
+        #{orgUserCount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -96,6 +108,12 @@
       </if>
       <if test="state != null">
         state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="orgActiveUserCount != null">
+        org_active_user_count = #{orgActiveUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserCount != null">
+        org_user_count = #{orgUserCount,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id}

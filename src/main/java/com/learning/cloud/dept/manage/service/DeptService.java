@@ -38,7 +38,7 @@ public interface DeptService {
 
     List<Administrator> getURLAdmin(String accessToken) throws ApiException;
 
-    OapiUserGetOrgUserCountResponse  getOrgUserCount(String accessToken) throws ApiException;
+    Long getOrgUserCount(String accessToken, Long onlyActive) throws ApiException;
 
     int recurseGetUserCount(String departmentId, String accessToken) throws ApiException;
 }

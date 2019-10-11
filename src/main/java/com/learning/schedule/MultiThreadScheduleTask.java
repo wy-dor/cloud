@@ -294,6 +294,11 @@ public class MultiThreadScheduleTask {
                                 Bureau bureau = new Bureau();
                                 bureau.setBureauName(corpName);
                                 bureau.setCorpId(corpId);
+                                accessToken = authenService.getAccessToken(corpId);
+                                Long orgUserCount = deptService.getOrgUserCount(accessToken, 0L);
+                                Long orgActiveUserCount = deptService.getOrgUserCount(accessToken, 1L);
+                                bureau.setOrgUserCount(orgUserCount);
+                                bureau.setOrgActiveUserCount(orgActiveUserCount);
                                 bureauDao.insert(bureau);
                             }
                         }

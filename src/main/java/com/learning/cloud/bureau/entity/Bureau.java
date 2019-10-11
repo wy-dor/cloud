@@ -11,7 +11,7 @@ public class Bureau extends BaseEntity {
 
     private String bureauName;
 
-    private String proviceName;
+    private String provinceName;
 
     private String cityName;
 
@@ -19,4 +19,8 @@ public class Bureau extends BaseEntity {
 
     //后添加
     private String corpId;
+
+    private Long orgActiveUserCount;
+
+    private Long orgUserCount;
 }

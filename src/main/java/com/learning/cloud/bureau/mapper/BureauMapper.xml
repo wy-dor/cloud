@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.bureau.dao.BureauDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.bureau.entity.Bureau">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="bureau_name" jdbcType="VARCHAR" property="bureauName" />
-    <result column="provice_name" jdbcType="VARCHAR" property="proviceName" />
-    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
-    <result column="state" jdbcType="SMALLINT" property="state" />
-  </resultMap>
-
   <select id="getByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.bureau.entity.Bureau">
     select *
     from bureau
@@ -35,14 +27,20 @@
       <if test="corpId != null">
         corp_id,
       </if>
-      <if test="proviceName != null">
-        provice_name,
+      <if test="provinceName != null">
+        province_name,
       </if>
       <if test="cityName != null">
         city_name,
       </if>
       <if test="state != null">
         state,
+      </if>
+      <if test="orgActiveUserCount != null">
+        org_active_user_count,
+      </if>
+      <if test="orgUserCount != null">
+        org_user_count,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -52,8 +50,8 @@
       <if test="corpId != null">
         #{corpId,jdbcType=VARCHAR},
       </if>
-      <if test="proviceName != null">
-        #{proviceName,jdbcType=VARCHAR},
+      <if test="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
       </if>
       <if test="cityName != null">
         #{cityName,jdbcType=VARCHAR},
@@ -61,6 +59,25 @@
       <if test="state != null">
         #{state,jdbcType=SMALLINT},
       </if>
+      <if test="orgActiveUserCount != null">
+        #{orgActiveUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserCount != null">
+        #{orgUserCount,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
+
+  <update id="update" parameterType="com.learning.cloud.bureau.entity.Bureau">
+    update bureau
+    <set>
+      <if test="orgActiveUserCount != null">
+        org_active_user_count = #{orgActiveUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="orgUserCount != null">
+        org_user_count = #{orgUserCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>

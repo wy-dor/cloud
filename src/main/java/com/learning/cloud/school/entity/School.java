@@ -16,4 +16,10 @@ public class School extends BaseEntity {
     private Short state;
 
     private String corpId;
+
+    //added
+    private Long orgActiveUserCount;
+    
+    private Long orgUserCount;
+
 }

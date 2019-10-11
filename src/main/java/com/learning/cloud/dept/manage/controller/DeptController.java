@@ -134,8 +134,9 @@ public class DeptController {
 
     /*获取企业员工人数*/
     @GetMapping("/getOrgUserCount")
-    public ServiceResult getOrgUserCount(String accessToken) throws ApiException {
-        return ServiceResult.success(deptService.getOrgUserCount(accessToken));
+    public ServiceResult getOrgUserCount(String corpId, Long onlyActive) throws ApiException {
+        String accessToken = authenService.getAccessToken(corpId);
+        return ServiceResult.success(deptService.getOrgUserCount(accessToken, onlyActive));
     }
 
 }

@@ -193,13 +193,18 @@ public class DeptServiceImpl implements DeptService {
 //                }
 //            }
 
-            school.setState((short) 1);
-            schoolDao.update(school);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         //标记已初始化
+        school.setState((short) 1);
+        //保存用户人数
+        Long orgUserCount = getOrgUserCount(accessToken, 0L);
+        Long orgActiveUserCount = getOrgUserCount(accessToken, 1L);
+        school.setOrgUserCount(orgUserCount);
+        school.setOrgActiveUserCount(orgActiveUserCount);
+        schoolDao.update(school);
     }
 
     @Override
@@ -710,13 +715,14 @@ public class DeptServiceImpl implements DeptService {
 
     /*查询企业员工人数*/
     @Override
-    public OapiUserGetOrgUserCountResponse getOrgUserCount(String accessToken) throws ApiException {
+    public Long getOrgUserCount(String accessToken, Long onlyActive) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_org_user_count");
         OapiUserGetOrgUserCountRequest request = new OapiUserGetOrgUserCountRequest();
-        request.setOnlyActive(1L);
+        request.setOnlyActive(onlyActive);
         request.setHttpMethod("GET");
         OapiUserGetOrgUserCountResponse response = client.execute(request, accessToken);
-        return response;
+        Long count = response.getCount();
+        return count;
     }
 
     @Override

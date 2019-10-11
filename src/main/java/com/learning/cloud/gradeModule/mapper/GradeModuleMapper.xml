@@ -47,7 +47,7 @@
   </select>
 
   <select id="getAllGradeModuleForAdministrator" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-    select * from
+    select *
     from grade_module
     where school_id = #{schoolId}
     <if test="status != null">

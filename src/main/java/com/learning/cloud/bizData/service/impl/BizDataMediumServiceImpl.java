@@ -131,12 +131,12 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     Map<String, List<String>> parse = (Map<String, List<String>>) JSON.parse(tagsMap.toString());
                     if(parse.get("teacher") != null){
                         List<String> teacherDepts = parse.get("teacher");
-                    }
-                    if(parse.get("guardian") != null){
+                    }else if(parse.get("guardian") != null){
                         List<String> guardianDepts = parse.get("guardian");
-                    }
-                    if(parse.get("student") != null){
+                    }else if(parse.get("student") != null){
                         List<String> studentDepts = parse.get("student");
+                    }else{
+
                     }
                 }else{
 

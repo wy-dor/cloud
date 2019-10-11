@@ -60,6 +60,9 @@ public class RoleTopApiController {
         String accessToken = authenService.getAccessToken(corpId);
         OapiEduGuardianGetResponse response = roleTopApiService.getEduParent(topClassId, userId, accessToken);
         OapiEduGuardianGetResponse.GuardianRespone result = response.getResult();
+        if(result == null){
+            return ServiceResult.failure("0","请求不到学生userId");
+        }
         return ServiceResult.success(result);
     }
 
