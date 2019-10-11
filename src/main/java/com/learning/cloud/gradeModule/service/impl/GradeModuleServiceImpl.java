@@ -39,12 +39,6 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     @Autowired
     private GradeEntryDao gradeEntryDao;
 
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private SchoolDao schoolDao;
-
     @Override
     public JsonResult saveGradeModule(GradeModule gradeModule) {
         Integer classesAddingWay = gradeModule.getClassesAddingWay();
