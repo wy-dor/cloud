@@ -59,11 +59,11 @@ public class LoggedServiceImpl implements LoggedService {
                 Integer all = school.getOrgActiveUserCount().intValue();
                 Integer point = activeUser*100/all;//-128～127可以直接比较
                 if(50<=point&&point<60){
-                    point = 1;
-                }else if(60<=point&&point<70){
                     point = 2;
+                }else if(60<=point&&point<70){
+                    point = 3;
                 }else if(70<=point&&point<80){
-                    point = 5;
+                    point = 4;
                 }
                 else if(80<=point&&point<90){
                     point = 6;
@@ -71,6 +71,8 @@ public class LoggedServiceImpl implements LoggedService {
                     point = 8;
                 }else if(100==point){
                     point = 10;
+                }else{
+                    point = 1;
                 }
                 //插入积分
                 ScoreRecordSchool scoreRecordSchool = new ScoreRecordSchool();
