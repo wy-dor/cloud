@@ -70,8 +70,14 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         if(scoreRecords.size()>=scoreType.getTime()){
             return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
         }
+        Long add = new Long(0);
+        if(scoreType.getScore()==0){
+            add = scoreRecordSchool.getScore();
+        }else{
+            add = scoreType.getScore().longValue();
+        }
         scoreRecordSchool.setScoreBeforeRecord(lastScore);
-        scoreRecordSchool.setScore(lastScore+scoreType.getScore());
+        scoreRecordSchool.setScore(lastScore+add);
         int i = scoreRecordDao.addScoreRecordSchool(scoreRecordSchool);
         return JsonResultUtil.success(scoreRecordSchool.getId());
     }
