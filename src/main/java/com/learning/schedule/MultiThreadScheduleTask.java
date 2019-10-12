@@ -16,6 +16,7 @@ import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.index.entity.AuthUserInfo;
 import com.learning.cloud.index.entity.CorpAgent;
 import com.learning.cloud.index.service.AuthenService;
+import com.learning.cloud.index.service.LoggedService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.score.dao.ScoreRecordDao;
@@ -93,135 +94,18 @@ public class MultiThreadScheduleTask {
     @Autowired
     private DeptService deptService;
 
+    @Autowired
+    private LoggedService loggedService;
+
     @Value("${spring.suiteId}")
     private String suiteId;
 
     private Map<String, Boolean> statusMap = new HashMap<>();
 
-
     @Async
-    @Scheduled(cron = "0 0 5 * * ?") //每天5点
-    public void refreshSchoolScore() throws InterruptedException {
-        //刷新学校的积分
-        //1。获取是所有学校
-        List<School> schools = schoolDao.getSchools();
-        for (School school : schools) {
-            double teacherAvg = 0.0;
-            double parentAvg = 0.0;
-            //获取所有老师
-            List<Teacher> teachers = teacherDao.getTeacherIds(school.getId().longValue());
-            //取老师最新的积分
-            Long sum_teacher_score = new Long(0);
-            int ts = teachers.size();
-            if (ts > 0) {
-                for (Teacher te : teachers) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    sum_teacher_score += score;
-                }
-                teacherAvg = sum_teacher_score / ts;
-            } else {
-                teacherAvg = 0.0;
-            }
-            //取家长最新积分
-            List<Parent> parents = parentDao.getParents(school.getId().longValue());
-            Long sum_parent_score = new Long(0);
-            int ps = parents.size();
-            if (ps > 0) {
-                for (Parent pa : parents) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    if (score != 0) {
-                        sum_parent_score += score;
-                    } else {
-                        ps--;
-                    }
-                }
-                if (ps > 0) {
-                    parentAvg = sum_parent_score / ps;
-                }
-            } else {
-                parentAvg = 0.0;
-            }
-
-            //计算最终的积分
-            double score = teacherAvg * 0.8 + parentAvg * 0.2;
-            //保存到数据库表中
-            SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
-            schoolScoreboard.setSchoolId(school.getId().longValue());
-            schoolScoreboard.setScore(new Double(score).intValue());
-            schoolScoreboard.setBureauId(school.getBureauId().longValue());
-            int i = scoreboardDao.addSchoolScoreboard(schoolScoreboard);
-        }
-    }
-
-
-    @Async
-    @Scheduled(cron = "0 0 6 * * ?") //每天6点
-    public void refreshClassScore() throws InterruptedException {
-        //刷新班级的积分
-        //1。获取所有班级
-        List<GradeClass> gradeClasses = gradeClassDao.getAllClass();
-        for (GradeClass gd : gradeClasses) {
-            double teacherAvg = 0.0;
-            double parentAvg = 0.0;
-            //获取所有老师
-            List<Teacher> teachers = teacherDao.getClassTeachers(gd);
-            //取老师最新的积分
-            Long sum_teacher_score = new Long(0);
-            int ts = teachers.size();
-            if (ts > 0) {
-                for (Teacher te : teachers) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    sum_teacher_score += score;
-                }
-                teacherAvg = sum_teacher_score / ts;
-            } else {
-                teacherAvg = 0.0;
-            }
-            //取家长最新积分
-            List<Parent> parents = parentDao.getParents(gd.getId().longValue());
-            Long sum_parent_score = new Long(0);
-            int ps = parents.size();
-            if (ps > 0) {
-                for (Parent pa : parents) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    if (score != 0) {
-                        sum_parent_score += score;
-                    } else {
-                        ps--;
-                    }
-                }
-                if (ps > 0) {
-                    parentAvg = sum_parent_score / ps;
-                }
-            } else {
-                parentAvg = 0.0;
-            }
-            //计算最终的积分
-            double score = teacherAvg * 0.8 + parentAvg * 0.2;
-            //保存到数据库表中
-            ClassScoreboard classScoreboard = new ClassScoreboard();
-            classScoreboard.setClassId(gd.getId().longValue());
-            classScoreboard.setScore(new Double(score).intValue());
-            classScoreboard.setSchoolId(gd.getSchoolId().longValue());
-            classScoreboard.setBureauId(gd.getBureauId().longValue());
-            int i = scoreboardDao.addClassScoreboard(classScoreboard);
-        }
+    @Scheduled(cron = "0 0 1 * * ?")//每天1点
+    public void addSchoolActivityScore() throws Exception {
+        loggedService.AddSchoolScoreFormActivity();
     }
 
 //    @Async
