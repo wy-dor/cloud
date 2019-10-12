@@ -208,10 +208,10 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                                 if (!idsStr.contains("," + classIdStr + ",")) {
                                     StringBuilder sb = new StringBuilder(classIds);
                                     sb.append("," + classIdStr);
-                                    teacher.setClassIds(sb.toString());
+                                    t.setClassIds(sb.toString());
                                 }
                             }
-                            teacherDao.update(teacher);
+                            teacherDao.update(t);
                         }
                     } else if(roleType == 4){
                         Student student = new Student();

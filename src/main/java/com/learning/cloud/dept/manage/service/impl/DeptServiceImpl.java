@@ -24,6 +24,7 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
+import com.learning.utils.CommonUtils;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,11 @@ public class DeptServiceImpl implements DeptService {
         String accessToken = null;
         try {
             accessToken = authenService.getAccessToken(corpId);
+            //保存用户人数
+            Long orgUserCount = getOrgUserCount(accessToken, 0L);
+            Long orgActiveUserCount = getOrgUserCount(accessToken, 1L);
+            school.setOrgUserCount(orgUserCount);
+            school.setOrgActiveUserCount(orgActiveUserCount);
         } catch (ApiException e) {
             e.printStackTrace();
         }
@@ -204,27 +210,16 @@ public class DeptServiceImpl implements DeptService {
 
         //标记已初始化
         school.setState((short) 1);
-        //保存用户人数
-        Long orgUserCount = getOrgUserCount(accessToken, 0L);
-        Long orgActiveUserCount = getOrgUserCount(accessToken, 1L);
-        school.setOrgUserCount(orgUserCount);
-        school.setOrgActiveUserCount(orgActiveUserCount);
         schoolDao.update(school);
     }
 
     @Override
     public void saveUserInClass(Long deptId) throws ApiException {
-//        //教师表删除同步记录
-//        Map<Integer, String> teacherClassIdMap1 = teacherDao.getTeacherClassIdsMap(classId);
-//        Map<Integer, String> teacherClassIdMap2 = new HashMap<>();
-//        //学生表删除同步记录
-//        List<Integer> studentIdList1 = studentDao.getStudentIdListInClass(classId);
-//        List<Integer> studentIdList2 = new ArrayList<>();
-//        //家长表删除同步记录
-//        List<Integer> parentIdList1 = parentDao.getParentIdListInClass(classId);
-//        List<Integer> parentIdList2 = new ArrayList<>();
+
         GradeClass gc = gradeClassDao.getByDeptId(deptId);
         Integer classId = gc.getId();
+
+        //班级基本信息获取
         Integer schoolId = gc.getSchoolId();
         Integer bureauId = gc.getBureauId();
         School school = new School();
@@ -233,14 +228,28 @@ public class DeptServiceImpl implements DeptService {
         String accessToken = authenService.getAccessToken(corpId);
         int campusId = gc.getCampusId();
         Long classDeptId = gc.getDeptId();
+
+        //删除同步
+        //教师表删除同步记录
+        List<String> teacherUserIdList1 = teacherDao.listTeacherUserIdInClass(classId);
+        List<String> teacherUserIdList2 = new ArrayList<>();
+        //学生表删除同步记录
+        List<String> studentUserIdList1 = studentDao.listStudentUserIdInClass(classId);
+        List<String> studentUserIdList2 = new ArrayList<>();
+        //家长表删除同步记录
+        List<String> parentUserIdList1 = parentDao.listParentUserIdInClass(classId);
+        List<String> parentUserIdList2 = new ArrayList<>();
+
         /*获取老师，学生，家长部门id*/
         OapiDepartmentListResponse resp4 = getDeptList(classDeptId.toString(), accessToken, 0);
+        //以部门为单位
         List<OapiDepartmentListResponse.Department> userDeptList = resp4.getDepartment();
         for (OapiDepartmentListResponse.Department dept4 : userDeptList) {
+            //部门名称
+            String dept4Name = dept4.getName();
             String userName = "";
             String userId = "";
-            int roleType = 0;
-            String userRole = dept4.getName();
+            int roleType = 5;
             Long userDeptId = dept4.getId();
             /*用户表更新*/
             //一个部门中若存在100以上的人员人数则需要再次进行请求
@@ -255,13 +264,13 @@ public class DeptServiceImpl implements DeptService {
                     offset += 1;
                 }
                 /*用户表填充*/
-                if (userRole.equals("老师")) {
+                if (dept4Name.equals("老师")) {
                     gc.setTDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
-//                        Integer teacherId = 0;
-                        String classIds = "";
+                        //用于对比删除
+                        teacherUserIdList2.add(userId);
                         roleType = 3;
                         String classIdStr = classId + "";
                         Teacher teacher = new Teacher();
@@ -272,14 +281,11 @@ public class DeptServiceImpl implements DeptService {
                         teacher.setBureauId(bureauId);
                         Teacher t = teacherDao.getTeacherInSchool(teacher);
                         if (t == null) {
-//                        classId = classIdStr;
                             teacher.setClassIds(classIdStr);
                             teacherDao.insert(teacher);
-//                        teacherId = teacher.getId();
                         } else {
                             //判断老师所在班级是否存在
-//                        teacherId = t.getId();
-                            classIds = t.getClassIds();
+                            String classIds = t.getClassIds();
                             String idsStr = "," + t.getClassIds() + ",";
                             if (!idsStr.contains("," + classIdStr + ",")) {
                                 StringBuilder sb = new StringBuilder(classIds);
@@ -289,19 +295,17 @@ public class DeptServiceImpl implements DeptService {
                             teacherDao.update(t);
                         }
 
-//                    teacherClassIdMap2.put(teacherId,classId);
-
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
 
                     }
-                } else if (userRole.equals("家长")) {
+                } else if (dept4Name.equals("家长")) {
                     gc.setPDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
-//                    Integer parentId = 0;
+                        //用于对比删除
+                        parentUserIdList2.add(userId);
                         roleType = 2;
-                        String classIds = "";
                         String classIdStr = classId + "";
                         Parent parent = new Parent();
                         parent.setUserId(userId);
@@ -313,10 +317,8 @@ public class DeptServiceImpl implements DeptService {
                         if (p == null) {
                             parent.setClassId(classIdStr);
                             parentDao.insert(parent);
-//                        parentId = parent.getId();
                         } else {
-//                        parentId = p.getId();
-                            classIds = p.getClassId();
+                            String classIds = p.getClassId();
                             String idsStr = "," + p.getClassId() + ",";
                             if (!idsStr.contains("," + classIdStr + ",")) {
                                 StringBuilder sb = new StringBuilder(classIds);
@@ -325,17 +327,17 @@ public class DeptServiceImpl implements DeptService {
                             }
                             parentDao.update(parent);
                         }
-//                    parentIdList2.add(parentId);
 
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
 
                     }
-                } else if (userRole.equals("学生")) {
+                } else if (dept4Name.equals("学生")) {
                     gc.setSDeptId(userDeptId);
                     for (OapiUserListbypageResponse.Userlist user : userList) {
                         userName = user.getName();
                         userId = user.getUserid();
-//                    Integer studentNo = 0;
+                        //用于对比删除
+                        studentUserIdList2.add(userId);
                         roleType = 4;
                         Student student = new Student();
                         student.setUserId(userId);
@@ -347,12 +349,9 @@ public class DeptServiceImpl implements DeptService {
                         Student s = studentDao.getByUserId(userId);
                         if (s == null) {
                             studentDao.insert(student);
-//                        studentNo = student.getId();
                         } else {
-//                        studentNo = s.getId();
                             studentDao.update(student);
                         }
-//                    studentIdList2.add(studentNo);
                         userSaveByRole(schoolId, corpId, campusId, user, roleType, accessToken);
                     }
                 }
@@ -361,44 +360,41 @@ public class DeptServiceImpl implements DeptService {
 
         //更新班级下老师，家长，学生的部门id
         gradeClassDao.update(gc);
-//        //学生表删除数据同步
-//        if(studentIdList1 != null && studentIdList1.size() > 0){
-//            List<Integer> studentIdList = CommonUtils.removeIntegerDupsInList(studentIdList1, studentIdList2);
-//            for (Integer id : studentIdList) {
-//                studentDao.delete(id);
-//            }
-//        }
-//        //家长表删除数据同步
-//        if(parentIdList1 != null && parentIdList1.size() > 0){
-//            List<Integer> parentIdList = CommonUtils.removeIntegerDupsInList(parentIdList1, parentIdList2);
-//            for (Integer id : parentIdList) {
-//                parentDao.delete(id);
-//            }
-//        }
 
-//        //老师表删除数据同步
-//        if(teacherClassIdMap1 != null && teacherClassIdMap2.size() > 0){
-//            Set<Integer> strings1 = teacherClassIdMap1.keySet();
-//            String[] idStrArray1 =  (String[])strings1.toArray();
-//            Set<Integer> strings2 = teacherClassIdMap2.keySet();
-//            String[] idStrArray2 =  (String[])strings2.toArray();
-//            String[] classIdStrArr1 = CommonUtils.removeStringDups(idStrArray1, idStrArray2);
-//            for (String s : classIdStrArr1) {
-//                teacherDao.delete(Integer.parseInt(s));
-//            }
-//            String[] classIdStrArr2 = CommonUtils.retainStringDups(idStrArray1, idStrArray2);
-//            for (String s : classIdStrArr2) {
-//                int id = Integer.parseInt(s);
-//                String[] classIdStrs1 = teacherClassIdMap1.get(id).split(",");
-//                String[] classIdStrs2 = teacherClassIdMap2.get(id).split(",");
-//                String[] classIdStrs3 = CommonUtils.retainStringDups(classIdStrs1, classIdStrs2);
-//                Teacher teacher = new Teacher();
-//                teacher.setId(id);
-//                teacher.setClassId(Arrays.toString(classIdStrs3));
-//                teacherDao.updateRole5ToOtherRole(teacher);
-//            }
+        //学生表删除数据同步
+        if (studentUserIdList1 != null && studentUserIdList1.size() > 0){
+            List<String> studentUserIdList3 = CommonUtils.removeStringDupsInList(studentUserIdList1, studentUserIdList2);
+            for (String userId : studentUserIdList3) {
+                studentDao.deleteByUserId(userId);
+            }
+        }
 
-//        }
+        if (parentUserIdList1 != null && parentUserIdList1.size() > 0){
+            List<String> parentUserIdList3 = CommonUtils.removeStringDupsInList(parentUserIdList1, parentUserIdList2);
+            for (String userId : parentUserIdList3) {
+                Parent p = parentDao.getByUserId(userId);
+                String classId1 = p.getClassId();
+                String classesStr = "," + classId1 + ",";
+                String replace = classesStr.replace(classId + ",", "");
+                String substring = replace.substring(1, replace.length() - 1);
+                p.setClassId(substring);
+                parentDao.update(p);
+            }
+        }
+
+        if (teacherUserIdList1 != null && teacherUserIdList1.size() > 0){
+            List<String> teacherUserIdList3 = CommonUtils.removeStringDupsInList(teacherUserIdList1, teacherUserIdList2);
+            for (String userId : teacherUserIdList3) {
+                Teacher t = teacherDao.getByUserId(userId);
+                String classId1 = t.getClassIds();
+                String classesStr = "," + classId1 + ",";
+                String replace = classesStr.replace(classId + ",", "");
+                String substring = replace.substring(1, replace.length() - 1);
+                t.setClassIds(substring);
+                teacherDao.update(t);
+            }
+        }
+
     }
 
 

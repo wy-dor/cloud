@@ -20,11 +20,13 @@ public interface StudentDao {
 
     List<Student> getClassStudents(GradeClass gradeClass);
 
-    List<Integer> getStudentIdListInClass(Integer classId);
+    List<String> listStudentUserIdInClass(Integer classId);
 
     List<Student> getStudentsByName(Student student);
 
     int delete(Integer id);
+
+    int deleteByUserId(String userId);
 
     int deleteByClassId(Integer classId);
 }

@@ -30,8 +30,8 @@
     order by id
   </select>
 
-  <select id="getStudentIdListInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select id
+  <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select user_id
     from user_student
     where class_id = #{classId}
   </select>
@@ -132,6 +132,11 @@
   <delete id="delete" parameterType="java.lang.Integer">
     delete from user_student
     where id = #{id}
+  </delete>
+
+  <delete id="deleteByUserId" parameterType="java.lang.String">
+    delete from user_student
+    where user_id = #{userId}
   </delete>
 
   <delete id="deleteByClassId" parameterType="java.lang.Integer">

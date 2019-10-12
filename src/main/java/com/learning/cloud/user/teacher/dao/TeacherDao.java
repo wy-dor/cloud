@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Mapper
@@ -27,12 +26,12 @@ public interface TeacherDao {
 
     List<Teacher> getClassTeachers(GradeClass gradeClass);
 
-    Map<Integer,String> getTeacherClassIdsMap(Integer schoolId);
+    List<String> listTeacherUserIdInClass(Integer classId);
 
     //获取学校的老师
     List<Teacher> getTeacherIds(Long classId);
 
     int delete(Integer id);
 
-    List<Teacher> getTeachersInSchool(Integer schoolId);
+    List<Teacher> ListTeacherInSchool(Integer schoolId);
 }

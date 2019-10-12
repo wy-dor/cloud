@@ -19,6 +19,12 @@
     limit 1
   </select>
 
+  <select id="listParentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select user_id
+    from user_parent
+    where FIND_IN_SET(#{classId},class_id)
+  </select>
+
   <select id="getParentInClass" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
     select *
     from user_parent

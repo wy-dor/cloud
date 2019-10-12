@@ -1,6 +1,5 @@
 package com.learning.cloud.user.teacher.service.impl;
 
-import com.learning.cloud.course.dao.CourseDao;
 import com.learning.cloud.course.dao.CourseTypeDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.user.teacher.service.TeacherService;
@@ -83,7 +82,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public JsonResult getTeachersInSchool(Integer schoolId) {
-        List<Teacher> teacherList = teacherDao.getTeachersInSchool(schoolId);
+        List<Teacher> teacherList = teacherDao.ListTeacherInSchool(schoolId);
         return JsonResultUtil.success(teacherList);
     }
 

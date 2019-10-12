@@ -16,10 +16,10 @@
     where find_in_set(#{id},class_ids)
   </select>
 
-  <select id="getTeacherClassIdsMap" parameterType="java.lang.Integer" resultType="java.util.Map">
-    select id ,class_ids
+  <select id="listTeacherUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select user_id
     from user_teacher
-    where school_id = #{schoolId}
+    where FIND_IN_SET(#{classId},class_ids)
   </select>
 
   <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
@@ -30,7 +30,7 @@
     limit 1
   </select>
 
-  <select id="getTeachersInSchool" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+  <select id="ListTeacherInSchool" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
     where school_id = #{schoolId}
@@ -146,7 +146,15 @@
         top_class_id = #{topClassId,jdbcType=BIGINT},
       </if>
     </set>
-    where id = #{id}
+    where
+    <choose>
+      <when test="id != null">
+        id = #{id}
+      </when>
+      <otherwise>
+        user_id = #{userId}
+      </otherwise>
+    </choose>
   </update>
 
   <select id="getTeacherIds" parameterType="java.lang.Long" resultType="com.learning.cloud.user.teacher.entity.Teacher">
