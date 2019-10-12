@@ -37,7 +37,7 @@ public class EvaluationDimensionServiceImpl implements EvaluationDimensionServic
     }
 
     @Override
-    public JsonResult deleteEvaluationDimension(Long id) {
+    public JsonResult deleteEvaluationDimensionById(Long id) {
         EvaluationItem evaluationItem = new EvaluationItem();
         evaluationItem.setDimensionId(id);
         evaluationItemDao.deleteByItem(evaluationItem);

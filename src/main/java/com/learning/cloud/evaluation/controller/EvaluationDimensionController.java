@@ -29,9 +29,9 @@ public class EvaluationDimensionController {
     }
 
     //删除指定评价维度及其下子评价类型
-    @GetMapping("/deleteEvaluationDimension")
-    public JsonResult deleteEvaluationDimension(Long id){
-        return evaluationDimensionService.deleteEvaluationDimension(id);
+    @GetMapping("/deleteEvaluationDimensionById")
+    public JsonResult deleteEvaluationDimensionById(Long id){
+        return evaluationDimensionService.deleteEvaluationDimensionById(id);
     }
 
     @GetMapping("/getEvaluationDimension")

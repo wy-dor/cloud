@@ -8,7 +8,7 @@ public interface EvaluationDimensionService {
 
     JsonResult getEvaluationDimensionById(Long id);
 
-    JsonResult deleteEvaluationDimension(Long id);
+    JsonResult deleteEvaluationDimensionById(Long id);
 
     JsonResult updateEvaluationDimension(EvaluationDimension evaluationDimension);
 
