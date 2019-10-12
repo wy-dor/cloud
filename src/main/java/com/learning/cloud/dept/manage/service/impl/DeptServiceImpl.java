@@ -75,7 +75,12 @@ public class DeptServiceImpl implements DeptService {
             bureauId = -1;
         }
         String corpId = school.getCorpId();
-        String accessToken = authenService.getAccessToken(corpId);
+        String accessToken = null;
+        try {
+            accessToken = authenService.getAccessToken(corpId);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
         try {
             OapiDepartmentListResponse resp = getDeptList("", accessToken, 0);
             List<OapiDepartmentListResponse.Department> departmentList_0 = resp.getDepartment();
