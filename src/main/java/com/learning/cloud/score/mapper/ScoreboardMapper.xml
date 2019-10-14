@@ -137,7 +137,7 @@
     select sc.school_id,sc.score,sc.bureau_id from score_record_school as sc where not exists(
       select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
       )
-    ) p on es.id = p.school_id where and p.bureau_id = #{bureauId}
+    ) p on es.id = p.school_id where p.bureau_id = #{bureauId}
     ORDER BY p.score desc
   </select>
 
