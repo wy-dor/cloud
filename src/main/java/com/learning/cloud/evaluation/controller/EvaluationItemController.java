@@ -26,13 +26,13 @@ public class EvaluationItemController {
     }
 
     @PostMapping("/addEvaluationItem")
-    public JsonResult addEvaluationItem(@RequestParam(value="file",required = false)MultipartFile file, EvaluationItem evaluationItem) throws Exception {
-        return evaluationItemService.addEvaluationItem(file, evaluationItem);
+    public JsonResult addEvaluationItem(EvaluationItem evaluationItem) throws Exception {
+        return evaluationItemService.addEvaluationItem(evaluationItem);
     }
 
     @PostMapping("/updateEvaluationItem")
-    public JsonResult updateEvaluationItem(@RequestParam(value = "file",required = false)MultipartFile file,EvaluationItem evaluationItem)  throws Exception{
-        return evaluationItemService.updateEvaluationItem(file,evaluationItem);
+    public JsonResult updateEvaluationItem(EvaluationItem evaluationItem)  throws Exception{
+        return evaluationItemService.updateEvaluationItem(evaluationItem);
     }
 
     @GetMapping("/deleteEvaluationItemById")

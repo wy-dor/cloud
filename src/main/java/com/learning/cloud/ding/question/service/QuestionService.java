@@ -29,5 +29,7 @@ public interface QuestionService {
 
     Long reduceImg(MultipartFile file)throws Exception;
 
+    String base64Reduce(MultipartFile file) throws Exception;
+
     JsonResult getQuestionById(Long id);
 }

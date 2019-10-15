@@ -151,6 +151,16 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public Long reduceImg(MultipartFile file)throws Exception{
+        String sp = base64Reduce(file);
+        Picture picture = new Picture();
+        picture.setPic(sp);
+        int i = pictureDao.addPic(picture);
+//        questionDao.updateSmallPic(picture.getId(),id);
+        return picture.getId();
+    }
+
+    @Override
+    public String base64Reduce(MultipartFile file) throws Exception {
         int widthDist = 500;
         int heightDist = 500;
         InputStream inputStream = null;
@@ -169,12 +179,7 @@ public class QuestionServiceImpl implements QuestionService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(tag, "jpg", outputStream);
         BASE64Encoder encoder = new BASE64Encoder();
-        String sp = encoder.encode(outputStream.toByteArray());
-        Picture picture = new Picture();
-        picture.setPic(sp);
-        int i = pictureDao.addPic(picture);
-//        questionDao.updateSmallPic(picture.getId(),id);
-        return picture.getId();
+        return encoder.encode(outputStream.toByteArray());
     }
 
     @Override

@@ -74,8 +74,8 @@
       <if test="maxValue != null">
         max_value,
       </if>
-      <if test="picId != null">
-        pic_id,
+      <if test="iconId != null">
+        icon_id,
       </if>
       <if test="plusMinus != null">
         plus_minus,
@@ -106,8 +106,8 @@
       <if test="maxValue != null">
         #{maxValue,jdbcType=DECIMAL},
       </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
+      <if test="iconId != null">
+        #{iconId,jdbcType=BIGINT},
       </if>
       <if test="plusMinus != null">
         #{plusMinus,jdbcType=INTEGER},
@@ -139,8 +139,8 @@
       <if test="maxValue != null">
         max_value = #{maxValue,jdbcType=DECIMAL},
       </if>
-      <if test="picId != null">
-        pic_id = #{picId,jdbcType=BIGINT},
+      <if test="iconId != null">
+        icon_id = #{iconId,jdbcType=BIGINT},
       </if>
       <if test="plusMinus != null">
         plus_minus = #{plusMinus,jdbcType=INTEGER},

@@ -45,8 +45,8 @@
       <if test="dimensionName != null">
         dimension_name,
       </if>
-      <if test="picId != null">
-        pic_id,
+      <if test="iconId != null">
+        icon_id,
       </if>
       <if test="schoolId != null">
         school_id,
@@ -68,8 +68,8 @@
       <if test="dimensionName != null">
         #{dimensionName,jdbcType=VARCHAR},
       </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
+      <if test="iconId != null">
+        #{iconId,jdbcType=BIGINT},
       </if>
       <if test="schoolId != null">
         #{schoolId,jdbcType=INTEGER},
@@ -92,8 +92,8 @@
       <if test="dimensionName != null">
         dimension_name = #{dimensionName,jdbcType=VARCHAR},
       </if>
-      <if test="picId != null">
-        pic_id = #{picId,jdbcType=BIGINT},
+      <if test="iconId != null">
+        icon_id = #{iconId,jdbcType=BIGINT},
       </if>
       <if test="schoolId != null">
         school_id = #{schoolId,jdbcType=INTEGER},

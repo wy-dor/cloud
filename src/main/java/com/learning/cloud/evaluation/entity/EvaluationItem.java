@@ -19,7 +19,7 @@ public class EvaluationItem extends BaseEntity {
 
     private BigDecimal maxValue;
 
-    private Long picId;
+    private Long iconId;
 
     private Integer plusMinus;
 

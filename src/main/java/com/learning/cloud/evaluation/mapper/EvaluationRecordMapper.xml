@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.evaluation.dao.EvaluationRecordDao">
+  <select id="selectById" parameterType="java.lang.Long" resultType="com.learning.cloud.evaluation.entity.EvaluationRecord">
+    select *
+    from evaluation_record
+    where id = #{id}
+  </select>
+  
+  <select id="getByRecord" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord"
+          resultType="com.learning.cloud.evaluation.entity.EvaluationRecord">
+    select *
+     from evaluation_record
+    <where>
+      <if test="dimensionId != null">
+        and dimension_id = #{dimensionId,jdbcType=BIGINT}
+      </if>
+      <if test="itemId != null">
+        and item_id = #{itemId,jdbcType=BIGINT}
+      </if>
+      <if test="addingWay != null">
+        and adding_way = #{addingWay,jdbcType=INTEGER}
+      </if>
+      <if test="groupIds != null">
+        and group_ids = #{groupIds,jdbcType=VARCHAR}
+      </if>
+      <if test="studentUserIds != null">
+        and student_user_ids = #{studentUserIds,jdbcType=VARCHAR}
+      </if>
+      <if test="score != null">
+        and score = #{score,jdbcType=DECIMAL}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">
+    delete from evaluation_record
+    where id = #{id}
+  </delete>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">
+    insert into evaluation_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dimensionId != null">
+        dimension_id,
+      </if>
+      <if test="itemId != null">
+        item_id,
+      </if>
+      <if test="addingWay != null">
+        adding_way,
+      </if>
+      <if test="groupIds != null">
+        group_ids,
+      </if>
+      <if test="studentUserIds != null">
+        student_user_ids,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="dimensionId != null">
+        #{dimensionId,jdbcType=BIGINT},
+      </if>
+      <if test="itemId != null">
+        #{itemId,jdbcType=BIGINT},
+      </if>
+      <if test="addingWay != null">
+        #{addingWay,jdbcType=INTEGER},
+      </if>
+      <if test="groupIds != null">
+        #{groupIds,jdbcType=VARCHAR},
+      </if>
+      <if test="studentUserIds != null">
+        #{studentUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">
+    update evaluation_record
+    <set>
+      <if test="dimensionId != null">
+        dimension_id = #{dimensionId,jdbcType=BIGINT},
+      </if>
+      <if test="itemId != null">
+        item_id = #{itemId,jdbcType=BIGINT},
+      </if>
+      <if test="addingWay != null">
+        adding_way = #{addingWay,jdbcType=INTEGER},
+      </if>
+      <if test="groupIds != null">
+        group_ids = #{groupIds,jdbcType=VARCHAR},
+      </if>
+      <if test="studentUserIds != null">
+        student_user_ids = #{studentUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>
