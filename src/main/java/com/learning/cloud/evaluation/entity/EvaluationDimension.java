@@ -9,7 +9,7 @@ public class EvaluationDimension extends BaseEntity {
 
     private String dimensionName;
 
-    private Long picId;
+    private Long iconId;
 
     private Integer schoolId;
 

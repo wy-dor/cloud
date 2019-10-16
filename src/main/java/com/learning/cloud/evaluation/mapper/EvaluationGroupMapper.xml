@@ -22,7 +22,7 @@
     </where>
   </select>
   
-  <delete id="deleteById" parameterType="java.lang.Long">
+  <delete id="deleteByGroup" parameterType="java.lang.Long">
     delete from evaluation_group
     where
     <choose>

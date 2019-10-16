@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 public class EvaluationIconController {
@@ -21,8 +26,20 @@ public class EvaluationIconController {
     }
 
     @GetMapping("/getEvaluationIconById")
-    public JsonResult getEvaluationIconById(long id){
-        return evaluationIconService.getEvaluationIconById(id);
+    public void getEvaluationIconById(long id, HttpServletResponse response) throws IOException {
+        EvaluationIcon evaluationIconById = evaluationIconService.getEvaluationIconById(id);
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] bytes = decoder.decodeBuffer(evaluationIconById.getPic());
+        for(int i=0; i<bytes.length;++i){
+            if(bytes[i]<0){
+                bytes[i]+=256;
+            }
+        }
+        ServletOutputStream out = response.getOutputStream();
+        out.write(bytes);
+
+        out.flush();
+        out.close();
     }
 
     @PostMapping("/addEvaluationIcon")

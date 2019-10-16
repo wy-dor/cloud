@@ -13,7 +13,7 @@ public interface EvaluationIconService {
 
     JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon);
 
-    JsonResult getEvaluationIconById(long id);
+    EvaluationIcon getEvaluationIconById(long id);
 
     JsonResult deleteEvaluationIconById(Long id);
 

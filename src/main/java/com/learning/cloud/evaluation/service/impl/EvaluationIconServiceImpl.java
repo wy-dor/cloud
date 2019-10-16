@@ -40,9 +40,9 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
     }
 
     @Override
-    public JsonResult getEvaluationIconById(long id) {
+    public EvaluationIcon getEvaluationIconById(long id) {
         EvaluationIcon evaluationIcon = evaluationIconDao.getById(id);
-        return JsonResultUtil.success(evaluationIcon);
+        return evaluationIcon;
     }
 
     @Override

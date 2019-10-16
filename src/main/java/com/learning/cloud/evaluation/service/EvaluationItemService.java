@@ -8,7 +8,7 @@ public interface EvaluationItemService {
 
     JsonResult getEvaluationItem(EvaluationItem evaluationItem);
 
-    JsonResult getEvaluationItemById(long id);
+    JsonResult getEvaluationItemById(Long id);
 
     JsonResult deleteEvaluationItemById(Long id);
 

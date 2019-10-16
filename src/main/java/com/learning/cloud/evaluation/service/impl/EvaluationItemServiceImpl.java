@@ -1,6 +1,5 @@
 package com.learning.cloud.evaluation.service.impl;
 
-import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.evaluation.dao.EvaluationItemDao;
 import com.learning.cloud.evaluation.entity.EvaluationItem;
 import com.learning.cloud.evaluation.service.EvaluationItemService;
@@ -33,7 +32,7 @@ public class EvaluationItemServiceImpl implements EvaluationItemService {
     }
 
     @Override
-    public JsonResult getEvaluationItemById(long id) {
+    public JsonResult getEvaluationItemById(Long id) {
         EvaluationItem evaluationItem = evaluationItemDao.getById(id);
         return JsonResultUtil.success(evaluationItem);
     }

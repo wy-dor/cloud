@@ -21,7 +21,7 @@ public class EvaluationItemController {
     }
 
     @GetMapping("/getEvaluationItemById")
-    public JsonResult getEvaluationItemById(long id){
+    public JsonResult getEvaluationItemById(Long id){
         return evaluationItemService.getEvaluationItemById(id);
     }
 

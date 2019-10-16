@@ -21,7 +21,7 @@ public class EvaluationGroupController {
     }
 
     @GetMapping("/getEvaluationGroupById")
-    public JsonResult getEvaluationGroupById(long id){
+    public JsonResult getEvaluationGroupById(Long id){
         return evaluationGroupService.getEvaluationGroupById(id);
     }
 

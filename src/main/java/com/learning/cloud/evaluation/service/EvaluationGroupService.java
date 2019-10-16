@@ -8,7 +8,7 @@ public interface EvaluationGroupService {
 
     JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup);
 
-    JsonResult getEvaluationGroupById(long id);
+    JsonResult getEvaluationGroupById(Long id);
 
     JsonResult deleteEvaluationGroupById(Long id);
 

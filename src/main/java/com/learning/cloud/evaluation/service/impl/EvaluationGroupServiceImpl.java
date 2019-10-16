@@ -27,7 +27,7 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
     private StudentDao studentDao;
 
     @Override
-    public JsonResult addEvaluationGroup(EvaluationGroup evaluationGroup) throws Exception {
+    public JsonResult addEvaluationGroup(EvaluationGroup evaluationGroup) {
         int i = evaluationGroupDao.insert(evaluationGroup);
         return JsonResultUtil.success("成功增加" + i + "条数据:id "+evaluationGroup.getId());
     }
@@ -42,7 +42,7 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
     }
 
     @Override
-    public JsonResult getEvaluationGroupById(long id) {
+    public JsonResult getEvaluationGroupById(Long id) {
         EvaluationGroup evaluationGroup = evaluationGroupDao.getById(id);
         setStuList(evaluationGroup);
         return JsonResultUtil.success(evaluationGroup);
