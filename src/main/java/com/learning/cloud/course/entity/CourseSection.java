@@ -6,6 +6,8 @@ import lombok.Data;
 public class CourseSection {
     private Long id;
 
+    private Long sectionId;
+
     private Long schoolId;
 
     private String timeFrame;
@@ -17,7 +19,5 @@ public class CourseSection {
     private String end;
 
     private Short type;
-
-    private String season;
 
 }

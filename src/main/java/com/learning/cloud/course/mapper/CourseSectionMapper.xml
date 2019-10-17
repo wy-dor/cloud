@@ -7,6 +7,9 @@
       <if test="id != null">
         id,
       </if>
+      <if test="sectionId != null">
+        section_id,
+      </if>
       <if test="schoolId != null">
         school_id,
       </if>
@@ -29,6 +32,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sectionId != null">
+        #{sectionId,jdbcType=BIGINT},
       </if>
       <if test="schoolId != null">
         #{schoolId,jdbcType=BIGINT},
@@ -75,14 +81,14 @@
 
   <select id="getSchoolSection" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSection">
     select * from course_section
-    where school_id = #{schoolId}
+    where section_id= #{id}
     order by start
   </select>
 
   <insert id="saveSectionArray">
     insert  into course_section_array
-      (school_id, content) values (#{schoolId},#{sectionArray})
-      on DUPLICATE KEY UPDATE content = #{sectionArray}
+      (id, content,name) values (#{id},#{sectionArray},#{name})
+      on DUPLICATE KEY UPDATE content = #{sectionArray}, name=#{name}
   </insert>
 
   <delete id="deleteSection">
@@ -92,11 +98,31 @@
 
   <delete id="deleteSchoolSection">
     delete from course_section
-    where school_id = #{schoolId}
+    where section_id = #{sectionId}
   </delete>
 
   <select id="getSchoolSectionArray" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSectionArray">
     select * from course_section_array
     where school_id = #{schoolId}
+    and status = 1
   </select>
+
+  <select id="getSchoolSectionList" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSectionArray">
+    select * from course_section_array
+    where school_id = #{schoolId}
+  </select>
+
+  <update id="setSectionArrayBlock">
+    update course_section_array set status = 0
+    where id = #{id} and school_id = #{schoolId}
+  </update>
+  <update id="setSectionArrayActive">
+    update course_section_array set status = 1
+    where id = #{id}
+  </update>
+
+  <insert id="addSectionArray" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseSectionArray">
+    insert into course_section_array
+      (school_id,name) values (#{schoolId},#{name})
+  </insert>
 </mapper>
