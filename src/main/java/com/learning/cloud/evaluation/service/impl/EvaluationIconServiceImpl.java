@@ -40,7 +40,7 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
     }
 
     @Override
-    public EvaluationIcon getEvaluationIconById(long id) {
+    public EvaluationIcon getEvaluationIconById(Long id) {
         EvaluationIcon evaluationIcon = evaluationIconDao.getById(id);
         return evaluationIcon;
     }

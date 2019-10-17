@@ -26,7 +26,7 @@ public class EvaluationIconController {
     }
 
     @GetMapping("/getEvaluationIconById")
-    public void getEvaluationIconById(long id, HttpServletResponse response) throws IOException {
+    public void getEvaluationIconById(Long id, HttpServletResponse response) throws IOException {
         EvaluationIcon evaluationIconById = evaluationIconService.getEvaluationIconById(id);
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] bytes = decoder.decodeBuffer(evaluationIconById.getPic());

@@ -10,23 +10,29 @@
   
   <select id="getByDimension" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension" 
           resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-    select *
-    from evaluation_dimension
+    select a.* ,IFNULL(b.praiseItemCount, 0) praiseItemCount, IFNULL(b.criticalItemCount, 0) criticalItemCount
+    from evaluation_dimension a
+    left join
+    (select c.dimension_id, sum(case when plus_minus = 1 then 1 else 0 end) praiseItemCount,
+    sum(case when plus_minus = -1 then 1 else 0 end) criticalItemCount
+    from evaluation_item c
+    group by dimension_id) b
+    on a.id = b.dimension_id
     <where>
       <if test="dimensionName != null">
-        and dimension_name = #{dimensionName,jdbcType=VARCHAR}
+        and a.dimension_name = #{dimensionName,jdbcType=VARCHAR}
       </if>
       <if test="schoolId != null">
-        and school_id = #{schoolId,jdbcType=INTEGER}
+        and a.school_id = #{schoolId,jdbcType=INTEGER}
       </if>
       <if test="updateUserId != null">
-        and update_user_id = #{updateUserId,jdbcType=VARCHAR}
+        and a.update_user_id = #{updateUserId,jdbcType=VARCHAR}
       </if>
       <if test="updateUserName != null">
-        and update_user_name = #{updateUserName,jdbcType=VARCHAR}
+        and a.update_user_name = #{updateUserName,jdbcType=VARCHAR}
       </if>
       <if test="builtin != null">
-        and builtin = #{builtin,jdbcType=INTEGER}
+        and a.builtin = #{builtin,jdbcType=INTEGER}
       </if>
     </where>
   </select>

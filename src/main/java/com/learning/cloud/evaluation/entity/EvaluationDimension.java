@@ -18,4 +18,8 @@ public class EvaluationDimension extends BaseEntity {
     private String updateUserName;
 
     private Integer builtin;
+
+    private Integer praiseItemCount;
+
+    private Integer criticalItemCount;
 }
