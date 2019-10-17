@@ -118,11 +118,11 @@ public class LoginController {
             int userRole = user.getRoleType();
             OapiUserGetResponse userGetResponse = getUserByUserid(user.getUserId(), user.getCorpId());
             if (userGetResponse != null) {
-                if (i == 0) {
-                    userInfo.setAvatar(userGetResponse.getAvatar());
-                    userInfo.setName(userGetResponse.getName());
-                    userInfo.setUnionid(unionid);
-                }
+
+                userInfo.setAvatar(userGetResponse.getAvatar());
+                userInfo.setName(userGetResponse.getName());
+                userInfo.setUnionid(unionid);
+
                 SysUserInfo sysUserInfo = new SysUserInfo();
                 sysUserInfo.setCropid(user.getCorpId());
                 sysUserInfo.setUserid(user.getUserId());
