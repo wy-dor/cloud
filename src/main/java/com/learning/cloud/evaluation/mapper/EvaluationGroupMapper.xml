@@ -8,18 +8,11 @@
     where id = #{id}
   </select>
   
-  <select id="selectByGroup" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup"
+  <select id="getByGroup" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup"
           resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
     select *
-    from evaluation_group 
-    <where>
-      <if test="groupPlanId != null">
-        and group_plan_id = #{groupPlanId,jdbcType=BIGINT}
-      </if>
-      <if test="userId != null">
-        and user_id = #{userId,jdbcType=INTEGER}
-      </if>
-    </where>
+    from evaluation_group
+    where group_plan_id = #{groupPlanId,jdbcType=BIGINT}
   </select>
   
   <delete id="deleteByGroup" parameterType="java.lang.Long">

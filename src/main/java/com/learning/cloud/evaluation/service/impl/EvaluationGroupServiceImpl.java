@@ -34,6 +34,8 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
 
     @Override
     public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup) {
+        EvaluationGroup eg = new EvaluationGroup();
+        List<String> userIdList = new ArrayList<>();
         List<EvaluationGroup> evaluationGroupList = evaluationGroupDao.getByGroup(evaluationGroup);
         for (EvaluationGroup group : evaluationGroupList) {
             setStuList(group);

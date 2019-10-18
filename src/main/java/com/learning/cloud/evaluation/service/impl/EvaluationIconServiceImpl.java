@@ -26,6 +26,10 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
 
     @Override
     public JsonResult addEvaluationIcon(MultipartFile file, EvaluationIcon evaluationIcon) throws Exception {
+        byte[] bytes = file.getBytes();
+        if (bytes.length > 200 * 1024 * 8){
+            throw new Exception("图片大小限制200KB以内，请重新上传");
+        }
         String s = questionService.base64Reduce(file);
         evaluationIcon.setPic(s);
         int i = evaluationIconDao.insert(evaluationIcon);
