@@ -114,7 +114,7 @@
 
   <update id="setSectionArrayBlock">
     update course_section_array set status = 0
-    where id = #{id} and school_id = #{schoolId}
+    where id != #{id} and school_id = #{schoolId}
   </update>
   <update id="setSectionArrayActive">
     update course_section_array set status = 1

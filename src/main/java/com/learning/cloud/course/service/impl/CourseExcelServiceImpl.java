@@ -25,6 +25,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sun.awt.geom.AreaOp;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -100,7 +101,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                 0,//first row
                 0,//last row
                 0,//first column
-                8 //last column
+                7 //last column
         );
         sheet.addMergedRegion(region);
 
@@ -117,7 +118,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                     size*i+1,//first row
                     size*i+1,//last row
                     0,//first column
-                    8 //last column
+                    7 //last column
             );
             sheet.addMergedRegion(region1_x);
             //定义班级字段样式
@@ -125,10 +126,6 @@ public class CourseExcelServiceImpl implements CourseExcelService {
             HSSFFont blueFont = wb.createFont();
             //颜色
             blueFont.setColor(HSSFColor.DARK_BLUE.index);
-            //字体大小
-            //blueFont.setFontHeightInPoints((short) 10);
-            //字体
-            //blueFont.setFontName("宋体");
             blueStyle.setFont(blueFont);
             row1_x.getCell(0).setCellStyle(blueStyle);
 
@@ -146,8 +143,23 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                 row3x.createCell(0).setCellValue(sectionArrays.get(j).getName()+"\n"+sectionArrays.get(j).getTime());
             }
             //留一行空白
-            HSSFRow row4x = sheet.createRow(size*i+size+3);
-            row4x.createCell(0).setCellValue("");
+            HSSFRow row4_x = sheet.createRow(size*(i+1));
+            HSSFCell cell4_x = row4_x.createCell(0);
+            cell4_x.setCellValue("");
+            CellRangeAddress region4_x = new CellRangeAddress(
+                    size*(i+1)+3,//first row
+                    size*(i+1)+3,//last row
+                    0,//first column
+                    7 //last column
+            );
+            sheet.addMergedRegion(region4_x);
+
+            //定义空白行样式
+            CellStyle grayStyle = wb.createCellStyle();
+            //自动换行
+            grayStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  //填充单元格
+            grayStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);    //填红色
+            row4_x.getCell(0).setCellStyle(grayStyle);
 
         }
         //定义说明定义样式
@@ -155,6 +167,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
         //自动换行
         A0Style.setWrapText(true);
         row0.getCell(0).setCellStyle(A0Style);
+
 
         //设置列宽
         int[] width = {30,15,15,15,15,15,15,15};
@@ -204,48 +217,96 @@ public class CourseExcelServiceImpl implements CourseExcelService {
 
         Integer[] weekDay = {1,2,3,4,5,6,7};
 
-        for(int i=1;i<sheet.getLastRowNum();i++){
-            //参数
-            Integer classId = 0;
-            List<Teacher> teachers = new ArrayList<>();
-
-            Map<Long, Integer> teacherCourse = new HashMap<>();
-
-            //保存对象
-            CourseDetail courseDetail = new CourseDetail();
+        //按照行循环，取出所有班级
+        List<ClassNameId> classNameIdList = new ArrayList<>();
+        for(int i=1;i<sheet.getLastRowNum()-3;i++){
             Row row = sheet.getRow(i);
-            if(i%size==2){//班级名称ij
-                String name = row.getCell(0).getStringCellValue();
-                //根据班级名称获取班级id,老师对应的课程,课程主表id
-                classId = gcMap.get(name);
-                gradeClass.setId(classId);
-                teachers = teacherDao.getClassTeachers(gradeClass);
-                teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId));
-                courseDetail.setClassId(classId.longValue());
-                Course course = courseDao.getCourseByClassId(classId.longValue());
-                courseDetail.setCourseId(course.getId());
-            }
-            if(i%size<3){
-                continue;
-            }
-            //第四行，依次取周一~周日数据
-            if(i%size>=4){
-                for(int k=0;k<sectionArrays.size();k++){
-                    SectionArray section = sectionArrays.get(k);
-                    String courseTime = section.getTime();
-                    for(int j=1;j<=weekDay.length;j++){
-                        String courseName = row.getCell(i).getStringCellValue();
-                        Long courseType = courseList.get(courseName);
-                        courseDetail.setCourseName(courseName);
-                        courseDetail.setCourseId(courseType);
-                        courseDetail.setCourseTeacherId(teacherCourse.get(courseType).longValue());
-                        courseDetail.setCourseTime(courseTime);
-                        courseDetail.setCourseNum(j);
-                        courseDetailDao.addCourseDetail(courseDetail);
-                    }
+            if(i%size==1){//班级名称ij
+                Cell cell = row.getCell(0);
+                if(cell!=null){
+                    ClassNameId classNameAndId = new ClassNameId();
+                    String name = cell.getStringCellValue();
+                    //根据班级名称获取班级id,老师对应的课程,课程主表id
+                    Integer classId = gcMap.get(name);
+                    classNameAndId.setName(name);
+                    classNameAndId.setClassId(classId);
+                    classNameIdList.add(classNameAndId);
                 }
             }
         }
+        //循环处理班级
+        for(int i=0;i<classNameIdList.size();i++){
+            System.out.println("i="+i);
+            Integer classId = classNameIdList.get(i).getClassId();
+
+            //获取老师
+            GradeClass gcForT = new GradeClass();
+            gcForT.setId(classId);
+            List<Teacher> teachers = teacherDao.getClassTeachers(gcForT);
+            //保存对象
+            Map<Long, Integer> teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId));
+            Map<Long, String> teacherName = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getTeacherName));
+            //获取课程主表信息
+            Course course = courseDao.getCourseByClassId(classId.longValue());
+
+            //处理excel表格
+            //第四行，依次取周一~周日数据
+            for(int k=0;k<sectionArrays.size();k++){
+                System.out.println("k="+k);
+                SectionArray section = sectionArrays.get(k);
+                String courseTime = section.getTime();
+                for(int j=1;j<=weekDay.length;j++){
+                    System.out.println("j="+j);
+                    Row row = sheet.getRow(i*size+k+3);
+                    int rowLength = row.getLastCellNum();
+                    if(rowLength>1){
+                        Cell cell = row.getCell(j);
+                        if(cell!=null){
+                            //表格框中的课程名称，若包含"/"则课程类型为单双周。
+                            String courseName = cell.getStringCellValue();
+                            if(courseName!=null&&!courseName.isEmpty()){
+                                //初始化
+                                CourseDetail courseDetail = new CourseDetail();
+                                courseDetail.setClassId(classId.longValue());
+                                courseDetail.setCourseId(course.getId());
+                                //获取课程名称和对应老师名称
+                                Long courseType = courseList.get(courseName);
+                                courseDetail.setCourseName(courseName);
+                                courseDetail.setCourseType(courseType);
+                                courseDetail.setCourseTeacherId(teacherCourse.get(courseType).longValue());
+                                courseDetail.setCourseTeacherName(teacherName.get(courseType));
+                                courseDetail.setCourseTime(courseTime);
+                                courseDetail.setWeekDay(j);
+                                courseDetail.setCourseNum(k+1);
+                                courseDetailDao.addCourseDetail(courseDetail);
+                            }
+                        }
+                    }
+                }
+            }
+            }
+
         return null;
+    }
+
+    class ClassNameId {
+        private String name;
+        private Integer classId;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getClassId() {
+            return classId;
+        }
+
+        public void setClassId(Integer classId) {
+            this.classId = classId;
+        }
     }
 }
