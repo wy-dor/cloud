@@ -303,6 +303,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                                         courseDetail.setCourseTypeS(courseTypeS);
                                         courseDetail.setCourseTeacherNameS(teacherName.get(courseTypeS));
                                         courseDetail.setCourseTeacherIdS(teacherCourse.get(courseTypeS).longValue());
+                                        courseDetail.setWeekType((short)3);
                                     }
                                     courseDetailDao.addCourseDetail(courseDetail);
                                 }
