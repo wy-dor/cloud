@@ -366,7 +366,8 @@ public class ExportServiceImpl implements ExportService {
         try {
             if(file.exists()){
                 String  fileName = new String(title.getBytes("UTF-8"), "ISO-8859-1");
-                response.setContentType("application/octet-stream");
+//                response.setContentType("application/octet-stream");
+                response.setContentType("application/ms-excel;charset=UTF-8");
                 response.addHeader("Content-Disposition", "attachment; filename="+fileName);
                 in = new FileInputStream(file);
                 byte[] by = new byte[in.available()];

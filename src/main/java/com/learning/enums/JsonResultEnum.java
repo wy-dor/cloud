@@ -41,6 +41,10 @@ public enum JsonResultEnum {
 
     EXIST_INSPECTOR(1061,"登录名重复，不能新增"),
     RESET_ERROR(1062,"修改密码出错"),
+
+    COURSE_NO_PARAMS(1071,"EXCEL模板参数错误"),
+    COURSE_NO_FILE(1072,"请传入课程信息"),
+    COURSE_NO_SECTION(1073,"设置的生效作息时间错误"),
     ;
 
     @Getter private Integer code;

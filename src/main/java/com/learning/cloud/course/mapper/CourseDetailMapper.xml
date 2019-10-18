@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.CourseDetailDao">
- 
+
   <insert id="addCourseDetail" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseDetail">
     insert into course_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -98,8 +98,14 @@
         #{courseTeacherNameS,jdbcType=VARCHAR},
       </if>
     </trim>
+    ON DUPLICATE KEY UPDATE
+    <if test="weekType != null">
+      week_type=#{weekType},
+    </if>
+    course_type=#{courseType},course_name=#{courseName},course_teacher_id=#{courseTeacherId},course_teacher_name=#{courseTeacherName},
+    course_type_s=#{courseTypeS},course_name_s=#{courseNameS},course_teacher_id_s=#{courseTeacherIdS},course_teacher_name_s=#{courseTeacherNameS}
   </insert>
-  
+
   <select id="getCourseDetailByClassId" resultType="com.learning.cloud.course.entity.CourseDetail">
     select * from course_detail
     where class_id = #{classId}

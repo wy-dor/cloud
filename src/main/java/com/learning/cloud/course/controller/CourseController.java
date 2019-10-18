@@ -47,4 +47,5 @@ public class CourseController {
     public JsonResult publishCourse(@RequestParam(value="id",required = true) Long id) throws Exception{
         return courseService.publishCourse(id);
     }
+
 }

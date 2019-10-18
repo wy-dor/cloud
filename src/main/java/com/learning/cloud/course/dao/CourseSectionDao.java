@@ -20,13 +20,21 @@ public interface CourseSectionDao {
 
     int editSection(CourseSection courseSection);
 
-    List<CourseSection> getSchoolSection(Long schoolId);
+    List<CourseSection> getSchoolSection(Long id);
 
-    int saveSectionArray(@Param("schoolId") Long schoolId, @Param("sectionArray") String sectionArray);
+    int saveSectionArray(@Param("id") Long id, @Param("sectionArray") String sectionArray, @Param("name") String name);
 
     int deleteSection(Long id);
 
-    int deleteSchoolSection(Long schoolId);
+    int deleteSchoolSection(Long sectionId);
 
     CourseSectionArray getSchoolSectionArray(Long schoolId);
+
+    int setSectionArrayBlock(@Param("id") Long id, @Param("schoolId") Long schoolId);
+
+    int setSectionArrayActive(Long id);
+
+    List<CourseSectionArray> getSchoolSectionList(Long schoolId);
+
+    int addSectionArray(CourseSectionArray courseSectionArray);
 }
