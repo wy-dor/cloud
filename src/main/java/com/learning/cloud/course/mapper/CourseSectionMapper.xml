@@ -85,11 +85,11 @@
     order by start
   </select>
 
-  <insert id="saveSectionArray">
-    insert  into course_section_array
-      (id, content,name) values (#{id},#{sectionArray},#{name})
-      on DUPLICATE KEY UPDATE content = #{sectionArray}, name=#{name}
-  </insert>
+  <update id="saveSectionArray">
+    update course_section_array set
+      content = #{sectionArray},name = #{name}
+      where id = #{id}
+  </update>
 
   <delete id="deleteSection">
     delete from course_section
