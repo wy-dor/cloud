@@ -272,9 +272,9 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                             String courseName = cell.getStringCellValue();
                             String courseNameS = "";
                             if (courseName != null && !courseName.isEmpty()) {
-                                if(className.contains("/")){
-                                    courseName = courseName.substring(0,className.indexOf("/"));
-                                    courseNameS = courseName.substring(className.indexOf("/")+1);
+                                if(courseName.contains("/")){
+                                    courseNameS = courseName.substring(courseName.indexOf("/")+1);
+                                    courseName = courseName.substring(0,courseName.indexOf("/"));
                                 }
                                 //初始化
                                 CourseDetail courseDetail = new CourseDetail();
@@ -303,7 +303,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                                         courseDetail.setCourseTypeS(courseTypeS);
                                         courseDetail.setCourseTeacherNameS(teacherName.get(courseTypeS));
                                         courseDetail.setCourseTeacherIdS(teacherCourse.get(courseTypeS).longValue());
-                                        courseDetail.setWeekType((short)3);
+                                        courseDetail.setWeekType((short)4);
                                     }
                                     courseDetailDao.addCourseDetail(courseDetail);
                                 }
