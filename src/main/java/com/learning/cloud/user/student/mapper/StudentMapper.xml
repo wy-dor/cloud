@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.student.dao.StudentDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.user.student.entity.Student">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="student_name" jdbcType="VARCHAR" property="studentName" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="class_id" jdbcType="INTEGER" property="classId" />
-    <result column="campus_id" jdbcType="INTEGER" property="campusId" />
-  </resultMap>
+
+  <select id="getStuInfoByUserId" parameterType="java.lang.String"
+          resultType="com.learning.cloud.evaluation.entity.StuInfo">
+    select student_name, user_id, student_no
+    from user_student
+    where user_id = #{userId}
+    limit 1
+  </select>
+
+  <select id="listStuInfoInClass" parameterType="java.lang.Integer" resultType="com.learning.cloud.evaluation.entity.StuInfo">
+    select student_name, user_id, student_no
+    from user_student
+    where class_id = #{id}
+  </select>
 
   <select id="getByUserId" parameterType="java.lang.String"
           resultType="com.learning.cloud.user.student.entity.Student">
@@ -30,7 +37,7 @@
     order by id
   </select>
 
-  <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
     select user_id
     from user_student
     where class_id = #{classId}

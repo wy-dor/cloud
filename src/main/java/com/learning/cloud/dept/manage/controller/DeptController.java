@@ -48,15 +48,23 @@ public class DeptController {
 
     /*学校结构数据同步*/
     @PostMapping("/initSchool")
-    public ServiceResult initSchool(Integer schoolId) throws ApiException {
-        deptService.init(schoolId);
+    public ServiceResult initSchool(Integer schoolId) {
+        try {
+            deptService.init(schoolId);
+        } catch (ApiException e) {
+            return ServiceResult.success(e.getErrMsg());
+        }
         return ServiceResult.success("同步成功");
     }
 
     /*班级结构数据同步*/
     @GetMapping("/updateUserInClass")
-    public ServiceResult updateUserInClass(Long deptId) throws ApiException {
-        deptService.saveUserInClass(deptId);
+    public ServiceResult updateUserInClass(Long deptId) {
+        try {
+            deptService.saveUserInClass(deptId);
+        } catch (ApiException e) {
+            return ServiceResult.success(e.getErrMsg());
+        }
         return ServiceResult.success("更新成功");
     }
 

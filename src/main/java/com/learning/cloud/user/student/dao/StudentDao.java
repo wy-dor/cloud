@@ -1,6 +1,7 @@
 package com.learning.cloud.user.student.dao;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.evaluation.entity.StuInfo;
 import com.learning.cloud.user.student.entity.Student;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,8 @@ public interface StudentDao {
     int deleteByUserId(String userId);
 
     int deleteByClassId(Integer classId);
+
+    StuInfo getStuInfoByUserId(String userId);
+
+    List<StuInfo> listStuInfoInClass(Integer classId);
 }
