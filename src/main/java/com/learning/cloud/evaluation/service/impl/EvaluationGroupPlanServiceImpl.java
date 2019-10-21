@@ -82,15 +82,18 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
 
             //返回未处理学生信息
             List<StuInfo> stuInfoList = new ArrayList<>();
-            for (StuInfo stuInfo : classStuInfoList) {
-                for (String userId : stuUserIdListInGroup) {
-                    if(stuInfo.getUserId() == userId){
-                        continue;
+            if(stuUserIdListInGroup.size() > 0){
+                for (StuInfo stuInfo : classStuInfoList) {
+                    for (String userId : stuUserIdListInGroup) {
+                        if(stuInfo.getUserId() == userId){
+                            continue;
+                        }
+                        stuInfoList.add(stuInfo);
                     }
-                    stuInfoList.add(stuInfo);
                 }
+            }else{
+                stuInfoList = classStuInfoList;
             }
-
             groupPlan.setStuInfoList(stuInfoList);
         }
         return JsonResultUtil.success(new PageEntity<>(evaluationGroupPlanList));
