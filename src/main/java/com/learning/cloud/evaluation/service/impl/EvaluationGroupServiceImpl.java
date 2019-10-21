@@ -1,7 +1,9 @@
 package com.learning.cloud.evaluation.service.impl;
 
 import com.learning.cloud.evaluation.dao.EvaluationGroupDao;
+import com.learning.cloud.evaluation.dao.EvaluationGroupPlanDao;
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
+import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import com.learning.cloud.evaluation.entity.StuInfo;
 import com.learning.cloud.evaluation.service.EvaluationGroupService;
 import com.learning.cloud.user.student.dao.StudentDao;
@@ -24,8 +26,12 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
     private EvaluationGroupDao evaluationGroupDao;
 
     @Autowired
+    private EvaluationGroupPlanDao evaluationGroupPlanDao;
+
+    @Autowired
     private StudentDao studentDao;
 
+    //添加小组时需要将移动的组员在对应组中的人员信息删除
     @Override
     public JsonResult addEvaluationGroup(EvaluationGroup evaluationGroup) {
         int i = evaluationGroupDao.insert(evaluationGroup);
@@ -34,8 +40,14 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
 
     @Override
     public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup) {
-        EvaluationGroup eg = new EvaluationGroup();
-        List<String> userIdList = new ArrayList<>();
+//        //获取班级下全部学生
+//        Long groupPlanId = evaluationGroup.getGroupPlanId();
+//        EvaluationGroupPlan evaluationGroupPlan = evaluationGroupPlanDao.getById(groupPlanId);
+//        Integer classId = evaluationGroupPlan.getClassId();
+//        List<StuInfo> stuInfoListInClass = studentDao.listStuInfoInClass(classId);
+//
+//        EvaluationGroup eg = new EvaluationGroup();
+//        List<String> userIdList = new ArrayList<>();
         List<EvaluationGroup> evaluationGroupList = evaluationGroupDao.getByGroup(evaluationGroup);
         for (EvaluationGroup group : evaluationGroupList) {
             setStuList(group);
@@ -55,14 +67,8 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
         List<StuInfo> stuInfoList = new ArrayList<>();
         String[] split = studentUserIds.split(",");
         for (String s : split) {
-            Student byUserId = studentDao.getByUserId(s);
-            if(byUserId != null){
-                StuInfo stuInfo = new StuInfo();
-                stuInfo.setStuUserId(s);
-                stuInfo.setStuName(byUserId.getStudentName());
-                stuInfo.setStuNo(byUserId.getStudentNo());
-                stuInfoList.add(stuInfo);
-            }
+            StuInfo stuInfo = studentDao.getStuInfoByUserId(s);
+            stuInfoList.add(stuInfo);
         }
         evaluationGroup.setStuList(stuInfoList);
     }

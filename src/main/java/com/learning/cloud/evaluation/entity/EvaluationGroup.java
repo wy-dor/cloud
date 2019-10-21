@@ -18,4 +18,6 @@ public class EvaluationGroup extends BaseEntity {
     private String studentUserIds;
 
     private List<StuInfo> stuList;
+
+    private String groupName;
 }
