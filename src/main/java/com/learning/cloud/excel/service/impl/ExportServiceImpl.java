@@ -11,6 +11,8 @@ import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.domain.JsonResult;
+import com.learning.enums.JsonResultEnum;
+import com.learning.exception.MyException;
 import com.learning.utils.CommonUtils;
 import com.learning.utils.JsonResultUtil;
 import org.apache.poi.hssf.usermodel.*;
@@ -19,6 +21,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -69,12 +72,12 @@ public class ExportServiceImpl implements ExportService {
         List<Map<String, Object>> parse = (List<Map<String, Object>>) JSON.parse(subjects);
         for (Map<String, Object> map : parse) {
             String appendix = "";
-            if(scoringRoles == 1){
-                String totalScore =(String) map.get("totalScore");
-                appendix = "(" + totalScore +")";
+            if (scoringRoles == 1) {
+                String totalScore = (String) map.get("totalScore");
+                appendix = "(" + totalScore + ")";
             }
             String courseName = (String) map.get("courseName");
-            subjectStrList.add(courseName+appendix);
+            subjectStrList.add(courseName + appendix);
         }
 
 
@@ -96,11 +99,11 @@ public class ExportServiceImpl implements ExportService {
         sheet.addMergedRegion(region);
 
         String row2_str = "当前成绩表计分方式为分数制，小数点后保留2位";
-        if(scoringRoles == 2){
+        if (scoringRoles == 2) {
             Integer rankModule = gradeModule.getRankModule();
-            if(rankModule == 1){
+            if (rankModule == 1) {
                 row2_str = "当前成绩表计分方式为等第制，请输入“优秀 / 良好 / 合格 / 待合格/ 缺考”";
-            }else{
+            } else {
                 row2_str = "当前成绩表计分方式为等第制，请输入“A / B / C / D / 缺考”";
             }
         }
@@ -118,12 +121,12 @@ public class ExportServiceImpl implements ExportService {
         row3.createCell(2).setCellValue("学号");
         int subjectSize = subjectStrList.size();
         for (int i = 0; i < subjectSize; i++) {
-            row3.createCell(i+3).setCellValue(subjectStrList.get(i));
+            row3.createCell(i + 3).setCellValue(subjectStrList.get(i));
         }
-        row3.createCell(subjectSize+3).setCellValue("评语");
+        row3.createCell(subjectSize + 3).setCellValue("评语");
 
         for (int i = 0; i < stuList.size(); i++) {
-            HSSFRow row_recurse = sheet.createRow(i+3);
+            HSSFRow row_recurse = sheet.createRow(i + 3);
 
             row_recurse.createCell(0).setCellValue(classMap.get(stuList.get(i).getClassId().toString()));
             row_recurse.createCell(1).setCellValue(stuList.get(i).getStudentName());
@@ -154,7 +157,7 @@ public class ExportServiceImpl implements ExportService {
 //        blackStyle.setWrapText(true);
         HSSFFont font = wb.createFont();
         font.setFontName("微软雅黑");
-        font.setFontHeightInPoints((short)11);
+        font.setFontHeightInPoints((short) 11);
         blackStyle_r3.setFont(font);
         row3.setRowStyle(blackStyle_r3);
 
@@ -162,7 +165,7 @@ public class ExportServiceImpl implements ExportService {
         //row3.getCell(4).setCellType(HSSFCell.CELL_TYPE_NUMERIC);
 
         //设置列宽
-        List<Integer> widthList=new ArrayList<>();
+        List<Integer> widthList = new ArrayList<>();
         List<Integer> tempList = Arrays.asList(20, 15, 20);
         widthList.addAll(tempList);
         for (int i = 0; i < subjectSize; i++) {
@@ -170,14 +173,14 @@ public class ExportServiceImpl implements ExportService {
         }
         widthList.add(60);
         for (int i = 0; i < widthList.size(); i++) {
-            sheet.setColumnWidth(i,widthList.get(i)*256);
+            sheet.setColumnWidth(i, widthList.get(i) * 256);
         }
 
 
-        String fileName = CommonUtils.getRandomStr()+".xls";//用随机号来存储文件，避免文件名重复
+        String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
-        String filePath = (rootPath+"/"+fileName).replace("\\","/");
+        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
 
         out = new FileOutputStream(filePath);
         wb.write(out);
@@ -185,7 +188,7 @@ public class ExportServiceImpl implements ExportService {
         out.close();
         DownloadBean download = new DownloadBean();
         download.setFilePath(filePath);
-        download.setTitle(gradeModule.getTitle()+"-成绩导出.xls");
+        download.setTitle(gradeModule.getTitle() + "-成绩导出.xls");
         return JsonResultUtil.success(download);
     }
 
@@ -207,7 +210,7 @@ public class ExportServiceImpl implements ExportService {
             //若班级下学生人数为0则不计入统计
             Integer classId1 = Integer.parseInt(key);
             Integer classStuNum = studentDao.getClassStuNum(classId1);
-            if(classStuNum != null && classStuNum != 0){
+            if (classStuNum != null && classStuNum != 0) {
                 fullClassIdList.add(classId1);
             }
         }
@@ -228,8 +231,8 @@ public class ExportServiceImpl implements ExportService {
         List<GradeEntry> doneClassSubjectInModule = gradeEntryDao.getDoneClassSubjectInModule(tempEntry);
         List<Integer> doneClassIdList = new ArrayList<>();
         //如果传入classId可该班级没有成绩录入时
-        if(classId != null && (doneClassSubjectInModule == null || doneClassSubjectInModule.size() == 0)){
-            undoneClassMention.append(classMapByModule.get(classId.toString()) +"还没有录入成绩，请录入");
+        if (classId != null && (doneClassSubjectInModule == null || doneClassSubjectInModule.size() == 0)) {
+            undoneClassMention.append(classMapByModule.get(classId.toString()) + "还没有录入成绩，请录入");
         }
         //"提示：XXX班的数学，语文成绩还没有录入，请继续录入"
         for (GradeEntry ge : doneClassSubjectInModule) {
@@ -247,30 +250,30 @@ public class ExportServiceImpl implements ExportService {
             }
             //对比得出班级中未录入的科目进行提示
             List<String> undoneSubjectList = CommonUtils.removeStringDupsInList(fullSubjectNameList, doneSubjectList);
-            if(undoneSubjectList != null && undoneSubjectList.size() > 0){
+            if (undoneSubjectList != null && undoneSubjectList.size() > 0) {
                 String s = undoneSubjectList.toString();
                 String substring = s.substring(1, s.length() - 1);
-                undoneSubjectMention.append(className+"中"+ substring +"成绩还没有录入，请继续录入；");
+                undoneSubjectMention.append(className + "中" + substring + "成绩还没有录入，请继续录入；");
             }
         }
-        if (classId == null){
+        if (classId == null) {
             List<Integer> undoneClassIdList = CommonUtils.removeIntegerDupsInList(fullClassIdList, doneClassIdList);
             List<String> undoneClassNameList = new ArrayList<>();
             for (Integer undoneClassId : undoneClassIdList) {
                 undoneClassNameList.add(classMapByModule.get(undoneClassId.toString()));
             }
-            if(undoneClassIdList != null && undoneClassIdList.size() > 0){
+            if (undoneClassIdList != null && undoneClassIdList.size() > 0) {
                 String s = undoneClassNameList.toString();
                 String substring = s.substring(1, s.length() - 1);
-                undoneClassMention.append(substring +"还没有录入成绩；");
+                undoneClassMention.append(substring + "还没有录入成绩；");
             }
         }
 
 
         //如果提示均不为空字符串，则返回提示
-        if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")){
+        if (!undoneClassMention.toString().equals("") || !undoneSubjectMention.toString().equals("")) {
             String s = undoneClassMention.append(undoneSubjectMention).toString();
-            return JsonResultUtil.error(0,s);
+            return JsonResultUtil.error(0, s);
         }
 
         //生成模板
@@ -284,13 +287,13 @@ public class ExportServiceImpl implements ExportService {
         row0.createCell(2).setCellValue("学号");
         int subjectSize = fullSubjectNameList.size();
         for (int i = 0; i < subjectSize; i++) {
-            row0.createCell(i+3).setCellValue(fullSubjectNameList.get(i));
+            row0.createCell(i + 3).setCellValue(fullSubjectNameList.get(i));
         }
-        row0.createCell(subjectSize+3).setCellValue("评语");
+        row0.createCell(subjectSize + 3).setCellValue("评语");
         //科目抬头
         for (int i = 0; i < subjectSize; i++) {
             String subject = fullSubjectNameList.get(i);
-            row0.createCell(i+3).setCellValue(subject);
+            row0.createCell(i + 3).setCellValue(subject);
         }
 
         List<GradeEntry> entryList = gradeEntryDao.getByGradeEntry(tempEntry);
@@ -305,18 +308,18 @@ public class ExportServiceImpl implements ExportService {
             r.createCell(0).setCellValue(className);
             r.createCell(1).setCellValue(studentName);
             r.createCell(2).setCellValue(studentNo);
-            r.createCell(subjectSize+3).setCellValue(remark);
+            r.createCell(subjectSize + 3).setCellValue(remark);
             for (int j = 0; j < subjectSize; j++) {
                 String marks = ge.getMarks();
                 String subject = fullSubjectNameList.get(j);
                 List<Map<String, String>> markMapList = (List<Map<String, String>>) JSON.parse(marks);
                 for (Map<String, String> markMap : markMapList) {
-                    if(markMap.get("courseName").equals(subject)){
+                    if (markMap.get("courseName").equals(subject)) {
                         String value = markMap.get("value");
-                        if(value.equals("")){
+                        if (value.equals("")) {
                             value = "缺考";
                         }
-                        r.createCell(j+3).setCellValue(value);
+                        r.createCell(j + 3).setCellValue(value);
                     }
                 }
             }
@@ -326,12 +329,12 @@ public class ExportServiceImpl implements ExportService {
         CellStyle blackStyle = wb.createCellStyle();
         HSSFFont font = wb.createFont();
         font.setFontName("微软雅黑");
-        font.setFontHeightInPoints((short)11);
+        font.setFontHeightInPoints((short) 11);
         blackStyle.setFont(font);
         row0.setRowStyle(blackStyle);
 
         //设置列宽
-        List<Integer> widthList=new ArrayList<>();
+        List<Integer> widthList = new ArrayList<>();
         List<Integer> tempList = Arrays.asList(20, 15, 30);
         widthList.addAll(tempList);
         for (int i = 0; i < subjectSize; i++) {
@@ -339,13 +342,13 @@ public class ExportServiceImpl implements ExportService {
         }
         widthList.add(60);
         for (int i = 0; i < widthList.size(); i++) {
-            sheet.setColumnWidth(i,widthList.get(i)*256);
+            sheet.setColumnWidth(i, widthList.get(i) * 256);
         }
 
-        String fileName = CommonUtils.getRandomStr()+".xls";//用随机号来存储文件，避免文件名重复
+        String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
-        String filePath = (rootPath+"/"+fileName).replace("\\","/");
+        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
 
         out = new FileOutputStream(filePath);
         wb.write(out);
@@ -353,22 +356,22 @@ public class ExportServiceImpl implements ExportService {
         out.close();
         DownloadBean download = new DownloadBean();
         download.setFilePath(filePath);
-        download.setTitle(gradeModule.getTitle()+"-成绩导出.xls");
+        download.setTitle(gradeModule.getTitle() + "-成绩导出.xls");
         return JsonResultUtil.success(download);
     }
 
     @Override
-    public JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception{
+    public JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception {
         OutputStream out = null;
         InputStream in = null;
 
         File file = new File(filePath);
         try {
-            if(file.exists()){
-                String  fileName = new String(title.getBytes("UTF-8"), "ISO-8859-1");
+            if (file.exists()) {
+                String fileName = new String(title.getBytes("UTF-8"), "ISO-8859-1");
 //                response.setContentType("application/octet-stream");
                 response.setContentType("application/ms-excel;charset=UTF-8");
-                response.addHeader("Content-Disposition", "attachment; filename="+fileName);
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
                 in = new FileInputStream(file);
                 byte[] by = new byte[in.available()];
                 in.read(by);
@@ -377,20 +380,19 @@ public class ExportServiceImpl implements ExportService {
 
                 //删除该文件
                 file.delete();
-
             }
-        }catch (Exception e){
-            throw new Exception("成绩模板下载失败");
-        }finally {
-            try{
-                if(out!=null){
+        } catch (Exception e) {
+            throw new MyException(JsonResultEnum.EXCEL_ERROR_DOWNLOAD);
+        } finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }catch (Exception e){
-                throw new Exception("成绩模板下载失败");
+            } catch (Exception e) {
+                throw new MyException(JsonResultEnum.EXCEL_ERROR_DOWNLOAD);
             }
         }
         return JsonResultUtil.success();

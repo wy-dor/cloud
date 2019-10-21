@@ -76,7 +76,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
             throw new MyException(JsonResultEnum.COURSE_NO_SECTION);
         }
         //下载班级课表
-        List<GradeClass> classList = null;
+        List<GradeClass> classList = new ArrayList<>();
         if (classIds == null) {
             //所有班级
             Campus campus = new Campus();

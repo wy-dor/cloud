@@ -45,6 +45,7 @@ public enum JsonResultEnum {
     COURSE_NO_PARAMS(1071,"EXCEL模板参数错误"),
     COURSE_NO_FILE(1072,"请传入课程信息"),
     COURSE_NO_SECTION(1073,"设置的生效作息时间错误"),
+    EXCEL_ERROR_DOWNLOAD(1074,"EXCEL下载失败！")
     ;
 
     @Getter private Integer code;
