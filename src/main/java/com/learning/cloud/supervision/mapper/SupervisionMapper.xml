@@ -74,6 +74,7 @@
         from supervision
         where bureau_id = #{bureauId}
         and status = 3
+        and topping = 0
         <if test="typeId != null">
             and type_id = #{typeId}
         </if>

@@ -69,5 +69,4 @@ public class PictureController {
             return WangEditorUtil.error();
         }
     }
-
 }

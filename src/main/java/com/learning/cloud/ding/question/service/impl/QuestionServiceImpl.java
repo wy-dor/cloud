@@ -159,10 +159,13 @@ public class QuestionServiceImpl implements QuestionService {
         return picture.getId();
     }
 
+    /*
+    *
+    **/
+    //手机宽度 375 320
+    //高度
     @Override
     public String base64Reduce(MultipartFile file) throws Exception {
-        int widthDist = 500;
-        int heightDist = 500;
         InputStream inputStream = null;
         inputStream = file.getInputStream();
         File toFile = new File(file.getOriginalFilename());
@@ -170,12 +173,17 @@ public class QuestionServiceImpl implements QuestionService {
         inputStream.close();
         // 开始读取文件并进行压缩
         Image img = ImageIO.read(toFile);
+        int originWidth = img.getWidth(null);
+        int originHeight = img.getHeight(null);
+        int destWidth = 400;
+        int destHeight = originHeight * destWidth / originWidth;
 
         // 构造一个类型为预定义图像类型之一的 BufferedImage
-        BufferedImage tag = new BufferedImage(widthDist,heightDist, BufferedImage.TYPE_INT_RGB);
+        BufferedImage tag = new BufferedImage(destWidth,destHeight, BufferedImage.TYPE_INT_RGB);
 
         //绘制图像
-        tag.getGraphics().drawImage(img.getScaledInstance(widthDist, heightDist, Image.SCALE_SMOOTH), 0, 0, null);
+        //Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
+        tag.getGraphics().drawImage(img.getScaledInstance(destWidth, destHeight, Image.SCALE_SMOOTH), 0, 0, null);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(tag, "jpg", outputStream);
         BASE64Encoder encoder = new BASE64Encoder();

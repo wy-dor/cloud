@@ -31,9 +31,6 @@ public class SupervisionServiceImpl implements SupervisionService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private PictureDao pictureDao;
-
     //状态 0:未提交，1:审核中，2:已驳回，3:已发布，4:已撤销
     @Override
     public JsonResult addSupervision(MultipartFile file, Supervision supervision) throws Exception {
