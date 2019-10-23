@@ -102,7 +102,7 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     @Override
     public JsonResult setSectionArrayActive(Long id, Long schoolId) throws Exception {
         int i = courseSectionDao.setSectionArrayBlock(id, schoolId);
-        if(i>0){
+        if(i>=0){
             int j = courseSectionDao.setSectionArrayActive(id);
             if(j>0){
                 return JsonResultUtil.success();
