@@ -13,7 +13,7 @@ public class EvaluationGroup extends BaseEntity {
 
     private Long iconId;
 
-    private Integer userId;
+    private String userId;
 
     private String studentUserIds;
 

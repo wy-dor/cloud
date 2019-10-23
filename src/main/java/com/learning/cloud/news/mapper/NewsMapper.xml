@@ -5,7 +5,6 @@
     select *
     from news
     where id = #{id}
-    limit 1
   </select>
   
   <select id="getNews" parameterType="com.learning.cloud.news.entity.News" resultType="com.learning.cloud.news.entity.News">
@@ -106,6 +105,9 @@
       <if test="bureauId != null">
         bureau_id,
       </if>
+      <if test="urls != null">
+        urls,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -137,6 +139,9 @@
       </if>
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="urls != null">
+        #{urls,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -170,6 +175,9 @@
       </if>
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
+      </if>
+      <if test="urls != null">
+        urls = #{urls,jdbcType=VARCHAR},
       </if>
     </set>
     where id =  #{id,jdbcType=BIGINT}

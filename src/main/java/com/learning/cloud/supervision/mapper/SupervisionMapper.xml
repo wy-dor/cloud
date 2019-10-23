@@ -5,7 +5,6 @@
     select *
     from supervision
     where id = #{id}
-    limit 1
   </select>
 
     <select id="getSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">

@@ -61,7 +61,7 @@
         #{iconId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="studentUserIds != null">
         #{studentUserIds,jdbcType=VARCHAR},
@@ -82,7 +82,7 @@
         icon_id = #{iconId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="studentUserIds != null">
         student_user_ids = #{studentUserIds,jdbcType=VARCHAR},
