@@ -17,8 +17,6 @@ import java.util.List;
  * @Desc:
  */
 public interface PictureService {
-    void inputStreamToFile(InputStream ins, File file);
-
     Picture getPicById(Long picId)throws Exception;
 
     JsonResult addPic(MultipartFile file)throws Exception;
