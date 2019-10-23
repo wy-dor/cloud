@@ -6,19 +6,12 @@ import com.learning.cloud.ding.picture.service.PictureService;
 import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
