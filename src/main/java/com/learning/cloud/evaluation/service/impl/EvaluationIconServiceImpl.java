@@ -19,7 +19,7 @@ import java.util.List;
 public class EvaluationIconServiceImpl implements EvaluationIconService {
 
     @Autowired
-    private EvaluationIconDao evaluationIconDao;
+    private EvaluationIconDao iconDao;
 
     @Autowired
     private QuestionService questionService;
@@ -32,26 +32,26 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         }
         String s = questionService.base64Reduce(file);
         evaluationIcon.setPic(s);
-        int i = evaluationIconDao.insert(evaluationIcon);
+        int i = iconDao.insert(evaluationIcon);
         Long id = evaluationIcon.getId();
         return JsonResultUtil.success("成功增加" + i + "条数据:id " + id);
     }
 
     @Override
     public JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon) {
-        List<EvaluationIcon> evaluationIconList = evaluationIconDao.getByIcon(evaluationIcon);
+        List<EvaluationIcon> evaluationIconList = iconDao.getByIcon(evaluationIcon);
         return JsonResultUtil.success(new PageEntity<>(evaluationIconList));
     }
 
     @Override
     public EvaluationIcon getEvaluationIconById(Long id) {
-        EvaluationIcon evaluationIcon = evaluationIconDao.getById(id);
+        EvaluationIcon evaluationIcon = iconDao.getById(id);
         return evaluationIcon;
     }
 
     @Override
     public JsonResult deleteEvaluationIconById(Long id) {
-        int i = evaluationIconDao.deleteById(id);
+        int i = iconDao.deleteById(id);
         if (i > 0) {
             return JsonResultUtil.success("删除成功");
         }
@@ -61,7 +61,7 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
 
     @Override
     public JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon) throws Exception {
-        int i = evaluationIconDao.update(evaluationIcon);
+        int i = iconDao.update(evaluationIcon);
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 

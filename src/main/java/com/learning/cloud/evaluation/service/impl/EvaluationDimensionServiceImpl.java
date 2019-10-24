@@ -19,20 +19,20 @@ import java.util.List;
 public class EvaluationDimensionServiceImpl implements EvaluationDimensionService {
 
     @Autowired
-    private EvaluationDimensionDao evaluationDimensionDao;
+    private EvaluationDimensionDao dimensionDao;
 
     @Autowired
-    private EvaluationItemDao evaluationItemDao;
+    private EvaluationItemDao itemDao;
 
     @Override
     public JsonResult addEvaluationDimension(EvaluationDimension evaluationDimension) {
-        int i = evaluationDimensionDao.insert(evaluationDimension);
+        int i = dimensionDao.insert(evaluationDimension);
         return JsonResultUtil.success("成功增加" + i + "条数据  id:" + evaluationDimension.getId());
     }
 
     @Override
     public JsonResult getEvaluationDimensionById(Long id) {
-        EvaluationDimension evaluationDimension = evaluationDimensionDao.getById(id);
+        EvaluationDimension evaluationDimension = dimensionDao.getById(id);
         return JsonResultUtil.success(evaluationDimension);
     }
 
@@ -40,20 +40,20 @@ public class EvaluationDimensionServiceImpl implements EvaluationDimensionServic
     public JsonResult deleteEvaluationDimensionById(Long id) {
         EvaluationItem evaluationItem = new EvaluationItem();
         evaluationItem.setDimensionId(id);
-        evaluationItemDao.deleteByItem(evaluationItem);
-        evaluationDimensionDao.deleteById(id);
+        itemDao.deleteByItem(evaluationItem);
+        dimensionDao.deleteById(id);
         return JsonResultUtil.success("删除成功");
     }
 
     @Override
     public JsonResult updateEvaluationDimension(EvaluationDimension evaluationDimension) {
-        int i = evaluationDimensionDao.update(evaluationDimension);
+        int i = dimensionDao.update(evaluationDimension);
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 
     @Override
     public JsonResult getEvaluationDimension(EvaluationDimension evaluationDimension) {
-        List<EvaluationDimension> evaluationDimensionList = evaluationDimensionDao.getByDimension(evaluationDimension);
+        List<EvaluationDimension> evaluationDimensionList = dimensionDao.getByDimension(evaluationDimension);
         return JsonResultUtil.success(new PageEntity<>(evaluationDimensionList));
     }
 

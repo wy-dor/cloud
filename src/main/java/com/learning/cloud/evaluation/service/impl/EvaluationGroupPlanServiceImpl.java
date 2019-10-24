@@ -23,26 +23,26 @@ import java.util.List;
 public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanService {
 
     @Autowired
-    private EvaluationGroupPlanDao evaluationGroupPlanDao;
+    private EvaluationGroupPlanDao groupPlanDao;
 
     @Autowired
-    private EvaluationGroupDao evaluationGroupDao;
+    private EvaluationGroupDao groupDao;
 
     @Autowired
-    private EvaluationGroupService evaluationGroupService;
+    private EvaluationGroupService groupService;
 
     @Autowired
     private StudentDao studentDao;
 
     @Override
     public JsonResult addEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan) {
-        int i = evaluationGroupPlanDao.insert(evaluationGroupPlan);
+        int i = groupPlanDao.insert(evaluationGroupPlan);
         return JsonResultUtil.success("成功增加" + i + "条数据  id:" + evaluationGroupPlan.getId());
     }
 
     @Override
     public JsonResult getEvaluationGroupPlanById(Long id) {
-        EvaluationGroupPlan evaluationGroupPlan = evaluationGroupPlanDao.getById(id);
+        EvaluationGroupPlan evaluationGroupPlan = groupPlanDao.getById(id);
         return JsonResultUtil.success(evaluationGroupPlan);
     }
 
@@ -50,14 +50,14 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
     public JsonResult deleteEvaluationGroupPlanById(Long id) {
         EvaluationGroup evaluationGroup = new EvaluationGroup();
         evaluationGroup.setGroupPlanId(id);
-        evaluationGroupDao.deleteByGroup(evaluationGroup);
-        evaluationGroupPlanDao.deleteById(id);
+        groupDao.deleteByGroup(evaluationGroup);
+        groupPlanDao.deleteById(id);
         return JsonResultUtil.success("删除成功");
     }
 
     @Override
     public JsonResult updateEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan) {
-        int i = evaluationGroupPlanDao.update(evaluationGroupPlan);
+        int i = groupPlanDao.update(evaluationGroupPlan);
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 
@@ -68,12 +68,12 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
         List<StuInfo> classStuInfoList = studentDao.listStuInfoInClass(classId);
 
         //小组信息
-        List<EvaluationGroupPlan> evaluationGroupPlanList = evaluationGroupPlanDao.getByGroupPlan(evaluationGroupPlan);
+        List<EvaluationGroupPlan> evaluationGroupPlanList = groupPlanDao.getByGroupPlan(evaluationGroupPlan);
         for (EvaluationGroupPlan groupPlan : evaluationGroupPlanList) {
             Long id = groupPlan.getId();
             EvaluationGroup evaluationGroup = new EvaluationGroup();
             evaluationGroup.setGroupPlanId(id);
-            List<EvaluationGroup> groupList = evaluationGroupService.getEvaluationGroup(evaluationGroup);
+            List<EvaluationGroup> groupList = groupService.getEvaluationGroup(evaluationGroup);
             List<String> stuUserIdListInGroup = new ArrayList<>();
             for (EvaluationGroup group : groupList) {
                 String studentUserIds = group.getStudentUserIds();

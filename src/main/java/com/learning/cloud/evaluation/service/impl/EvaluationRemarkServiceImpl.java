@@ -3,7 +3,6 @@ package com.learning.cloud.evaluation.service.impl;
 import com.learning.cloud.evaluation.dao.EvaluationRemarkDao;
 import com.learning.cloud.evaluation.entity.EvaluationRemark;
 import com.learning.cloud.evaluation.service.EvaluationRemarkService;
-import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
@@ -18,23 +17,23 @@ import java.util.List;
 public class EvaluationRemarkServiceImpl implements EvaluationRemarkService {
 
     @Autowired
-    private EvaluationRemarkDao evaluationRemarkDao;
+    private EvaluationRemarkDao remarkDao;
 
     @Override
     public JsonResult addEvaluationRemark(EvaluationRemark evaluationRemark) {
-        int i = evaluationRemarkDao.insert(evaluationRemark);
+        int i = remarkDao.insert(evaluationRemark);
         return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationRemark.getId());
     }
 
     @Override
     public JsonResult getEvaluationRemark(EvaluationRemark evaluationRemark) {
-        List<EvaluationRemark> evaluationRemarkList = evaluationRemarkDao.getByRemark(evaluationRemark);
+        List<EvaluationRemark> evaluationRemarkList = remarkDao.getByRemark(evaluationRemark);
         return JsonResultUtil.success(new PageEntity<>(evaluationRemarkList));
     }
 
     @Override
     public JsonResult getEvaluationRemarkById(Long id) {
-        EvaluationRemark evaluationRemark = evaluationRemarkDao.getById(id);
+        EvaluationRemark evaluationRemark = remarkDao.getById(id);
         return JsonResultUtil.success(evaluationRemark);
     }
 
@@ -42,13 +41,13 @@ public class EvaluationRemarkServiceImpl implements EvaluationRemarkService {
     public JsonResult deleteEvaluationRemarkById(Long id) {
         EvaluationRemark evaluationRemark = new EvaluationRemark();
         evaluationRemark.setId(id);
-        int i = evaluationRemarkDao.deleteByRemark(evaluationRemark);
+        int i = remarkDao.deleteByRemark(evaluationRemark);
         return JsonResultUtil.success("删除成功");
     }
 
     @Override
     public JsonResult updateEvaluationRemark(EvaluationRemark evaluationRemark) throws Exception {
-        int i = evaluationRemarkDao.update(evaluationRemark);
+        int i = remarkDao.update(evaluationRemark);
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 

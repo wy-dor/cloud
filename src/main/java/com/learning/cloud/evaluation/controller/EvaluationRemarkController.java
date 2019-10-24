@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EvaluationRemarkController {
     @Autowired
-    private EvaluationRemarkService evaluationRemarkService;
+    private EvaluationRemarkService remarkService;
 
     @GetMapping("/getEvaluationRemark")
     public JsonResult getEvaluationRemark(EvaluationRemark evaluationRemark){
-        return evaluationRemarkService.getEvaluationRemark(evaluationRemark);
+        return remarkService.getEvaluationRemark(evaluationRemark);
     }
 
     @GetMapping("/getEvaluationRemarkById")
     public JsonResult getEvaluationRemarkById(Long id){
-        return evaluationRemarkService.getEvaluationRemarkById(id);
+        return remarkService.getEvaluationRemarkById(id);
     }
 
     @PostMapping("/addEvaluationRemark")
     public JsonResult addEvaluationRemark(EvaluationRemark evaluationRemark) throws Exception {
-        return evaluationRemarkService.addEvaluationRemark(evaluationRemark);
+        return remarkService.addEvaluationRemark(evaluationRemark);
     }
 
     @PostMapping("/updateEvaluationRemark")
     public JsonResult updateEvaluationRemark(EvaluationRemark evaluationRemark)  throws Exception{
-        return evaluationRemarkService.updateEvaluationRemark(evaluationRemark);
+        return remarkService.updateEvaluationRemark(evaluationRemark);
     }
 
     @GetMapping("/deleteEvaluationRemarkById")
     public JsonResult deleteEvaluationRemarkById(Long id){
-        return evaluationRemarkService.deleteEvaluationRemarkById(id);
+        return remarkService.deleteEvaluationRemarkById(id);
     }
 }
 

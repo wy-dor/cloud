@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EvaluationRecordController {
     @Autowired
-    private EvaluationRecordService evaluationRecordService;
+    private EvaluationRecordService recordService;
 
     @PostMapping("/addEvaluationRecord")
     public JsonResult addEvaluationRecord(EvaluationRecord evaluationRecord){
-        return evaluationRecordService.addEvaluationRecord(evaluationRecord);
+        return recordService.addEvaluationRecord(evaluationRecord);
     }
 
     @PostMapping("updateEvaluationRecord")
     public JsonResult updateEvaluationRecord(EvaluationRecord evaluationRecord){
-        return evaluationRecordService.updateEvaluationRecord(evaluationRecord);
+        return recordService.updateEvaluationRecord(evaluationRecord);
     }
 
     @GetMapping("/getEvaluationRecordById")
     public JsonResult getEvaluationRecordById(Long id){
-        return evaluationRecordService.getEvaluationRecordById(id);
+        return recordService.getEvaluationRecordById(id);
     }
 
     //删除指定评价记录方案及其下所有评论内容
     @GetMapping("/deleteEvaluationRecordById")
     public JsonResult deleteEvaluationRecordById(Long id){
-        return evaluationRecordService.deleteEvaluationRecordById(id);
+        return recordService.deleteEvaluationRecordById(id);
     }
 
     @GetMapping("/getEvaluationRecord")
     public JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord){
-        return evaluationRecordService.getEvaluationRecord(evaluationRecord);
+        return recordService.getEvaluationRecord(evaluationRecord);
     }
 }

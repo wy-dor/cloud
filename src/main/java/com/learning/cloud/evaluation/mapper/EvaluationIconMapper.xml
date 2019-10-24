@@ -34,7 +34,7 @@
     <delete id="deleteById" parameterType="java.lang.Long">
     delete from evaluation_icon
     where id = #{id}
-  </delete>
+    </delete>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.evaluation.entity.EvaluationIcon">

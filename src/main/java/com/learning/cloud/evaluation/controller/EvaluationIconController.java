@@ -18,16 +18,16 @@ import java.io.IOException;
 @RestController
 public class EvaluationIconController {
     @Autowired
-    private EvaluationIconService evaluationIconService;
+    private EvaluationIconService iconService;
 
     @GetMapping("/getEvaluationIcon")
     public JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon){
-        return evaluationIconService.getEvaluationIcon(evaluationIcon);
+        return iconService.getEvaluationIcon(evaluationIcon);
     }
 
     @GetMapping("/getEvaluationIconById")
     public void getEvaluationIconById(Long id, HttpServletResponse response) throws IOException {
-        EvaluationIcon evaluationIconById = evaluationIconService.getEvaluationIconById(id);
+        EvaluationIcon evaluationIconById = iconService.getEvaluationIconById(id);
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] bytes = decoder.decodeBuffer(evaluationIconById.getPic());
         for(int i=0; i<bytes.length;++i){
@@ -44,17 +44,17 @@ public class EvaluationIconController {
 
     @PostMapping("/addEvaluationIcon")
     public JsonResult addEvaluationIcon(@RequestParam(value="file",required = false)MultipartFile file, EvaluationIcon evaluationIcon) throws Exception {
-        return evaluationIconService.addEvaluationIcon(file, evaluationIcon);
+        return iconService.addEvaluationIcon(file, evaluationIcon);
     }
 
     @PostMapping("/updateEvaluationIcon")
     public JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon)  throws Exception{
-        return evaluationIconService.updateEvaluationIcon(evaluationIcon);
+        return iconService.updateEvaluationIcon(evaluationIcon);
     }
 
     @GetMapping("/deleteEvaluationIconById")
     public JsonResult deleteEvaluationIconById(Long id){
-        return evaluationIconService.deleteEvaluationIconById(id);
+        return iconService.deleteEvaluationIconById(id);
     }
 }
 

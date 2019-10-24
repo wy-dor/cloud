@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EvaluationGroupPlanController {
     @Autowired
-    private EvaluationGroupPlanService evaluationGroupPlanService;
+    private EvaluationGroupPlanService groupPlanService;
 
     @PostMapping("/addEvaluationGroupPlan")
     public JsonResult addEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
-        return evaluationGroupPlanService.addEvaluationGroupPlan(evaluationGroupPlan);
+        return groupPlanService.addEvaluationGroupPlan(evaluationGroupPlan);
     }
 
     @PostMapping("updateEvaluationGroupPlan")
     public JsonResult updateEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
-        return evaluationGroupPlanService.updateEvaluationGroupPlan(evaluationGroupPlan);
+        return groupPlanService.updateEvaluationGroupPlan(evaluationGroupPlan);
     }
 
     @GetMapping("/getEvaluationGroupPlanById")
     public JsonResult getEvaluationGroupPlanById(Long id){
-        return evaluationGroupPlanService.getEvaluationGroupPlanById(id);
+        return groupPlanService.getEvaluationGroupPlanById(id);
     }
 
     //删除指定分组方案及其下分组
     @GetMapping("/deleteEvaluationGroupPlanById")
     public JsonResult deleteEvaluationGroupPlanById(Long id){
-        return evaluationGroupPlanService.deleteEvaluationGroupPlanById(id);
+        return groupPlanService.deleteEvaluationGroupPlanById(id);
     }
 
     @GetMapping("/getEvaluationGroupPlan")
     public JsonResult getEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
-        return evaluationGroupPlanService.getEvaluationGroupPlan(evaluationGroupPlan);
+        return groupPlanService.getEvaluationGroupPlan(evaluationGroupPlan);
     }
 }

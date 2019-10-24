@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EvaluationDimensionController {
     @Autowired
-    private EvaluationDimensionService evaluationDimensionService;
+    private EvaluationDimensionService dimensionService;
 
     @PostMapping("/addEvaluationDimension")
     public JsonResult addEvaluationDimension(EvaluationDimension evaluationDimension){
-        return evaluationDimensionService.addEvaluationDimension(evaluationDimension);
+        return dimensionService.addEvaluationDimension(evaluationDimension);
     }
 
     @PostMapping("updateEvaluationDimension")
     public JsonResult updateEvaluationDimension(EvaluationDimension evaluationDimension){
-        return evaluationDimensionService.updateEvaluationDimension(evaluationDimension);
+        return dimensionService.updateEvaluationDimension(evaluationDimension);
     }
 
     @GetMapping("/getEvaluationDimensionById")
     public JsonResult getEvaluationDimensionById(Long id){
-        return evaluationDimensionService.getEvaluationDimensionById(id);
+        return dimensionService.getEvaluationDimensionById(id);
     }
 
     //删除指定评价维度及其下子评价类型
     @GetMapping("/deleteEvaluationDimensionById")
     public JsonResult deleteEvaluationDimensionById(Long id){
-        return evaluationDimensionService.deleteEvaluationDimensionById(id);
+        return dimensionService.deleteEvaluationDimensionById(id);
     }
 
     @GetMapping("/getEvaluationDimension")
     public JsonResult getEvaluationDimension(EvaluationDimension evaluationDimension){
-        return evaluationDimensionService.getEvaluationDimension(evaluationDimension);
+        return dimensionService.getEvaluationDimension(evaluationDimension);
     }
 }

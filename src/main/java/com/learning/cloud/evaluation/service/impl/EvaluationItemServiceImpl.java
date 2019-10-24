@@ -17,23 +17,23 @@ import java.util.List;
 public class EvaluationItemServiceImpl implements EvaluationItemService {
 
     @Autowired
-    private EvaluationItemDao evaluationItemDao;
+    private EvaluationItemDao itemDao;
 
     @Override
     public JsonResult addEvaluationItem(EvaluationItem evaluationItem) throws Exception {
-        int i = evaluationItemDao.insert(evaluationItem);
+        int i = itemDao.insert(evaluationItem);
         return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationItem.getId());
     }
 
     @Override
     public JsonResult getEvaluationItem(EvaluationItem evaluationItem) {
-        List<EvaluationItem> evaluationItemList = evaluationItemDao.getByItem(evaluationItem);
+        List<EvaluationItem> evaluationItemList = itemDao.getByItem(evaluationItem);
         return JsonResultUtil.success(new PageEntity<>(evaluationItemList));
     }
 
     @Override
     public JsonResult getEvaluationItemById(Long id) {
-        EvaluationItem evaluationItem = evaluationItemDao.getById(id);
+        EvaluationItem evaluationItem = itemDao.getById(id);
         return JsonResultUtil.success(evaluationItem);
     }
 
@@ -41,13 +41,13 @@ public class EvaluationItemServiceImpl implements EvaluationItemService {
     public JsonResult deleteEvaluationItemById(Long id) {
         EvaluationItem evaluationItem = new EvaluationItem();
         evaluationItem.setId(id);
-        int i = evaluationItemDao.deleteByItem(evaluationItem);
+        int i = itemDao.deleteByItem(evaluationItem);
         return JsonResultUtil.success("删除成功");
     }
 
     @Override
     public JsonResult updateEvaluationItem(EvaluationItem evaluationItem) throws Exception {
-        int i = evaluationItemDao.update(evaluationItem);
+        int i = itemDao.update(evaluationItem);
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 
@@ -59,7 +59,7 @@ public class EvaluationItemServiceImpl implements EvaluationItemService {
             long id = Long.parseLong(s);
             EvaluationItem evaluationItem = new EvaluationItem();
             evaluationItem.setId(id);
-            int j = evaluationItemDao.update(evaluationItem);
+            int j = itemDao.update(evaluationItem);
             if (j == 1) {
                 i++;
             }

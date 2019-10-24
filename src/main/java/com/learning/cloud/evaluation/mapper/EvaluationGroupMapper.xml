@@ -13,7 +13,7 @@
         select *
         from evaluation_group
         where group_plan_id = #{groupPlanId,jdbcType=BIGINT}
-        <if test="studentUserIds != null">
+        <if test="studentUserIds != null and studentUserIds != ''">
             and FIND_IN_SET(#{studentUserIds},student_user_ids)
         </if>
     </select>
