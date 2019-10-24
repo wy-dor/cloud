@@ -2,119 +2,121 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationDimensionDao">
 
-  <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
+    <select id="getById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
     select *
     from evaluation_dimension
     where id = #{id}
   </select>
-  
-  <select id="getByDimension" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension" 
-          resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-    select a.* ,IFNULL(b.praiseItemCount, 0) praiseItemCount, IFNULL(b.criticalItemCount, 0) criticalItemCount
-    from evaluation_dimension a
-    left join
-    (select c.dimension_id, sum(case when plus_minus = 1 then 1 else 0 end) praiseItemCount,
-    sum(case when plus_minus = -1 then 1 else 0 end) criticalItemCount
-    from evaluation_item c
-    group by dimension_id) b
-    on a.id = b.dimension_id
-    <where>
-      <if test="dimensionName != null">
-        and a.dimension_name = #{dimensionName,jdbcType=VARCHAR}
-      </if>
-      <if test="schoolId != null">
-        and a.school_id = #{schoolId,jdbcType=INTEGER}
-      </if>
-      <if test="updateUserId != null">
-        and a.update_user_id = #{updateUserId,jdbcType=VARCHAR}
-      </if>
-      <if test="updateUserName != null">
-        and a.update_user_name = #{updateUserName,jdbcType=VARCHAR}
-      </if>
-      <if test="builtin != null">
-        and a.builtin = #{builtin,jdbcType=INTEGER}
-      </if>
-    </where>
-  </select>
 
-  <delete id="deleteById" parameterType="java.lang.Long">
+    <select id="getByDimension" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
+        select a.* ,IFNULL(b.praiseItemCount, 0) praiseItemCount, IFNULL(b.criticalItemCount, 0) criticalItemCount
+        from evaluation_dimension a
+        left join
+        (select c.dimension_id, sum(case when plus_minus = 1 then 1 else 0 end) praiseItemCount,
+        sum(case when plus_minus = -1 then 1 else 0 end) criticalItemCount
+        from evaluation_item c
+        group by dimension_id) b
+        on a.id = b.dimension_id
+        <where>
+            <if test="dimensionName != null">
+                and a.dimension_name = #{dimensionName,jdbcType=VARCHAR}
+            </if>
+            <if test="schoolId != null">
+                and a.school_id = #{schoolId,jdbcType=INTEGER}
+            </if>
+            <if test="updateUserId != null">
+                and a.update_user_id = #{updateUserId,jdbcType=VARCHAR}
+            </if>
+            <if test="updateUserName != null">
+                and a.update_user_name = #{updateUserName,jdbcType=VARCHAR}
+            </if>
+            <if test="builtin != null">
+                and a.builtin = #{builtin,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
     delete from evaluation_dimension
     where id = #{id}
    </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-    insert into evaluation_dimension
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="dimensionName != null">
-        dimension_name,
-      </if>
-      <if test="iconId != null">
-        icon_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="updateUserId != null">
-        update_user_id,
-      </if>
-      <if test="updateUserName != null">
-        update_user_name,
-      </if>
-      <if test="builtin != null">
-        builtin,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="dimensionName != null">
-        #{dimensionName,jdbcType=VARCHAR},
-      </if>
-      <if test="iconId != null">
-        #{iconId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="updateUserId != null">
-        #{updateUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="updateUserName != null">
-        #{updateUserName,jdbcType=VARCHAR},
-      </if>
-      <if test="builtin != null">
-        #{builtin,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension">
+        insert into evaluation_dimension
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dimensionName != null">
+                dimension_name,
+            </if>
+            <if test="iconId != null">
+                icon_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="updateUserId != null">
+                update_user_id,
+            </if>
+            <if test="updateUserName != null">
+                update_user_name,
+            </if>
+            <if test="builtin != null">
+                builtin,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="dimensionName != null">
+                #{dimensionName,jdbcType=VARCHAR},
+            </if>
+            <if test="iconId != null">
+                #{iconId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserName != null">
+                #{updateUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="builtin != null">
+                #{builtin,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-    update evaluation_dimension
-    <set>
-      <if test="dimensionName != null">
-        dimension_name = #{dimensionName,jdbcType=VARCHAR},
-      </if>
-      <if test="iconId != null">
-        icon_id = #{iconId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="updateUserId != null">
-        update_user_id = #{updateUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="updateUserName != null">
-        update_user_name = #{updateUserName,jdbcType=VARCHAR},
-      </if>
-      <if test="builtin != null">
-        builtin = #{builtin,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension">
+        update evaluation_dimension
+        <set>
+            <if test="dimensionName != null">
+                dimension_name = #{dimensionName,jdbcType=VARCHAR},
+            </if>
+            <if test="iconId != null">
+                icon_id = #{iconId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="updateUserId != null">
+                update_user_id = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserName != null">
+                update_user_name = #{updateUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="builtin != null">
+                builtin = #{builtin,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 
 </mapper>

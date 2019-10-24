@@ -26,20 +26,37 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
     private EvaluationGroupDao evaluationGroupDao;
 
     @Autowired
-    private EvaluationGroupPlanDao evaluationGroupPlanDao;
-
-    @Autowired
     private StudentDao studentDao;
 
     //添加小组时需要将移动的组员在对应组中的人员信息删除
     @Override
     public JsonResult addEvaluationGroup(EvaluationGroup evaluationGroup) {
+        String studentUserIds = evaluationGroup.getStudentUserIds();
+        String[] split = studentUserIds.split(",");
+        EvaluationGroup eg = new EvaluationGroup();
+        eg.setGroupPlanId(evaluationGroup.getGroupPlanId());
+        for (String s : split) {
+            eg.setStudentUserIds(s);
+            List<EvaluationGroup> byGroup = evaluationGroupDao.getByGroup(eg);
+            for (EvaluationGroup group : byGroup) {
+                String userIds = group.getStudentUserIds();
+                String concatUserIds = "," + userIds + ",";
+                String replace = concatUserIds.replace(s + ",", "");
+                String substring = "";
+                //需考虑最后只剩下","时subString会报错
+                if (!replace.equals(",")) {
+                    substring = replace.substring(1, replace.lastIndexOf(","));
+                }
+                group.setStudentUserIds(substring);
+                evaluationGroupDao.update(group);
+            }
+        }
         int i = evaluationGroupDao.insert(evaluationGroup);
-        return JsonResultUtil.success("成功增加" + i + "条数据:id "+evaluationGroup.getId());
+        return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationGroup.getId());
     }
 
     @Override
-    public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup) {
+    public List<EvaluationGroup> getEvaluationGroup(EvaluationGroup evaluationGroup) {
 //        //获取班级下全部学生
 //        Long groupPlanId = evaluationGroup.getGroupPlanId();
 //        EvaluationGroupPlan evaluationGroupPlan = evaluationGroupPlanDao.getById(groupPlanId);
@@ -52,7 +69,7 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
         for (EvaluationGroup group : evaluationGroupList) {
             setStuList(group);
         }
-        return JsonResultUtil.success(new PageEntity<>(evaluationGroupList));
+        return evaluationGroupList;
     }
 
     @Override
@@ -66,9 +83,13 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
         String studentUserIds = evaluationGroup.getStudentUserIds();
         List<StuInfo> stuInfoList = new ArrayList<>();
         String[] split = studentUserIds.split(",");
-        for (String s : split) {
-            StuInfo stuInfo = studentDao.getStuInfoByUserId(s);
-            stuInfoList.add(stuInfo);
+        if(split.length > 0){
+            for (String s : split) {
+                StuInfo stuInfo = studentDao.getStuInfoByUserId(s);
+                if(stuInfo != null){
+                    stuInfoList.add(stuInfo);
+                }
+            }
         }
         evaluationGroup.setStuList(stuInfoList);
     }

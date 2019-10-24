@@ -1,90 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationGroupPlanDao">
-  
-  <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
+
+    <select id="getById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
     select *
     from evaluation_group_plan
     where id = #{id}
   </select>
 
-  <select id="getByGroupPlan" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan"
-          resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
-    select *
-    from evaluation_group_plan
-    <where>
-      <if test="name != null">
-        and name = #{name}
-      </if>
-      <if test="userId != null">
-        and user_id = #{userId}
-      </if>
-      <if test="userName != null">
-        and user_name = #{userName}
-      </if>
-      <if test="classId != null">
-        and class_id = #{classId}
-      </if>
-    </where>
-  </select>
-  
-  <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
+    <select id="getByGroupPlan" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
+        select *
+        from evaluation_group_plan
+        <where>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null">
+                and user_name = #{userName}
+            </if>
+            <if test="classId != null">
+                and class_id = #{classId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
     delete from evaluation_group_plan
     where id = #{id}
   </delete>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
-    insert into evaluation_group_plan
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  
-  <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
-    update evaluation_group_plan
-    <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-  
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
+        insert into evaluation_group_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
+        update evaluation_group_plan
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

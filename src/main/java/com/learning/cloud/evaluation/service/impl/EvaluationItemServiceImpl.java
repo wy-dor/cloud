@@ -22,7 +22,7 @@ public class EvaluationItemServiceImpl implements EvaluationItemService {
     @Override
     public JsonResult addEvaluationItem(EvaluationItem evaluationItem) throws Exception {
         int i = evaluationItemDao.insert(evaluationItem);
-        return JsonResultUtil.success("成功增加" + i + "条数据:id "+evaluationItem.getId());
+        return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationItem.getId());
     }
 
     @Override

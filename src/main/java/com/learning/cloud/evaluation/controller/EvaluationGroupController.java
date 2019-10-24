@@ -3,12 +3,16 @@ package com.learning.cloud.evaluation.controller;
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
 import com.learning.cloud.evaluation.service.EvaluationGroupService;
 import com.learning.domain.JsonResult;
+import com.learning.domain.PageEntity;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 public class EvaluationGroupController {
@@ -17,7 +21,8 @@ public class EvaluationGroupController {
 
     @GetMapping("/getEvaluationGroup")
     public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup){
-        return evaluationGroupService.getEvaluationGroup(evaluationGroup);
+        List<EvaluationGroup> groupList = evaluationGroupService.getEvaluationGroup(evaluationGroup);
+        return JsonResultUtil.success(new PageEntity<>(groupList));
     }
 
     @GetMapping("/getEvaluationGroupById")

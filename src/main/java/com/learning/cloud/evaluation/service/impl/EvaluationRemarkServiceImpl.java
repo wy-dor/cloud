@@ -23,7 +23,7 @@ public class EvaluationRemarkServiceImpl implements EvaluationRemarkService {
     @Override
     public JsonResult addEvaluationRemark(EvaluationRemark evaluationRemark) {
         int i = evaluationRemarkDao.insert(evaluationRemark);
-        return JsonResultUtil.success("成功增加" + i + "条数据:id "+evaluationRemark.getId());
+        return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationRemark.getId());
     }
 
     @Override

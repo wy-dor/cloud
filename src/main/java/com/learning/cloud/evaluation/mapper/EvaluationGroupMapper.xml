@@ -1,96 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationGroupDao">
-  <select id="getById" parameterType="java.lang.Long"
-          resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
+    <select id="getById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
     select *
     from evaluation_group
     where id = #{id}
   </select>
-  
-  <select id="getByGroup" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup"
-          resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
-    select *
-    from evaluation_group
-    where group_plan_id = #{groupPlanId,jdbcType=BIGINT}
-  </select>
-  
-  <delete id="deleteByGroup" parameterType="java.lang.Long">
-    delete from evaluation_group
-    where
-    <choose>
-      <when test="id != null">
-        id = #{id}
-      </when>
-      <when test="groupPlanId != null">
-        group_plan_id = #{groupPlanId}
-      </when>
-    </choose>
-  </delete>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup">
-    insert into evaluation_group
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="groupPlanId != null">
-        group_plan_id,
-      </if>
-      <if test="iconId != null">
-        icon_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="studentUserIds != null">
-        student_user_ids,
-      </if>
-      <if test="groupName != null">
-          group_name,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="groupPlanId != null">
-        #{groupPlanId,jdbcType=BIGINT},
-      </if>
-      <if test="iconId != null">
-        #{iconId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="studentUserIds != null">
-        #{studentUserIds,jdbcType=VARCHAR},
-      </if>
-      <if test="groupName != null">
-        #{groupName,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  
-  <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup">
-    update evaluation_group
-    <set>
-      <if test="groupPlanId != null">
-        group_plan_id = #{groupPlanId,jdbcType=BIGINT},
-      </if>
-      <if test="iconId != null">
-        icon_id = #{iconId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="studentUserIds != null">
-        student_user_ids = #{studentUserIds,jdbcType=VARCHAR},
-      </if>
-      <if test="groupName != null">
-          group_name = #{groupName,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
+
+    <select id="getByGroup" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
+        select *
+        from evaluation_group
+        where group_plan_id = #{groupPlanId,jdbcType=BIGINT}
+        <if test="studentUserIds != null">
+            and FIND_IN_SET(#{studentUserIds},student_user_ids)
+        </if>
+    </select>
+
+    <delete id="deleteByGroup" parameterType="java.lang.Long">
+        delete from evaluation_group
+        where
+        <choose>
+            <when test="id != null">
+                id = #{id}
+            </when>
+            <when test="groupPlanId != null">
+                group_plan_id = #{groupPlanId}
+            </when>
+        </choose>
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup">
+        insert into evaluation_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="groupPlanId != null">
+                group_plan_id,
+            </if>
+            <if test="iconId != null">
+                icon_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="studentUserIds != null">
+                student_user_ids,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="groupPlanId != null">
+                #{groupPlanId,jdbcType=BIGINT},
+            </if>
+            <if test="iconId != null">
+                #{iconId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="studentUserIds != null">
+                #{studentUserIds,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup">
+        update evaluation_group
+        <set>
+            <if test="groupPlanId != null">
+                group_plan_id = #{groupPlanId,jdbcType=BIGINT},
+            </if>
+            <if test="iconId != null">
+                icon_id = #{iconId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="studentUserIds != null">
+                student_user_ids = #{studentUserIds,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

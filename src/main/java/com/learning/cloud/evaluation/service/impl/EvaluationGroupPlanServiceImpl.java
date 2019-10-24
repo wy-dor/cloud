@@ -6,6 +6,7 @@ import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
 import com.learning.cloud.evaluation.entity.StuInfo;
 import com.learning.cloud.evaluation.service.EvaluationGroupPlanService;
+import com.learning.cloud.evaluation.service.EvaluationGroupService;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
@@ -26,6 +27,9 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
 
     @Autowired
     private EvaluationGroupDao evaluationGroupDao;
+
+    @Autowired
+    private EvaluationGroupService evaluationGroupService;
 
     @Autowired
     private StudentDao studentDao;
@@ -69,8 +73,8 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
             Long id = groupPlan.getId();
             EvaluationGroup evaluationGroup = new EvaluationGroup();
             evaluationGroup.setGroupPlanId(id);
-            List<EvaluationGroup> groupList = evaluationGroupDao.getByGroup(evaluationGroup);
-            List<String> stuUserIdListInGroup  = new ArrayList<>();
+            List<EvaluationGroup> groupList = evaluationGroupService.getEvaluationGroup(evaluationGroup);
+            List<String> stuUserIdListInGroup = new ArrayList<>();
             for (EvaluationGroup group : groupList) {
                 String studentUserIds = group.getStudentUserIds();
                 String[] split = studentUserIds.split(",");
@@ -82,16 +86,17 @@ public class EvaluationGroupPlanServiceImpl implements EvaluationGroupPlanServic
 
             //返回未处理学生信息
             List<StuInfo> stuInfoList = new ArrayList<>();
-            if(stuUserIdListInGroup.size() > 0){
+            if (stuUserIdListInGroup.size() > 0) {
+                OUTERMOST:
                 for (StuInfo stuInfo : classStuInfoList) {
                     for (String userId : stuUserIdListInGroup) {
-                        if(stuInfo.getUserId() == userId){
-                            continue;
+                        if (stuInfo.getUserId().equals(userId)) {
+                            continue OUTERMOST;
                         }
-                        stuInfoList.add(stuInfo);
                     }
+                    stuInfoList.add(stuInfo);
                 }
-            }else{
+            } else {
                 stuInfoList = classStuInfoList;
             }
             groupPlan.setStuInfoList(stuInfoList);

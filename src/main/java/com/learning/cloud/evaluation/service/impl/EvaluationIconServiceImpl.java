@@ -27,14 +27,14 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
     @Override
     public JsonResult addEvaluationIcon(MultipartFile file, EvaluationIcon evaluationIcon) throws Exception {
         byte[] bytes = file.getBytes();
-        if (bytes.length > 200 * 1024 * 8){
+        if (bytes.length > 200 * 1024 * 8) {
             throw new Exception("图片大小限制200KB以内，请重新上传");
         }
         String s = questionService.base64Reduce(file);
         evaluationIcon.setPic(s);
         int i = evaluationIconDao.insert(evaluationIcon);
         Long id = evaluationIcon.getId();
-        return JsonResultUtil.success("成功增加" + i + "条数据:id "+ id);
+        return JsonResultUtil.success("成功增加" + i + "条数据:id " + id);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
     @Override
     public JsonResult deleteEvaluationIconById(Long id) {
         int i = evaluationIconDao.deleteById(id);
-        if (i > 0){
+        if (i > 0) {
             return JsonResultUtil.success("删除成功");
         }
         return JsonResultUtil.success("删除失败");
