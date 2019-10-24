@@ -66,6 +66,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         if (allBizDataMedium == null || allBizDataMedium.size() == 0) {
             return null;
         }
+        OUTERMOST:
         for (SyncBizDataMedium sbdm : allBizDataMedium) {
             Long id = sbdm.getId();
             String corpId = sbdm.getCorpId();
@@ -153,11 +154,11 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 } catch (ApiException e) {
                     log.info("biz_data_id:"+id.toString()+"/n"+e.getErrMsg());
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue OUTERMOST;
                 }
                 if(deptDetail == null){
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue OUTERMOST;
                 }
                 String deptName = deptDetail.getName();
                 GradeClass gc = new GradeClass();
@@ -263,7 +264,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 //部门删除
                 if (syncAction.equals("org_dept_remove")) {
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue OUTERMOST;
                 }
                 String deptId = ((Integer) bizDataParse.get("id")).toString();
                 Department dept = new Department();

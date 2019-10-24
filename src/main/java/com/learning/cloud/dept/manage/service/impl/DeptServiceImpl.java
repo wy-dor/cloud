@@ -372,26 +372,46 @@ public class DeptServiceImpl implements DeptService {
         if (parentUserIdList1 != null && parentUserIdList1.size() > 0){
             List<String> parentUserIdList3 = CommonUtils.removeStringDupsInList(parentUserIdList1, parentUserIdList2);
             for (String userId : parentUserIdList3) {
-                Parent p = parentDao.getByUserId(userId);
+                Parent parent = new Parent();
+                parent.setUserId(userId);
+                parent.setSchoolId(schoolId);
+                Parent p = parentDao.getParentInSchool(parent);
                 String classId1 = p.getClassId();
                 String classesStr = "," + classId1 + ",";
                 String replace = classesStr.replace(classId + ",", "");
-                String substring = replace.substring(1, replace.length() - 1);
-                p.setClassId(substring);
-                parentDao.update(p);
+                String substring = "";
+                if(!replace.equals(",")){
+                    substring = replace.substring(1, replace.lastIndexOf(","));
+                }
+                if(substring.equals("")){
+                    parentDao.delete(p.getId());
+                }else{
+                    p.setClassId(substring);
+                    parentDao.update(p);
+                }
             }
         }
 
         if (teacherUserIdList1 != null && teacherUserIdList1.size() > 0){
             List<String> teacherUserIdList3 = CommonUtils.removeStringDupsInList(teacherUserIdList1, teacherUserIdList2);
             for (String userId : teacherUserIdList3) {
-                Teacher t = teacherDao.getByUserId(userId);
+                Teacher teacher = new Teacher();
+                teacher.setSchoolId(schoolId);
+                teacher.setUserId(userId);
+                Teacher t = teacherDao.getTeacherInSchool(teacher);
                 String classId1 = t.getClassIds();
                 String classesStr = "," + classId1 + ",";
                 String replace = classesStr.replace(classId + ",", "");
-                String substring = replace.substring(1, replace.length() - 1);
-                t.setClassIds(substring);
-                teacherDao.update(t);
+                String substring = "";
+                if(!replace.equals(",")){
+                    substring = replace.substring(1, replace.lastIndexOf(","));
+                }
+                if(substring.equals("")){
+                    teacherDao.delete(t.getId());
+                }else{
+                    t.setClassIds(substring);
+                    teacherDao.update(t);
+                }
             }
         }
 
