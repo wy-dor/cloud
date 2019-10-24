@@ -91,4 +91,34 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = teacherDao.getById(teacherId);
         return JsonResultUtil.success(teacher);
     }
+
+    @Override
+    public int removeTeachersInClass(Integer classId) {
+        List<Teacher> teacherList = teacherDao.listTeacherInClass(classId.toString());
+        int i = 0;
+        for (Teacher teacher : teacherList) {
+            int j = removeTeacherInClass(classId, teacher);
+            i += j;
+        }
+        return i;
+    }
+
+    @Override
+    public int removeTeacherInClass(Integer classId, Teacher teacher) {
+        String classIds = teacher.getClassIds();
+        String classesStr = "," + classIds + ",";
+        String replace = classesStr.replace(classId + ",", "");
+        String substring = "";
+        if(!replace.equals(",")){
+            substring = replace.substring(1, replace.lastIndexOf(","));
+        }
+        int i = 0;
+        if(substring.equals("")){
+            i = teacherDao.delete(teacher.getId());
+        }else{
+            teacher.setClassIds(substring);
+            i = teacherDao.update(teacher);
+        }
+        return i;
+    }
 }

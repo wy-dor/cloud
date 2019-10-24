@@ -13,7 +13,9 @@ public interface ParentDao {
 
     Integer getClassParentNum(String classId);
 
-    Parent getParentInClass(Parent parent);
+    List<Parent> getParentInClass(Parent parent);
+
+    List<Parent> listParentInClass(String classId);
 
     List<Integer> getParentIdListInClass(String classId);
 

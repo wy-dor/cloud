@@ -16,6 +16,12 @@
     where find_in_set(#{id},class_ids)
   </select>
 
+  <select id="listTeacherInClass" parameterType="java.lang.String" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where FIND_IN_SET(#{classId},class_ids)
+  </select>
+
   <select id="listTeacherUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
     select user_id
     from user_teacher

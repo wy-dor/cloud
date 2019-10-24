@@ -18,10 +18,12 @@ import com.learning.cloud.user.admin.dao.AdministratorDao;
 import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.parent.dao.ParentDao;
 import com.learning.cloud.user.parent.entity.Parent;
+import com.learning.cloud.user.parent.service.ParentService;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.cloud.user.teacher.service.TeacherService;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
 import com.learning.utils.CommonUtils;
@@ -64,12 +66,18 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private AdministratorDao administratorDao;
 
+    @Autowired
+    private ParentService parentService;
+
+    @Autowired
+    private TeacherService teacherService;
+
     private int count = 0;
 
     @Override
     public void init(Integer schoolId) throws ApiException {
-//        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
-//        List<Integer> classIdList2 = new ArrayList<>();
+        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
+        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
         Integer bureauId = school.getBureauId();
         if (bureauId == null) {
@@ -160,7 +168,7 @@ public class DeptServiceImpl implements DeptService {
                                         gradeClass.setId(classId);
                                         gradeClassDao.update(gradeClass);
                                     }
-//                                classIdList2.add(classId);
+                                    classIdList2.add(classId);
 
                                     /*班级结构数据同步*/
                                     saveUserInClass(classDeptId);
@@ -195,14 +203,15 @@ public class DeptServiceImpl implements DeptService {
             }
 
             //删除班级记录同步
-//            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
-//            if(classIdList3 != null && classIdList3.size() > 0){
-//                for (Integer cId : classIdList3) {
-//                    gradeClassDao.delete(cId);
-////                    studentDao.deleteByClassId(cId);
-////                    parentDao.deleteByClassId(cId);
-//                }
-//            }
+            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
+            if(classIdList3 != null && classIdList3.size() > 0){
+                for (Integer cId : classIdList3) {
+                    gradeClassDao.delete(cId);
+                    studentDao.deleteByClassId(cId);
+                    parentService.removeParentsInClass(cId);
+                    teacherService.removeTeachersInClass(cId);
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,19 +385,7 @@ public class DeptServiceImpl implements DeptService {
                 parent.setUserId(userId);
                 parent.setSchoolId(schoolId);
                 Parent p = parentDao.getParentInSchool(parent);
-                String classId1 = p.getClassId();
-                String classesStr = "," + classId1 + ",";
-                String replace = classesStr.replace(classId + ",", "");
-                String substring = "";
-                if(!replace.equals(",")){
-                    substring = replace.substring(1, replace.lastIndexOf(","));
-                }
-                if(substring.equals("")){
-                    parentDao.delete(p.getId());
-                }else{
-                    p.setClassId(substring);
-                    parentDao.update(p);
-                }
+                parentService.removeParentInClass(classId, p);
             }
         }
 
@@ -399,19 +396,7 @@ public class DeptServiceImpl implements DeptService {
                 teacher.setSchoolId(schoolId);
                 teacher.setUserId(userId);
                 Teacher t = teacherDao.getTeacherInSchool(teacher);
-                String classId1 = t.getClassIds();
-                String classesStr = "," + classId1 + ",";
-                String replace = classesStr.replace(classId + ",", "");
-                String substring = "";
-                if(!replace.equals(",")){
-                    substring = replace.substring(1, replace.lastIndexOf(","));
-                }
-                if(substring.equals("")){
-                    teacherDao.delete(t.getId());
-                }else{
-                    t.setClassIds(substring);
-                    teacherDao.update(t);
-                }
+                teacherService.removeTeacherInClass(classId,t);
             }
         }
 

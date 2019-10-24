@@ -14,6 +14,8 @@ public interface TeacherDao {
 
     int insert(Teacher record);
 
+    List<Teacher> listTeacherInClass(String classId);
+
     Teacher getByUserId(String userId);
 
     Teacher getById(Integer teacherId);

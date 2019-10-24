@@ -20,4 +20,8 @@ public interface TeacherService {
     JsonResult getTeachersInSchool(Integer schoolId);
 
     JsonResult getTeacherById(Integer teacherId)throws Exception;
+
+    int removeTeachersInClass(Integer cId);
+
+    int removeTeacherInClass(Integer classId, Teacher teacher);
 }
