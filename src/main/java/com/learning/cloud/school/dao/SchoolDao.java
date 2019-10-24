@@ -22,4 +22,6 @@ public interface SchoolDao {
     School getSchoolByCorpId(String corpId);
 
     School getBySchoolId(Integer schoolId);
+
+    List<School> getSchoolByBureau(Integer id);
 }
