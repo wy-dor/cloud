@@ -24,7 +24,7 @@ public class SysUpload {
 
     private static String ipAddress;
 
-    @Value("${ipAddress}")
+    @Value("${spring.ipAddress}")
     public void setIpAddress(String ipAddress) {
         SysUpload.ipAddress = ipAddress;
     }

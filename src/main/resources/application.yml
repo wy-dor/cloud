@@ -73,6 +73,7 @@ spring:
   suiteId: 6453002
   suiteKey: suiteiupbsqvnrh1t5whf
   suiteSecret: yeqc41yBZNXMmeq3iA5vQk7ZBE5t4-S-oq3IHMpGzLkyrivP72XCM5zU9f06viKY
+  ipAddress: http://localhost:80
 
 ---
 #测试环境
@@ -85,7 +86,7 @@ spring:
   suiteId: 6453002
   suiteKey: suiteiupbsqvnrh1t5whf
   suiteSecret: yeqc41yBZNXMmeq3iA5vQk7ZBE5t4-S-oq3IHMpGzLkyrivP72XCM5zU9f06viKY
-
+  ipAddress: http://114.55.168.33:80
 ---
 #生产环境
 spring:
@@ -97,3 +98,4 @@ spring:
   suiteId: 6298012
   suiteKey: suitets3egysydvw6xhns
   suiteSecret: hZ1Qn3Sq0-ug2ySUXWdf_kjlODNVysS1CoRuDOFhpEzmx5ueGbOPl3Bg9e9w2Mod
+  ipAddress: http://47.111.152.107:80
