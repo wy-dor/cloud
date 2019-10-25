@@ -136,7 +136,9 @@ public class ProcessServiceImpl implements ProcessService {
             String params = JSON.toJSONString(responseParams.get("saveProcessRequest"));
             OapiProcessSaveResponse.ProcessTopVo v = response.getResult();
             process.setAgentId(corpAgent.getAgentId());
-            process.setBureauId(bureau.getId());
+            if(bureau!=null){
+                process.setBureauId(bureau.getId());
+            }
             process.setCorpId(corpId);
             process.setFormComponentList(params);
             process.setProcessCode(v.getProcessCode());

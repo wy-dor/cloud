@@ -15,12 +15,14 @@ import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.admin.service.AdminService;
 import com.learning.cloud.workProcess.dao.ProcessDao;
 import com.learning.cloud.workProcess.dao.ProcessInstanceDao;
+import com.learning.cloud.workProcess.entity.Attachment;
 import com.learning.cloud.workProcess.entity.Process;
 import com.learning.cloud.workProcess.entity.ProcessInstance;
 import com.learning.cloud.workProcess.entity.ProcessValue;
 import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.cloud.workProcess.service.ProcessService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,13 +101,24 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         formComponentValues.add(vo4);
 
         //6.附件
+
         OapiProcessinstanceCreateRequest.FormComponentValueVo attachmentComponent = new OapiProcessinstanceCreateRequest.FormComponentValueVo();
         JSONObject attachmentJson = new JSONObject();
-        attachmentJson.put("fileId", processValue.getAttachment().getFileId());
-        attachmentJson.put("fileName", processValue.getAttachment().getFileName());
-        attachmentJson.put("fileType", processValue.getAttachment().getFileType());
-        attachmentJson.put("spaceId", processValue.getAttachment().getSpaceId());
-        attachmentJson.put("fileSize", processValue.getAttachment().getFileSize());
+        Attachment attachment = JSONObject.parseObject(processValue.getAttachment(), Attachment.class);
+        if(attachment!=null){
+            attachmentJson.put("fileId", attachment.getFileId());
+            attachmentJson.put("fileName", attachment.getFileName());
+            attachmentJson.put("fileType", attachment.getFileType());
+            attachmentJson.put("spaceId", attachment.getSpaceId());
+            attachmentJson.put("fileSize", attachment.getFileSize());
+        }else {
+            attachmentJson.put("fileId", "");
+            attachmentJson.put("fileName", "");
+            attachmentJson.put("fileType", "");
+            attachmentJson.put("spaceId", "");
+            attachmentJson.put("fileSize", "");
+        }
+
 
         JSONArray array = new JSONArray();
         array.add(attachmentJson);
@@ -148,7 +161,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
             processInstanceDao.update(processInstance);
         }
 
-        return null;
+        return JsonResultUtil.success(response);
     }
 
     //获取最新的公文编号，暂不实现
@@ -161,7 +174,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
     //创建学校的固定流程实例
     public void createSchoolProcessInstance(String schoolIds, ProcessValue processValue,Integer parentId)throws Exception{
         //获取各个
-        String[] sIds = schoolIds.split(".");
+        String[] sIds = schoolIds.split(",");
         for(String schoolId: sIds){
             //获取学校信息
             School school = schoolDao.getBySchoolId(Integer.valueOf(schoolId));
@@ -215,11 +228,20 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
             //学校的附件需要单独处理，先上传到钉盘再返回参数
             OapiProcessinstanceCreateRequest.FormComponentValueVo attachmentComponent = new OapiProcessinstanceCreateRequest.FormComponentValueVo();
             JSONObject attachmentJson = new JSONObject();
-            attachmentJson.put("fileId", processValue.getAttachment().getFileId());
-            attachmentJson.put("fileName", processValue.getAttachment().getFileName());
-            attachmentJson.put("fileType", processValue.getAttachment().getFileType());
-            attachmentJson.put("spaceId", processValue.getAttachment().getSpaceId());
-            attachmentJson.put("fileSize", processValue.getAttachment().getFileSize());
+            Attachment attachment = JSONObject.parseObject(processValue.getAttachment(), Attachment.class);
+            if(attachment!=null){
+                attachmentJson.put("fileId", attachment.getFileId());
+                attachmentJson.put("fileName", attachment.getFileName());
+                attachmentJson.put("fileType", attachment.getFileType());
+                attachmentJson.put("spaceId", attachment.getSpaceId());
+                attachmentJson.put("fileSize", attachment.getFileSize());
+            }else {
+                attachmentJson.put("fileId", "");
+                attachmentJson.put("fileName", "");
+                attachmentJson.put("fileType", "");
+                attachmentJson.put("spaceId", "");
+                attachmentJson.put("fileSize", "");
+            }
 
             JSONArray array = new JSONArray();
             array.add(attachmentJson);

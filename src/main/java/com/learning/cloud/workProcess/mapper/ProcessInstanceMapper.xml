@@ -75,10 +75,10 @@
       <if test="status != null">
         status = #{status,jdbcType=SMALLINT},
       </if>
-      <if test="record.attachment != null">
+      <if test="attachment != null">
         attachment = #{attachment,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.formComponentValues != null">
+      <if test="formComponentValues != null">
         form_component_values = #{formComponentValues,jdbcType=LONGVARCHAR},
       </if>
     </set>
