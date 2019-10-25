@@ -2,6 +2,7 @@ package com.learning.cloud.evaluation.controller;
 
 import com.learning.cloud.evaluation.entity.EvaluationRecord;
 import com.learning.cloud.evaluation.service.EvaluationRecordService;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,5 +38,10 @@ public class EvaluationRecordController {
     @GetMapping("/getEvaluationRecord")
     public JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord){
         return recordService.getEvaluationRecord(evaluationRecord);
+    }
+
+    @GetMapping("/listClassStudentEvaluationScore")
+    public JsonResult listClassStudentEvaluationScore(Student student){
+        return recordService.listClassStudentEvaluationScore(student);
     }
 }

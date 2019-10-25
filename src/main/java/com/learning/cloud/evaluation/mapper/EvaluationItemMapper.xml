@@ -38,6 +38,9 @@
             <if test="builtin != null">
                 and builtin = #{builtin,jdbcType=INTEGER}
             </if>
+            <if test="schoolId != null">
+                and school_id = #{schoolId,jdbcType=INTEGER}
+            </if>
         </where>
     </select>
 
@@ -88,6 +91,9 @@
             <if test="builtin != null">
                 builtin,
             </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -119,6 +125,9 @@
             </if>
             <if test="builtin != null">
                 #{builtin,jdbcType=INTEGER},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -152,6 +161,9 @@
             </if>
             <if test="builtin != null">
                 builtin = #{builtin,jdbcType=INTEGER},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

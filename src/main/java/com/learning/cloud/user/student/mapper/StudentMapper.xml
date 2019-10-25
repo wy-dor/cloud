@@ -2,151 +2,179 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.student.dao.StudentDao">
 
-  <select id="getStuInfoByUserId" parameterType="java.lang.String"
-          resultType="com.learning.cloud.evaluation.entity.StuInfo">
+    <select id="listClassStudentEvaluationScore" parameterType="com.learning.cloud.user.student.entity.Student"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationStudentScore">
+        select student_name, user_id, student_no, avatar, total_score
+        from user_student
+        where class_id = #{classId}
+        <if test="scoreSort != null">
+            order by
+            <choose>
+                <when test="scoreSort == 1">
+                    student_name
+                </when>
+                <when test="scoreSort == 2">
+                    student_no
+                </when>
+                <otherwise>
+                    total_score desc
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <select id="getStuInfoByUserId" parameterType="java.lang.String"
+            resultType="com.learning.cloud.evaluation.entity.StuInfo">
     select student_name, user_id, student_no
     from user_student
     where user_id = #{userId}
     limit 1
   </select>
 
-  <select id="listStuInfoInClass" parameterType="java.lang.Integer" resultType="com.learning.cloud.evaluation.entity.StuInfo">
+    <select id="listStuInfoInClass" parameterType="java.lang.Integer"
+            resultType="com.learning.cloud.evaluation.entity.StuInfo">
     select student_name, user_id, student_no
     from user_student
     where class_id = #{id}
   </select>
 
-  <select id="getByUserId" parameterType="java.lang.String"
-          resultType="com.learning.cloud.user.student.entity.Student">
+    <select id="getByUserId" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.student.entity.Student">
     select *
     from user_student
     where user_id = #{userId}
     limit 1
   </select>
 
-  <select id="getClassStuNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="getClassStuNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select count(id)
     from user_student
     where class_id = #{classId}
   </select>
 
-  <select id="getClassStudents" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.student.entity.Student">
+    <select id="getClassStudents" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
+            resultType="com.learning.cloud.user.student.entity.Student">
     select *
     from user_student
     where class_id = #{id}
     order by id
   </select>
 
-  <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
+    <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
     select user_id
     from user_student
     where class_id = #{classId}
   </select>
 
-  <select id="getStudentsByName" parameterType="com.learning.cloud.user.student.entity.Student" resultType="com.learning.cloud.user.student.entity.Student">
+    <select id="getStudentsByName" parameterType="com.learning.cloud.user.student.entity.Student"
+            resultType="com.learning.cloud.user.student.entity.Student">
     select *
     from user_student
     where student_name like concat('%',#{studentName},'%')
   </select>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.student.entity.Student">
-    insert into user_student
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="studentName != null">
-        student_name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="campusId != null">
-        campus_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-      <if test="topClassId != null">
-        top_class_id,
-      </if>
-      <if test="studentNo != null">
-        student_no,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="studentName != null">
-        #{studentName,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=INTEGER},
-      </if>
-      <if test="campusId != null">
-        #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="topClassId != null">
-        #{topClassId,jdbcType=BIGINT},
-      </if>
-      <if test="studentNo != null">
-       #{studentNo,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.user.student.entity.Student">
+        insert into user_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">
+                student_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="campusId != null">
+                campus_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+            <if test="topClassId != null">
+                top_class_id,
+            </if>
+            <if test="studentNo != null">
+                student_no,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">
+                #{studentName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=INTEGER},
+            </if>
+            <if test="campusId != null">
+                #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="topClassId != null">
+                #{topClassId,jdbcType=BIGINT},
+            </if>
+            <if test="studentNo != null">
+                #{studentNo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="update" parameterType="com.learning.cloud.user.student.entity.Student">
-    update user_student
-    <set>
-      <if test="studentName != null">
-        student_name = #{studentName,jdbcType=VARCHAR},
-      </if>
-      <if test="classId != null">
-        class_id = #{classId,jdbcType=INTEGER},
-      </if>
-      <if test="campusId != null">
-        campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="bureauId != null">
-        bureau_id = #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="topClassId != null">
-        top_class_id = #{topClassId,jdbcType=BIGINT},
-      </if>
-      <if test="studentNo != null">
-        student_no = #{studentNo,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where user_id = #{userId,jdbcType=VARCHAR}
-  </update>
+    <update id="update" parameterType="com.learning.cloud.user.student.entity.Student">
+        update user_student
+        <set>
+            <if test="studentName != null">
+                student_name = #{studentName,jdbcType=VARCHAR},
+            </if>
+            <if test="classId != null">
+                class_id = #{classId,jdbcType=INTEGER},
+            </if>
+            <if test="campusId != null">
+                campus_id = #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="bureauId != null">
+                bureau_id = #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="topClassId != null">
+                top_class_id = #{topClassId,jdbcType=BIGINT},
+            </if>
+            <if test="studentNo != null">
+                student_no = #{studentNo,jdbcType=VARCHAR},
+            </if>
+            <if test="totalScore != null">
+                total_score = #{totalScore,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
 
-  <delete id="delete" parameterType="java.lang.Integer">
+    <delete id="delete" parameterType="java.lang.Integer">
     delete from user_student
     where id = #{id}
   </delete>
 
-  <delete id="deleteByUserId" parameterType="java.lang.String">
+    <delete id="deleteByUserId" parameterType="java.lang.String">
     delete from user_student
     where user_id = #{userId}
   </delete>
 
-  <delete id="deleteByClassId" parameterType="java.lang.Integer">
+    <delete id="deleteByClassId" parameterType="java.lang.Integer">
     delete from user_student
     where class_id = #{classId}
   </delete>

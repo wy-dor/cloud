@@ -1,13 +1,10 @@
 package com.learning.cloud.evaluation.service.impl;
 
-import com.learning.cloud.evaluation.dao.EvaluationRemarkDao;
-import com.learning.cloud.evaluation.dao.EvaluationRecordDao;
-import com.learning.cloud.evaluation.dao.EvaluationScoreDao;
-import com.learning.cloud.evaluation.entity.EvaluationRemark;
-import com.learning.cloud.evaluation.entity.EvaluationRecord;
-import com.learning.cloud.evaluation.entity.EvaluationScore;
+import com.learning.cloud.evaluation.dao.*;
+import com.learning.cloud.evaluation.entity.*;
 import com.learning.cloud.evaluation.service.EvaluationRecordService;
 import com.learning.cloud.user.student.dao.StudentDao;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
@@ -15,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,32 +27,50 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     private EvaluationRemarkDao remarkDao;
 
     @Autowired
-    private EvaluationScoreDao scoreDao;
+    private StudentDao studentDao;
 
     @Autowired
-    private StudentDao studentDao;
+    private EvaluationGroupDao groupDao;
+
+    @Autowired
+    private EvaluationItemDao itemDao;
+
+    @Autowired
+    private EvaluationDimensionDao dimensionDao;
 
     @Override
     public JsonResult addEvaluationRecord(EvaluationRecord evaluationRecord) {
+        saveRecord(evaluationRecord);
+        int i = recordDao.insert(evaluationRecord);
+        return JsonResultUtil.success(evaluationRecord.getId());
+    }
+
+    public void saveRecord(EvaluationRecord evaluationRecord) {
         Integer addingWay = evaluationRecord.getAddingWay();
         //按用户添加
-        if(addingWay == 1){
+        BigDecimal score = evaluationRecord.getScore();
+        if (addingWay == 1) {
             String userIds = evaluationRecord.getStudentUserIds();
-            String[] split = userIds.split(",");
-            for (String s : split) {
-                EvaluationScore byUserId = scoreDao.getByUserId(s);
-                if(byUserId == null){
-
-                }else{
-
-                }
-            }
-        }else if(addingWay == 2){
+            saveScoreByUser(score, userIds);
+        } else if (addingWay == 2) {
             String groupIds = evaluationRecord.getGroupIds();
-
+            String[] split = groupIds.split(",");
+            for (String s : split) {
+                EvaluationGroup byId = groupDao.getById(Long.parseLong(s));
+                String userIds = byId.getStudentUserIds();
+                saveScoreByUser(score, userIds);
+            }
         }
-        int i = recordDao.insert(evaluationRecord);
-        return JsonResultUtil.success("成功增加" + i + "条数据  id:" + evaluationRecord.getId());
+    }
+
+    public void saveScoreByUser(BigDecimal score, String userIds) {
+        String[] split = userIds.split(",");
+        for (String s : split) {
+            Student byUserId = studentDao.getByUserId(s);
+            BigDecimal totalScore = byUserId.getTotalScore();
+            byUserId.setTotalScore(totalScore.add(score));
+            studentDao.update(byUserId);
+        }
     }
 
     @Override
@@ -64,6 +81,11 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
 
     @Override
     public JsonResult deleteEvaluationRecordById(Long id) {
+        EvaluationRecord byId = recordDao.getById(id);
+        BigDecimal score = byId.getScore();
+        BigDecimal minusScore = score.multiply(new BigDecimal(-1));
+        byId.setScore(minusScore);
+        //删除相应评论
         EvaluationRemark evaluationRemark = new EvaluationRemark();
         evaluationRemark.setRecordId(id);
         remarkDao.deleteByRemark(evaluationRemark);
@@ -80,7 +102,46 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     @Override
     public JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord) {
         List<EvaluationRecord> evaluationRecordList = recordDao.getByRecord(evaluationRecord);
+        for (EvaluationRecord record : evaluationRecordList) {
+            Integer addingWay = record.getAddingWay();
+            List<Student> studentList = new ArrayList<>();
+            if (addingWay == 1) {
+                String userIds = record.getStudentUserIds();
+                String[] split = userIds.split(",");
+                for (String s : split) {
+                    Student byUserId = studentDao.getByUserId(s);
+                    studentList.add(byUserId);
+                }
+            } else if (addingWay == 2) {
+                String groupIds = record.getGroupIds();
+                String[] split = groupIds.split(",");
+                for (String s : split) {
+                    EvaluationGroup byId = groupDao.getById(Long.parseLong(s));
+                    String userIds = byId.getStudentUserIds();
+                    String[] split1 = userIds.split(",");
+                    for (String userId : split1) {
+                        Student byUserId = studentDao.getByUserId(userId);
+                        studentList.add(byUserId);
+                    }
+                }
+            }
+            record.setStudentList(studentList);
+
+            Long itemId = record.getItemId();
+            EvaluationItem item = itemDao.getById(itemId);
+            String itemName = item.getItemName();
+            Long dimensionId = item.getDimensionId();
+            EvaluationDimension dimension = dimensionDao.getById(dimensionId);
+            String dimensionName = dimension.getDimensionName();
+            record.setRecordName(dimensionName + "/" + itemName);
+        }
         return JsonResultUtil.success(new PageEntity<>(evaluationRecordList));
+    }
+
+    @Override
+    public JsonResult listClassStudentEvaluationScore(Student student) {
+        List<EvaluationStudentScore> evaluationStudentScores = studentDao.listClassStudentEvaluationScore(student);
+        return JsonResultUtil.success(new PageEntity<>(evaluationStudentScores));
     }
 
 }

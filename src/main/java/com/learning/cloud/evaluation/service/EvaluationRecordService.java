@@ -1,6 +1,7 @@
 package com.learning.cloud.evaluation.service;
 
 import com.learning.cloud.evaluation.entity.EvaluationRecord;
+import com.learning.cloud.user.student.entity.Student;
 import com.learning.domain.JsonResult;
 
 public interface EvaluationRecordService {
@@ -13,4 +14,6 @@ public interface EvaluationRecordService {
     JsonResult updateEvaluationRecord(EvaluationRecord evaluationRecord);
 
     JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord);
+
+    JsonResult listClassStudentEvaluationScore(Student student);
 }

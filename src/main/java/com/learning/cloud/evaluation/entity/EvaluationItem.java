@@ -26,4 +26,6 @@ public class EvaluationItem extends BaseEntity {
     private Integer favorite;
 
     private Integer builtin;
+
+    private Integer schoolId;
 }

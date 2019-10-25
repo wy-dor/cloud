@@ -14,12 +14,12 @@ public class EvaluationItemController {
     private EvaluationItemService itemService;
 
     @GetMapping("/getEvaluationItem")
-    public JsonResult getEvaluationItem(EvaluationItem evaluationItem){
+    public JsonResult getEvaluationItem(EvaluationItem evaluationItem) {
         return itemService.getEvaluationItem(evaluationItem);
     }
 
     @GetMapping("/getEvaluationItemById")
-    public JsonResult getEvaluationItemById(Long id){
+    public JsonResult getEvaluationItemById(Long id) {
         return itemService.getEvaluationItemById(id);
     }
 
@@ -29,18 +29,18 @@ public class EvaluationItemController {
     }
 
     @PostMapping("/updateEvaluationItem")
-    public JsonResult updateEvaluationItem(EvaluationItem evaluationItem)  throws Exception{
+    public JsonResult updateEvaluationItem(EvaluationItem evaluationItem) throws Exception {
         return itemService.updateEvaluationItem(evaluationItem);
     }
 
     @GetMapping("/deleteEvaluationItemById")
-    public JsonResult deleteEvaluationItemById(Long id){
+    public JsonResult deleteEvaluationItemById(Long id) {
         return itemService.deleteEvaluationItemById(id);
     }
 
     @PostMapping("/batchUpdateEvaluationItem")
-    public JsonResult batchUpdateEvaluationItem(String ids,Integer status){
-        return itemService.batchUpdateEvaluationItem(ids,status);
+    public JsonResult batchUpdateEvaluationItem(String ids, Integer status) {
+        return itemService.batchUpdateEvaluationItem(ids, status);
     }
 }
 

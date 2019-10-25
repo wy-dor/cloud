@@ -1,6 +1,7 @@
 package com.learning.cloud.user.student.dao;
 
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.evaluation.entity.EvaluationStudentScore;
 import com.learning.cloud.evaluation.entity.StuInfo;
 import com.learning.cloud.user.student.entity.Student;
 import org.apache.ibatis.annotations.Mapper;
@@ -34,4 +35,6 @@ public interface StudentDao {
     StuInfo getStuInfoByUserId(String userId);
 
     List<StuInfo> listStuInfoInClass(Integer classId);
+
+    List<EvaluationStudentScore> listClassStudentEvaluationScore(Student student);
 }
