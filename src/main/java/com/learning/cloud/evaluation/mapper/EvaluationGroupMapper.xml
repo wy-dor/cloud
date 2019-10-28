@@ -18,6 +18,33 @@
         </if>
     </select>
 
+    <select id="getEvaluationGroupScoreList" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
+        select b.id, b.group_name, b.student_user_ids, b.icon_id, b.total_score
+        from evaluation_group_plan a
+        left join evaluation_group b
+        on a.id = b.group_plan_id
+        <where>
+            <if test="classId != null">
+                and a.class_id = #{classId}
+            </if>
+            <if test="id != null">
+                and a.id = #{id}
+            </if>
+        </where>
+        <if test="scoreSort != null">
+            order by
+            <choose>
+                <when test="scoreSort == 1">
+                    id desc
+                </when>
+                <otherwise>
+                    total_score desc
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
     <delete id="deleteByGroup" parameterType="java.lang.Long">
         delete from evaluation_group
         where
@@ -53,6 +80,9 @@
             <if test="groupName != null">
                 group_name,
             </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -72,6 +102,9 @@
             </if>
             <if test="groupName != null">
                 #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -93,6 +126,9 @@
             </if>
             <if test="groupName != null">
                 group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="totalScore != null">
+                total_score = #{totalScore,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id}

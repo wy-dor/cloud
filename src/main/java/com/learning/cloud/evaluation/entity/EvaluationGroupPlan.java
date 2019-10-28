@@ -21,4 +21,6 @@ public class EvaluationGroupPlan extends BaseEntity {
     private List<EvaluationGroup> groupList;
 
     private List<StuInfo> stuInfoList;
+
+    private Integer scoreSort;
 }

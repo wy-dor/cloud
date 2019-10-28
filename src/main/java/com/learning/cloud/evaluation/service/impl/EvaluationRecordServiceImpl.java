@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -57,6 +57,9 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
             String[] split = groupIds.split(",");
             for (String s : split) {
                 EvaluationGroup byId = groupDao.getById(Long.parseLong(s));
+                BigDecimal totalScore = byId.getTotalScore();
+                byId.setTotalScore(score.add(totalScore));
+                groupDao.update(byId);
                 String userIds = byId.getStudentUserIds();
                 saveScoreByUser(score, userIds);
             }
@@ -127,13 +130,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
             }
             record.setStudentList(studentList);
 
-            Long itemId = record.getItemId();
-            EvaluationItem item = itemDao.getById(itemId);
-            String itemName = item.getItemName();
-            Long dimensionId = item.getDimensionId();
-            EvaluationDimension dimension = dimensionDao.getById(dimensionId);
-            String dimensionName = dimension.getDimensionName();
-            record.setRecordName(dimensionName + "/" + itemName);
+            setRecordConcatName(record);
         }
         return JsonResultUtil.success(new PageEntity<>(evaluationRecordList));
     }
@@ -142,6 +139,66 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     public JsonResult listClassStudentEvaluationScore(Student student) {
         List<EvaluationStudentScore> evaluationStudentScores = studentDao.listClassStudentEvaluationScore(student);
         return JsonResultUtil.success(new PageEntity<>(evaluationStudentScores));
+    }
+
+    @Override
+    public JsonResult getRecordStatisticsForStudent(String studentUserId) {
+        Map<String,Object> map = new HashMap<>();
+        List<EvaluationDimension> dimensionList = recordDao.getRecordStatisticsForStudent(studentUserId);
+        Integer totalPraiseCount = 0;
+        Integer totalCriticalCount = 0;
+        for (EvaluationDimension dimension : dimensionList) {
+            Integer praiseItemCount = dimension.getPraiseItemCount();
+            Integer criticalItemCount = dimension.getCriticalItemCount();
+            totalCriticalCount += criticalItemCount;
+            totalPraiseCount += praiseItemCount;
+        }
+        map.put("dimensionList",dimensionList);
+        map.put("totalCriticalCount",totalCriticalCount);
+        map.put("totalPraiseCount",totalPraiseCount);
+        return JsonResultUtil.success(map);
+    }
+
+    @Override
+    public JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord) {
+        Map<String,Object> map = new HashMap();
+        List<EvaluationRecord> recordListForStudent = recordDao.getByRecord(evaluationRecord);
+        PageEntity<EvaluationRecord> pageEntity = new PageEntity<>(recordListForStudent);
+        map.put("pageEntity",pageEntity);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(date);
+        String s = format.substring(0, 10);
+        int todayPraiseCount = 0;
+        int todayCriticalCount = 0;
+        for (EvaluationRecord r : recordListForStudent) {
+            //拼接项目名
+            setRecordConcatName(r);
+            //指定用户获取今日评价统计数据
+            String updateTime = r.getUpdateTime();
+            String substring = updateTime.substring(0, 10);
+            if(s.equals(substring)){
+                BigDecimal score = r.getScore();
+                if (score.compareTo(BigDecimal.ZERO) == 1){
+                    todayPraiseCount++;
+                }else{
+                    todayCriticalCount++;
+                }
+            }
+        }
+        map.put("todayCriticalCount",todayCriticalCount);
+        map.put("todayPraiseCount",todayPraiseCount);
+        return JsonResultUtil.success(map);
+    }
+
+    public void setRecordConcatName(EvaluationRecord record) {
+        Long itemId = record.getItemId();
+        EvaluationItem item = itemDao.getById(itemId);
+        String itemName = item.getItemName();
+        Long dimensionId = item.getDimensionId();
+        EvaluationDimension dimension = dimensionDao.getById(dimensionId);
+        String dimensionName = dimension.getDimensionName();
+        record.setRecordName(dimensionName + "/" + itemName);
     }
 
 }

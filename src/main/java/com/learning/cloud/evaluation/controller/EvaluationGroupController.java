@@ -1,6 +1,7 @@
 package com.learning.cloud.evaluation.controller;
 
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
+import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import com.learning.cloud.evaluation.service.EvaluationGroupService;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
@@ -21,6 +22,11 @@ public class EvaluationGroupController {
     public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup){
         List<EvaluationGroup> groupList = groupService.getEvaluationGroup(evaluationGroup);
         return JsonResultUtil.success(new PageEntity<>(groupList));
+    }
+
+    @GetMapping("/getEvaluationGroupScoreList")
+    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan ){
+        return groupService.getEvaluationGroupScoreList(evaluationGroupPlan);
     }
 
     @GetMapping("/getEvaluationGroupById")

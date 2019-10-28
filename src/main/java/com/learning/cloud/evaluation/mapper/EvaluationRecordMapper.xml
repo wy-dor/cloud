@@ -26,7 +26,7 @@
                 and group_ids = #{groupIds,jdbcType=VARCHAR}
             </if>
             <if test="studentUserIds != null">
-                and student_user_ids = #{studentUserIds,jdbcType=VARCHAR}
+                and FIND_IN_SET(#{studentUserIds,jdbcType=VARCHAR},student_user_ids)
             </if>
             <if test="score != null">
                 and score = #{score,jdbcType=DECIMAL}
@@ -35,6 +35,19 @@
                 and user_id = #{userId,jdbcType=VARCHAR}
             </if>
         </where>
+    </select>
+
+    <select id="getRecordStatisticsForStudent" parameterType="java.lang.String"
+            resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
+        select a.dimension_name, a.icon_id, IFNULL(b.praiseItemCount, 0) praiseItemCount, IFNULL(b.criticalItemCount, 0) criticalItemCount
+        from evaluation_dimension a
+        left join
+        (select c.dimension_id, sum(case when SIGN(c.score) = 1 then 1 else 0 end) praiseItemCount,
+        sum(case when SIGN(c.score) = -1 then 1 else 0 end) criticalItemCount
+        from evaluation_record c
+        where FIND_IN_SET(#{studentUserId},student_user_ids)
+        group by dimension_id) b
+        on b.dimension_id = a.id
     </select>
 
     <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">
@@ -70,6 +83,9 @@
             <if test="userId != null">
                 user_id,
             </if>
+            <if test="userName != null">
+                user_name,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -95,6 +111,9 @@
             </if>
             <if test="userId != null">
                 #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -122,6 +141,9 @@
             </if>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id}

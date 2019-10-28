@@ -44,4 +44,14 @@ public class EvaluationRecordController {
     public JsonResult listClassStudentEvaluationScore(Student student){
         return recordService.listClassStudentEvaluationScore(student);
     }
+
+    @GetMapping("/getRecordStatisticsForStudent")
+    public JsonResult getRecordStatisticsForStudent(String studentUserId){
+        return recordService.getRecordStatisticsForStudent(studentUserId);
+    }
+
+    @GetMapping("/getRecordStatisticsForStudentInToday")
+    public JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord){
+        return recordService.getRecordStatisticsForStudentInToday(evaluationRecord);
+    }
 }

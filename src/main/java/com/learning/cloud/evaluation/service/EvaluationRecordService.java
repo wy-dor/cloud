@@ -16,4 +16,8 @@ public interface EvaluationRecordService {
     JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord);
 
     JsonResult listClassStudentEvaluationScore(Student student);
+
+    JsonResult getRecordStatisticsForStudent(String studentUserId);
+
+    JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord);
 }

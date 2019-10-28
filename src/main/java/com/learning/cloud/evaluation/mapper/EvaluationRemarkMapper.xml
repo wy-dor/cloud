@@ -34,6 +34,7 @@
 
     <delete id="deleteByRemark" parameterType="com.learning.cloud.evaluation.entity.EvaluationRemark">
         delete from evaluation_remark
+        where
         <choose>
             <when test="id != null">
                 id = #{id}

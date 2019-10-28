@@ -1,5 +1,6 @@
 package com.learning.cloud.evaluation.dao;
 
+import com.learning.cloud.evaluation.entity.EvaluationDimension;
 import com.learning.cloud.evaluation.entity.EvaluationRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,6 @@ public interface EvaluationRecordDao {
     List<EvaluationRecord> getByRecord(EvaluationRecord evaluationRecord);
 
     int update(EvaluationRecord evaluationRecord);
+
+    List<EvaluationDimension> getRecordStatisticsForStudent(String studentUserId);
 }

@@ -16,4 +16,6 @@ public class EvaluationRemark extends BaseEntity {
     private Integer roleType;
 
     private String userName;
+
+    private String updateTime;
 }

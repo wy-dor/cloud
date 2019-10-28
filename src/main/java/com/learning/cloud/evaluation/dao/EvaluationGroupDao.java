@@ -1,6 +1,7 @@
 package com.learning.cloud.evaluation.dao;
 
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
+import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface EvaluationGroupDao {
     int update(EvaluationGroup evaluationGroup);
 
     int deleteByGroup(EvaluationGroup evaluationGroup);
+
+    List<EvaluationGroup> getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan);
 }

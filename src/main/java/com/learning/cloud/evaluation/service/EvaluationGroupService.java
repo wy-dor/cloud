@@ -1,6 +1,7 @@
 package com.learning.cloud.evaluation.service;
 
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
+import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import com.learning.domain.JsonResult;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface EvaluationGroupService {
 
     JsonResult batchUpdateEvaluationGroup(String ids, Integer status);
 
+    JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan);
 }

@@ -2,16 +2,20 @@ package com.learning.cloud.evaluation.service.impl;
 
 import com.learning.cloud.evaluation.dao.EvaluationGroupDao;
 import com.learning.cloud.evaluation.entity.EvaluationGroup;
+import com.learning.cloud.evaluation.entity.EvaluationGroupPlan;
 import com.learning.cloud.evaluation.entity.StuInfo;
 import com.learning.cloud.evaluation.service.EvaluationGroupService;
 import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.domain.JsonResult;
+import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +35,7 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
         String[] split = studentUserIds.split(",");
         EvaluationGroup eg = new EvaluationGroup();
         eg.setGroupPlanId(evaluationGroup.getGroupPlanId());
+        //将同一方案中其他组相同人员信息移除
         for (String s : split) {
             eg.setStudentUserIds(s);
             List<EvaluationGroup> byGroup = groupDao.getByGroup(eg);
@@ -47,6 +52,10 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
                 groupDao.update(group);
             }
         }
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(date);
+        evaluationGroup.setCreateTime(format);
         int i = groupDao.insert(evaluationGroup);
         return JsonResultUtil.success("成功增加" + i + "条数据:id " + evaluationGroup.getId());
     }
@@ -110,6 +119,15 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
             }
         }
         return JsonResultUtil.success("成功更新" + i + "条信息");
+    }
+
+    @Override
+    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan  evaluationGroupPlan) {
+        List<EvaluationGroup> evaluationGroupScoreList = groupDao.getEvaluationGroupScoreList(evaluationGroupPlan);
+        for (EvaluationGroup evaluationGroup : evaluationGroupScoreList) {
+            setStuList(evaluationGroup);
+        }
+        return JsonResultUtil.success(new PageEntity<>(evaluationGroupScoreList));
     }
 
 }
