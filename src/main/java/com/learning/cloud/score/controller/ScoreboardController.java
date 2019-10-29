@@ -36,8 +36,8 @@ public class ScoreboardController {
 
 
     @GetMapping("/getTeacherRank")
-    public JsonResult getTeacherRank(@RequestParam(value="bureauId",required = true) Long bureauId)throws Exception{
-        return scoreboardService.getTeacherRank(bureauId);
+    public JsonResult getTeacherRank(ScoreRank scoreRank)throws Exception{
+        return scoreboardService.getTeacherRank(scoreRank);
     }
 
 //    @GetMapping("/getClassRank")
