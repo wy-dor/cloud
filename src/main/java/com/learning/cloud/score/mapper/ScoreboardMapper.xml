@@ -108,7 +108,6 @@
     on ut.school_id = es.id
     where ut.bureau_id = #{bureauId}
     ORDER BY  score desc
-    LIMIT 100
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
