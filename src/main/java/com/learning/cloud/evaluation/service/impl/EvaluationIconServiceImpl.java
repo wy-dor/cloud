@@ -11,7 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -30,8 +37,25 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         if (bytes.length > 200 * 1024 * 8) {
             throw new Exception("图片大小限制200KB以内，请重新上传");
         }
-        String s = questionService.base64Reduce(file);
-        evaluationIcon.setPic(s);
+        InputStream inputStream = null;
+        inputStream = file.getInputStream();
+        File toFile = new File(file.getOriginalFilename());
+        questionService.inputStreamToFile(inputStream, toFile);
+        inputStream.close();
+        // 开始读取文件并进行压缩
+        Image img = ImageIO.read(toFile);
+
+        // 构造一个类型为预定义图像类型之一的 BufferedImage
+        BufferedImage tag = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
+
+        //绘制图像
+        //Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
+        tag.getGraphics().drawImage(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(tag, "jpg", outputStream);
+        BASE64Encoder encoder = new BASE64Encoder();
+        String encode = encoder.encode(outputStream.toByteArray());
+        evaluationIcon.setPic(encode);
         int i = iconDao.insert(evaluationIcon);
         Long id = evaluationIcon.getId();
         return JsonResultUtil.success("成功增加" + i + "条数据:id " + id);

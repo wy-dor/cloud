@@ -196,7 +196,8 @@ public class QuestionServiceImpl implements QuestionService {
         return JsonResultUtil.success(question);
     }
 
-    private void inputStreamToFile(InputStream inputStream, File toFile) throws Exception{
+    @Override
+    public void inputStreamToFile(InputStream inputStream, File toFile) throws Exception{
         OutputStream outputStream = new FileOutputStream(toFile);
         int bytesRead = 0;
         byte[] buffer = new byte[8192];

@@ -5,6 +5,9 @@ import com.learning.cloud.ding.question.entity.Question;
 import com.learning.domain.JsonResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.InputStream;
+
 /**
  * @Author: yyt
  * @Date: 2019-03-21 17:55
@@ -22,6 +25,8 @@ public interface QuestionService {
     JsonResult deleteQuestion(Long id)throws Exception;
 
     JsonResult getQuestionIn(Question question)throws Exception;
+
+    void inputStreamToFile(InputStream inputStream, File toFile) throws Exception;
 
     JsonResult closeQuestion(Long id)throws Exception;
 
