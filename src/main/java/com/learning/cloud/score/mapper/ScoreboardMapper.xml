@@ -96,18 +96,19 @@
     on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
   </insert>
 
-  <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select sr.* ,ut.teacher_name from user_teacher ut
-    LEFT JOIN (
-      SELECT sr1.* FROM score_record sr1 LEFT JOIN
-      score_record sr2 on (sr1.user_id = sr2.user_id and sr1.id &lt; sr2.id)
-      WHERE sr2.id is null) sr
-    ON ut.user_id = sr.user_id
-    where ut.bureau_id =#{bureauId}
-    <if test="schoolId != null">
-      and ut.school_id = #{schoolId}
-    </if>
-    ORDER BY sr.score desc
+  <select id="getTeacherRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRank">
+    select sr.score, ut.teacher_name name,es.school_name from user_teacher ut
+    RIGHT join
+    (SELECT sr1.* FROM score_record sr1 LEFT JOIN
+    score_record sr2 on (sr1.user_id = sr2.user_id and sr1.id &lt; sr2.id)
+    WHERE sr2.id is null) sr
+    on
+    sr.user_id = ut.user_id
+    left join edu_school es
+    on ut.school_id = es.id
+    where ut.bureau_id = #{bureauId}
+    ORDER BY  score desc
+    LIMIT 100
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">

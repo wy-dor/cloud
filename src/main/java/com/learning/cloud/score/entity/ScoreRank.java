@@ -15,6 +15,7 @@ import java.util.Date;
 public class ScoreRank extends BaseEntity {
     private Long bureauId;
     private Long schoolId;
+    private String schoolName;
     private String name;
     private Long classId;
     private Long score;
