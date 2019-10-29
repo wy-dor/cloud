@@ -17,6 +17,7 @@ import java.io.IOException;
 
 @RestController
 public class EvaluationIconController {
+
     @Autowired
     private EvaluationIconService iconService;
 
