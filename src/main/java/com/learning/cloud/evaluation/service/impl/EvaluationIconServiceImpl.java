@@ -39,11 +39,12 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         }
         InputStream inputStream = null;
         inputStream = file.getInputStream();
-        String pathName = System.getProperty("user.dir") + File.separator + "upload" + File.separator + file.getOriginalFilename();
-        File toFile = new File(pathName);
-        if(!toFile.exists()){
-            toFile.mkdirs();
+        String pathName = System.getProperty("user.dir") + File.separator + "upload";
+        File f = new File(pathName);
+        if(!f.exists()){
+            f.mkdirs();
         }
+        File toFile = new File(pathName + File.separator + file.getOriginalFilename());
         questionService.inputStreamToFile(inputStream, toFile);
         inputStream.close();
         // 开始读取文件并进行压缩

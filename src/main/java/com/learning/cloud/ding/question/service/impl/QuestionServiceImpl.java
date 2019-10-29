@@ -166,11 +166,12 @@ public class QuestionServiceImpl implements QuestionService {
     //高度
     @Override
     public String base64Reduce(MultipartFile file) throws Exception {
-        String pathName = System.getProperty("user.dir") + File.separator + "upload" + File.separator + file.getOriginalFilename();
-        File toFile = new File(pathName);
-        if(!toFile.exists()){
-            toFile.mkdirs();
+        String pathName = System.getProperty("user.dir") + File.separator + "upload";
+        File f = new File(pathName);
+        if(!f.exists()){
+            f.mkdirs();
         }
+        File toFile = new File(pathName + File.separator + file.getOriginalFilename());
         InputStream is = null;
         is = file.getInputStream();
         inputStreamToFile(is, toFile);
