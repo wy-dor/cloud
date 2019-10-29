@@ -42,6 +42,7 @@
                 and school_id = #{schoolId,jdbcType=INTEGER}
             </if>
         </where>
+        order by id desc
     </select>
 
     <delete id="deleteByItem" parameterType="com.learning.cloud.evaluation.entity.EvaluationItem">
