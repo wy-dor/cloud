@@ -35,6 +35,7 @@
                 and user_id = #{userId,jdbcType=VARCHAR}
             </if>
         </where>
+        order by id desc
     </select>
 
     <select id="getRecordStatisticsForStudent" parameterType="java.lang.String"

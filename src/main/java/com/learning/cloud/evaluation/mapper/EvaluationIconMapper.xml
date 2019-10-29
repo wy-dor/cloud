@@ -29,6 +29,7 @@
                 and school_id = #{schoolId,jdbcType=INTEGER}
             </if>
         </where>
+        order by id desc
     </select>
 
     <delete id="deleteById" parameterType="java.lang.Long">

@@ -30,6 +30,7 @@
                 and user_name = #{userName,jdbcType=VARCHAR}
             </if>
         </where>
+        order by id desc
     </select>
 
     <delete id="deleteByRemark" parameterType="com.learning.cloud.evaluation.entity.EvaluationRemark">

@@ -27,6 +27,7 @@
                 and class_id = #{classId}
             </if>
         </where>
+        order by id desc
     </select>
 
     <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">

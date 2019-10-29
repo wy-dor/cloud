@@ -16,6 +16,7 @@
         <if test="studentUserIds != null and studentUserIds != ''">
             and FIND_IN_SET(#{studentUserIds},student_user_ids)
         </if>
+        order by id desc
     </select>
 
     <select id="getEvaluationGroupScoreList" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan"
