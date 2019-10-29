@@ -22,7 +22,7 @@ public interface ScoreboardDao {
 
     int addClassScoreboard(ClassScoreboard classScoreboard);
 
-    List<ScoreRank> getTeacherRank(Long bureauId);
+    List<ScoreRank> getTeacherRank(ScoreRank scoreRank);
 
     List<ClassScoreboard> getClassRank(Long schoolId);
 

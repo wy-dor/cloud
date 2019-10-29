@@ -201,8 +201,8 @@ public class ScoreboardServiceImpl implements ScoreboardService {
 
 
     @Override
-    public JsonResult getTeacherRank(Long bureauId) throws Exception{
-        List<ScoreRank> scoreRanks = scoreboardDao.getTeacherRank(bureauId);
+    public JsonResult getTeacherRank(ScoreRank scoreRank) throws Exception{
+        List<ScoreRank> scoreRanks = scoreboardDao.getTeacherRank(scoreRank);
         return JsonResultUtil.success(new PageEntity<>(scoreRanks));
     }
 
