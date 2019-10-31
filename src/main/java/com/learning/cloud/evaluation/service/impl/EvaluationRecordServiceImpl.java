@@ -102,6 +102,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 
+
     @Override
     public JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord) {
         List<EvaluationRecord> evaluationRecordList = recordDao.getByRecord(evaluationRecord);
@@ -144,18 +145,18 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     @Override
     public JsonResult getRecordStatisticsForStudent(String studentUserId) {
         Map<String,Object> map = new HashMap<>();
-        List<EvaluationDimension> dimensionList = recordDao.getRecordStatisticsForStudent(studentUserId);
-        Integer totalPraiseCount = 0;
-        Integer totalCriticalCount = 0;
-        for (EvaluationDimension dimension : dimensionList) {
-            Integer praiseItemCount = dimension.getPraiseItemCount();
-            Integer criticalItemCount = dimension.getCriticalItemCount();
-            totalCriticalCount += criticalItemCount;
-            totalPraiseCount += praiseItemCount;
+        List<RecordStatisticsForStudent> dimensionList = recordDao.getRecordStatisticsForStudent(studentUserId);
+        BigDecimal totalPraiseScore = new BigDecimal("0");
+        BigDecimal totalCriticalScore = new BigDecimal("0");
+        for (RecordStatisticsForStudent dimension : dimensionList) {
+            BigDecimal praiseItemScore = dimension.getPraiseItemCount();
+            BigDecimal criticalItemScore = dimension.getCriticalItemCount();
+            totalPraiseScore = totalPraiseScore.add(praiseItemScore);
+            totalCriticalScore = totalCriticalScore.add(criticalItemScore);
         }
         map.put("dimensionList",dimensionList);
-        map.put("totalCriticalCount",totalCriticalCount);
-        map.put("totalPraiseCount",totalPraiseCount);
+        map.put("totalCriticalCount",totalCriticalScore);
+        map.put("totalPraiseCount",totalPraiseScore);
         return JsonResultUtil.success(map);
     }
 
@@ -169,8 +170,8 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sdf.format(date);
         String s = format.substring(0, 10);
-        int todayPraiseCount = 0;
-        int todayCriticalCount = 0;
+        BigDecimal todayPraiseScore = new BigDecimal("0");
+        BigDecimal todayCriticalScore = new BigDecimal("0");
         for (EvaluationRecord r : recordListForStudent) {
             //拼接项目名
             setRecordConcatName(r);
@@ -180,14 +181,14 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
             if(s.equals(substring)){
                 BigDecimal score = r.getScore();
                 if (score.compareTo(BigDecimal.ZERO) == 1){
-                    todayPraiseCount++;
+                    todayPraiseScore = todayPraiseScore.add(score);
                 }else{
-                    todayCriticalCount++;
+                    todayCriticalScore = todayCriticalScore.add(score);
                 }
             }
         }
-        map.put("todayCriticalCount",todayCriticalCount);
-        map.put("todayPraiseCount",todayPraiseCount);
+        map.put("todayCriticalCount",todayCriticalScore);
+        map.put("todayPraiseCount",todayPraiseScore);
         return JsonResultUtil.success(map);
     }
 
