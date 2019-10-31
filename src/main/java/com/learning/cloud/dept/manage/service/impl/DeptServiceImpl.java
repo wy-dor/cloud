@@ -79,6 +79,7 @@ public class DeptServiceImpl implements DeptService {
         List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
         List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
+
         Integer bureauId = school.getBureauId();
         if (bureauId == null) {
             bureauId = -1;
@@ -203,15 +204,15 @@ public class DeptServiceImpl implements DeptService {
             }
 
             //删除班级记录同步
-            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
-            if(classIdList3 != null && classIdList3.size() > 0){
-                for (Integer cId : classIdList3) {
-                    gradeClassDao.delete(cId);
-                    studentDao.deleteByClassId(cId);
-                    parentService.removeParentsInClass(cId);
-                    teacherService.removeTeachersInClass(cId);
-                }
-            }
+//            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
+//            if(classIdList3 != null && classIdList3.size() > 0){
+//                for (Integer cId : classIdList3) {
+//                    gradeClassDao.delete(cId);
+//                    studentDao.deleteByClassId(cId);
+//                    parentService.removeParentsInClass(cId);
+//                    teacherService.removeTeachersInClass(cId);
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
