@@ -5,10 +5,7 @@ import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
-import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
-import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.manage.service.DeptService;
-import com.learning.cloud.index.dao.AuthAppInfoDao;
 import com.learning.cloud.index.dao.AuthCorpInfoDao;
 import com.learning.cloud.index.dao.AuthUserInfoDao;
 import com.learning.cloud.index.dao.CorpAgentDao;
@@ -16,17 +13,9 @@ import com.learning.cloud.index.entity.AuthCorpInfo;
 import com.learning.cloud.index.entity.AuthUserInfo;
 import com.learning.cloud.index.entity.CorpAgent;
 import com.learning.cloud.index.service.AuthenService;
+import com.learning.cloud.index.service.LoggedService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
-import com.learning.cloud.score.dao.ScoreRecordDao;
-import com.learning.cloud.score.dao.ScoreboardDao;
-import com.learning.cloud.score.entity.ClassScoreboard;
-import com.learning.cloud.score.entity.SchoolScoreboard;
-import com.learning.cloud.score.entity.ScoreRecord;
-import com.learning.cloud.user.parent.dao.ParentDao;
-import com.learning.cloud.user.parent.entity.Parent;
-import com.learning.cloud.user.teacher.dao.TeacherDao;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.bizData.dao.SyncBizDataDao;
 import com.learning.cloud.bizData.entity.SyncBizData;
 import com.taobao.api.ApiException;
@@ -52,24 +41,6 @@ public class MultiThreadScheduleTask {
     private SchoolDao schoolDao;
 
     @Autowired
-    private TeacherDao teacherDao;
-
-    @Autowired
-    private ScoreRecordDao scoreRecordDao;
-
-    @Autowired
-    private ParentDao parentDao;
-
-    @Autowired
-    private ScoreboardDao scoreboardDao;
-
-    @Autowired
-    private GradeClassDao gradeClassDao;
-
-    @Autowired
-    private AuthAppInfoDao authAppInfoDao;
-
-    @Autowired
     private AuthenService authenService;
 
     @Autowired
@@ -93,148 +64,19 @@ public class MultiThreadScheduleTask {
     @Autowired
     private DeptService deptService;
 
+    @Autowired
+    private LoggedService loggedService;
+
     @Value("${spring.suiteId}")
     private String suiteId;
 
     private Map<String, Boolean> statusMap = new HashMap<>();
 
-
     @Async
-    @Scheduled(cron = "0 0 5 * * ?") //每天5点
-    public void refreshSchoolScore() throws InterruptedException {
-        //刷新学校的积分
-        //1。获取是所有学校
-        List<School> schools = schoolDao.getSchools();
-        for (School school : schools) {
-            double teacherAvg = 0.0;
-            double parentAvg = 0.0;
-            //获取所有老师
-            List<Teacher> teachers = teacherDao.getTeacherIds(school.getId().longValue());
-            //取老师最新的积分
-            Long sum_teacher_score = new Long(0);
-            int ts = teachers.size();
-            if (ts > 0) {
-                for (Teacher te : teachers) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    sum_teacher_score += score;
-                }
-                teacherAvg = sum_teacher_score / ts;
-            } else {
-                teacherAvg = 0.0;
-            }
-            //取家长最新积分
-            List<Parent> parents = parentDao.getParents(school.getId().longValue());
-            Long sum_parent_score = new Long(0);
-            int ps = parents.size();
-            if (ps > 0) {
-                for (Parent pa : parents) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    if (score != 0) {
-                        sum_parent_score += score;
-                    } else {
-                        ps--;
-                    }
-                }
-                if (ps > 0) {
-                    parentAvg = sum_parent_score / ps;
-                }
-            } else {
-                parentAvg = 0.0;
-            }
-
-            //计算最终的积分
-            double score = teacherAvg * 0.8 + parentAvg * 0.2;
-            //保存到数据库表中
-            SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
-            schoolScoreboard.setSchoolId(school.getId().longValue());
-            schoolScoreboard.setScore(new Double(score).intValue());
-            schoolScoreboard.setBureauId(school.getBureauId().longValue());
-            int i = scoreboardDao.addSchoolScoreboard(schoolScoreboard);
-        }
+    @Scheduled(cron = "0 0 1 * * ?")//每天1点
+    public void addSchoolActivityScore() throws Exception {
+        loggedService.AddSchoolScoreFormActivity();
     }
-
-
-    @Async
-    @Scheduled(cron = "0 0 6 * * ?") //每天6点
-    public void refreshClassScore() throws InterruptedException {
-        //刷新班级的积分
-        //1。获取所有班级
-        List<GradeClass> gradeClasses = gradeClassDao.getAllClass();
-        for (GradeClass gd : gradeClasses) {
-            double teacherAvg = 0.0;
-            double parentAvg = 0.0;
-            //获取所有老师
-            List<Teacher> teachers = teacherDao.getClassTeachers(gd);
-            //取老师最新的积分
-            Long sum_teacher_score = new Long(0);
-            int ts = teachers.size();
-            if (ts > 0) {
-                for (Teacher te : teachers) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    sum_teacher_score += score;
-                }
-                teacherAvg = sum_teacher_score / ts;
-            } else {
-                teacherAvg = 0.0;
-            }
-            //取家长最新积分
-            List<Parent> parents = parentDao.getParents(gd.getId().longValue());
-            Long sum_parent_score = new Long(0);
-            int ps = parents.size();
-            if (ps > 0) {
-                for (Parent pa : parents) {
-                    ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
-                    Long score = new Long(0);
-                    if (last != null) {
-                        score = last.getScore() == null ? 0 : last.getScore();
-                    }
-                    if (score != 0) {
-                        sum_parent_score += score;
-                    } else {
-                        ps--;
-                    }
-                }
-                if (ps > 0) {
-                    parentAvg = sum_parent_score / ps;
-                }
-            } else {
-                parentAvg = 0.0;
-            }
-            //计算最终的积分
-            double score = teacherAvg * 0.8 + parentAvg * 0.2;
-            //保存到数据库表中
-            ClassScoreboard classScoreboard = new ClassScoreboard();
-            classScoreboard.setClassId(gd.getId().longValue());
-            classScoreboard.setScore(new Double(score).intValue());
-            classScoreboard.setSchoolId(gd.getSchoolId().longValue());
-            classScoreboard.setBureauId(gd.getBureauId().longValue());
-            int i = scoreboardDao.addClassScoreboard(classScoreboard);
-        }
-    }
-
-//    @Async
-//    @Scheduled(cron = "0 0/1 * * * ?")//每隔一分钟
-//    public void refreshAgent() throws InterruptedException, ApiException {
-//        List<AuthAppInfo> infos = authAppInfoDao.getToAuthorize();
-//        if(infos != null && infos.size() > 0){
-//            for (AuthAppInfo info : infos) {
-//                authenService.authenApp(info.getCorpId());
-//            }
-//        }
-//
-//    }
 
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")//每隔一分钟
@@ -313,29 +155,6 @@ public class MultiThreadScheduleTask {
                             System.out.println("保存授权企业信息成功");
                         }
 
-                        //更新授权应用表
-                        /*SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-                        if (forSuiteTicket != null) {
-                            Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
-                            String suiteTicket = parse.get("suiteTicket");
-                            accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-                            AuthAppInfo info = authAppInfoDao.findByCorpId(corpId);
-                            AuthAppInfo authAppInfo = new AuthAppInfo();
-                            authAppInfo.setCorpId(corpId);
-                            authAppInfo.setCorpName(corpName);
-                            authAppInfo.setSuiteTicket(suiteTicket);
-                            authAppInfo.setCorpAccessToken(accessToken);
-                            if (info == null) {
-                                authAppInfo.setCreatedTime(new Date());
-                                authAppInfoDao.insert(authAppInfo);
-                            } else {
-                                authAppInfoDao.update(authAppInfo);
-                            }
-                            syncBizDataDao.updateStatus(forSuiteTicket.getId());
-                        }else {
-                            throw new Exception("获取不到suiteTicket推送");
-                        }*/
-
                         //获取企业凭证
                         accessToken = authenService.getAccessToken(corpId);
 
@@ -357,12 +176,6 @@ public class MultiThreadScheduleTask {
                                 corpAgentDao.update(ca);
                             }
                             System.out.println("保存应用信息成功！");
-//                            List<String> adminList = (List<String>) a.get("admin_list");
-//                            //更新管理员表
-//                            for (String userId : adminList) {
-//                                //administrator表和user表同步
-//                                deptService.userSaveByRole(schoolId, corpId, null, userId, 5, accessToken);
-//                            }
 
                         }
 
@@ -423,39 +236,6 @@ public class MultiThreadScheduleTask {
 
             }
         }
-
-        //更新推送的suite_ticket
-//        List<SyncBizData> bizDataList = syncBizDataDao.getBizData(subscribeId, 2);
-//        if (bizDataList != null && bizDataList.size() != 0) {
-//            for (SyncBizData bizData_02 : bizDataList) {
-//                Long id = bizData_02.getId();
-//                Map<String, String> parse = (Map<String, String>) JSON.parse(bizData_02.getBizData());
-//                String suiteTicket = parse.get("suiteTicket");
-//                List<AuthCorpInfo> corpInfos = authCorpInfoDao.getCorpInfos();
-//                for (AuthCorpInfo corpInfo : corpInfos) {
-//                    String corpId = corpInfo.getCorpId();
-//                    String corpName = corpInfo.getCorpName();
-//                    String accessToken = authenService.getURLAccessToken(corpId, suiteTicket);
-//                    if (accessToken == null) {
-//                        continue;
-//                    }
-//                    AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(corpId);
-//                    AuthAppInfo authAppInfo = new AuthAppInfo();
-//                    authAppInfo.setCorpId(corpId);
-//                    authAppInfo.setCorpName(corpName);
-//                    authAppInfo.setSuiteTicket(suiteTicket);
-//                    authAppInfo.setCorpAccessToken(accessToken);
-//                    if (byCorpId == null) {
-//                        authAppInfo.setCreatedTime(new Date());
-//                        authAppInfoDao.insert(authAppInfo);
-//                    } else {
-//                        authAppInfoDao.update(authAppInfo);
-//                    }
-//                }
-//                //标识已操作
-//                syncBizDataDao.updateStatus(id);
-//            }
-//        }
 
     }
 
