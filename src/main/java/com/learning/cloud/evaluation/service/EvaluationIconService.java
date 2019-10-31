@@ -15,4 +15,5 @@ public interface EvaluationIconService {
 
     JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon) throws Exception;
 
+    JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType);
 }

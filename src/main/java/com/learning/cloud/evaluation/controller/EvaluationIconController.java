@@ -26,6 +26,11 @@ public class EvaluationIconController {
         return iconService.getEvaluationIcon(evaluationIcon);
     }
 
+    @GetMapping("/listEvaluationIconWithDefault")
+    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType){
+        return iconService.listEvaluationIconWithDefault(schoolId, iconType);
+    }
+
     @GetMapping("/getEvaluationIconById")
     public void getEvaluationIconById(Long id, HttpServletResponse response) throws IOException {
         EvaluationIcon evaluationIconById = iconService.getEvaluationIconById(id);

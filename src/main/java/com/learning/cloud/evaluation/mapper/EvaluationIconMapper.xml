@@ -10,7 +10,7 @@
 
     <select id="getByIcon" parameterType="com.learning.cloud.evaluation.entity.EvaluationIcon"
             resultType="com.learning.cloud.evaluation.entity.EvaluationIcon">
-        select *
+        select id, icon_type, builtin, sequence, school_id
         from evaluation_icon
         <where>
             <if test="iconType != null">

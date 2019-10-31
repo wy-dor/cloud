@@ -94,4 +94,21 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         return JsonResultUtil.success("成功修改" + i + "条数据");
     }
 
+    @Override
+    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType) {
+        //获取内置图标
+        EvaluationIcon icon = new EvaluationIcon();
+        icon.setIconType(iconType);
+        icon.setBuiltin(1);
+        icon.setSchoolId(-1);
+        List<EvaluationIcon> defaultIconList = iconDao.getByIcon(icon);
+        //获取学校下对应类型图标
+        EvaluationIcon icon1 = new EvaluationIcon();
+        icon1.setSchoolId(schoolId);
+        icon1.setIconType(iconType);
+        List<EvaluationIcon> evaluationIconList = iconDao.getByIcon(icon1);
+        defaultIconList.addAll(evaluationIconList);
+        return JsonResultUtil.success(defaultIconList);
+    }
+
 }
