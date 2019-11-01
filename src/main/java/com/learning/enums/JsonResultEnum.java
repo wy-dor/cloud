@@ -46,6 +46,7 @@ public enum JsonResultEnum {
     COURSE_NO_FILE(1072,"请传入课程信息"),
     COURSE_NO_SECTION(1073,"设置的生效作息时间错误"),
     EXCEL_ERROR_DOWNLOAD(1074,"EXCEL下载失败！"),
+    COURSE_NO_CLASS(1075,"不存在的班级信息！"),
 
 
     DING_SPACE_ERROR(1081,"获取钉盘审批空间失败"),
