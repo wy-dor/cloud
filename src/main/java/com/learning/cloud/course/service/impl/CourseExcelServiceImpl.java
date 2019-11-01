@@ -87,6 +87,9 @@ public class CourseExcelServiceImpl implements CourseExcelService {
             String[] classId = classIds.split(",");
             for (String id : classId) {
                 GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(id));
+                if(gradeClass==null){
+                    throw new MyException(JsonResultEnum.COURSE_NO_CLASS);
+                }
                 classList.add(gradeClass);
             }
         }

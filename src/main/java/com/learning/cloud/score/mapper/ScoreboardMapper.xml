@@ -107,7 +107,7 @@
     left join edu_school es
     on ut.school_id = es.id
     where ut.bureau_id = #{bureauId}
-    ORDER BY  score desc
+    ORDER BY  score desc,ut.user_id
   </select>
 
   <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
@@ -138,7 +138,7 @@
       select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
       )
     ) p on es.id = p.school_id where p.bureau_id = #{bureauId}
-    ORDER BY p.score desc
+    ORDER BY p.score desc, p.school_id
   </select>
 
   <select id="getPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
@@ -154,7 +154,7 @@
     select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
     ) p
     on f.user_id = p.user_id
-    ORDER BY p.score desc
+    ORDER BY p.score desc,f.user_id
   </select>
 
   <select id="getClassRankFromDuty" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
@@ -170,6 +170,6 @@
     ) c
     left join edu_grade_class b
     on c.class_id = b.id
-    order by score desc
+    order by score desc,c.class_id
   </select>
 </mapper>
