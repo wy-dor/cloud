@@ -10,6 +10,8 @@ public class CourseDetail {
 
     private Long courseId;
 
+    private String className;
+
     private Integer weekDay;
 
     private Integer courseNum;

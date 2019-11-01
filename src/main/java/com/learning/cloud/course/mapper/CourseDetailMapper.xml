@@ -151,12 +151,14 @@
   </update>
 
   <select id="getTeacherCourseDetail" resultType="com.learning.cloud.course.entity.CourseDetail">
-    select * from course_detail
-    where ( course_teacher_id = #{teacherId} or course_teacher_id_s = #{teacherId} )
+    select a.*,b.class_name from course_detail a
+    LEFT JOIN edu_grade_class b
+    on a.class_id = b.id
+    where ( a.course_teacher_id = #{teacherId} or a.course_teacher_id_s = #{teacherId} )
     <if test="weekDay != null">
-      and week_day = #{weekDay}
+      and a.week_day = #{weekDay}
     </if>
-    order by week_day,course_num
+    order by a.week_day,a.course_num
   </select>
 
   <select id="getCourseDetailById" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseDetail">
