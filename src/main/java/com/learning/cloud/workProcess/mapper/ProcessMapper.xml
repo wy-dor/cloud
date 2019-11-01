@@ -14,7 +14,7 @@
         select * from process where corp_id = #{corpId}
     </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.workProcess.entity.Process">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.workProcess.entity.Process">
         insert into process
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -87,4 +87,17 @@
             </if>
         </trim>
     </insert>
+
+    <update id="update" parameterType="com.learning.cloud.workProcess.entity.Process">
+        update process
+        <set>
+            <if test="processCode != null">
+                process_code = #{processCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=LONGVARCHAR}
+    </update>
 </mapper>

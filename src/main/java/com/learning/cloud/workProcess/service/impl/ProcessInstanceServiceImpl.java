@@ -4,14 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiProcessinstanceCreateRequest;
+import com.dingtalk.api.request.OapiProcessinstanceGetRequest;
 import com.dingtalk.api.response.OapiProcessinstanceCreateResponse;
+import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
-import com.learning.cloud.user.admin.dao.AdministratorDao;
-import com.learning.cloud.user.admin.entity.Administrator;
 import com.learning.cloud.user.admin.service.AdminService;
 import com.learning.cloud.workProcess.dao.ProcessDao;
 import com.learning.cloud.workProcess.dao.ProcessInstanceDao;
@@ -22,6 +23,7 @@ import com.learning.cloud.workProcess.entity.ProcessValue;
 import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.cloud.workProcess.service.ProcessService;
 import com.learning.domain.JsonResult;
+import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,13 +61,15 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
     private static String PROCESS_INSTANCE_CREATE = "https://oapi.dingtalk.com/topapi/processinstance/create";
 
+    private static String PROCESS_INSTANCE_GET = "https://oapi.dingtalk.com/topapi/processinstance/get";
+
     @Override
     public JsonResult createProcessInstance(ProcessValue processValue) throws Exception {
         //根据流程id获取流程的模板信息
         Process process = processDao.getProcessById(processValue.getProcessId());
 
         //获取提交人的信息
-        OapiUserGetResponse userGetResponse = getUserByUserid(processValue.getUserId(),process.getCorpId());
+        OapiUserGetResponse userGetResponse = getUserByUserid(processValue.getUserId(), process.getCorpId());
         List<Long> dep = userGetResponse.getDepartment();
 
         DefaultDingTalkClient client = new DefaultDingTalkClient(PROCESS_INSTANCE_CREATE);
@@ -105,13 +109,13 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         OapiProcessinstanceCreateRequest.FormComponentValueVo attachmentComponent = new OapiProcessinstanceCreateRequest.FormComponentValueVo();
         JSONObject attachmentJson = new JSONObject();
         Attachment attachment = JSONObject.parseObject(processValue.getAttachment(), Attachment.class);
-        if(attachment!=null){
+        if (attachment != null) {
             attachmentJson.put("fileId", attachment.getFileId());
             attachmentJson.put("fileName", attachment.getFileName());
             attachmentJson.put("fileType", attachment.getFileType());
             attachmentJson.put("spaceId", attachment.getSpaceId());
             attachmentJson.put("fileSize", attachment.getFileSize());
-        }else {
+        } else {
             attachmentJson.put("fileId", "");
             attachmentJson.put("fileName", "");
             attachmentJson.put("fileType", "");
@@ -142,7 +146,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         ProcessInstance processInstance = new ProcessInstance();
         processInstance.setProcessId(process.getId());
         processInstance.setAgentId(process.getAgentId());
-        processInstance.setStatus((short)1);
+        processInstance.setStatus((short) 1);
         processInstance.setAttachment(JSON.toJSONString(processValue.getAttachment()));
         processInstance.setFormComponentValues(JSON.toJSONString(formComponentValues));
         int i = processInstanceDao.insert(processInstance);
@@ -151,11 +155,11 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         // 2.生成组织流程实例
         // 3.默认提交人为管理员，审核人为校长。
         // 4.附件需要从服务器转存到各个组织的钉盘
-        if(processValue.getSchool()!=null){
-            createSchoolProcessInstance(processValue.getSchool(),processValue,processInstance.getId());
+        if (processValue.getSchool() != null) {
+            createSchoolProcessInstance(processValue.getSchool(), processValue, processInstance.getId());
         }
-        OapiProcessinstanceCreateResponse response = client.execute(request,authenService.getAccessToken(process.getCorpId()));
-        if(response.isSuccess()){
+        OapiProcessinstanceCreateResponse response = client.execute(request, authenService.getAccessToken(process.getCorpId()));
+        if (response.isSuccess()) {
             //跟新
             processInstance.setProcessInstanceId(response.getProcessInstanceId());
             processInstanceDao.update(processInstance);
@@ -172,14 +176,14 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
     }
 
     //创建学校的固定流程实例
-    public void createSchoolProcessInstance(String schoolIds, ProcessValue processValue,Integer parentId)throws Exception{
+    public void createSchoolProcessInstance(String schoolIds, ProcessValue processValue, Integer parentId) throws Exception {
         //获取各个
         String[] sIds = schoolIds.split(",");
-        for(String schoolId: sIds){
+        for (String schoolId : sIds) {
             //获取学校信息
             School school = schoolDao.getBySchoolId(Integer.valueOf(schoolId));
             Process schoolProcess = processDao.getProcessByCorpId(school.getCorpId());
-            if(schoolProcess==null){
+            if (schoolProcess == null) {
                 //创建流程
                 processService.createProcessExample(school.getCorpId());
             }
@@ -189,7 +193,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
             //获取学校管理员
             String userId = adminService.getMainAdmin(school.getCorpId());
             //获取学校管理员的信息
-            OapiUserGetResponse userGetResponse = getUserByUserid(userId,school.getCorpId());
+            OapiUserGetResponse userGetResponse = getUserByUserid(userId, school.getCorpId());
             List<Long> dep = userGetResponse.getDepartment();
             //发起流程实例
             DefaultDingTalkClient client = new DefaultDingTalkClient(PROCESS_INSTANCE_CREATE);
@@ -229,13 +233,13 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
             OapiProcessinstanceCreateRequest.FormComponentValueVo attachmentComponent = new OapiProcessinstanceCreateRequest.FormComponentValueVo();
             JSONObject attachmentJson = new JSONObject();
             Attachment attachment = JSONObject.parseObject(processValue.getAttachment(), Attachment.class);
-            if(attachment!=null){
+            if (attachment != null) {
                 attachmentJson.put("fileId", attachment.getFileId());
                 attachmentJson.put("fileName", attachment.getFileName());
                 attachmentJson.put("fileType", attachment.getFileType());
                 attachmentJson.put("spaceId", attachment.getSpaceId());
                 attachmentJson.put("fileSize", attachment.getFileSize());
-            }else {
+            } else {
                 attachmentJson.put("fileId", "");
                 attachmentJson.put("fileName", "");
                 attachmentJson.put("fileType", "");
@@ -261,21 +265,36 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 //            request.setCcPosition("START_FINISH");
             request.setDeptId(dep.get(0));
             request.setAgentId(Long.valueOf(process.getAgentId()));
-
-            OapiProcessinstanceCreateResponse response = client.execute(request,authenService.getAccessToken(process.getCorpId()));
-            if(response.isSuccess()){
-                ProcessInstance processInstance = new ProcessInstance();
-                processInstance.setProcessId(process.getId());
-                processInstance.setAgentId(process.getAgentId());
+            //先保存
+            ProcessInstance processInstance = new ProcessInstance();
+            processInstance.setProcessId(process.getId());
+            processInstance.setAgentId(process.getAgentId());
+            processInstance.setAttachment(JSON.toJSONString(processValue.getAttachment()));
+            processInstance.setFormComponentValues(JSON.toJSONString(formComponentValues));
+            int i = processInstanceDao.insert(processInstance);
+            OapiProcessinstanceCreateResponse response = client.execute(request, authenService.getAccessToken(process.getCorpId()));
+            if (response.isSuccess()) {
                 processInstance.setProcessInstanceId(response.getProcessInstanceId());
-                processInstance.setStatus((short)1);
-                processInstance.setAttachment(JSON.toJSONString(processValue.getAttachment()));
-                processInstance.setFormComponentValues(JSON.toJSONString(formComponentValues));
-                int i = processInstanceDao.insert(processInstance);
+                processInstance.setStatus((short) 1);
+                processInstanceDao.update(processInstance);
+
             }
 
         }
     }
 
-
+    //获取流程实例详情
+    @Override
+    public JsonResult getInstanceStatus(String processInstanceId, String corpId) throws Exception {
+        DingTalkClient client = new DefaultDingTalkClient(PROCESS_INSTANCE_GET);
+        OapiProcessinstanceGetRequest request = new OapiProcessinstanceGetRequest();
+        request.setProcessInstanceId(processInstanceId);
+        OapiProcessinstanceGetResponse response = client.execute(request, authenService.getAccessToken(corpId));
+        if(response.isSuccess()){
+            OapiProcessinstanceGetResponse.ProcessInstanceTopVo p = response.getProcessInstance();
+            return  JsonResultUtil.success(p);
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.ERROR);
+        }
+    }
 }

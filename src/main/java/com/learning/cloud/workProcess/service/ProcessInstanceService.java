@@ -12,4 +12,6 @@ public interface ProcessInstanceService {
     JsonResult createProcessInstance(ProcessValue process)throws Exception;
 
     JsonResult getLastDocumentNo(Integer bureauId)throws Exception;
+
+    JsonResult getInstanceStatus(String processInstanceId, String corpId)throws Exception;
 }

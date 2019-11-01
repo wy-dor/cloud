@@ -84,7 +84,7 @@ public class MultiThreadScheduleTask {
         //标志正在操作
         String subscribeId = suiteId + "_0";
         //获取企业授权应用最新状态的数据
-        List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(subscribeId, 4);
+        List<SyncBizData> bizData_04 = syncBizDataDao.getBizData(4);
         if (bizData_04 != null && bizData_04.size() > 0) {
             for (SyncBizData bizData : bizData_04) {
                 String corpId = bizData.getCorpId();

@@ -12,7 +12,7 @@ import java.util.List;
 public interface SyncBizDataDao {
     int insert(SyncBizData record);
 
-    List<SyncBizData> getBizData(@Param("subscribeId") String subscribeId, @Param("bizType") Integer bizType);
+    List<SyncBizData> getBizData(Integer bizType);
 
     SyncBizData getForSuiteTicket();
 

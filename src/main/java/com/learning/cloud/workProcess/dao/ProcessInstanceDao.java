@@ -15,4 +15,6 @@ public interface ProcessInstanceDao {
     int insert(ProcessInstance processInstance);
 
     int update(ProcessInstance processInstance);
+
+    ProcessInstance getProcessInstance(String processInstanceId);
 }

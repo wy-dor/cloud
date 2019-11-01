@@ -14,9 +14,11 @@ import org.springframework.stereotype.Repository;
 public interface ProcessDao {
     Process getProcessById(Integer id);
 
-    void save(Process process);
+    void insert(Process process);
 
     Process getProcessByBureauId(String bureauId);
 
     Process getProcessByCorpId(String corpId);
+
+    void update(Process process);
 }

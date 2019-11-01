@@ -85,5 +85,9 @@
     where id = #{id,jdbcType=LONGVARCHAR}
   </update>
 
+  <select id="getProcessInstance" resultType="com.learning.cloud.workProcess.entity.ProcessInstance">
+    select * from process_instance
+    where process_instance_id = #{processInstanceId}
+  </select>
 
 </mapper>

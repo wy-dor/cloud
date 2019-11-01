@@ -128,26 +128,27 @@ public class ProcessServiceImpl implements ProcessService {
         saveProcessRequest.setFormComponentList(formComponentList);
         request.setSaveProcessRequest(saveProcessRequest);
 
+        //保存流程信息
+        Process process = new Process();
+        String params = JSON.toJSONString(formComponentList);
+        process.setAgentId(corpAgent.getAgentId());
+        if(bureau!=null){
+            process.setBureauId(bureau.getId());
+        }
+        process.setCorpId(corpId);
+        process.setFormComponentList(params);
+        process.setDisableFormEdit("true");
+        process.setName("内部公文流转");
+        process.setDescription("内部公文流转模板");
+        processDao.insert(process);
+
         OapiProcessSaveResponse response = client.execute(request, authenService.getAccessToken(corpId));
         //保存流程创建模板
         if(response.isSuccess()){
-            Process process = new Process();
-            Map responseParams = response.getParams();
-            String params = JSON.toJSONString(responseParams.get("saveProcessRequest"));
             OapiProcessSaveResponse.ProcessTopVo v = response.getResult();
-            process.setAgentId(corpAgent.getAgentId());
-            if(bureau!=null){
-                process.setBureauId(bureau.getId());
-            }
-            process.setCorpId(corpId);
-            process.setFormComponentList(params);
             process.setProcessCode(v.getProcessCode());
             process.setStatus((short)1);
-            process.setDisableFormEdit("true");
-            process.setName("内部公文流转");
-            process.setDescription("内部公文流转模板");
-            process.setFormComponentList(params);
-            processDao.save(process);
+            processDao.update(process);
         }
         System.out.println(JSON.toJSONString(response));
 

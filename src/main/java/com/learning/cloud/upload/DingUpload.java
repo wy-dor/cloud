@@ -108,6 +108,7 @@ public class DingUpload {
      *
      * （3）调用发起审批实例接口，传递附件信息
      */
+    @GetMapping("/getApprovingDingSpace")
     public Long getApprovingDingSpace(String corpId,String userId)throws Exception{
         CorpAgent corpAgent = corpAgentDao.getByCorpId(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/cspace/info");

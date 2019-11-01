@@ -26,8 +26,13 @@ public class ProcessInstanceController {
     }
 
     //创建实例时获取最新的公文编号。
-    @GetMapping("/getLastDocumentNo")
-    public JsonResult getLastDocumentNo(Integer bureauId)throws Exception{
-        return processInstanceService.getLastDocumentNo(bureauId);
+//    @GetMapping("/getLastDocumentNo")
+//    public JsonResult getLastDocumentNo(Integer bureauId)throws Exception{
+//        return processInstanceService.getLastDocumentNo(bureauId);
+//    }
+
+    @GetMapping("/getInstanceStatus")
+    public JsonResult getInstanceStatus(String processInstanceId,String corpId)throws Exception{
+        return processInstanceService.getInstanceStatus(processInstanceId, corpId);
     }
 }
