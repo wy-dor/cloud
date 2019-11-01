@@ -76,8 +76,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void init(Integer schoolId) throws ApiException {
-        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
-        List<Integer> classIdList2 = new ArrayList<>();
+//        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
+//        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
 
         Integer bureauId = school.getBureauId();
@@ -169,7 +169,7 @@ public class DeptServiceImpl implements DeptService {
                                         gradeClass.setId(classId);
                                         gradeClassDao.update(gradeClass);
                                     }
-                                    classIdList2.add(classId);
+//                                    classIdList2.add(classId);
 
                                     /*班级结构数据同步*/
                                     saveUserInClass(classDeptId);
@@ -446,6 +446,9 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user,
                                int roleType, String accessToken){
+        if(roleType == 4){
+            return;
+        }
         String userId = user.getUserid();
         Boolean isAdmin = user.getIsAdmin();
         if (isAdmin != null && isAdmin == true) {
