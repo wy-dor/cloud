@@ -37,29 +37,38 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         if (bytes.length > 200 * 1024 * 8) {
             throw new Exception("图片大小限制200KB以内，请重新上传");
         }
-        InputStream inputStream = null;
-        inputStream = file.getInputStream();
-        String pathName = System.getProperty("user.dir") + File.separator + "upload";
-        File f = new File(pathName);
-        if(!f.exists()){
-            f.mkdirs();
+        Integer builtin = evaluationIcon.getBuiltin();
+        String encode = "";
+        //内置则不压缩
+        if(builtin != null && builtin == 1){
+            BASE64Encoder encoder = new BASE64Encoder();
+            //base64转图
+            encode = encoder.encode(file.getBytes());
+        }else{
+            InputStream inputStream = null;
+            inputStream = file.getInputStream();
+            String pathName = System.getProperty("user.dir") + File.separator + "upload";
+            File f = new File(pathName);
+            if(!f.exists()){
+                f.mkdirs();
+            }
+            File toFile = new File(pathName + File.separator + file.getOriginalFilename());
+            questionService.inputStreamToFile(inputStream, toFile);
+            inputStream.close();
+            // 开始读取文件并进行压缩
+            Image img = ImageIO.read(toFile);
+
+            // 构造一个类型为预定义图像类型之一的 BufferedImage
+            BufferedImage tag = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
+
+            //绘制图像
+            //Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
+            tag.getGraphics().drawImage(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(tag, "jpg", outputStream);
+            BASE64Encoder encoder = new BASE64Encoder();
+            encode = encoder.encode(outputStream.toByteArray());
         }
-        File toFile = new File(pathName + File.separator + file.getOriginalFilename());
-        questionService.inputStreamToFile(inputStream, toFile);
-        inputStream.close();
-        // 开始读取文件并进行压缩
-        Image img = ImageIO.read(toFile);
-
-        // 构造一个类型为预定义图像类型之一的 BufferedImage
-        BufferedImage tag = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
-
-        //绘制图像
-        //Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
-        tag.getGraphics().drawImage(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(tag, "jpg", outputStream);
-        BASE64Encoder encoder = new BASE64Encoder();
-        String encode = encoder.encode(outputStream.toByteArray());
         evaluationIcon.setPic(encode);
         int i = iconDao.insert(evaluationIcon);
         Long id = evaluationIcon.getId();

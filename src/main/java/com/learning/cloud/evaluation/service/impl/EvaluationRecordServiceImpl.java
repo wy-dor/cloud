@@ -88,6 +88,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         BigDecimal score = byId.getScore();
         BigDecimal minusScore = score.multiply(new BigDecimal(-1));
         byId.setScore(minusScore);
+        saveRecord(byId);
         //删除相应评论
         EvaluationRemark evaluationRemark = new EvaluationRemark();
         evaluationRemark.setRecordId(id);
