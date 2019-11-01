@@ -39,7 +39,12 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         }
         InputStream inputStream = null;
         inputStream = file.getInputStream();
-        File toFile = new File(file.getOriginalFilename());
+        String pathName = System.getProperty("user.dir") + File.separator + "upload";
+        File f = new File(pathName);
+        if(!f.exists()){
+            f.mkdirs();
+        }
+        File toFile = new File(pathName + File.separator + file.getOriginalFilename());
         questionService.inputStreamToFile(inputStream, toFile);
         inputStream.close();
         // 开始读取文件并进行压缩
@@ -87,6 +92,23 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
     public JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon) throws Exception {
         int i = iconDao.update(evaluationIcon);
         return JsonResultUtil.success("成功修改" + i + "条数据");
+    }
+
+    @Override
+    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType) {
+        //获取内置图标
+        EvaluationIcon icon = new EvaluationIcon();
+        icon.setIconType(iconType);
+        icon.setBuiltin(1);
+        icon.setSchoolId(-1);
+        List<EvaluationIcon> defaultIconList = iconDao.getByIcon(icon);
+        //获取学校下对应类型图标
+        EvaluationIcon icon1 = new EvaluationIcon();
+        icon1.setSchoolId(schoolId);
+        icon1.setIconType(iconType);
+        List<EvaluationIcon> evaluationIconList = iconDao.getByIcon(icon1);
+        defaultIconList.addAll(evaluationIconList);
+        return JsonResultUtil.success(defaultIconList);
     }
 
 }

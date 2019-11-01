@@ -39,12 +39,12 @@
     </select>
 
     <select id="getRecordStatisticsForStudent" parameterType="java.lang.String"
-            resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-        select a.dimension_name, a.icon_id, IFNULL(b.praiseItemCount, 0) praiseItemCount, IFNULL(b.criticalItemCount, 0) criticalItemCount
+            resultType="com.learning.cloud.evaluation.entity.RecordStatisticsForStudent">
+        select a.dimension_name, a.icon_id, IFNULL(b.praiseItemScore, 0) praiseItemCount, IFNULL(b.criticalItemScore, 0) criticalItemCount
         from evaluation_dimension a
         left join
-        (select c.dimension_id, sum(case when SIGN(c.score) = 1 then 1 else 0 end) praiseItemCount,
-        sum(case when SIGN(c.score) = -1 then 1 else 0 end) criticalItemCount
+        (select c.dimension_id, sum(case when SIGN(c.score) = 1 then c.score else 0 end) praiseItemScore,
+        sum(case when SIGN(c.score) = -1 then c.score else 0 end) criticalItemScore
         from evaluation_record c
         where FIND_IN_SET(#{studentUserId},student_user_ids)
         group by dimension_id) b

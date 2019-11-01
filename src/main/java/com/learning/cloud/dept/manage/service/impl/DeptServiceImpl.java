@@ -76,9 +76,10 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void init(Integer schoolId) throws ApiException {
-        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
-        List<Integer> classIdList2 = new ArrayList<>();
+//        List<Integer> classIdList1 = gradeClassDao.getClassIdList(schoolId);
+//        List<Integer> classIdList2 = new ArrayList<>();
         School school = schoolDao.getBySchoolId(schoolId);
+
         Integer bureauId = school.getBureauId();
         if (bureauId == null) {
             bureauId = -1;
@@ -168,7 +169,7 @@ public class DeptServiceImpl implements DeptService {
                                         gradeClass.setId(classId);
                                         gradeClassDao.update(gradeClass);
                                     }
-                                    classIdList2.add(classId);
+//                                    classIdList2.add(classId);
 
                                     /*班级结构数据同步*/
                                     saveUserInClass(classDeptId);
@@ -203,15 +204,15 @@ public class DeptServiceImpl implements DeptService {
             }
 
             //删除班级记录同步
-            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
-            if(classIdList3 != null && classIdList3.size() > 0){
-                for (Integer cId : classIdList3) {
-                    gradeClassDao.delete(cId);
-                    studentDao.deleteByClassId(cId);
-                    parentService.removeParentsInClass(cId);
-                    teacherService.removeTeachersInClass(cId);
-                }
-            }
+//            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
+//            if(classIdList3 != null && classIdList3.size() > 0){
+//                for (Integer cId : classIdList3) {
+//                    gradeClassDao.delete(cId);
+//                    studentDao.deleteByClassId(cId);
+//                    parentService.removeParentsInClass(cId);
+//                    teacherService.removeTeachersInClass(cId);
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -445,6 +446,9 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user,
                                int roleType, String accessToken){
+        if(roleType == 4){
+            return;
+        }
         String userId = user.getUserid();
         Boolean isAdmin = user.getIsAdmin();
         if (isAdmin != null && isAdmin == true) {

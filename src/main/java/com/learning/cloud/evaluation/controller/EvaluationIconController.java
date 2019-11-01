@@ -17,12 +17,18 @@ import java.io.IOException;
 
 @RestController
 public class EvaluationIconController {
+
     @Autowired
     private EvaluationIconService iconService;
 
     @GetMapping("/getEvaluationIcon")
     public JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon){
         return iconService.getEvaluationIcon(evaluationIcon);
+    }
+
+    @GetMapping("/listEvaluationIconWithDefault")
+    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType){
+        return iconService.listEvaluationIconWithDefault(schoolId, iconType);
     }
 
     @GetMapping("/getEvaluationIconById")
