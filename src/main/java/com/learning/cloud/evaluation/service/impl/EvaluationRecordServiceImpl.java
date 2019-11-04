@@ -167,25 +167,26 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         List<EvaluationRecord> recordListForStudent = recordDao.getByRecord(evaluationRecord);
         PageEntity<EvaluationRecord> pageEntity = new PageEntity<>(recordListForStudent);
         map.put("pageEntity",pageEntity);
+        //获取今日记录数据统计
+        EvaluationRecord record = new EvaluationRecord();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = sdf.format(date);
-        String s = format.substring(0, 10);
+        String dateStr = sdf.format(date);
+        record.setUpdateTime(dateStr);
+        String userIds = evaluationRecord.getStudentUserIds();
+        record.setStudentUserIds(userIds);
+        List<EvaluationRecord> recordList = recordDao.getByRecord(record);
         BigDecimal todayPraiseScore = new BigDecimal("0");
         BigDecimal todayCriticalScore = new BigDecimal("0");
-        for (EvaluationRecord r : recordListForStudent) {
+        for (EvaluationRecord r : recordList) {
             //拼接项目名
             setRecordConcatName(r);
             //指定用户获取今日评价统计数据
-            String updateTime = r.getUpdateTime();
-            String substring = updateTime.substring(0, 10);
-            if(s.equals(substring)){
-                BigDecimal score = r.getScore();
-                if (score.compareTo(BigDecimal.ZERO) == 1){
-                    todayPraiseScore = todayPraiseScore.add(score);
-                }else{
-                    todayCriticalScore = todayCriticalScore.add(score);
-                }
+            BigDecimal score = r.getScore();
+            if (score.compareTo(BigDecimal.ZERO) == 1){
+                todayPraiseScore = todayPraiseScore.add(score);
+            }else{
+                todayCriticalScore = todayCriticalScore.add(score);
             }
         }
         map.put("todayCriticalCount",todayCriticalScore);

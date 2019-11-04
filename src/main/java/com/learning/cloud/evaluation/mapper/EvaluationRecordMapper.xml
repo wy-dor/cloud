@@ -34,6 +34,9 @@
             <if test="userId != null">
                 and user_id = #{userId,jdbcType=VARCHAR}
             </if>
+            <if test="updateTime != null">
+                and TO_DAYS(update_time) = TO_DAYS(#{updateTime})
+            </if>
         </where>
         order by id desc
     </select>
