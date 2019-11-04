@@ -165,6 +165,10 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     public JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord) {
         Map<String,Object> map = new HashMap();
         List<EvaluationRecord> recordListForStudent = recordDao.getByRecord(evaluationRecord);
+        for (EvaluationRecord r : recordListForStudent) {
+            //拼接项目名
+            setRecordConcatName(r);
+        }
         PageEntity<EvaluationRecord> pageEntity = new PageEntity<>(recordListForStudent);
         map.put("pageEntity",pageEntity);
         //获取今日记录数据统计
@@ -179,8 +183,6 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         BigDecimal todayPraiseScore = new BigDecimal("0");
         BigDecimal todayCriticalScore = new BigDecimal("0");
         for (EvaluationRecord r : recordList) {
-            //拼接项目名
-            setRecordConcatName(r);
             //指定用户获取今日评价统计数据
             BigDecimal score = r.getScore();
             if (score.compareTo(BigDecimal.ZERO) == 1){
