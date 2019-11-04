@@ -131,8 +131,6 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
                 }
             }
             record.setStudentList(studentList);
-
-            setRecordConcatName(record);
         }
         return JsonResultUtil.success(new PageEntity<>(evaluationRecordList));
     }
@@ -165,10 +163,6 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     public JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord) {
         Map<String,Object> map = new HashMap();
         List<EvaluationRecord> recordListForStudent = recordDao.getByRecord(evaluationRecord);
-        for (EvaluationRecord r : recordListForStudent) {
-            //拼接项目名
-            setRecordConcatName(r);
-        }
         PageEntity<EvaluationRecord> pageEntity = new PageEntity<>(recordListForStudent);
         map.put("pageEntity",pageEntity);
         //获取今日记录数据统计

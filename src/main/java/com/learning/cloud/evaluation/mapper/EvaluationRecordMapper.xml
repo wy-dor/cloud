@@ -10,32 +10,36 @@
 
     <select id="getByRecord" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord"
             resultType="com.learning.cloud.evaluation.entity.EvaluationRecord">
-        select *
-        from evaluation_record
+        select r.*,CONCAT(d.dimension_name,'/',i.item_name) recordName
+        from evaluation_record r
+        left join evaluation_item i
+        on r.item_id = i.id
+        left join evaluation_dimension d
+        on i.dimension_id = d.id
         <where>
             <if test="dimensionId != null">
-                and dimension_id = #{dimensionId,jdbcType=BIGINT}
+                and r.dimension_id = #{dimensionId,jdbcType=BIGINT}
             </if>
             <if test="itemId != null">
-                and item_id = #{itemId,jdbcType=BIGINT}
+                and r.item_id = #{itemId,jdbcType=BIGINT}
             </if>
             <if test="addingWay != null">
-                and adding_way = #{addingWay,jdbcType=INTEGER}
+                and r.adding_way = #{addingWay,jdbcType=INTEGER}
             </if>
             <if test="groupIds != null">
-                and group_ids = #{groupIds,jdbcType=VARCHAR}
+                and r.group_ids = #{groupIds,jdbcType=VARCHAR}
             </if>
             <if test="studentUserIds != null">
-                and FIND_IN_SET(#{studentUserIds,jdbcType=VARCHAR},student_user_ids)
+                and FIND_IN_SET(#{studentUserIds,jdbcType=VARCHAR},r.student_user_ids)
             </if>
             <if test="score != null">
-                and score = #{score,jdbcType=DECIMAL}
+                and r.score = #{score,jdbcType=DECIMAL}
             </if>
             <if test="userId != null">
-                and user_id = #{userId,jdbcType=VARCHAR}
+                and r.user_id = #{userId,jdbcType=VARCHAR}
             </if>
             <if test="updateTime != null">
-                and TO_DAYS(update_time) = TO_DAYS(#{updateTime})
+                and TO_DAYS(r.update_time) = TO_DAYS(#{updateTime})
             </if>
         </where>
         order by id desc
