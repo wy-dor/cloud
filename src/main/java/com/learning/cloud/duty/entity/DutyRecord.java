@@ -35,4 +35,6 @@ public class DutyRecord {
 
     private String userName;
 
+    private String picIds;
+
 }

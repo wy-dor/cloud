@@ -82,6 +82,9 @@
             <if test="status != null">
                 status,
             </if>
+            <if test="picIds != null">
+                pic_ids,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -111,13 +114,16 @@
             <if test="status != null">
                 #{status,jdbcType=SMALLINT},
             </if>
+            <if test="picIds != null">
+                #{picIds,jdbcType=VARCHAR},
+            </if>
         </trim>
         ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id=#{userId}
     </insert>
 
     <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
         insert into duty_record
-        (school_id,campus_id,class_id, point_type,time,day,user_id)
+        (school_id,campus_id,class_id, point_type,time,day,user_id,pic_ids)
         values
         <foreach collection="list" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -144,6 +150,9 @@
                 </if>
                 <if test="item.status != null">
                     #{item.status,jdbcType=SMALLINT},
+                </if>
+                <if test="item.picIds != null">
+                    #{item.picIds,jdbcType=VARCHAR},
                 </if>
             </trim>
             ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id=#{item.userId}

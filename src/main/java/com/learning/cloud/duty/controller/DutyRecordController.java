@@ -4,10 +4,8 @@ import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.duty.service.DutyRecordService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,6 +46,14 @@ public class DutyRecordController {
         return dutyRecordService.addDutyRecordList(dutyRecordList);
     }
 
+    @PostMapping("/addDutyPics")
+    public JsonResult addDutyPics(@RequestParam(value = "fileList",required = false)List<MultipartFile> fileList) throws Exception {
+        return dutyRecordService.addPics(fileList);
+    }
 
+//    @GetMapping("/setTeachersForDutyCheck")
+//    public JsonResult setTeachersForDutyCheck(){
+//        return DutyRecordService.setTeachersForDutyCheck();
+//    }
 
 }

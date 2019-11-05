@@ -2,6 +2,7 @@ package com.learning.cloud.duty.service;
 
 import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.domain.JsonResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  */
 public interface DutyRecordService {
     JsonResult addDutyRecord(DutyRecord dutyRecord)throws Exception;
+
+    JsonResult addPics(List<MultipartFile> fileList) throws Exception;
 
     JsonResult deleteDutyRecord(Long id)throws Exception;
 

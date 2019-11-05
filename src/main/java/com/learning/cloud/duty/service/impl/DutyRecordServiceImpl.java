@@ -1,5 +1,6 @@
 package com.learning.cloud.duty.service.impl;
 
+import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.duty.dao.DutyRecordDao;
 import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.duty.service.DutyRecordService;
@@ -8,6 +9,7 @@ import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,14 +25,33 @@ public class DutyRecordServiceImpl implements DutyRecordService {
     @Autowired
     private DutyRecordDao dutyRecordDao;
 
+    @Autowired
+    private QuestionService questionService;
+
     @Override
-    public JsonResult addDutyRecord(DutyRecord dutyRecord) {
+    public JsonResult addDutyRecord(DutyRecord dutyRecord){
         int i = dutyRecordDao.addDutyRecord(dutyRecord);
         if(i>0){
             return JsonResultUtil.success(dutyRecord.getId());
         }else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
+    }
+
+    @Override
+    public JsonResult addPics(List<MultipartFile> fileList) throws Exception {
+        String picIds = "";
+        if(fileList != null && fileList.size() >0){
+            for (MultipartFile multipartFile : fileList) {
+                Long picId = questionService.reduceImg(multipartFile);
+                if(!picIds.equals("")){
+                    picIds += "," + picId.toString();
+                }else{
+                    picIds = picId.toString();
+                }
+            }
+        }
+        return JsonResultUtil.success(picIds);
     }
 
     @Override
