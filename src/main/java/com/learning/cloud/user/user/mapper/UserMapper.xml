@@ -41,6 +41,12 @@
     and corp_id = #{corpId}
   </select>
 
+  <delete id="deleteUserInCorp" parameterType="com.learning.cloud.user.user.entity.User">
+    delete from user
+    where user_id = #{userId}
+    and corp_id = #{corpId}
+  </delete>
+
   <select id="getUserRole234" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
     select * from user
     where user_id = #{userId}

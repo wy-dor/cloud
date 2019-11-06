@@ -19,4 +19,6 @@ public interface CampusDao {
     int updateCampusType(Integer id);
 
     int update(Campus campus);
+
+    Campus getByDeptId(Long deptId);
 }

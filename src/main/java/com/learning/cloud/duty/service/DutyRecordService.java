@@ -12,6 +12,8 @@ import java.util.List;
  * @Desc:
  */
 public interface DutyRecordService {
+    JsonResult setTeachersForDutyCheck(String userId);
+
     JsonResult addDutyRecord(DutyRecord dutyRecord)throws Exception;
 
     JsonResult addPics(List<MultipartFile> fileList) throws Exception;

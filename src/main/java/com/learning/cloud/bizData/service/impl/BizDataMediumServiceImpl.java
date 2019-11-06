@@ -2,10 +2,14 @@ package com.learning.cloud.bizData.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.dingtalk.api.response.OapiDepartmentGetResponse;
+import com.dingtalk.api.response.OapiDepartmentListParentDeptsByDeptResponse;
+import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.learning.cloud.bizData.dao.SyncBizDataMediumDao;
 import com.learning.cloud.bizData.entity.SyncBizDataMedium;
 import com.learning.cloud.bizData.service.BizDataMediumService;
+import com.learning.cloud.dept.campus.dao.CampusDao;
+import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.department.dao.DepartmentDao;
 import com.learning.cloud.dept.department.entity.Department;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
@@ -20,12 +24,15 @@ import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.cloud.user.student.entity.Student;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
+import com.learning.cloud.user.user.dao.UserDao;
+import com.learning.cloud.user.user.entity.User;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
-import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,12 +67,19 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
     @Autowired
     private TeacherDao teacherDao;
 
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private CampusDao campusDao;
+
     @Override
     public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception {
         List<SyncBizDataMedium> allBizDataMedium = syncBizDataMediumDao.getAllBizDataMedium(syncBizDataMedium);
         if (allBizDataMedium == null || allBizDataMedium.size() == 0) {
             return null;
         }
+        LOOP:
         for (SyncBizDataMedium sbdm : allBizDataMedium) {
             Long id = sbdm.getId();
             String corpId = sbdm.getCorpId();
@@ -73,34 +87,33 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             if (accessToken == null) {
                 continue;
             }
-            Integer schoolId;
+            Integer schoolId = -1;
+            Integer bureauId = -1;
             School schoolByCorpId = schoolDao.getSchoolByCorpId(corpId);
-            if (schoolByCorpId == null) {
-                schoolId = -1;
-            } else {
+            if (schoolByCorpId != null) {
                 schoolId = schoolByCorpId.getId();
+                Integer bId = schoolByCorpId.getBureauId();
+                if(bId != null){
+                    bureauId = bId;
+                }
             }
             Integer bizType = sbdm.getBizType();
             Map<String, Object> bizDataParse = (Map<String, Object>) JSON.parse(sbdm.getBizData());
             String syncAction = (String) bizDataParse.get("syncAction");
             if (bizType == 13) {
                 //员工同步
-                //todo
-                //员工删除
                 if (syncAction.equals("user_leave_org")) {
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue LOOP;
                 }
-                //{"errcode":0,"unionid":"SiSRKI4KSk39fTOtTVTnsGwiEiE","syncAction":"user_active_org","userid":"1569277724148",
-                // "isLeaderInDepts":"{114360989:false}","isBoss":false,"isSenior":false,"department":[114360989],
-                // "orderInDepts":"{114360989:176348740195815512}","dingId":"$:LWCP_v1:$thWRYFwvvNF/BmcFZpoIBMKPhdliWOHx",
-                // "errmsg":"ok","active":true,"avatar":"","isAdmin":false,"tags":{"guardian":["114461272"]},"isHide":false,"name":"刘淇妈妈"}
+
                 //返回错误码继续跳过该条
                 Integer errcode = (Integer)bizDataParse.get("errcode");
                 if(errcode != 0){
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue LOOP;
                 }
+
                 String userId = bizDataParse.get("userid").toString();
                 Boolean isAdmin = (Boolean) bizDataParse.get("isAdmin");
                 String avatar = bizDataParse.get("avatar").toString();
@@ -117,107 +130,25 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 apiUser.setUserid(userId);
                 Integer roleType = 5;
 
-                int i = 1;
-                Integer campusId = null;
-                Integer classId = null;
-                Integer bureauId = null;
-
                 //因为一次可能会有多个部门的变化，所以使用tags判断其身份，对其信息进行保存
                 //一次性添加两个人员在两个部门的变化时
-                Map<String,Object> tagsParse = null;
                 Object tagsMap = bizDataParse.get("tags");
                 //存在tags则一定为老师家长学生角色？
+                //多重身份 家长+老师？
+                Integer campusId = null;
                 if(tagsMap != null){
                     Map<String, List<String>> parse = (Map<String, List<String>>) JSON.parse(tagsMap.toString());
-                    if(parse.get("teacher") != null){
-                        List<String> teacherDepts = parse.get("teacher");
-                    }else if(parse.get("guardian") != null){
-                        List<String> guardianDepts = parse.get("guardian");
-                    }else if(parse.get("student") != null){
+                    //学生只能有一种身份，且user表中不用存储学生信息
+                    if(parse.get("student") != null){
                         List<String> studentDepts = parse.get("student");
-                    }else{
+                        roleType = 4;
+                        Map<String, Object> map = getClassInfo(studentDepts);
+                        campusId = (Integer) map.get("campusId");
 
-                    }
-                }else{
-
-                }
-
-                //设置角色类型
-                List<Integer> departmentList = (List<Integer>) bizDataParse.get("department");
-                int size = departmentList.size();
-                Long lastDeptId = departmentList.get(size - 1).longValue();
-
-                OapiDepartmentGetResponse deptDetail = null;
-                try {
-                    deptDetail = deptService.getDeptDetail(lastDeptId + "", accessToken);
-                } catch (ApiException e) {
-                    log.info("biz_data_id:"+id.toString()+"/n"+e.getErrMsg());
-                    syncBizDataMediumDao.updateStatus(id);
-                    continue;
-                }
-                if(deptDetail == null){
-                    syncBizDataMediumDao.updateStatus(id);
-                    continue;
-                }
-                String deptName = deptDetail.getName();
-                GradeClass gc = new GradeClass();
-
-                if (deptName.equals("老师")) {
-                    roleType = 3;
-                    gc.setTDeptId(lastDeptId);
-                } else if (deptName.equals("学生")) {
-                    roleType = 4;
-                    gc.setTDeptId(lastDeptId);
-                } else if (deptName.equals("家长")) {
-                    roleType = 2;
-                    gc.setPDeptId(lastDeptId);
-                } else {
-                    i = 0;
-                }
-                String classIdStr = "";
-                if (i == 1) {
-                    List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
-                    if (byGradeClass != null && byGradeClass.size() > 0) {
-                        GradeClass gradeClass = byGradeClass.get(0);
-                        campusId = gradeClass.getCampusId();
-                        classId = gradeClass.getId();
-                        bureauId = gradeClass.getBureauId();
-                        classIdStr = classId.toString();
-                    }else{
-                        //当前班级还未同步
-                    }
-                    if(roleType == 3){
-                        String classIds = "";
-                        roleType = 3;
-                        Teacher teacher = new Teacher();
-                        teacher.setTeacherName(name);
-                        teacher.setUserId(userId);
-                        teacher.setCampusId(campusId);
-                        teacher.setSchoolId(schoolId);
-                        teacher.setBureauId(bureauId);
-                        Teacher t = teacherDao.getTeacherInSchool(teacher);
-                        if (t == null) {
-                            teacher.setClassIds(classIdStr);
-                            teacherDao.insert(teacher);
-                        } else {
-                            //获取到classId才进行更新
-                            if(!classIdStr.equals("")){
-                                //判断老师所在班级是否存在
-                                classIds = t.getClassIds();
-                                String idsStr = "," + t.getClassIds() + ",";
-                                if (!idsStr.contains("," + classIdStr + ",")) {
-                                    StringBuilder sb = new StringBuilder(classIds);
-                                    sb.append("," + classIdStr);
-                                    t.setClassIds(sb.toString());
-                                }
-                            }
-                            teacherDao.update(t);
-                        }
-                    } else if(roleType == 4){
                         Student student = new Student();
                         student.setUserId(userId);
                         student.setStudentName(name);
-                        student.setClassId(classId);
+                        student.setClassId((Integer) map.get("classStrs"));
                         student.setCampusId(campusId);
                         student.setSchoolId(schoolId);
                         student.setBureauId(bureauId);
@@ -227,50 +158,139 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         } else {
                             studentDao.update(student);
                         }
-                    }else if(roleType == 2){
-                        String classIds = "";
-                        Parent parent = new Parent();
-                        parent.setUserId(userId);
-                        parent.setParentName(name);
-                        parent.setCampusId(campusId);
-                        parent.setSchoolId(schoolId);
-                        parent.setBureauId(bureauId);
-                        Parent p = parentDao.getParentInSchool(parent);
-                        if (p == null) {
-                            parent.setClassId(classIdStr);
-                            parentDao.insert(parent);
-//                        parentId = parent.getId();
-                        } else {
-//                        parentId = p.getId();
-                            //获取到classId才进行更新
-                            if(!classIdStr.equals("")){
-                                //判断班级是否已存在
-                                classIds = p.getClassId();
-                                String idsStr = "," + p.getClassId() + ",";
-                                if (!idsStr.contains("," + classIdStr + ",")) {
-                                    StringBuilder sb = new StringBuilder(classIds);
-                                    sb.append("," + classIdStr);
-                                    parent.setClassId(sb.toString());
-                                }
+                    }else {
+                        //多重身份解决
+                        if(parse.get("teacher") != null || parse.get("headmaster") != null){
+                            List<String> teacherDepts = parse.get("teacher");
+                            List<String> teacherDepts_1 = parse.get("headmaster");
+
+                            teacherDepts.addAll(teacherDepts_1);
+                            roleType = 3;
+
+                            Map<String, Object> map = getClassInfo(teacherDepts);
+                            campusId = (Integer) map.get("campusId");
+
+                            Teacher teacher = new Teacher();
+                            teacher.setTeacherName(name);
+                            teacher.setUserId(userId);
+                            teacher.setCampusId(campusId);
+                            teacher.setSchoolId(schoolId);
+                            teacher.setBureauId(bureauId);
+                            teacher.setClassIds(map.get("classStrs").toString());
+                            Teacher t = teacherDao.getTeacherInSchool(teacher);
+                            if (t == null) {
+                                teacherDao.insert(teacher);
+                            } else {
+                                teacherDao.update(t);
                             }
-                            parentDao.update(parent);
+                        }
+                        if(parse.get("guardian") != null){
+                            List<String> guardianDepts = parse.get("guardian");
+                            if(roleType != 3){
+                                roleType = 2;
+                            }else{
+                                //即为老师又为家长
+                                roleType = 6;
+                            }
+
+                            Map<String, Object> map = getClassInfo(guardianDepts);
+                            campusId = (Integer) map.get("campusId");
+
+                            Parent parent = new Parent();
+                            parent.setUserId(userId);
+                            parent.setParentName(name);
+                            parent.setCampusId(campusId);
+                            parent.setClassId(map.get("classStrs").toString());
+                            parent.setSchoolId(schoolId);
+                            parent.setBureauId(bureauId);
+                            Parent p = parentDao.getParentInSchool(parent);
+                            if (p == null) {
+                                parentDao.insert(parent);
+                            } else {
+                                parentDao.update(parent);
+                            }
                         }
                     }
+
+                    //身份从老师或家长变为管理员
+                    if(syncAction.equals("user_leave_change") && roleType == 5){
+                        List<User> userRole234 = userDao.getUserRole234(userId, corpId);
+                        if(userRole234 != null && userRole234.size() > 0){
+                            User user = userRole234.get(0);
+                            userDao.deleteUserInCorp(user);
+                        }
+                    }
+
+                    deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
+
                 }
-                deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
-            } else if (bizType == 14) {
-                //todo
-                //部门删除
+            } else if (bizType == 14)
+            {
                 if (syncAction.equals("org_dept_remove")) {
                     syncBizDataMediumDao.updateStatus(id);
-                    continue;
+                    continue LOOP;
                 }
+                //tags家校通下的结构部门
+                //增加年级和增加班级
                 String deptId = ((Integer) bizDataParse.get("id")).toString();
+                String tags = "";
+                if(bizDataParse.get("tags") != null){
+                    tags = bizDataParse.get("tags").toString();
+                }
                 Department dept = new Department();
                 dept.setDeptId(deptId);
                 dept.setCorpId(corpId);
-                dept.setName((String) bizDataParse.get("name"));
+                String deptName = (String) bizDataParse.get("name");
+                dept.setName(deptName);
                 dept.setParentId(((Integer) bizDataParse.get("parentid")).toString());
+                if(tags.equals("class")){
+                    GradeClass gc = new GradeClass();
+                    gc.setDeptId(Long.parseLong(deptId));
+                    gc.setClassName(deptName);
+                    if(syncAction.equals("org_dept_modify")){
+                        gradeClassDao.update(gc);
+                    }else{
+                        //getListParentDepts?accessToken=xxx&deptId=119466078
+                        //response   "parentIds": [119466078,119528065,119543068,119435065,-7,1]
+                        //获取年级，分校信息
+                        OapiDepartmentListParentDeptsByDeptResponse response =
+                                deptService.getListParentDeptsByDept(deptId, accessToken);
+                        if(response == null){
+                            continue LOOP;
+                        }
+                        List<Long> parentIds = response.getParentIds();
+                        String gradeDept = parentIds.get(1).toString();
+                        String periodDept = parentIds.get(2).toString();
+                        Long campusDeptId = parentIds.get(3);
+                        OapiDepartmentGetResponse gradeDeptDetail = deptService.getDeptDetail(gradeDept, accessToken);
+                        OapiDepartmentGetResponse periodDeptDetail = deptService.getDeptDetail(periodDept, accessToken);
+                        String gradeName = gradeDeptDetail.getName();
+                        String periodName = periodDeptDetail.getName();
+                        Campus campus = campusDao.getByDeptId(campusDeptId);
+                        gc.setGradeName(gradeName);
+                        gc.setSessionName(periodName);
+                        gc.setCampusId(campus.getId());
+                        gc.setSchoolId(schoolId);
+                        gc.setBureauId(bureauId);
+
+                        //获取老师，家长，学生部门id
+                        OapiDepartmentListResponse deptList = deptService.getDeptList(deptId, accessToken, 0);
+                        List<OapiDepartmentListResponse.Department> department = deptList.getDepartment();
+                        for (OapiDepartmentListResponse.Department dept_1 : department) {
+                            String name = dept_1.getName();
+                            Long deptId_1 = dept_1.getId();
+                            if(name.equals("学生")){
+                                gc.setSDeptId(deptId_1);
+                            }else if(name.equals("家长")){
+                                gc.setPDeptId(deptId_1);
+                            }else if(name.equals("老师")){
+                                gc.setTDeptId(deptId_1);
+                            }
+                        }
+
+                        gradeClassDao.insert(gc);
+                    }
+                }
                 Boolean outerDept = false;
                 if (bizDataParse.get("outerDept") != null) {
                     outerDept = (Boolean) bizDataParse.get("outerDept");
@@ -286,21 +306,47 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 } else {
                     dept.setGroupContainSubDept((short) 0);
                 }
+                //学校信息的更新解决？ 学校名称修改
                 //部门同步
-                Department byDeptId = departmentDao.getByDeptId(deptId);
-                if (byDeptId == null) {
-                    departmentDao.insert(dept);
-                } else if (syncAction.equals("org_dept_modify")) {
-                    departmentDao.update(dept);
-                }
+
+                departmentDao.insert(dept);
 
             } else if (bizType == 16) {
                 //企业同步
 
             }
+            //更新已操作状态
             syncBizDataMediumDao.updateStatus(id);
         }
         return JsonResultUtil.success();
+    }
+
+    public Map<String, Object> getClassInfo(List<String> deptStrList) {
+        String classStrs = "";
+        Integer campusId = null;
+        Map<String, Object> map = new HashMap<>();
+        for (String deptId : deptStrList) {
+                GradeClass byDeptId = gradeClassDao.getByDeptId(Long.parseLong(deptId));
+                //班级信息已存在
+                if(byDeptId != null){
+                    campusId = byDeptId.getCampusId();
+                    Integer classId = byDeptId.getId();
+                    //之前的部门没有找到对应班级
+                    if(!classStrs .equals("")){
+                        classStrs = classStrs + "," + classId.toString();
+                    }else{
+                        classStrs = classId.toString();
+                    }
+                }else{
+                    //班级信息还未录入
+                    if(campusId.equals("")){
+                        campusId = 0;
+                    }
+                }
+        }
+        map.put("classStrs", classStrs);
+        map.put("campusId", campusId);
+        return map;
     }
 
 

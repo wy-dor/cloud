@@ -449,85 +449,90 @@ public class DeptServiceImpl implements DeptService {
         if(roleType == 4){
             return;
         }
-        String userId = user.getUserid();
-        Boolean isAdmin = user.getIsAdmin();
-        if (isAdmin != null && isAdmin == true) {
-            Administrator a1 = new Administrator();
-            //判断获取的值是否为空，为空则不插入
-            String userDetailName = user.getName();
-            //管理员表处理
-            if (userDetailName != null) {
-                a1.setName(userDetailName);
-                a1.setUserId(userId);
-                a1.setSchoolId(schoolId);
-                Administrator byAdm = administratorDao.getByAdm(a1);
-                if (byAdm == null) {
-                    administratorDao.insert(a1);
-                } else {
-                    administratorDao.updateName(a1);
+        //老师、家长两重身份
+        if(roleType == 6){
+            userSaveByRole(schoolId, corpId, campusId, user, 2, accessToken);
+            userSaveByRole(schoolId, corpId, campusId, user, 3, accessToken);
+        }else
+            {
+            String userId = user.getUserid();
+            Boolean isAdmin = user.getIsAdmin();
+            if (isAdmin != null && isAdmin == true) {
+                Administrator a1 = new Administrator();
+                //判断获取的值是否为空，为空则不插入
+                String userDetailName = user.getName();
+                //管理员表处理
+                if (userDetailName != null) {
+                    a1.setName(userDetailName);
+                    a1.setUserId(userId);
+                    a1.setSchoolId(schoolId);
+                    Administrator byAdm = administratorDao.getByAdm(a1);
+                    if (byAdm == null) {
+                        administratorDao.insert(a1);
+                    } else {
+                        administratorDao.updateName(a1);
+                    }
                 }
             }
-        }
 
+            //其他身份不覆盖主要角色
+            if (roleType == 5) {
+                List<User> userRole234 = userDao.getUserRole234(userId, corpId);
+                if (userRole234.size() > 0) {
+                    return;
+                }
+            }
 
-        //其他身份不覆盖主要角色
-        if (roleType == 5) {
-            List<User> userRole234 = userDao.getUserRole234(userId, corpId);
-            if (userRole234.size() > 0) {
+            User bySchoolRoleIdentity_5 = null;
+            User u = new User();
+            u.setUserId(userId);
+            u.setSchoolId(schoolId);
+
+            String userDetailUnionid = user.getUnionid();
+            if (userDetailUnionid == null) {
                 return;
             }
-        }
-
-        User bySchoolRoleIdentity_5 = null;
-        User u = new User();
-        u.setUserId(userId);
-        u.setSchoolId(schoolId);
-
-        String userDetailUnionid = user.getUnionid();
-        if (userDetailUnionid == null) {
-            return;
-        }
-        u.setUnionId(userDetailUnionid);
-        u.setUserName(user.getName());
-        u.setUserId(userId);
-        u.setCampusId(campusId);
-        u.setCorpId(corpId);
-        u.setAvatar(user.getAvatar());
-        Boolean active = user.getActive();
-        if (active != null) {
-            if (active) {
-                u.setActive((short) 1);
-            } else {
-                u.setActive((short) 0);
+            u.setUnionId(userDetailUnionid);
+            u.setUserName(user.getName());
+            u.setUserId(userId);
+            u.setCampusId(campusId);
+            u.setCorpId(corpId);
+            u.setAvatar(user.getAvatar());
+            Boolean active = user.getActive();
+            if (active != null) {
+                if (active) {
+                    u.setActive((short) 1);
+                } else {
+                    u.setActive((short) 0);
+                }
             }
-        }
 
-        u.setRoleType(5);
-        bySchoolRoleIdentity_5 = userDao.getBySchoolRoleIdentity(u);
+            u.setRoleType(5);
+            bySchoolRoleIdentity_5 = userDao.getBySchoolRoleIdentity(u);
 
-        if (roleType == 5) {
-            //若为其他身份按照常规操作
-            if (bySchoolRoleIdentity_5 == null) {
-                userDao.insert(u);
-            } else {
-                userDao.updateWithSpecificRole(u);
-            }
-        } else {
-            //若为通讯录下角色则且无其他身份则常规保存
-            u.setRoleType(roleType);
-            if (bySchoolRoleIdentity_5 == null) {
-                User bySchoolRoleIdentity_s = userDao.getBySchoolRoleIdentity(u);
-                if (bySchoolRoleIdentity_s == null) {
+            if (roleType == 5) {
+                //若为其他身份按照常规操作
+                if (bySchoolRoleIdentity_5 == null) {
                     userDao.insert(u);
                 } else {
                     userDao.updateWithSpecificRole(u);
                 }
             } else {
-                //若为通讯录下角色还有其他身份则取消其他身份
-                userDao.updateRole5ToOtherRole(u);
+                //若为通讯录下角色则且无其他身份则常规保存
+                u.setRoleType(roleType);
+                if (bySchoolRoleIdentity_5 == null) {
+                    User bySchoolRoleIdentity_s = userDao.getBySchoolRoleIdentity(u);
+                    if (bySchoolRoleIdentity_s == null) {
+                        userDao.insert(u);
+                    } else {
+                        userDao.updateWithSpecificRole(u);
+                    }
+                } else {
+                    //若为通讯录下角色还有其他身份则取消其他身份
+                    userDao.updateRole5ToOtherRole(u);
+                }
             }
         }
-
     }
 
     @Override

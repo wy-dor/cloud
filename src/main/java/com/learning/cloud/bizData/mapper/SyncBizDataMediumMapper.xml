@@ -28,6 +28,9 @@
     <if test="corpId != null">
       and corp_id = #{corpId}
     </if>
+    <if test="id != null">
+      and id = #{id}
+    </if>
     order by id
   </select>
 

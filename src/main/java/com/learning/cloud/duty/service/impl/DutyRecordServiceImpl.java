@@ -29,6 +29,11 @@ public class DutyRecordServiceImpl implements DutyRecordService {
     private QuestionService questionService;
 
     @Override
+    public JsonResult setTeachersForDutyCheck(String userId) {
+        return null;
+    }
+
+    @Override
     public JsonResult addDutyRecord(DutyRecord dutyRecord){
         int i = dutyRecordDao.addDutyRecord(dutyRecord);
         if(i>0){

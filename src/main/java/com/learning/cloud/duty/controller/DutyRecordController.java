@@ -51,9 +51,9 @@ public class DutyRecordController {
         return dutyRecordService.addPics(fileList);
     }
 
-//    @GetMapping("/setTeachersForDutyCheck")
-//    public JsonResult setTeachersForDutyCheck(){
-//        return DutyRecordService.setTeachersForDutyCheck();
-//    }
+    @GetMapping("/setTeachersForDutyCheck")
+    public JsonResult setTeachersForDutyCheck(String userId){
+        return dutyRecordService.setTeachersForDutyCheck(userId);
+    }
 
 }

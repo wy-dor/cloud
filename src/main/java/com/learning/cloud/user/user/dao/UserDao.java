@@ -27,4 +27,6 @@ public interface UserDao {
     List<User> getUserRole234(@Param("userId") String userId, @Param("corpId") String corpId);
 
     int updateWithSpecificRole(User user);
+
+    int deleteUserInCorp(User user);
 }
