@@ -16,6 +16,13 @@
     where find_in_set(#{id},class_ids)
   </select>
 
+  <select id="getClassTeachersWithCourseType" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    where find_in_set(#{id},class_ids)
+    and course_type is not null
+  </select>
+
   <select id="listTeacherInClass" parameterType="java.lang.String" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
     from user_teacher
