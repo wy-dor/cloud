@@ -164,7 +164,16 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             List<String> teacherDepts = parse.get("teacher");
                             List<String> teacherDepts_1 = parse.get("headmaster");
 
-                            teacherDepts.addAll(teacherDepts_1);
+                            //班主任和老师存在相同的班级
+                            L1:
+                            for (String s1 : teacherDepts_1) {
+                                for (String s : teacherDepts) {
+                                    if(s1.equals(s)){
+                                        continue L1;
+                                    }
+                                }
+                                teacherDepts.add(s1);
+                            }
                             roleType = 3;
 
                             Map<String, Object> map = getClassInfo(teacherDepts);
@@ -221,6 +230,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         }
                     }
 
+                    //老师和家长的身份去掉一个？
                     deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
 
                 }

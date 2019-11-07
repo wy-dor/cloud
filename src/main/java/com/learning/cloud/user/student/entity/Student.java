@@ -2,8 +2,6 @@ package com.learning.cloud.user.student.entity;
 
 import com.learning.domain.BaseEntity;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -25,8 +23,6 @@ public class Student extends BaseEntity {
     private Integer bureauId;
 
     private String avatar;
-
-    private Long topClassId;
 
     private String studentNo;
 

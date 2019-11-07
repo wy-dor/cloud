@@ -4,6 +4,8 @@ import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.duty.dao.DutyRecordDao;
 import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.duty.service.DutyRecordService;
+import com.learning.cloud.user.teacher.dao.TeacherDao;
+import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
@@ -28,9 +30,29 @@ public class DutyRecordServiceImpl implements DutyRecordService {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private TeacherDao teacherDao;
+
     @Override
-    public JsonResult setTeachersForDutyCheck(String userId) {
-        return null;
+    public JsonResult setTeachersForDutyCheck(String teacherIds, Integer dutyInspector) {
+        String[] split = teacherIds.split(",");
+        List<String> teacherIdList = new ArrayList<>();
+        LOOP:
+        for (String s : split) {
+            for (String s1 : teacherIdList) {
+                if(s.equals(s1)){
+                    continue LOOP;
+                }
+            }
+            teacherIdList.add(s);
+        }
+        for (String teacherId : teacherIdList) {
+            Teacher t = new Teacher();
+            t.setId(Integer.parseInt(teacherId));
+            t.setDutyInspector(dutyInspector);
+            teacherDao.update(t);
+        }
+        return JsonResultUtil.success("设置成功");
     }
 
     @Override

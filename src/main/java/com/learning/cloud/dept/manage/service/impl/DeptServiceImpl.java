@@ -289,6 +289,7 @@ public class DeptServiceImpl implements DeptService {
                         teacher.setCampusId(campusId);
                         teacher.setSchoolId(schoolId);
                         teacher.setBureauId(bureauId);
+                        teacher.setAvatar(user.getAvatar());
                         Teacher t = teacherDao.getTeacherInSchool(teacher);
                         if (t == null) {
                             teacher.setClassIds(classIdStr);
@@ -323,6 +324,7 @@ public class DeptServiceImpl implements DeptService {
                         parent.setCampusId(campusId);
                         parent.setSchoolId(schoolId);
                         parent.setBureauId(bureauId);
+                        parent.setAvatar(user.getAvatar());
                         Parent p = parentDao.getParentInSchool(parent);
                         if (p == null) {
                             parent.setClassId(classIdStr);
@@ -356,6 +358,7 @@ public class DeptServiceImpl implements DeptService {
                         student.setCampusId(campusId);
                         student.setSchoolId(schoolId);
                         student.setBureauId(bureauId);
+                        student.setAvatar(user.getAvatar());
                         Student s = studentDao.getByUserId(userId);
                         if (s == null) {
                             studentDao.insert(student);
@@ -574,7 +577,6 @@ public class DeptServiceImpl implements DeptService {
                     }
                     Integer id = t.getId();
                     map.put("teacherId", id + "");
-                    t.setAvatar(avatar);
                     teacherDao.update(t);
                     break;
                 } else if (deptName.equals("家长")) {

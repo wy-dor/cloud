@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.teacher.dao.TeacherDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.user.teacher.entity.Teacher">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="campus_id" jdbcType="INTEGER" property="campusId" />
-    <result column="class_ids" jdbcType="VARCHAR" property="classIds" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-  </resultMap>
+  <select id="getTeachers" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+    select *
+    from user_teacher
+    <where>
+      <if test="campusId != null">
+        and campus_id = #{campusId}
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId}
+      </if>
+      <if test="bureauId != null">
+        and bureau_id = #{bureauId}
+      </if>
+      <if test="dutyInspector != null">
+        and duty_inspector = #{dutyInspector}
+      </if>
+    </where>
+  </select>
 
   <select id="getClassTeachers" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.teacher.entity.Teacher">
     select *
@@ -93,11 +103,8 @@
       <if test="courseType != null">
         course_type,
       </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="topClassId != null">
-        top_class_id,
+      <if test="avatar != null">
+        avatar,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -122,11 +129,8 @@
       <if test="courseType != null">
         #{courseType,jdbcType=BIGINT},
       </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="topClassId != null">
-        #{topClassId,jdbcType=BIGINT},
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -143,20 +147,20 @@
       <if test="classIds != null">
         class_ids = #{classIds,jdbcType=VARCHAR},
       </if>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
       </if>
       <if test="courseType != null">
         course_type = #{courseType,jdbcType=BIGINT},
       </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
+      <if test="dutyInspector != null">
+        duty_inspector = #{dutyInspector,jdbcType=INTEGER},
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="topClassId != null">
-        top_class_id = #{topClassId,jdbcType=BIGINT},
       </if>
     </set>
     where

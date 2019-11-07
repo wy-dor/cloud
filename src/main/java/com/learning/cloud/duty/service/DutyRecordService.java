@@ -12,7 +12,7 @@ import java.util.List;
  * @Desc:
  */
 public interface DutyRecordService {
-    JsonResult setTeachersForDutyCheck(String userId);
+    JsonResult setTeachersForDutyCheck(String teacherIds, Integer dutyInspector);
 
     JsonResult addDutyRecord(DutyRecord dutyRecord)throws Exception;
 

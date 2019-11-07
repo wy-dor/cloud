@@ -101,12 +101,10 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
                 //学生学号存储
                 String studentUserid = studentRespone.getStudentUserid();
                 String studentNo = studentRespone.getStudentNo();
-                Long classId = studentRespone.getClassId();
                 String name = studentRespone.getName();
                 Student byUserId = studentDao.getByUserId(studentUserid);
                 Student student = new Student();
                 student.setUserId(studentUserid);
-                student.setTopClassId(classId);
                 student.setStudentNo(studentNo);
                 student.setStudentName(name);
                 student.setSchoolId(schoolId);
@@ -213,14 +211,12 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
             List<OapiEduGuardianListResponse.GuardianRespone> list = result.getList();
             for (OapiEduGuardianListResponse.GuardianRespone guardianRespone : list) {
                 String guardianUserid = guardianRespone.getGuardianUserid();
-                String studentUserid = guardianRespone.getStudentUserid();
                 String nick = guardianRespone.getNick();
                 Parent parent = new Parent();
                 parent.setUserId(guardianUserid);
                 parent.setSchoolId(schoolId);
                 Parent parentInSchool = parentDao.getParentInSchool(parent);
                 parent.setParentName(nick);
-                parent.setStudentUserId(studentUserid);
                 if(parentInSchool != null){
                     parentDao.insert(parent);
                 }else{

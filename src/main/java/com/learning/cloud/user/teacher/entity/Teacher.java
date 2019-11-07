@@ -2,9 +2,6 @@ package com.learning.cloud.user.teacher.entity;
 
 import com.learning.domain.BaseEntity;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Data
 public class Teacher extends BaseEntity {
@@ -18,7 +15,7 @@ public class Teacher extends BaseEntity {
 
     private String classIds;
 
-    private String phone;
+    private String avatar;
 
     //后添加
     private Integer schoolId;
@@ -29,8 +26,6 @@ public class Teacher extends BaseEntity {
 
     private String courseName;
 
-    private String avatar;
-
-    private Long topClassId;
+    private Integer dutyInspector;
 
 }
