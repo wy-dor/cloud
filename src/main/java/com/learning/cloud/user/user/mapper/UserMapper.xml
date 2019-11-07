@@ -45,6 +45,9 @@
     delete from user
     where user_id = #{userId}
     and corp_id = #{corpId}
+    <if test="roleType != null">
+      and role_type = #{roleType}
+    </if>
   </delete>
 
   <select id="getUserRole234" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
