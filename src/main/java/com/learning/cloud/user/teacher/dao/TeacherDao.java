@@ -36,4 +36,6 @@ public interface TeacherDao {
     int delete(Integer id);
 
     List<Teacher> ListTeacherInSchool(Integer schoolId);
+
+    List<Teacher> getClassTeachersWithCourseType(GradeClass gradeClass);
 }

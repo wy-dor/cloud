@@ -253,8 +253,9 @@ public class CourseExcelServiceImpl implements CourseExcelService {
             //获取老师
             GradeClass gcForT = new GradeClass();
             gcForT.setId(classId);
-            List<Teacher> teachers = teacherDao.getClassTeachers(gcForT);
+            List<Teacher> teachers = teacherDao.getClassTeachersWithCourseType(gcForT);
             //保存对象
+
             Map<Long, Integer> teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId));
             Map<Long, String> teacherName = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getTeacherName));
             //获取课程主表信息
