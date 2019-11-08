@@ -7,6 +7,11 @@
     where school_id = #{schoolId}
   </select>
 
+  <select id="getTotalPointInSchool" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select sum(org_point) from duty_type
+    where school_id = #{schoolId}
+  </select>
+
   <select id="getDutyTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyType">
     select * from duty_type
     where id = #{id}

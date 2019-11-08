@@ -1,9 +1,11 @@
 package com.learning.cloud.excel.controller;
 
+import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.excel.service.ExportService;
 import com.learning.cloud.gradeModule.entity.GradeModule;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,17 +21,23 @@ public class ExportController {
 
     //id,classesStr,subjects,title,scoringRoles
     @RequestMapping("/exportExcelModule")
-    public JsonResult exportExcelModule(GradeModule gradeModule)throws Exception{
+    public JsonResult exportExcelModule(GradeModule gradeModule) throws Exception {
         return exportService.exportExcelModule(gradeModule);
     }
 
     @PostMapping("/downloadExcelGrade")
-    public JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException{
+    public JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException {
         return exportService.downloadExcelGrade(moduleId, classId);
     }
+
     // 下载账单
     @RequestMapping("/downloadExcelByName")
-    public JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception{
+    public JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception {
         return exportService.downloadExcelByName(response, filePath, title);
+    }
+
+    @GetMapping("/downloadDutyRecordStatistics")
+    public JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime) {
+        return exportService.downloadDutyRecordStatistics(campusId, gradeName, startTime, endTime);
     }
 }

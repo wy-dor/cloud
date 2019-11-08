@@ -25,4 +25,6 @@ public interface DutyRecordService {
     JsonResult getDutyRecordByClassId(DutyRecord dutyRecord)throws Exception;
 
     JsonResult addDutyRecordList(List<DutyRecord> dutyRecordList)throws Exception;
+
+    JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime);
 }

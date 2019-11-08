@@ -1,7 +1,10 @@
 package com.learning.cloud.duty.service.impl;
 
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
+import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.duty.dao.DutyRecordDao;
+import com.learning.cloud.duty.dao.DutyTypeDao;
 import com.learning.cloud.duty.entity.DutyRecord;
 import com.learning.cloud.duty.service.DutyRecordService;
 import com.learning.cloud.user.teacher.dao.TeacherDao;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -32,6 +36,12 @@ public class DutyRecordServiceImpl implements DutyRecordService {
 
     @Autowired
     private TeacherDao teacherDao;
+
+    @Autowired
+    private GradeClassDao classDao;
+
+    @Autowired
+    private DutyTypeDao typeDao;
 
     @Override
     public JsonResult setTeachersForDutyCheck(String teacherIds, Integer dutyInspector) {
@@ -130,5 +140,30 @@ public class DutyRecordServiceImpl implements DutyRecordService {
             dutyRecordDao.addDutyRecord(dutyRecord);
         }
         return JsonResultUtil.success();
+    }
+
+    @Override
+    public JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime) {
+        //获取班级
+        GradeClass gc = new GradeClass();
+        gc.setSchoolId(schoolId);
+        if(!gradeName.equals("")){
+            gc.setGradeName(gradeName);
+        }
+        List<GradeClass> byGradeClass = classDao.getByGradeClass(gc);
+        String classesStr = "";
+        for (GradeClass gradeClass : byGradeClass) {
+            Integer classId = gradeClass.getId();
+            if(!classesStr.equals("")){
+                classesStr += "," + classId.toString();
+            }else{
+                classesStr = classId.toString();
+            }
+        }
+        //计算总分
+        int totalPoint = typeDao.getTotalPointInSchool(schoolId);
+        //每个班级每天的加扣分统计
+
+        return null;
     }
 }

@@ -116,6 +116,18 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
+    public JsonResult listGradeClassByIds(String classIds) {
+        String[] split = classIds.split(",");
+        List<GradeClass> classList = new ArrayList<>();
+        for (String id : split) {
+            int classId = Integer.parseInt(id);
+            GradeClass byId = gradeClassDao.getById(classId);
+            classList.add(byId);
+        }
+        return JsonResultUtil.success(classList);
+    }
+
+    @Override
     public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
         Integer campusId = getCampusIdForTeacher(userId, schoolId);
         GradeClass gradeClass = new GradeClass();

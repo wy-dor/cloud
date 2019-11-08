@@ -23,4 +23,6 @@ public interface DutyTypeDao {
     List<DutyType> getDutyTypeBySchoolId(DutyType dutyType);
 
     DutyType getDutyTypeById(Long id);
+
+    int getTotalPointInSchool(Integer schoolId);
 }

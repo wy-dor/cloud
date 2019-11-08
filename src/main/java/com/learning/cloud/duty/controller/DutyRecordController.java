@@ -56,4 +56,9 @@ public class DutyRecordController {
         return dutyRecordService.setTeachersForDutyCheck(teacherIds, dutyInspector);
     }
 
+    @GetMapping("/getDutyRecordStatistics")
+    public JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime){
+        return dutyRecordService.getDutyRecordStatistics(schoolId, gradeName, startTime, endTime);
+    }
+
 }

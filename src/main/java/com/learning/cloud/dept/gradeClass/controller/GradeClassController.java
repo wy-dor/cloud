@@ -48,6 +48,12 @@ public class GradeClassController {
         return gradeClassService.getGradeClassById(id);
     }
 
+    /*根据班级id字符串获取班级信息*/
+    @GetMapping("/listGradeClassByIds")
+    public JsonResult listGradeClassByIds(String classIds){
+        return gradeClassService.listGradeClassByIds(classIds);
+    }
+
     @GetMapping("getAllGradeName")
     public JsonResult getAllGradeName(Integer schoolId, String userId){
         return gradeClassService.getAllGradeName(schoolId, userId);
