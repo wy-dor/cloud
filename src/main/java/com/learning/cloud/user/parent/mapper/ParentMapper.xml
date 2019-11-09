@@ -106,9 +106,6 @@
       <if test="parentName != null">
         parent_name = #{parentName,jdbcType=VARCHAR},
       </if>
-      <if test="studentId != null">
-        student_name = #{studentId,jdbcType=INTEGER},
-      </if>
       <if test="campusId != null">
         campus_id = #{campusId,jdbcType=INTEGER},
       </if>
