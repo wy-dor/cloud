@@ -148,7 +148,11 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         Student student = new Student();
                         student.setUserId(userId);
                         student.setStudentName(name);
-                        student.setClassId((Integer) map.get("classStrs"));
+                        String classStrs = (map.get("classStrs")).toString();
+                        if (!classStrs.equals("")) {
+                            Integer classId = Integer.parseInt(classStrs);
+                            student.setClassId(classId);
+                        }
                         student.setCampusId(campusId);
                         student.setSchoolId(schoolId);
                         student.setBureauId(bureauId);
@@ -357,13 +361,15 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 Integer classId = byDeptId.getId();
                 //之前的部门没有找到对应班级
                 if (!classStrs.equals("")) {
-                    classStrs = classStrs + "," + classId.toString();
+                    if (classId != null) {
+                        classStrs = classStrs + "," + classId.toString();
+                    }
                 } else {
                     classStrs = classId.toString();
                 }
             } else {
                 //班级信息还未录入
-                if (campusId.equals("")) {
+                if (campusId == null) {
                     campusId = 0;
                 }
             }
