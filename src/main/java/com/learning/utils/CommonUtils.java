@@ -54,7 +54,7 @@ public class CommonUtils {
         OUTERMOST:
         for (Integer e1 : list1) {
             for (Integer e2 : list2) {
-                if (e1 == e2)
+                if (e1.equals(e2))
                     continue OUTERMOST;
             }
             list3.add(e1);

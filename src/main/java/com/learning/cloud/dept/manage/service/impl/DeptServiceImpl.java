@@ -205,7 +205,7 @@ public class DeptServiceImpl implements DeptService {
 
             //删除班级记录同步
 //            List<Integer> classIdList3 = CommonUtils.removeIntegerDupsInList(classIdList1, classIdList2);
-//            if(classIdList3 != null && classIdList3.size() > 0){
+//            if (classIdList3 != null && classIdList3.size() > 0) {
 //                for (Integer cId : classIdList3) {
 //                    gradeClassDao.delete(cId);
 //                    studentDao.deleteByClassId(cId);
@@ -221,6 +221,72 @@ public class DeptServiceImpl implements DeptService {
         //标记已初始化
         school.setState((short) 1);
         schoolDao.update(school);
+    }
+
+    @Override
+    public void updateClassInSchool(Integer schoolId) throws ApiException {
+        //todo
+        //涉及增加班级的部分需要在此操作吗
+        GradeClass gc = new GradeClass();
+        gc.setSchoolId(schoolId);
+        //数据库中班级信息
+        List<String> classDeptIdList1 = new ArrayList<>();
+        //家校通下实时班级信息
+        List<String> classDeptIdList2 = new ArrayList<>();
+        List<GradeClass> classList = gradeClassDao.getByGradeClass(gc);
+        for (GradeClass gradeClass : classList) {
+            Long deptId = gradeClass.getDeptId();
+            classDeptIdList1.add(deptId.toString());
+        }
+        School school = schoolDao.getBySchoolId(schoolId);
+        String corpId = school.getCorpId();
+        String accessToken = authenService.getAccessToken(corpId);
+        OapiDepartmentListResponse resp = getDeptList("-7", accessToken, 1);
+        List<OapiDepartmentListResponse.Department> departmentList_0 = resp.getDepartment();
+        for (OapiDepartmentListResponse.Department dept_1 : departmentList_0) {
+            //分校
+            Long pId_1 = dept_1.getParentid();
+            if (pId_1.equals(new Long(-7))) {
+                Long campusDeptId = dept_1.getId();
+                for (OapiDepartmentListResponse.Department dept_2 : departmentList_0) {
+                    //学段
+                    Long pId_2 = dept_2.getParentid();
+                    if (pId_2.equals(campusDeptId)) {
+                        Long periodDeptId = dept_2.getId();
+                        for (OapiDepartmentListResponse.Department dept_3 : departmentList_0) {
+                            //年级
+                            Long pId_3 = dept_3.getParentid();
+                            if (pId_3.equals(periodDeptId)) {
+                                Long gradeDeptId = dept_3.getId();
+                                for (OapiDepartmentListResponse.Department dept_4 : departmentList_0) {
+                                    //班级
+                                    Long pId_4 = dept_4.getParentid();
+                                    if(pId_4.equals(gradeDeptId)){
+                                        Long classDeptId = dept_4.getId();
+                                        classDeptIdList2.add(classDeptId.toString());
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //数据比较
+        List<String> classDeptIdList3 = CommonUtils.removeStringDupsInList(classDeptIdList1, classDeptIdList2);
+        if (classDeptIdList3 != null && classDeptIdList3.size() > 0) {
+            for (String deptId : classDeptIdList3) {
+                GradeClass byDeptId = gradeClassDao.getByDeptId(Long.parseLong(deptId));
+                Integer cId = byDeptId.getId();
+                studentDao.deleteByClassId(cId);
+                parentService.removeParentsInClass(cId);
+                teacherService.removeTeachersInClass(cId);
+                courseDao.deleteGradeClass(cId);
+                gradeClassDao.delete(cId);
+            }
+        }
+
     }
 
     @Override
@@ -375,14 +441,14 @@ public class DeptServiceImpl implements DeptService {
         gradeClassDao.update(gc);
 
         //学生表删除数据同步
-        if (studentUserIdList1 != null && studentUserIdList1.size() > 0){
+        if (studentUserIdList1 != null && studentUserIdList1.size() > 0) {
             List<String> studentUserIdList3 = CommonUtils.removeStringDupsInList(studentUserIdList1, studentUserIdList2);
             for (String userId : studentUserIdList3) {
                 studentDao.deleteByUserId(userId);
             }
         }
 
-        if (parentUserIdList1 != null && parentUserIdList1.size() > 0){
+        if (parentUserIdList1 != null && parentUserIdList1.size() > 0) {
             List<String> parentUserIdList3 = CommonUtils.removeStringDupsInList(parentUserIdList1, parentUserIdList2);
             for (String userId : parentUserIdList3) {
                 Parent parent = new Parent();
@@ -393,14 +459,14 @@ public class DeptServiceImpl implements DeptService {
             }
         }
 
-        if (teacherUserIdList1 != null && teacherUserIdList1.size() > 0){
+        if (teacherUserIdList1 != null && teacherUserIdList1.size() > 0) {
             List<String> teacherUserIdList3 = CommonUtils.removeStringDupsInList(teacherUserIdList1, teacherUserIdList2);
             for (String userId : teacherUserIdList3) {
                 Teacher teacher = new Teacher();
                 teacher.setSchoolId(schoolId);
                 teacher.setUserId(userId);
                 Teacher t = teacherDao.getTeacherInSchool(teacher);
-                teacherService.removeTeacherInClass(classId,t);
+                teacherService.removeTeacherInClass(classId, t);
             }
         }
 
@@ -448,16 +514,15 @@ public class DeptServiceImpl implements DeptService {
     //对用户角色进行判断存储
     @Override
     public void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user,
-                               int roleType, String accessToken){
-        if(roleType == 4){
+                               int roleType, String accessToken) {
+        if (roleType == 4) {
             return;
         }
         //老师、家长两重身份
-        if(roleType == 6){
+        if (roleType == 6) {
             userSaveByRole(schoolId, corpId, campusId, user, 2, accessToken);
             userSaveByRole(schoolId, corpId, campusId, user, 3, accessToken);
-        }else
-            {
+        } else {
             String userId = user.getUserid();
             Boolean isAdmin = user.getIsAdmin();
             if (isAdmin != null && isAdmin == true) {
@@ -585,7 +650,7 @@ public class DeptServiceImpl implements DeptService {
                     parent.setUserId(userId);
                     parent.setSchoolId(schoolId);
                     Parent parentInSchool = parentDao.getParentInSchool(parent);
-                    if (parent == null ) {
+                    if (parent == null) {
                         continue;
                     }
                     String classIds = parentInSchool.getClassId();

@@ -139,6 +139,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                 if (tagsMap != null) {
                     Map<String, List<String>> parse = (Map<String, List<String>>) JSON.parse(tagsMap.toString());
                     //学生只能有一种身份，且user表中不用存储学生信息
+                    //学生tags中的部门id是班级的还是班级下学生的
                     if (parse.get("student") != null) {
                         List<String> studentDepts = parse.get("student");
                         roleType = 4;
