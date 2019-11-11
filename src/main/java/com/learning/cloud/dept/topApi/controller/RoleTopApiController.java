@@ -66,4 +66,18 @@ public class RoleTopApiController {
         return ServiceResult.success(result);
     }
 
+    @GetMapping("/getEduRoles")
+    public ServiceResult getEduRoles(String userId, String accessToken) throws ApiException{
+        return roleTopApiService.getEduRoles(userId,accessToken);
+    }
+
+    @GetMapping("/listEduParent")
+    public ServiceResult listEduParent(Long classId, String accessToken) throws ApiException{
+        return roleTopApiService.listEduParent(classId,accessToken);
+    }
+
+    @GetMapping("/listEduStudent")
+    public ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException{
+        return roleTopApiService.listEduStudent(classId,accessToken);
+    }
 }

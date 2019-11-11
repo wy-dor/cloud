@@ -23,4 +23,6 @@ public interface CourseDao {
     List<Course> getSchoolCourse(Course course);
 
     int publishCourse(Long id);
+
+    int deleteGradeClass(Integer classId);
 }

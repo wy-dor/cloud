@@ -246,7 +246,15 @@
         top_campus_id = #{topCampusId,jdbcType=BIGINT},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where
+    <choose>
+      <when test="id != null">
+        id = #{id}
+      </when>
+      <otherwise>
+        dept_id = #{deptId}
+      </otherwise>
+    </choose>
   </update>
 
   <select id="getClassIdList" parameterType="java.lang.Integer" resultType="java.lang.Integer">

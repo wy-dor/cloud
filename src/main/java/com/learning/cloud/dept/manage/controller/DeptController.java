@@ -57,6 +57,12 @@ public class DeptController {
         return ServiceResult.success("同步成功");
     }
 
+    @GetMapping("/updateClassInSchool")
+    public ServiceResult updateClassInSchool(Integer schoolId) throws ApiException {
+        deptService.updateClassInSchool(schoolId);
+        return ServiceResult.success("更新成功");
+    }
+
     /*班级结构数据同步*/
     @GetMapping("/updateUserInClass")
     public ServiceResult updateUserInClass(Long deptId) {

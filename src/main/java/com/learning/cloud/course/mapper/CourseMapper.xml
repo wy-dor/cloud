@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.CourseDao">
 
+  <delete id="deleteGradeClass" parameterType="java.lang.Integer">
+    delete from course
+    where class_id = #{classId}
+  </delete>
+
   <insert id="addCourse" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.Course">
     insert into course
     <trim prefix="(" suffix=")" suffixOverrides=",">

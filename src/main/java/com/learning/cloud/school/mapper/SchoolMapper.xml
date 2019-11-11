@@ -43,11 +43,9 @@
   </select>
 
   <select id="getSchoolByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.school.entity.School">
-    select s.*
-    from edu_school s
-    left join auth_corp_info a
-    on s.school_name = a.corp_name
-    where a.corp_id = #{corpId}
+    select *
+    from edu_school
+    where corp_id = #{corpId}
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.school.entity.School">

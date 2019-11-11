@@ -27,6 +27,12 @@ public class TeacherServiceImpl implements TeacherService {
     private CourseTypeDao courseTypeDao;
 
     @Override
+    public JsonResult listTeacher(Teacher teacher){
+        List<Teacher> teachers = teacherDao.getTeachers(teacher);
+        return JsonResultUtil.success(new PageEntity<>(teachers));
+    }
+
+    @Override
     public ServiceResult getByUserId(String userId) {
         Teacher byUserId = teacherDao.getByUserId(userId);
         Long courseTypeId = byUserId.getCourseType();

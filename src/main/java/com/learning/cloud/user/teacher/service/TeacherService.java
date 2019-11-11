@@ -7,6 +7,8 @@ import com.learning.domain.JsonResult;
 
 public interface TeacherService {
 
+    JsonResult listTeacher(Teacher teacher);
+
     ServiceResult getByUserId(String userId);
 
     JsonResult getClassTeacherNum(Integer classId);

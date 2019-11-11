@@ -193,6 +193,11 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
+    public JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime) {
+        return null;
+    }
+
+    @Override
     public JsonResult downloadExcelGrade(Long moduleId, Integer classId) throws IOException {
         FileOutputStream out = null;
         StringBuilder undoneClassMention = new StringBuilder("");

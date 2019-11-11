@@ -15,6 +15,7 @@ import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.utils.JsonResultUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.*;
 
 @Service
 @Transactional
+@Slf4j
 public class GradeClassServiceImpl implements GradeClassService {
 
     @Autowired
@@ -116,8 +118,24 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
+    public JsonResult listGradeClassByIds(String classIds) {
+        String[] split = classIds.split(",");
+        List<GradeClass> classList = new ArrayList<>();
+        for (String id : split) {
+            int classId = Integer.parseInt(id);
+            GradeClass byId = gradeClassDao.getById(classId);
+            classList.add(byId);
+        }
+        return JsonResultUtil.success(classList);
+    }
+
+    @Override
     public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
         Integer campusId = getCampusIdForTeacher(userId, schoolId);
+        if(campusId == null){
+            log.info("根据老师信息获取学校下所有班级失败");
+            return JsonResultUtil.error(0,"根据老师信息获取学校下所有班级失败");
+        }
         GradeClass gradeClass = new GradeClass();
         gradeClass.setCampusId(campusId);
         List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gradeClass);
@@ -131,6 +149,10 @@ public class GradeClassServiceImpl implements GradeClassService {
         user.setUserId(userId);
         user.setRoleType(3);
         User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
+        if(bySchoolRoleIdentity == null){
+            log.info("不存在该老师");
+            return null;
+        }
         return bySchoolRoleIdentity.getCampusId();
     }
 }

@@ -56,4 +56,8 @@ public class TeacherController {
         return teacherService.getTeacherById(teacherId);
     }
 
+    @GetMapping("/listTeacherByTeacher")
+    public JsonResult listTeacherByTeacher(Teacher teacher){
+        return teacherService.listTeacher(teacher);
+    }
 }

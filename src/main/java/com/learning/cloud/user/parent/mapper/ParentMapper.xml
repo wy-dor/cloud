@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.parent.dao.ParentDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.user.parent.entity.Parent">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="student_id" jdbcType="INTEGER" property="studentId" />
-    <result column="class_id" jdbcType="INTEGER" property="classId" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-  </resultMap>
-
   <select id="getByUserId" parameterType="java.lang.String"
           resultType="com.learning.cloud.user.parent.entity.Parent">
     select *
@@ -68,9 +59,6 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="studentId != null">
-        student_id,
-      </if>
       <if test="classId != null">
         class_id,
       </if>
@@ -83,14 +71,8 @@
       <if test="bureauId != null">
         bureau_id,
       </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="topClassId != null">
-        top_class_id,
-      </if>
-      <if test="studentUserId != null">
-        student_user_id,
+      <if test="avatar != null">
+        avatar,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -99,9 +81,6 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="studentId != null">
-        #{studentId,jdbcType=INTEGER},
       </if>
       <if test="classId != null">
         #{classId,jdbcType=VARCHAR},
@@ -115,14 +94,8 @@
       <if test="bureauId != null">
         #{bureauId,jdbcType=INTEGER},
       </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="topClassId != null">
-        #{topClassId,jdbcType=BIGINT},
-      </if>
-      <if test="studentUserId != null">
-        #{studentUserId,jdbcType=VARCHAR},
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -133,9 +106,6 @@
       <if test="parentName != null">
         parent_name = #{parentName,jdbcType=VARCHAR},
       </if>
-      <if test="studentId != null">
-        student_name = #{studentId,jdbcType=INTEGER},
-      </if>
       <if test="campusId != null">
         campus_id = #{campusId,jdbcType=INTEGER},
       </if>
@@ -145,18 +115,9 @@
       <if test="bureauId != null">
         bureau_id = #{bureauId,jdbcType=INTEGER},
       </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
       <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="topClassId != null">
-        top_class_id = #{topClassId,jdbcType=BIGINT},
-      </if>
-      <if test="studentUserId != null">
-        student_user_id = #{studentUserId,jdbcType=VARCHAR},
-      </if>
+      avatar = #{avatar,jdbcType=VARCHAR},
+    </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
     <if test="schoolId != null">

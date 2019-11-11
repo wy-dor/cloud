@@ -50,7 +50,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="point != null">
-        #{point,jdbcType=INTEGER},
+        #{point,jdbcType=DECIMAL},
       </if>
       <if test="plusMinus != null">
         #{plusMinus,jdbcType=SMALLINT},
@@ -68,7 +68,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="point != null">
-        point = #{point,jdbcType=INTEGER},
+        point = #{point,jdbcType=DECIMAL},
       </if>
       <if test="plusMinus != null">
         plus_minus = #{plusMinus,jdbcType=SMALLINT},

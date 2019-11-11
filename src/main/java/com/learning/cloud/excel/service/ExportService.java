@@ -12,4 +12,6 @@ public interface ExportService {
     JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception;
 
     JsonResult exportExcelModule(GradeModule gradeModule) throws IOException;
+
+    JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime);
 }

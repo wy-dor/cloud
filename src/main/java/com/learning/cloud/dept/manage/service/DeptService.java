@@ -10,6 +10,8 @@ import java.util.Map;
 public interface DeptService {
     void init(Integer schoolId) throws ApiException;
 
+    void updateClassInSchool(Integer schoolId) throws ApiException;
+
     void saveUserInClass(Long deptId) throws ApiException;
 
     Map<String, String> getUserRole(String userId, String accessToken, String avatar ,String corpId) throws ApiException;

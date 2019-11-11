@@ -95,9 +95,6 @@
             <if test="bureauId != null">
                 bureau_id,
             </if>
-            <if test="topClassId != null">
-                top_class_id,
-            </if>
             <if test="studentNo != null">
                 student_no,
             </if>
@@ -120,9 +117,6 @@
             </if>
             <if test="bureauId != null">
                 #{bureauId,jdbcType=INTEGER},
-            </if>
-            <if test="topClassId != null">
-                #{topClassId,jdbcType=BIGINT},
             </if>
             <if test="studentNo != null">
                 #{studentNo,jdbcType=VARCHAR},
@@ -150,9 +144,6 @@
             </if>
             <if test="avatar != null">
                 avatar = #{avatar,jdbcType=VARCHAR},
-            </if>
-            <if test="topClassId != null">
-                top_class_id = #{topClassId,jdbcType=BIGINT},
             </if>
             <if test="studentNo != null">
                 student_no = #{studentNo,jdbcType=VARCHAR},

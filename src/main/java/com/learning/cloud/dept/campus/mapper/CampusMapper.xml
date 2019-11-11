@@ -9,6 +9,12 @@
     <result column="state" jdbcType="INTEGER" property="state" />
   </resultMap>
 
+  <select id="getByDeptId" parameterType="java.lang.Long" resultType="com.learning.cloud.dept.campus.entity.Campus">
+    select *
+    from edu_campus
+    where dept_id = #{deptId}
+  </select>
+
   <select id="getByCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
     select *
     from edu_campus
