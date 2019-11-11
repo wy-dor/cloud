@@ -12,4 +12,6 @@ public interface CourseExcelService {
     JsonResult exportCourseTemplet(String classIds, Long schoolId)throws Exception;
 
     JsonResult importCourseTemplet(MultipartFile file, Long schoolId)throws Exception;
+
+    JsonResult getInfoBeforeImportCourse(Long schoolId, Long classId)throws Exception;
 }

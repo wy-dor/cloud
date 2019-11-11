@@ -61,7 +61,8 @@ public class CourseExcelServiceImpl implements CourseExcelService {
 
     private static final String A0 = "录入须知：\n" +
             "<1> 请严格根据下载课表模板时间段填写\n" +
-            "<2> 填写课表前请先维护好班级对应的老师任教信息\n";
+            "<2> 填写课表前请先维护好班级对应的老师任教信息,若后期新增老师需重新导入\n" +
+            "<3> 课程名称填写格式如下："+"美术-王老师"+"\n";
 
     @Override
     public JsonResult exportCourseTemplet(String classIds, Long schoolId) throws Exception {
@@ -256,8 +257,24 @@ public class CourseExcelServiceImpl implements CourseExcelService {
             List<Teacher> teachers = teacherDao.getClassTeachersWithCourseType(gcForT);
             //保存对象
 
-            Map<Long, Integer> teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId));
-            Map<Long, String> teacherName = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getTeacherName));
+            Map<String, Integer> teacherInfo = null;
+            try {
+                teacherInfo = teachers.stream().collect(Collectors.toMap(Teacher::getTeacherName, Teacher::getId));
+            } catch (Exception e) {
+                throw new MyException(JsonResultEnum.TEACHER_NAME_REPEAT);
+            }
+
+            Map<Long, Integer> teacherCourse = null;
+            Map<Long, String> teacherNameList = null;
+            try {
+                teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId));
+                teacherNameList = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getTeacherName));
+            } catch (Exception e) {
+                teacherCourse = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getId, (key1 , key2)-> key2));
+                teacherNameList = teachers.stream().collect(Collectors.toMap(Teacher::getCourseType, Teacher::getTeacherName, (key1 , key2)-> key2));
+                s.append("名称为：'"+className+"'的课班级有多个老师教授同一科目;");
+            }
+
             //获取课程主表信息
             Course course = courseDao.getCourseByClassId(classId.longValue());
 
@@ -275,10 +292,15 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                             //表格框中的课程名称，若包含"/"则课程类型为单双周。
                             String courseName = cell.getStringCellValue();
                             String courseNameS = "";
+                            String teacherName = "";
                             if (courseName != null && !courseName.isEmpty()) {
                                 if(courseName.contains("/")){
-                                    courseNameS = courseName.substring(courseName.indexOf("/")+1);
-                                    courseName = courseName.substring(0,courseName.indexOf("/"));
+                                    courseNameS = courseName.substring(courseName.indexOf("/")+1).trim();
+                                    courseName = courseName.substring(0,courseName.indexOf("/")).trim();
+                                }
+                                if(courseName.contains("-")){
+                                    teacherName = courseName.substring(courseName.indexOf("-")+1).trim();
+                                    courseName = courseName.substring(0,courseName.indexOf("-")).trim();
                                 }
                                 //初始化
                                 CourseDetail courseDetail = new CourseDetail();
@@ -291,12 +313,19 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                                     Long courseType = courseList.get(courseName);
                                     courseDetail.setCourseName(courseName);
                                     courseDetail.setCourseType(courseType);
-                                    //根据课程类型获取老师信息
-                                    if(teacherName.get(courseType)==null){
-                                        s.append(className+courseName+"课的老师未设置;");
+                                    //老师名字存在
+                                    if(!teacherName.isEmpty()){
+                                        courseDetail.setCourseTeacherName(teacherName);
+                                        courseDetail.setCourseTeacherId(teacherInfo.get(teacherName).longValue());
                                     }else {
-                                        courseDetail.setCourseTeacherName(teacherName.get(courseType));
-                                        courseDetail.setCourseTeacherId(teacherCourse.get(courseType).longValue());
+                                        //没有老师名字
+                                        //根据课程类型获取老师信息
+                                        if(teacherNameList.get(courseType)==null){
+                                            s.append(className+courseName+"课的老师未设置;");
+                                        }else {
+                                            courseDetail.setCourseTeacherName(teacherNameList.get(courseType));
+                                            courseDetail.setCourseTeacherId(teacherCourse.get(courseType).longValue());
+                                        }
                                     }
                                     courseDetail.setCourseTime(courseTime);
                                     courseDetail.setWeekDay(j);
@@ -305,7 +334,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                                         Long courseTypeS = courseList.get(courseNameS);
                                         courseDetail.setCourseNameS(courseNameS);
                                         courseDetail.setCourseTypeS(courseTypeS);
-                                        courseDetail.setCourseTeacherNameS(teacherName.get(courseTypeS));
+                                        courseDetail.setCourseTeacherNameS(teacherNameList.get(courseTypeS));
                                         courseDetail.setCourseTeacherIdS(teacherCourse.get(courseTypeS).longValue());
                                         courseDetail.setWeekType((short)4);
                                     }
@@ -317,7 +346,7 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                 }
             }
         }
-        return JsonResultUtil.success();
+        return JsonResultUtil.success(s.toString());
     }
 
     class ClassNameId {
@@ -339,5 +368,10 @@ public class CourseExcelServiceImpl implements CourseExcelService {
         public void setClassId(Integer classId) {
             this.classId = classId;
         }
+    }
+
+    @Override
+    public JsonResult getInfoBeforeImportCourse(Long schoolId, Long classId) throws Exception {
+        return null;
     }
 }
