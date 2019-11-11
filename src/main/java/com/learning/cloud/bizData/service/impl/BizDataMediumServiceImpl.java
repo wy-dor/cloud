@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,22 +167,42 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     } else {
                         //多重身份解决
                         if (parse.get("teacher") != null || parse.get("headmaster") != null) {
-                            List<String> teacherDepts = parse.get("teacher");
-                            List<String> teacherDepts_1 = parse.get("headmaster");
+                            List<String> teacherDepts = new ArrayList<>();
+                            List<String> teacherDepts_1 = new ArrayList<>();
+                            List<String> teacherDepts_2 = new ArrayList<>();
+
+                            if(parse.get("teacher") != null){
+                                teacherDepts = parse.get("teacher");
+                            }
+
+                            if(parse.get("headmaster") != null){
+                                teacherDepts_1 = parse.get("headmaster");
+                            }
 
                             //班主任和老师存在相同的班级
-                            L1:
-                            for (String s1 : teacherDepts_1) {
-                                for (String s : teacherDepts) {
-                                    if (s1.equals(s)) {
-                                        continue L1;
+                            if(teacherDepts.size() > 0 && teacherDepts_1.size() > 0){
+                                L1:
+                                for (String s1 : teacherDepts_1) {
+                                    for (String s : teacherDepts) {
+                                        if (s1.equals(s)) {
+                                            continue L1;
+                                        }
                                     }
+                                    teacherDepts.add(s1);
                                 }
-                                teacherDepts.add(s1);
+                                teacherDepts_2 = teacherDepts;
+                            }else{
+                                //仅为班主任
+                                if(teacherDepts.size() == 0){
+                                    teacherDepts_2 = teacherDepts_1;
+                                }else{
+                                    teacherDepts_2 = teacherDepts;
+                                }
                             }
+
                             roleType = 3;
 
-                            Map<String, Object> map = getClassInfo(teacherDepts);
+                            Map<String, Object> map = getClassInfo(teacherDepts_2);
                             campusId = (Integer) map.get("campusId");
 
                             Teacher teacher = new Teacher();
@@ -254,7 +275,8 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
 
                 }
-            } else if (bizType == 14) {
+            } else if (bizType == 14)
+            {
                 if (syncAction.equals("org_dept_remove")) {
                     syncBizDataMediumDao.updateStatus(id);
                     continue LOOP;

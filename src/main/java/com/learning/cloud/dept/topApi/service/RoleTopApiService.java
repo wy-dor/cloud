@@ -9,6 +9,8 @@ public interface RoleTopApiService {
 
     ServiceResult listAndSaveEduStudent(Integer schoolId, Long topClassId, String accessToken) throws ApiException;
 
+    ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException;
+
     ServiceResult getEduTeacher(Integer schoolId, Long topClassId, String teacherUserId) throws ApiException;
 
     ServiceResult listEduTeacher(Long topClassId, String accessToken) throws ApiException;
@@ -16,6 +18,8 @@ public interface RoleTopApiService {
     OapiEduGuardianGetResponse getEduParent(Long topClassId, String parentUserId, String accessToken) throws ApiException;
 
     ServiceResult listAndSaveEduParent(Integer schoolId, Long topClassId, String accessToken) throws ApiException;
+
+    ServiceResult listEduParent(Long classId, String accessToken) throws ApiException;
 
     ServiceResult getEduRoles(String userId, String accessToken) throws ApiException;
 }

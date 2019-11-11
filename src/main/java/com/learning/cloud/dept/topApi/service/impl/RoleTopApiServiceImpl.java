@@ -124,6 +124,30 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         return ServiceResult.success(allList);
     }
 
+    @Override
+    public ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/student/list");
+        OapiEduStudentListRequest req = new OapiEduStudentListRequest();
+        req.setClassId(classId);
+        Boolean flag = true;
+        Long pageNo = 1L;
+        List<OapiEduStudentListResponse.StudentRespone> allList = new ArrayList<>();
+        while(flag){
+            req.setPageNo(pageNo);
+            req.setPageSize(10L);
+            OapiEduStudentListResponse rsp = client.execute(req, accessToken);
+            OapiEduStudentListResponse.PageResult result = rsp.getResult();
+            List<OapiEduStudentListResponse.StudentRespone> list = result.getList();
+            allList.addAll(list);
+            if(result.getHasMore()){
+                pageNo += 1;
+            }else{
+                flag = false;
+            }
+        }
+        return ServiceResult.success(allList);
+    }
+
     //查询班级下老师详细信息。
     //"result":{
     //        "grade_id":123,
@@ -233,6 +257,30 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         return ServiceResult.success(allList);
     }
 
+    @Override
+    public ServiceResult listEduParent(Long classId, String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/guardian/list");
+        OapiEduGuardianListRequest req = new OapiEduGuardianListRequest();
+        req.setClassId(classId);
+        Boolean flag = true;
+        Long pageNo = 1L;
+        List<OapiEduGuardianListResponse.GuardianRespone> allList = new ArrayList<>();
+        while(flag){
+            req.setPageNo(pageNo);
+            req.setPageSize(10L);
+            OapiEduGuardianListResponse rsp = client.execute(req, accessToken);
+            OapiEduGuardianListResponse.PageResult result = rsp.getResult();
+            List<OapiEduGuardianListResponse.GuardianRespone> list = result.getList();
+            allList.addAll(list);
+            if(result.getHasMore()){
+                pageNo += 1;
+            }else{
+                flag = false;
+            }
+        }
+        return ServiceResult.success(allList);
+    }
+
 
     //查询当前用户所有角色身份以及其所在的班级列表。
     //"result":{
@@ -242,6 +290,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
     //        "guardian":[123,345],
     //        "userid":"123345-1234"
     //    }
+
     @Override
     public ServiceResult getEduRoles(String userId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/roles/get");
