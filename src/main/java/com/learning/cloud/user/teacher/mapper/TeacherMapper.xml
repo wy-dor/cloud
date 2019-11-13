@@ -54,9 +54,11 @@
   </select>
 
   <select id="ListTeacherInSchool" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where school_id = #{schoolId}
+    select a.*, b.course_name
+    from user_teacher a
+    left join course_type b
+    on a.course_type = b.id
+    where a.school_id = #{schoolId}
   </select>
 
   <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
