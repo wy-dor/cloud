@@ -13,5 +13,5 @@ public interface ExportService {
 
     JsonResult exportExcelModule(GradeModule gradeModule) throws IOException;
 
-    JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime);
+    JsonResult downloadDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime) throws IOException;
 }

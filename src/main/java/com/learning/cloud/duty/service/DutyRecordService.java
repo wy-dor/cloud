@@ -5,6 +5,7 @@ import com.learning.domain.JsonResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: yyt
@@ -26,5 +27,5 @@ public interface DutyRecordService {
 
     JsonResult addDutyRecordList(List<DutyRecord> dutyRecordList)throws Exception;
 
-    JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime);
+    Map<String, Object> getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime);
 }

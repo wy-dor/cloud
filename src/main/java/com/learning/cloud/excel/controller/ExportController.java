@@ -30,14 +30,14 @@ public class ExportController {
         return exportService.downloadExcelGrade(moduleId, classId);
     }
 
-    // 下载账单
+    //根据名字和存储路径下载
     @RequestMapping("/downloadExcelByName")
     public JsonResult downloadExcelByName(HttpServletResponse response, String filePath, String title) throws Exception {
         return exportService.downloadExcelByName(response, filePath, title);
     }
 
     @GetMapping("/downloadDutyRecordStatistics")
-    public JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime) {
-        return exportService.downloadDutyRecordStatistics(campusId, gradeName, startTime, endTime);
+    public JsonResult downloadDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime) throws IOException {
+        return exportService.downloadDutyRecordStatistics(schoolId, gradeName, startTime, endTime);
     }
 }

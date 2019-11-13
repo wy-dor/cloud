@@ -1,6 +1,7 @@
 package com.learning.cloud.duty.dao;
 
 import com.learning.cloud.duty.entity.DutyRecord;
+import com.learning.cloud.duty.entity.RecordStatistics;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,6 @@ public interface DutyRecordDao {
     List<DutyRecord> getDutyRecordByClassId(DutyRecord dutyRecord);
 
     void addDutyRecordList(List<DutyRecord> dutyRecordList);
+
+    List<RecordStatistics> getRecordPointStatistics(String startTime, String endTime, String classIds);
 }

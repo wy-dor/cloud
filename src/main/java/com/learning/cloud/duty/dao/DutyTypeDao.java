@@ -24,5 +24,5 @@ public interface DutyTypeDao {
 
     DutyType getDutyTypeById(Long id);
 
-    int getTotalPointInSchool(Integer schoolId);
+    Integer getTotalPointInSchool(Integer schoolId);
 }

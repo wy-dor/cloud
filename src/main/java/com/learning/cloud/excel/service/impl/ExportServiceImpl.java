@@ -2,6 +2,8 @@ package com.learning.cloud.excel.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.duty.entity.RecordStatistics;
+import com.learning.cloud.duty.service.DutyRecordService;
 import com.learning.cloud.excel.entity.DownloadBean;
 import com.learning.cloud.excel.service.ExportService;
 import com.learning.cloud.gradeModule.dao.GradeEntryDao;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -37,6 +40,9 @@ public class ExportServiceImpl implements ExportService {
 
     @Autowired
     private GradeEntryDao gradeEntryDao;
+
+    @Autowired
+    private DutyRecordService dutyRecordService;
 
     private static final String A0 = "填写须知：\n" +
             "<1> 学号是钉钉中设置的学生学号，若未设置，仅在表格中填写无效；班级中若有学生重名，请在钉钉中设置学号或调整姓名，并在表格中作相应调整\n" +
@@ -193,8 +199,59 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public JsonResult downloadDutyRecordStatistics(Integer campusId, String gradeName, String startTime, String endTime) {
-        return null;
+    public JsonResult downloadDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime) throws IOException {
+        FileOutputStream out = null;
+        //生成模板
+        HSSFWorkbook wb = new HSSFWorkbook();
+        //创建table
+        HSSFSheet sheet = wb.createSheet("工作表1");
+        //创建其他行
+        HSSFRow row0 = sheet.createRow(0);
+        //创建单元格并设置单元格内容
+        row0.createCell(0).setCellValue("班级");
+
+        String[] weekDays = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+        for (int i = 0; i < 7; i++) {
+            row0.createCell(i+1).setCellValue(weekDays[i]);
+        }
+
+
+        //统计数据
+        Map<String, Object> map = dutyRecordService.getDutyRecordStatistics(schoolId, gradeName, startTime, endTime);
+        List<String> classNameList = (List<String>) map.get("classNameList");
+        List<RecordStatistics> rsList = (List<RecordStatistics>) map.get("rsList");
+        //根据班级名称找数据
+        for (int i = 0; i < classNameList.size(); i++) {
+            HSSFRow r = sheet.createRow(i+1);
+            String className = classNameList.get(i);
+            r.createCell(0).setCellValue(className);
+            //班级下周几
+            for (int j = 0; j < weekDays.length; j++) {
+                for (RecordStatistics rs : rsList) {
+                    String day = rs.getDay();
+                    String weekday = day.substring(11);
+                    if(className.equals(rs.getClassName()) && weekDays[j].equals(weekday)){
+                        BigDecimal point = rs.getPoint();
+                        r.createCell(j+1).setCellValue(point.toString());
+                    }
+                }
+            }
+        }
+
+
+        String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
+        // 生成文件 程序所在目录
+        String rootPath = System.getProperty("user.dir");
+        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
+
+        out = new FileOutputStream(filePath);
+        wb.write(out);
+        out.flush();
+        out.close();
+        DownloadBean download = new DownloadBean();
+        download.setFilePath(filePath);
+        download.setTitle("检查统计.xls");
+        return JsonResultUtil.success(download);
     }
 
     @Override

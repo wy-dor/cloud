@@ -1,13 +1,17 @@
 package com.learning.cloud.duty.controller;
 
 import com.learning.cloud.duty.entity.DutyRecord;
+import com.learning.cloud.duty.entity.RecordStatistics;
 import com.learning.cloud.duty.service.DutyRecordService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,8 +61,9 @@ public class DutyRecordController {
     }
 
     @GetMapping("/getDutyRecordStatistics")
-    public JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime){
-        return dutyRecordService.getDutyRecordStatistics(schoolId, gradeName, startTime, endTime);
+    public JsonResult getDutyRecordStatistics(Integer schoolId, String gradeName, String startTime, String endTime) throws ParseException {
+        Map<String, Object> map = dutyRecordService.getDutyRecordStatistics(schoolId, gradeName, startTime, endTime);
+        return JsonResultUtil.success(map.get("rsList"));
     }
 
 }
