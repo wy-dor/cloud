@@ -15,4 +15,5 @@ public interface ProcessService {
     JsonResult getProcessById(Integer id)throws Exception;
 
     JsonResult getProcessByBureauId(String bureauId)throws Exception;
+
 }

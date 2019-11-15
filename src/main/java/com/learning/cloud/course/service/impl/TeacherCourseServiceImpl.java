@@ -149,7 +149,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         List<CourseType> courseTypes = courseTypeDao.getSchoolCourseType(schoolId);
         Map<String, Long> courseList = courseTypes.stream().collect(Collectors.toMap(CourseType::getCourseName, CourseType::getId));
         //从第三行开始
-        for (int i = 2; i < sheet.getLastRowNum(); i++) {
+        for (int i = 2; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
                 Cell cellTeacher = row.getCell(0);
                 Cell cellCourse = row.getCell(1);
