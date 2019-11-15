@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * @Date: 2019/10/15 10:13 上午
  * @Desc:
  */
+@Transactional
 @Service
 public class CourseExcelServiceImpl implements CourseExcelService {
 
@@ -316,7 +318,11 @@ public class CourseExcelServiceImpl implements CourseExcelService {
                                     //老师名字存在
                                     if(!teacherName.isEmpty()){
                                         courseDetail.setCourseTeacherName(teacherName);
-                                        courseDetail.setCourseTeacherId(teacherInfo.get(teacherName).longValue());
+                                        if(teacherInfo.get(teacherName)!=null){
+                                            courseDetail.setCourseTeacherId(teacherInfo.get(teacherName).longValue());
+                                        }else {
+                                            s.append("名称为：'"+teacherName+"'的老师不在"+className);
+                                        }
                                     }else {
                                         //没有老师名字
                                         //根据课程类型获取老师信息
