@@ -127,4 +127,10 @@ public class TeacherServiceImpl implements TeacherService {
         }
         return i;
     }
+
+    @Override
+    public JsonResult getTeacherByUserIdAndSchoolId(Teacher teacher) {
+        Teacher teacherInSchool = teacherDao.getTeacherInSchool(teacher);
+        return JsonResultUtil.success(teacherInSchool);
+    }
 }

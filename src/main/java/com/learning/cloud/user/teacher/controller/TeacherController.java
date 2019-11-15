@@ -21,6 +21,12 @@ public class TeacherController {
         return teacherService.getByUserId(userId);
     }
 
+    /*根据老师userId和schoolId获取老师信息*/
+    @GetMapping("/getTeacherByUserIdAndSchoolId")
+    public JsonResult getTeacherByUserIdAndSchoolId(Teacher teacher){
+        return teacherService.getTeacherByUserIdAndSchoolId(teacher);
+    }
+
     /*获取指定班级的老师数量*/
     @GetMapping("/getClassTeacherNum")
     public JsonResult getClassTeacherNum(Integer classId){

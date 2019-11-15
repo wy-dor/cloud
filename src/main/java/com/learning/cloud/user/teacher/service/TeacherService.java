@@ -26,4 +26,6 @@ public interface TeacherService {
     int removeTeachersInClass(Integer cId);
 
     int removeTeacherInClass(Integer classId, Teacher teacher);
+
+    JsonResult getTeacherByUserIdAndSchoolId(Teacher teacher);
 }

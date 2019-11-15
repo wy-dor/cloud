@@ -186,7 +186,11 @@ public class ExportServiceImpl implements ExportService {
         String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
-        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
+        File file = new File(rootPath + "/" + "export");
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");
 
         out = new FileOutputStream(filePath);
         wb.write(out);
@@ -206,13 +210,25 @@ public class ExportServiceImpl implements ExportService {
         //创建table
         HSSFSheet sheet = wb.createSheet("工作表1");
         //创建其他行
-        HSSFRow row0 = sheet.createRow(0);
+        HSSFRow row_0 = sheet.createRow(0);
+        String startTimeReplace = startTime.replace("-", "");
+        String endTimeReplace = endTime.replace("-", "");
+        HSSFCell c0 = row_0.createCell(0);
+        c0.setCellValue(startTimeReplace + "-" + endTimeReplace +" 检查统计");
+        CellRangeAddress range = new CellRangeAddress(0, 0, 0, 7);
+        sheet.addMergedRegion(range);
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        c0.setCellStyle(style);
+
+        HSSFRow row_1 = sheet.createRow(1);
         //创建单元格并设置单元格内容
-        row0.createCell(0).setCellValue("班级");
+        row_1.createCell(0).setCellValue("班级");
 
         String[] weekDays = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         for (int i = 0; i < 7; i++) {
-            row0.createCell(i+1).setCellValue(weekDays[i]);
+            row_1.createCell(i+1).setCellValue(weekDays[i]);
         }
 
 
@@ -222,7 +238,7 @@ public class ExportServiceImpl implements ExportService {
         List<RecordStatistics> rsList = (List<RecordStatistics>) map.get("rsList");
         //根据班级名称找数据
         for (int i = 0; i < classNameList.size(); i++) {
-            HSSFRow r = sheet.createRow(i+1);
+            HSSFRow r = sheet.createRow(i+2);
             String className = classNameList.get(i);
             r.createCell(0).setCellValue(className);
             //班级下周几
@@ -242,7 +258,11 @@ public class ExportServiceImpl implements ExportService {
         String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
-        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
+        File file = new File(rootPath + "/" + "export");
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");
 
         out = new FileOutputStream(filePath);
         wb.write(out);
@@ -250,7 +270,7 @@ public class ExportServiceImpl implements ExportService {
         out.close();
         DownloadBean download = new DownloadBean();
         download.setFilePath(filePath);
-        download.setTitle("检查统计.xls");
+        download.setTitle(startTimeReplace + "-" + endTimeReplace +" 检查统计.xls");
         return JsonResultUtil.success(download);
     }
 
@@ -410,7 +430,11 @@ public class ExportServiceImpl implements ExportService {
         String fileName = CommonUtils.getRandomStr() + ".xls";//用随机号来存储文件，避免文件名重复
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
-        String filePath = (rootPath + "/" + fileName).replace("\\", "/");
+        File file = new File(rootPath + "/" + "export");
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");
 
         out = new FileOutputStream(filePath);
         wb.write(out);
