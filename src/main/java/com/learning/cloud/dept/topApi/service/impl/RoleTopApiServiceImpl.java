@@ -5,6 +5,7 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.topApi.service.RoleTopApiService;
 import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
@@ -39,6 +40,9 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
 
     @Autowired
     private TeacherDao teacherDao;
+
+    @Autowired
+    private GradeClassDao classDao;
 
     //学生详细信息查询。
     //"result":{
@@ -298,6 +302,22 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         req.setUserid(userId);
         OapiEduRolesGetResponse rsp = client.execute(req, accessToken);
         return ServiceResult.success(rsp);
+    }
+
+    @Override
+    public String getAdvisorUserIdInClass(Long deptId, String accessToken) throws ApiException {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/teacher/list");
+        OapiEduTeacherListRequest req = new OapiEduTeacherListRequest();
+        req.setClassId(deptId);
+        OapiEduTeacherListResponse rsp = client.execute(req, accessToken);
+        List<OapiEduTeacherListResponse.TeacherRespone> result = rsp.getResult();
+        String advisorTeacherUserId = "";
+        for (OapiEduTeacherListResponse.TeacherRespone teacherRespone : result) {
+            if(teacherRespone.getIsAdviser().equals(new Long("1"))){
+                advisorTeacherUserId = teacherRespone.getTeacherUserid();
+            }
+        }
+        return advisorTeacherUserId;
     }
 
 }

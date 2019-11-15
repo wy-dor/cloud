@@ -28,6 +28,11 @@ public class SendMsgController {
 
     }
 
+    @PostMapping("/sendDutyMsgToAdvisor")
+    public JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception{
+        return sendMsgService.sendDutyMsgToAdvisor(classId, date, msgInfo);
+    }
+
     @PostMapping("/sendPerformanceCard")
     public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo)throws Exception{
         return sendMsgService.sendPerformanceCard(classIds, moduleId, msgInfo);

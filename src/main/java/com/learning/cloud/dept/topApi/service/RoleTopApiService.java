@@ -22,4 +22,6 @@ public interface RoleTopApiService {
     ServiceResult listEduParent(Long classId, String accessToken) throws ApiException;
 
     ServiceResult getEduRoles(String userId, String accessToken) throws ApiException;
+
+    String getAdvisorUserIdInClass(Long deptId, String accessToken) throws ApiException;
 }

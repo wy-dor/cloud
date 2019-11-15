@@ -1,11 +1,12 @@
 package com.learning.cloud.sendMsg.service.impl;
 
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
-import com.dingtalk.api.request.OapiMessageSendToConversationRequest;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.dept.topApi.service.RoleTopApiService;
 import com.learning.cloud.index.dao.CorpAgentDao;
 import com.learning.cloud.index.entity.CorpAgent;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.sendMsg.entity.MsgInfo;
@@ -41,6 +42,12 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private SchoolDao schoolDao;
 
+    @Autowired
+    private AuthenService authenService;
+
+    @Autowired
+    private RoleTopApiService roleTopApiService;
+
     //发送消息
     @Override
     public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo) throws Exception {
@@ -67,6 +74,36 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.getLink().setTitle(msgInfo.getTitle());
         msg.getLink().setText(msgInfo.getText());
         msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId+"&link=true");
+        msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
+        return SendWorkMsg(workMsg,msg);
+    }
+
+    @Override
+    public JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception {
+        GradeClass gradeClass = gradeClassDao.getById(classId);
+        Integer schoolId = gradeClass.getSchoolId();
+        School school = schoolDao.getBySchoolId(schoolId);
+        String corpId = school.getCorpId();
+        String accessToken = authenService.getAccessToken(corpId);
+        Long deptId = gradeClass.getDeptId();
+        String advisorUserIdInClass = roleTopApiService.getAdvisorUserIdInClass(deptId, accessToken);
+        if(advisorUserIdInClass.equals("")){
+            return JsonResultUtil.success("该班级下暂时没有设置班主任");
+        }
+        // 获取agent_id
+        CorpAgent corpAgent = corpAgentDao.getByCorpId(corpId);
+        WorkMsg workMsg = new WorkMsg();
+        workMsg.setCorpId(corpId);
+        workMsg.setAgentId(corpAgent.getAgentId());
+        List<String> userIdList = new ArrayList<>();
+        userIdList.add(advisorUserIdInClass);
+        workMsg.setUserIdList(userIdList);
+        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+        msg.setMsgtype("link");
+        msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
+        msg.getLink().setTitle(msgInfo.getTitle());
+        msg.getLink().setText(msgInfo.getText());
+        msg.getLink().setMessageUrl("eapp://pages/duty/classHygiene/classHygiene?classId="+classId+"&date="+date);
         msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
         return SendWorkMsg(workMsg,msg);
     }

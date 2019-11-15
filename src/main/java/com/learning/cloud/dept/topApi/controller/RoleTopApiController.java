@@ -80,4 +80,10 @@ public class RoleTopApiController {
     public ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException{
         return roleTopApiService.listEduStudent(classId,accessToken);
     }
+
+    @GetMapping("/getAdvisorUserIdInClass")
+    public ServiceResult getAdvisorUserIdInClass(Long deptId, String accessToken) throws ApiException {
+        String userId = roleTopApiService.getAdvisorUserIdInClass(deptId, accessToken);
+        return  ServiceResult.success(userId);
+    }
 }
