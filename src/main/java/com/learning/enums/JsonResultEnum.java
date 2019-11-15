@@ -48,6 +48,7 @@ public enum JsonResultEnum {
     EXCEL_ERROR_DOWNLOAD(1074,"EXCEL下载失败！"),
     COURSE_NO_CLASS(1075,"不存在的班级信息！"),
     TEACHER_NAME_REPEAT(1076,"老师姓名重复无法区分老师！"),
+    TEACHER_NO_COURSE(1077,"老师任课信息不能为空！"),
 
     DING_SPACE_ERROR(1081,"获取钉盘审批空间失败"),
     DING_SYSADMIN_ERROR(1082,"获取企业管理失败"),
