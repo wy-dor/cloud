@@ -52,9 +52,15 @@ public class SendUtils {
         DingTalkClient client = new DefaultDingTalkClient(SEND_WORK_MSG_URL);
         OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
         request.setAgentId(Long.valueOf(workMsg.getAgentId()));
-//        request.setUseridList(StringListToString(workMsg.getUserIdList()));
-        request.setDeptIdList(StringListToString(workMsg.getDeptIdList()));
-        request.setToAllUser(workMsg.getToAllUser());
+        if(workMsg.getUserIdList() != null){
+            request.setUseridList(StringListToString(workMsg.getUserIdList()));
+        }
+        if(workMsg.getDeptIdList() != null){
+            request.setDeptIdList(StringListToString(workMsg.getDeptIdList()));
+        }
+        if(workMsg.getToAllUser() != null){
+            request.setToAllUser(workMsg.getToAllUser());
+        }
         request.setMsg(msg);
         // 发送消息
         OapiMessageCorpconversationAsyncsendV2Response response = client.execute(request,getAccessToken(workMsg.getCorpId()));
