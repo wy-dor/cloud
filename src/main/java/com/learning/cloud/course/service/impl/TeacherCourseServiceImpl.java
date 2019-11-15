@@ -153,6 +153,9 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
             Row row = sheet.getRow(i);
                 Cell cellTeacher = row.getCell(0);
                 Cell cellCourse = row.getCell(1);
+                if(cellCourse==null){
+                    throw new MyException(JsonResultEnum.TEACHER_NO_COURSE);
+                }
                 if (cellTeacher != null) {
                     String teacherName = cellTeacher.getStringCellValue();
                     String courseName = cellCourse.getStringCellValue();
