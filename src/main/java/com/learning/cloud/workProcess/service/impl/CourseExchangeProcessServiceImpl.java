@@ -313,7 +313,6 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
     @Override
     public JsonResult getCourseProcess(String corpId) throws Exception {
         Process process = processDao.getCourseProcess(corpId);
-
-        return null;
+        return JsonResultUtil.success(process.getId());
     }
 }

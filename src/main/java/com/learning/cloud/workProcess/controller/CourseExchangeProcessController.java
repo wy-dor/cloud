@@ -35,6 +35,5 @@ public class CourseExchangeProcessController {
     @GetMapping("/getCourseProcess")
     public JsonResult getCourseProcess(String corpId)throws Exception{
         return courseExchangeProcessService.getCourseProcess(corpId);
-
     }
 }
