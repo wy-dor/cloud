@@ -271,7 +271,9 @@
   <select id="getAllGradeName" parameterType="java.lang.Integer" resultType="java.lang.String">
     select grade_name
     from edu_grade_class
-    where campus_id = #{campusId}
+    <if test="campusId != null">
+      where campus_id = #{campusId}
+    </if>
     group by grade_name
     order by SUBSTR(grade_name,4,4) desc
   </select>
