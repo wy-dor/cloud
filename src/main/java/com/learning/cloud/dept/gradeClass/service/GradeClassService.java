@@ -23,7 +23,7 @@ public interface GradeClassService {
 
     Integer getCampusIdForTeacher(String userId, Integer schoolId);
 
-    JsonResult getAllGradeNameByCampusId(Integer campusId);
+    JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass);
 
     JsonResult listGradeClassByIds(String classIds);
 }

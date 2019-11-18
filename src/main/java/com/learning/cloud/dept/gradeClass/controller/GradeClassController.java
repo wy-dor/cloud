@@ -3,7 +3,6 @@ package com.learning.cloud.dept.gradeClass.controller;
 import com.learning.cloud.dept.campus.entity.Campus;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.gradeClass.service.GradeClassService;
-import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
@@ -70,9 +69,9 @@ public class GradeClassController {
         return JsonResultUtil.success(campusId);
     }
 
-    @GetMapping("/getAllGradeNameByCampusId")
-    public JsonResult getAllGradeNameByCampusId(Integer campusId){
-        return gradeClassService.getAllGradeNameByCampusId(campusId);
+    @GetMapping("/getAllGradeNameByGradeClass")
+    public JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass){
+        return gradeClassService.getAllGradeNameByGradeClass(gradeClass);
     }
 
 }

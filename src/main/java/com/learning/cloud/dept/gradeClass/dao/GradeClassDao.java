@@ -29,5 +29,7 @@ public interface GradeClassDao {
 
     List<String> getAllGradeName(Integer campusId);
 
+    List<String> getAllGradeNameBySchoolId(Integer schoolId);
+
     GradeClass getByDeptId(Long deptId);
 }

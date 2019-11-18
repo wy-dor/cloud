@@ -112,8 +112,13 @@ public class GradeClassServiceImpl implements GradeClassService {
     }
 
     @Override
-    public JsonResult getAllGradeNameByCampusId(Integer campusId) {
-        List<String> gradeNameList = gradeClassDao.getAllGradeName(campusId);
+    public JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass) {
+        List<String> gradeNameList = null;
+        if(gradeClass.getCampusId() != null){
+            gradeNameList = gradeClassDao.getAllGradeName(gradeClass.getCampusId());
+        }else{
+            gradeNameList = gradeClassDao.getAllGradeNameBySchoolId(gradeClass.getSchoolId());
+        }
         return JsonResultUtil.success(gradeNameList);
     }
 
