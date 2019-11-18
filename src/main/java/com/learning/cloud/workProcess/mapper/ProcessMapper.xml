@@ -100,4 +100,8 @@
         </set>
         where id = #{id,jdbcType=LONGVARCHAR}
     </update>
+
+    <select id="getCourseProcess" resultType="com.learning.cloud.workProcess.entity.Process">
+        select * from process where corp_id = #{corpId} and name = "调课申请"
+    </select>
 </mapper>

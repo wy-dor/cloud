@@ -12,4 +12,6 @@ public interface CourseExchangeProcessService {
     JsonResult createCourseExchangeProcess(String corpId)throws Exception;
 
     JsonResult createCourseExchangeProcessInstance(CourseInstance courseInstance)throws Exception;
+
+    JsonResult getCourseProcess(String corpId)throws Exception;
 }

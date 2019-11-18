@@ -21,4 +21,6 @@ public interface ProcessDao {
     Process getProcessByCorpId(String corpId);
 
     void update(Process process);
+
+    Process getCourseProcess(String corpId);
 }

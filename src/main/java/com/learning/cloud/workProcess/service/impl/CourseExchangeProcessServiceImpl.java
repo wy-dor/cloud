@@ -69,6 +69,11 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
 
     @Override
     public JsonResult createCourseExchangeProcess(String corpId) throws Exception {
+        //判断模板是否已经创建
+        Process pro = processDao.getCourseProcess(corpId);
+        if(pro!=null){
+            return JsonResultUtil.success("流程模板已经创建");
+        }
         // 根据corpId获取学校信息
         School school = schoolDao.getSchoolByCorpId(corpId);
         CorpAgent corpAgent = corpAgentDao.getByCorpId(corpId);
@@ -303,5 +308,12 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
         }
 
         return JsonResultUtil.success(response);
+    }
+
+    @Override
+    public JsonResult getCourseProcess(String corpId) throws Exception {
+        Process process = processDao.getCourseProcess(corpId);
+
+        return null;
     }
 }

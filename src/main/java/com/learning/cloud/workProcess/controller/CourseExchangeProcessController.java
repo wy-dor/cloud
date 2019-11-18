@@ -5,6 +5,7 @@ import com.learning.cloud.workProcess.service.CourseExchangeProcessService;
 import com.learning.cloud.workProcess.service.ProcessService;
 import com.learning.domain.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +29,12 @@ public class CourseExchangeProcessController {
     @PostMapping("/createCourseExchangeProcessInstance")
     public JsonResult createCourseExchangeProcessInstance(CourseInstance courseInstance)throws Exception{
         return courseExchangeProcessService.createCourseExchangeProcessInstance(courseInstance);
+    }
+
+    //获取学校的流程模板
+    @GetMapping("/getCourseProcess")
+    public JsonResult getCourseProcess(String corpId)throws Exception{
+        return courseExchangeProcessService.getCourseProcess(corpId);
+
     }
 }
