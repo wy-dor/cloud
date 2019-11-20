@@ -1,7 +1,5 @@
 package com.learning.cloud.supervision.service.impl;
 
-import com.learning.cloud.ding.picture.dao.PictureDao;
-import com.learning.cloud.ding.picture.entity.Picture;
 import com.learning.cloud.ding.question.service.QuestionService;
 import com.learning.cloud.supervision.dao.SupervisionDao;
 import com.learning.cloud.supervision.entity.Supervision;
@@ -16,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,6 +37,9 @@ public class SupervisionServiceImpl implements SupervisionService {
             Long picId = questionService.reduceImg(file);
             supervision.setPicId(picId);
         }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = df.format(new Date());
+        supervision.setUploadTime(format);
         int i = supervisionDao.insert(supervision);
         return JsonResultUtil.success("成功增加" + i + "条数据");
     }
