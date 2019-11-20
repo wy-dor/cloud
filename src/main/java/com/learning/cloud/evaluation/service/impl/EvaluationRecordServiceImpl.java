@@ -50,9 +50,11 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         //按用户添加
         BigDecimal score = evaluationRecord.getScore();
         if (addingWay == 1) {
+            //按个人添加
             String userIds = evaluationRecord.getStudentUserIds();
             saveScoreByUser(score, userIds);
         } else if (addingWay == 2) {
+            //按小组添加
             String groupIds = evaluationRecord.getGroupIds();
             String[] split = groupIds.split(",");
             for (String s : split) {
@@ -70,9 +72,11 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         String[] split = userIds.split(",");
         for (String s : split) {
             Student byUserId = studentDao.getByUserId(s);
-            BigDecimal totalScore = byUserId.getTotalScore();
-            byUserId.setTotalScore(totalScore.add(score));
-            studentDao.update(byUserId);
+            if(byUserId != null){
+                BigDecimal totalScore = byUserId.getTotalScore();
+                byUserId.setTotalScore(totalScore.add(score));
+                studentDao.update(byUserId);
+            }
         }
     }
 
@@ -110,14 +114,18 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         for (EvaluationRecord record : evaluationRecordList) {
             Integer addingWay = record.getAddingWay();
             List<Student> studentList = new ArrayList<>();
+            //按个人添加
             if (addingWay == 1) {
                 String userIds = record.getStudentUserIds();
                 String[] split = userIds.split(",");
                 for (String s : split) {
                     Student byUserId = studentDao.getByUserId(s);
-                    studentList.add(byUserId);
+                    if(byUserId != null){
+                        studentList.add(byUserId);
+                    }
                 }
             } else if (addingWay == 2) {
+                //按小组添加
                 String groupIds = record.getGroupIds();
                 String[] split = groupIds.split(",");
                 for (String s : split) {
@@ -126,7 +134,9 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
                     String[] split1 = userIds.split(",");
                     for (String userId : split1) {
                         Student byUserId = studentDao.getByUserId(userId);
-                        studentList.add(byUserId);
+                        if(byUserId != null){
+                            studentList.add(byUserId);
+                        }
                     }
                 }
             }
