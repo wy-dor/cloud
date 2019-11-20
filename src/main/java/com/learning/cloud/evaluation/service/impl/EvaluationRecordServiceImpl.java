@@ -111,6 +111,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
     @Override
     public JsonResult getEvaluationRecord(EvaluationRecord evaluationRecord) {
         List<EvaluationRecord> evaluationRecordList = recordDao.getByRecord(evaluationRecord);
+        List<EvaluationRecord> recordList = new ArrayList<>();
         for (EvaluationRecord record : evaluationRecordList) {
             Integer addingWay = record.getAddingWay();
             List<Student> studentList = new ArrayList<>();
@@ -140,9 +141,13 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
                     }
                 }
             }
-            record.setStudentList(studentList);
+            //若记录中的用户均被删除 则该记录不返回展示
+            if(studentList.size() > 0){
+                record.setStudentList(studentList);
+                recordList.add(record);
+            }
         }
-        return JsonResultUtil.success(new PageEntity<>(evaluationRecordList));
+        return JsonResultUtil.success(new PageEntity<>(recordList));
     }
 
     @Override
