@@ -23,7 +23,6 @@ import com.learning.cloud.workProcess.entity.ProcessValue;
 import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.cloud.workProcess.service.ProcessService;
 import com.learning.domain.JsonResult;
-import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -285,16 +284,11 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
     //获取流程实例详情
     @Override
-    public JsonResult getInstanceStatus(String processInstanceId, String corpId) throws Exception {
+    public OapiProcessinstanceGetResponse getInstanceStatus(String processInstanceId, String corpId) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient(PROCESS_INSTANCE_GET);
         OapiProcessinstanceGetRequest request = new OapiProcessinstanceGetRequest();
         request.setProcessInstanceId(processInstanceId);
         OapiProcessinstanceGetResponse response = client.execute(request, authenService.getAccessToken(corpId));
-        if(response.isSuccess()){
-            OapiProcessinstanceGetResponse.ProcessInstanceTopVo p = response.getProcessInstance();
-            return  JsonResultUtil.success(p);
-        }else {
-            return JsonResultUtil.error(JsonResultEnum.ERROR);
-        }
+        return response;
     }
 }

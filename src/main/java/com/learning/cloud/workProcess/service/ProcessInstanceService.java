@@ -1,5 +1,6 @@
 package com.learning.cloud.workProcess.service;
 
+import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
 import com.learning.cloud.workProcess.entity.ProcessValue;
 import com.learning.domain.JsonResult;
 
@@ -13,5 +14,5 @@ public interface ProcessInstanceService {
 
     JsonResult getLastDocumentNo(Integer bureauId)throws Exception;
 
-    JsonResult getInstanceStatus(String processInstanceId, String corpId)throws Exception;
+    OapiProcessinstanceGetResponse getInstanceStatus(String processInstanceId, String corpId)throws Exception;
 }

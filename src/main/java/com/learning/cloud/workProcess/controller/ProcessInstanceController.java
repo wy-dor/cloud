@@ -1,8 +1,11 @@
 package com.learning.cloud.workProcess.controller;
 
+import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
 import com.learning.cloud.workProcess.entity.ProcessValue;
 import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.domain.JsonResult;
+import com.learning.enums.JsonResultEnum;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +36,12 @@ public class ProcessInstanceController {
 
     @GetMapping("/getInstanceStatus")
     public JsonResult getInstanceStatus(String processInstanceId,String corpId)throws Exception{
-        return processInstanceService.getInstanceStatus(processInstanceId, corpId);
+        OapiProcessinstanceGetResponse response = processInstanceService.getInstanceStatus(processInstanceId, corpId);
+        if(response.isSuccess()){
+            OapiProcessinstanceGetResponse.ProcessInstanceTopVo p = response.getProcessInstance();
+            return  JsonResultUtil.success(p);
+        }else {
+            return JsonResultUtil.error(JsonResultEnum.ERROR);
+        }
     }
 }

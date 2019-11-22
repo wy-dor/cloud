@@ -1,10 +1,16 @@
 package com.learning.cloud.course.service.impl;
 
+import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
 import com.learning.cloud.course.dao.CourseDetailDao;
 import com.learning.cloud.course.dao.CourseExchangeDao;
 import com.learning.cloud.course.entity.CourseDetail;
 import com.learning.cloud.course.entity.CourseExchange;
 import com.learning.cloud.course.service.CourseExchangeService;
+import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
+import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.school.dao.SchoolDao;
+import com.learning.cloud.school.entity.School;
+import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
 import com.learning.utils.JsonResultUtil;
@@ -30,6 +36,15 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
 
     @Autowired
     private CourseDetailDao courseDetailDao;
+
+    @Autowired
+    private ProcessInstanceService processInstanceService;
+
+    @Autowired
+    private GradeClassDao gradeClassDao;
+
+    @Autowired
+    private SchoolDao schoolDao;
 
     /**
      * 课程调换
@@ -90,6 +105,20 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
 
     @Override
     public JsonResult confirmExchange(Long id, Integer status) throws Exception {
+        CourseExchange exchange = courseExchangeDao.getById(id);
+        String processInstanceId = exchange.getProcessInstanceId();
+        Long classId = exchange.getClassId();
+        GradeClass gradeClass = gradeClassDao.getById(classId.intValue());
+        Integer schoolId = gradeClass.getSchoolId();
+        School school = schoolDao.getBySchoolId(schoolId);
+        String corpId = school.getCorpId();
+        OapiProcessinstanceGetResponse response = processInstanceService.getInstanceStatus(processInstanceId, corpId);
+        OapiProcessinstanceGetResponse.ProcessInstanceTopVo processInstance = response.getProcessInstance();
+        String s = processInstance.getStatus();
+        String result = processInstance.getResult();
+        if(!(s.equals("COMPLETED")&&result.equals("agree"))){
+            return JsonResultUtil.success("该审批还未完成通过");
+        }
         int i = courseExchangeDao.confirmExchange(id, status);
         if(i>0){
             return JsonResultUtil.success();

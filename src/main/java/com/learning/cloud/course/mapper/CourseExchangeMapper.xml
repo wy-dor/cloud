@@ -34,6 +34,18 @@
     </association>
   </resultMap>
 
+  <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseExchange">
+    select *
+    from course_exchange
+    where id = #{id}
+  </select>
+
+  <select id="getByInstanceId" parameterType="java.lang.String" resultType="com.learning.cloud.course.entity.CourseExchange">
+    select *
+    from course_exchange
+    where process_instance_id = #{processInstanceId}
+  </select>
+
   <insert id="addCourseExchange" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseExchange">
     insert into course_exchange
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -76,6 +88,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="processInstanceId != null">
+        process_instance_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -116,6 +131,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="processInstanceId != null">
+        #{processInstanceId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

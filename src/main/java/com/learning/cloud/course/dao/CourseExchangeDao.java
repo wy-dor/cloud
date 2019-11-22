@@ -23,4 +23,8 @@ public interface CourseExchangeDao {
     List<CourseExchange> getMyExchange(@Param("teacherId") Long teacherId, @Param("day") String day);
 
     int confirmExchange(@Param("id") Long id, @Param("status") Integer status);
+
+    CourseExchange getByInstanceId(String processInstanceId);
+
+    CourseExchange getById(Long id);
 }

@@ -38,4 +38,6 @@ public class CourseExchange {
 
     private Long classId;
 
+    private String processInstanceId;
+
 }

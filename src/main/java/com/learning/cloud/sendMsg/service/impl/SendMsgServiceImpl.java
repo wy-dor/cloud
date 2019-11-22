@@ -112,29 +112,40 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Override
     public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception {
         List<String> classes = Arrays.asList(classIds.split(","));
-        List<String> ps = new ArrayList<>();
-        Integer schoolId = null;
-        for(String classId: classes){
-            GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
-            String teacherDepId = String.valueOf(gradeClass.getTDeptId());
-            ps.add(teacherDepId);
-            schoolId = gradeClass.getSchoolId();
-        }
+        String cId = classes.get(0);
+        GradeClass gc = gradeClassDao.getById(Integer.valueOf(cId));
+        Integer schoolId = gc.getSchoolId();
         School school = schoolDao.getBySchoolId(schoolId);
         // 获取agent_id
         CorpAgent corpAgent = corpAgentDao.getByCorpId(school.getCorpId());
-        WorkMsg workMsg = new WorkMsg();
-        workMsg.setCorpId(school.getCorpId());
-        workMsg.setDeptIdList(ps);
-        workMsg.setAgentId(corpAgent.getAgentId());
-        workMsg.setToAllUser(false);
-        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
-        msg.setMsgtype("action_card");
-        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
-        msg.getActionCard().setTitle(msgInfo.getTitle());
-        msg.getActionCard().setMarkdown(msgInfo.getText());
-        msg.getActionCard().setSingleTitle("查看成绩");
-        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId);
-        return SendWorkMsg(workMsg,msg);
+        Boolean success = true;
+        for(String classId: classes){
+            List<String> ps = new ArrayList<>();
+            GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
+            String parentDeptId = String.valueOf(gradeClass.getPDeptId());
+            ps.add(parentDeptId);
+            WorkMsg workMsg = new WorkMsg();
+            workMsg.setToAllUser(false);
+            workMsg.setCorpId(school.getCorpId());
+            workMsg.setDeptIdList(ps);
+            workMsg.setAgentId(corpAgent.getAgentId());
+            OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+            msg.setMsgtype("action_card");
+            msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
+            msg.getActionCard().setTitle(msgInfo.getTitle());
+            msg.getActionCard().setMarkdown(msgInfo.getText());
+            msg.getActionCard().setSingleTitle("查看成绩");
+            msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId+"&classId="+classId);
+            JsonResult jsonResult = SendWorkMsg(workMsg, msg);
+            Integer code = jsonResult.getCode();
+            if(code != 1){
+                success = false;
+            }
+        }
+        if (success){
+            return JsonResultUtil.success();
+        }else{
+            return JsonResultUtil.error(0,"还有班级成绩未发送成功");
+        }
     }
 }

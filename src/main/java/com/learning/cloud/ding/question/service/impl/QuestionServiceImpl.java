@@ -166,6 +166,13 @@ public class QuestionServiceImpl implements QuestionService {
     //高度
     @Override
     public String base64Reduce(MultipartFile file) throws Exception {
+        //500KB以内不压缩
+        if(file.getBytes().length < 500 * 1024 * 8){
+            BASE64Encoder encoder = new BASE64Encoder();
+            //base64转图
+            String encode = encoder.encode(file.getBytes());
+            return encode;
+        }
         String pathName = System.getProperty("user.dir") + File.separator + "upload";
         File f = new File(pathName);
         if(!f.exists()){

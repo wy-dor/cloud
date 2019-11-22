@@ -26,6 +26,7 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
+import com.learning.cloud.workProcess.dao.ProcessInstanceDao;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -365,7 +366,17 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
             } else if (bizType == 16) {
                 //企业同步
 
-            }
+            }/* else if(bizType == 22){
+                //"syncAction":"isv_bpms",表示一条审批记录的创建或者流程更新。
+                //"syncAction": "isv_bpms_cancel"，表示一条审批记录撤销(字段保留待开发)。
+                if (syncAction.equals("isv_bpms_cancel")) {
+                    syncBizDataMediumDao.updateStatus(id);
+                    continue LOOP;
+                }
+                String processInstanceId = (String) bizDataParse.get("processInstanceId");
+                //审批状态，分为NEW（新创建）RUNNING（运行中）TERMINATED（被终止）COMPLETED（完成）
+                String status = (String) bizDataParse.get("status");
+            }*/
             //更新已操作状态
             syncBizDataMediumDao.updateStatus(id);
         }
