@@ -134,7 +134,7 @@
                 #{picIds,jdbcType=VARCHAR},
             </if>
         </trim>
-        ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id=#{userId}
+        ON DUPLICATE KEY UPDATE time= #{time},day=#{day},user_id=#{userId},pic_ids=#{picIds}
     </insert>
 
     <insert id="addDutyRecordList" parameterType="com.learning.cloud.duty.entity.DutyRecord">
@@ -171,7 +171,7 @@
                     #{item.picIds,jdbcType=VARCHAR},
                 </if>
             </trim>
-            ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id=#{item.userId}
+            ON DUPLICATE KEY UPDATE time= #{item.time},day=#{item.day},user_id=#{item.userId},pic_ids=#{item.picIds}
         </foreach>
     </insert>
 
