@@ -15,5 +15,7 @@ public interface CourseExchangeService {
 
     JsonResult getMyExchange(Long teacherId)throws Exception;
 
-    JsonResult confirmExchange(Long id, Integer status)throws Exception;
+    JsonResult confirmExchange(CourseExchange courseExchange)throws Exception;
+
+    void renewCourseExchangeStatus(CourseExchange courseExchange) throws Exception;
 }

@@ -82,7 +82,15 @@
         form_component_values = #{formComponentValues,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=LONGVARCHAR}
+    where
+    <choose>
+      <when test="id != null">
+        id = #{id,jdbcType=LONGVARCHAR}
+      </when>
+      <when test="processInstanceId != null">
+        process_instance_id = #{processInstanceId,jdbcType=VARCHAR}
+      </when>
+    </choose>
   </update>
 
   <select id="getProcessInstance" resultType="com.learning.cloud.workProcess.entity.ProcessInstance">

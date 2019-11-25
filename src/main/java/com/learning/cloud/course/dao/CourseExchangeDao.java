@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,9 +21,11 @@ public interface CourseExchangeDao {
 
     List<CourseExchange> getMyExchange(@Param("teacherId") Long teacherId, @Param("day") String day);
 
-    int confirmExchange(@Param("id") Long id, @Param("status") Integer status);
+    int confirmExchange(CourseExchange courseExchange);
 
     CourseExchange getByInstanceId(String processInstanceId);
 
     CourseExchange getById(Long id);
+
+    List<CourseExchange> listCourseExchangeForRenew(CourseExchange courseExchange);
 }

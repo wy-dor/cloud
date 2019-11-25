@@ -5,6 +5,7 @@ import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.learning.cloud.bizData.service.BizDataMediumService;
 import com.learning.cloud.bureau.dao.BureauDao;
 import com.learning.cloud.bureau.entity.Bureau;
+import com.learning.cloud.course.service.CourseExchangeService;
 import com.learning.cloud.dept.manage.service.DeptService;
 import com.learning.cloud.index.dao.AuthCorpInfoDao;
 import com.learning.cloud.index.dao.AuthUserInfoDao;
@@ -66,6 +67,9 @@ public class MultiThreadScheduleTask {
 
     @Autowired
     private LoggedService loggedService;
+
+    @Autowired
+    private CourseExchangeService courseExchangeService;
 
     @Value("${spring.suiteId}")
     private String suiteId;
@@ -244,4 +248,11 @@ public class MultiThreadScheduleTask {
     public void queryBizDataMedium() throws Exception {
         bizDataMediumService.initBizDataMedium(null);
     }
+
+    @Async
+    @Scheduled(cron = "0 0/10 * * * ?")//每隔十分钟
+    public void renewCourseExchangeAndInstanceState() throws Exception {
+        courseExchangeService.renewCourseExchangeStatus(null);
+    }
+
 }

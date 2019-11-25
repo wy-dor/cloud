@@ -3,13 +3,12 @@ package com.learning.cloud.course.controller;
 import com.learning.cloud.course.entity.CourseExchange;
 import com.learning.cloud.course.service.CourseExchangeService;
 import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * @Author: yyt
@@ -39,9 +38,13 @@ public class CourseExchangeController {
     }
 
     @PostMapping("/confirmExchange")
-    public JsonResult confirmExchange(@RequestParam(value="id",required = true) Long id,
-                                      @RequestParam(value="status",required = true) Integer status)throws Exception{
-        return courseExchangeService.confirmExchange(id, status);
+    public JsonResult confirmExchange(CourseExchange courseExchange)throws Exception{
+        return courseExchangeService.confirmExchange(courseExchange);
     }
 
+    @GetMapping("/renewCourseExchangeStatus")
+    public JsonResult renewCourseExchangeStatus(CourseExchange courseExchange) throws Exception {
+        courseExchangeService.renewCourseExchangeStatus(courseExchange);
+        return JsonResultUtil.success();
+    }
 }

@@ -157,6 +157,31 @@
 
   <update id="confirmExchange">
     update course_exchange set status = #{status}
-    where id = #{id}
+    where
+    <choose>
+      <when test="id != null">
+        id = #{id}
+      </when>
+      <when test="processInstanceId != null">
+        process_instance_id = #{processInstanceId}
+      </when>
+    </choose>
   </update>
+
+  <select id="listCourseExchangeForRenew" parameterType="com.learning.cloud.course.entity.CourseExchange"
+          resultType="com.learning.cloud.course.entity.CourseExchange">
+    select *
+    from course_exchange
+    where status = 1
+    and (process_instance_id is not null and process_instance_id !='')
+    <choose>
+      <when test="id != null">
+        and id = #{id}
+      </when>
+      <when test="processInstanceId != null">
+        and process_instance_id = #{processInstanceId}
+      </when>
+    </choose>
+  </select>
+
 </mapper>

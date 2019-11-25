@@ -10,6 +10,8 @@ import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
+import com.learning.cloud.workProcess.dao.ProcessInstanceDao;
+import com.learning.cloud.workProcess.entity.ProcessInstance;
 import com.learning.cloud.workProcess.service.ProcessInstanceService;
 import com.learning.domain.JsonResult;
 import com.learning.enums.JsonResultEnum;
@@ -18,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.learning.cloud.util.Utils.getWeekDay;
 
@@ -46,8 +47,12 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     @Autowired
     private SchoolDao schoolDao;
 
+    @Autowired
+    private ProcessInstanceDao processInstanceDao;
+
     /**
      * 课程调换
+     *
      * @param courseExchange
      * @return
      * @throws Exception
@@ -62,10 +67,10 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
         Integer weekDay = getWeekDay(fromDay);
         CourseDetail courseDetail = courseDetailDao.getCourseDetailById(courseExchange.getFromId());
         CourseDetail toDetail = courseDetailDao.getCourseDetailById(courseExchange.getToId());
-        List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(toDetail.getCourseTeacherId(),weekDay);
+        List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(toDetail.getCourseTeacherId(), weekDay);
         //判断当天该老师是否有本节课
-        for(CourseDetail bean : courseDetails){
-            if(bean.getCourseNum()==courseDetail.getCourseNum()){
+        for (CourseDetail bean : courseDetails) {
+            if (bean.getCourseNum() == courseDetail.getCourseNum()) {
                 return JsonResultUtil.error(JsonResultEnum.TIME_CONFLICT);
             }
         }
@@ -86,12 +91,12 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     @Override
     public JsonResult getCourseExchange(Long classId, String day) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(day!=null){
+        if (day != null) {
 
-        }else {
+        } else {
             day = sdf.format(new Date());
         }
-        List<CourseExchange> courseExchanges = courseExchangeDao.getCourseExchange(classId,day);
+        List<CourseExchange> courseExchanges = courseExchangeDao.getCourseExchange(classId, day);
         return JsonResultUtil.success(courseExchanges);
     }
 
@@ -104,26 +109,48 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     }
 
     @Override
-    public JsonResult confirmExchange(Long id, Integer status) throws Exception {
-        CourseExchange exchange = courseExchangeDao.getById(id);
-        String processInstanceId = exchange.getProcessInstanceId();
-        Long classId = exchange.getClassId();
-        GradeClass gradeClass = gradeClassDao.getById(classId.intValue());
-        Integer schoolId = gradeClass.getSchoolId();
-        School school = schoolDao.getBySchoolId(schoolId);
-        String corpId = school.getCorpId();
-        OapiProcessinstanceGetResponse response = processInstanceService.getInstanceStatus(processInstanceId, corpId);
-        OapiProcessinstanceGetResponse.ProcessInstanceTopVo processInstance = response.getProcessInstance();
-        String s = processInstance.getStatus();
-        String result = processInstance.getResult();
-        if(!(s.equals("COMPLETED")&&result.equals("agree"))){
-            return JsonResultUtil.success("该审批还未完成通过");
-        }
-        int i = courseExchangeDao.confirmExchange(id, status);
-        if(i>0){
+    public JsonResult confirmExchange(CourseExchange courseExchange) throws Exception {
+        int i = courseExchangeDao.confirmExchange(courseExchange);
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
+        }
+    }
+
+    @Override
+    public void renewCourseExchangeStatus(CourseExchange courseExchange) throws Exception {
+        List<CourseExchange> courseExchangeList = courseExchangeDao.listCourseExchangeForRenew(courseExchange);
+        for (CourseExchange exchange : courseExchangeList) {
+            String processInstanceId = exchange.getProcessInstanceId();
+            if (!processInstanceId.equals("")) {
+                Long classId = exchange.getClassId();
+                GradeClass gradeClass = gradeClassDao.getById(classId.intValue());
+                Integer schoolId = gradeClass.getSchoolId();
+                School school = schoolDao.getBySchoolId(schoolId);
+                String corpId = school.getCorpId();
+                OapiProcessinstanceGetResponse response = processInstanceService.getInstanceStatus(processInstanceId, corpId);
+                OapiProcessinstanceGetResponse.ProcessInstanceTopVo responseProcessInstance = response.getProcessInstance();
+                String status = responseProcessInstance.getStatus();
+                String result = responseProcessInstance.getResult();
+                if (status.equals("COMPLETED") || status.equals("TERMINATED")) {
+                    Integer exchangeStatus = 2;
+                    if(status.equals("TERMINATED")){
+                        exchangeStatus = 0;
+                    }else {
+                        if(result.equals("refuse")){
+                            exchangeStatus = 0;
+                        }
+                    }
+                    exchange.setStatus(exchangeStatus.shortValue());
+                    courseExchangeDao.confirmExchange(exchange);
+                    //审批实例表更新状态
+                    ProcessInstance instance = new ProcessInstance();
+                    instance.setProcessInstanceId(processInstanceId);
+                    instance.setStatus((short)2);
+                    processInstanceDao.update(instance);
+                }
+            }
         }
     }
 }
