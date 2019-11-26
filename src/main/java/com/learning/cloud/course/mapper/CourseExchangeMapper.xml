@@ -153,6 +153,9 @@
     select * from course_exchange
     where ( create_teacher_id = #{teacherId} or accept_teacher_id = #{teacherId})
     and to_day>#{day}
+    <if test="status != null">
+      and status = #{status}
+    </if>
   </select>
 
   <update id="confirmExchange">

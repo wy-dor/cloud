@@ -11,9 +11,9 @@ import com.learning.domain.JsonResult;
 public interface CourseExchangeService {
     JsonResult addCourseExchange(CourseExchange courseExchange)throws Exception;
 
-    JsonResult getCourseExchange(Long classId, String day)throws Exception;
+    JsonResult getCourseExchange(Long classId, String day);
 
-    JsonResult getMyExchange(Long teacherId)throws Exception;
+    JsonResult getMyExchange(Long teacherId, Integer status)throws Exception;
 
     JsonResult confirmExchange(CourseExchange courseExchange)throws Exception;
 

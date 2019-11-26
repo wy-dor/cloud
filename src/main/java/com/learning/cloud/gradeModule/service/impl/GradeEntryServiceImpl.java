@@ -219,6 +219,9 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             for (GradeEntry entry : gradeEntries) {
                 String marks = entry.getMarks();
                 List<Map<String, String>> parse = (List<Map<String, String>>) JSON.parse(marks);
+                if(parse.size() != subjectCounts){
+                    return JsonResultUtil.error(0,"科目未完全录入");
+                }
                 //总分计算
                 double markSum = 0;
                 for (Map<String, String> courseValueMap : parse) {
@@ -239,16 +242,20 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             //统计数据保留两位有效数字
             java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
             //用于对应统计数组的统计成绩列表
-            for (int i = 0; i < subjectMarksStrListArr.length; i++) {
-                Map<String, String> tempMap = statisticMapArr[i];
-                Double average = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).average().getAsDouble();
-                Double max = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).max().getAsDouble();
-                Double min = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).min().getAsDouble();
-                Long count = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).summaryStatistics().getCount();
-                tempMap.put("average", df.format(average));
-                tempMap.put("max", df.format(max));
-                tempMap.put("min", df.format(min));
-                statisticMapArr[i] = tempMap;
+            try {
+                for (int i = 0; i < subjectMarksStrListArr.length; i++) {
+                    Map<String, String> tempMap = statisticMapArr[i];
+                    Double average = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+                    Double max = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).max().getAsDouble();
+                    Double min = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).min().getAsDouble();
+                    Long count = subjectMarksStrListArr[i].stream().mapToDouble(Double::doubleValue).summaryStatistics().getCount();
+                    tempMap.put("average", df.format(average));
+                    tempMap.put("max", df.format(max));
+                    tempMap.put("min", df.format(min));
+                    statisticMapArr[i] = tempMap;
+                }
+            } catch (Exception e) {
+                return JsonResultUtil.error(0,"科目未完全录入");
             }
 
         } else {

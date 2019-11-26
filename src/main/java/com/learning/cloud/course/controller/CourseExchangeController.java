@@ -27,14 +27,14 @@ public class CourseExchangeController {
 
     @GetMapping("/getCourseExchange")
     public JsonResult getCourseExchange(@RequestParam(value="classId",required = false) Long classId,
-            @RequestParam(value="day",required = false) String day)throws Exception{
+            @RequestParam(value="day",required = false) String day){
         return courseExchangeService.getCourseExchange(classId,day);
     }
 
     //获取老师未完成的调课
     @GetMapping("/getMyExchange")
-    public JsonResult getMyExchange(@RequestParam(value="teacherId",required = true) Long teacherId)throws Exception{
-        return courseExchangeService.getMyExchange(teacherId);
+    public JsonResult getMyExchange(@RequestParam(value="teacherId",required = true) Long teacherId, Integer status)throws Exception{
+        return courseExchangeService.getMyExchange(teacherId, status);
     }
 
     @PostMapping("/confirmExchange")
@@ -47,4 +47,5 @@ public class CourseExchangeController {
         courseExchangeService.renewCourseExchangeStatus(courseExchange);
         return JsonResultUtil.success();
     }
+
 }

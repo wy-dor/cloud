@@ -89,7 +89,7 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
      * @throws Exception
      */
     @Override
-    public JsonResult getCourseExchange(Long classId, String day) throws Exception {
+    public JsonResult getCourseExchange(Long classId, String day){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (day != null) {
 
@@ -101,10 +101,10 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     }
 
     @Override
-    public JsonResult getMyExchange(Long teacherId) throws Exception {
+    public JsonResult getMyExchange(Long teacherId, Integer status) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String day = sdf.format(new Date());
-        List<CourseExchange> courseExchanges = courseExchangeDao.getMyExchange(teacherId, day);
+        List<CourseExchange> courseExchanges = courseExchangeDao.getMyExchange(teacherId, day, status);
         return JsonResultUtil.success(courseExchanges);
     }
 
