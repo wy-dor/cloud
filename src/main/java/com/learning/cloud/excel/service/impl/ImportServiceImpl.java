@@ -87,6 +87,9 @@ public class ImportServiceImpl implements ImportService {
                 List<Map<String,String>> markMapList = new ArrayList<>();
                 GradeEntry ge = new GradeEntry();
                 String className = r.getCell(0).getStringCellValue().trim();
+                if(classMap.get(className) == null){
+                    throw new Exception("该成绩模板中不存在" + className);
+                }
                 String classIdStr = classMap.get(className);
                 int classId = Integer.parseInt(classIdStr);
                 String stuName = r.getCell(1).getStringCellValue().trim();
