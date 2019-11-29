@@ -28,4 +28,6 @@ public interface CourseExchangeDao {
     CourseExchange getById(Long id);
 
     List<CourseExchange> listCourseExchangeForRenew(CourseExchange courseExchange);
+
+    int update(CourseExchange courseExchange);
 }

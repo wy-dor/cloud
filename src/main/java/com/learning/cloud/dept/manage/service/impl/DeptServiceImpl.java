@@ -264,6 +264,41 @@ public class DeptServiceImpl implements DeptService {
                                     if(pId_4.equals(gradeDeptId)){
                                         Long classDeptId = dept_4.getId();
                                         classDeptIdList2.add(classDeptId.toString());
+                                        Boolean found = CommonUtils.findInStrList(classDeptId.toString(),classDeptIdList1);
+                                        if (!found) {
+                                            GradeClass gradeClass = new GradeClass();
+                                            gradeClass.setDeptId(classDeptId);
+                                            String className = dept_4.getName();
+                                            String gradeName = dept_3.getName();
+                                            String sessionName = dept_2.getName();
+                                            //campusId
+                                            Campus campus = new Campus();
+                                            campus.setDeptId(campusDeptId);
+                                            Campus c = campusDao.getByCampus(campus);
+                                            Integer campusId;
+                                            if (c == null) {
+                                                campus.setSchoolId(schoolId);
+                                                campus.setCampusName(dept_1.getName());
+                                                campusDao.insert(campus);
+                                                campusId = campus.getId();
+                                            } else{
+                                                campusId = c.getId();
+                                            }
+
+                                            gradeClass.setCampusId(campusId);
+                                            gradeClass.setSessionName(sessionName);
+                                            gradeClass.setGradeName(gradeName);
+                                            gradeClass.setClassName(className);
+                                            gradeClassDao.insert(gradeClass);
+                                            Integer classId = gradeClass.getId();
+                                            //增加课程
+                                            Course course = new Course();
+                                            course.setSchoolId(schoolId.longValue());
+                                            course.setClassId(classId.longValue());
+                                            course.setGradeName(gradeName);
+                                            course.setClassName(className);
+                                            courseDao.addCourse(course);
+                                        }
                                     }
                                 }
 

@@ -138,6 +138,16 @@
     </trim>
   </insert>
 
+  <update id="update" parameterType="com.learning.cloud.course.entity.CourseExchange">
+    update course_exchange
+    <set>
+      <if test="processInstanceId != null">
+        process_instance_id = #{processInstanceId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
   <select id="getCourseExchange" parameterType="java.lang.String" resultMap="DayExchangeResultMap">
     select * from course_exchange a
     left join course_detail b

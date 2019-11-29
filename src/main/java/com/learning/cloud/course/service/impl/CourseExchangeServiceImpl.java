@@ -59,25 +59,31 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
      */
     @Override
     public JsonResult addCourseExchange(CourseExchange courseExchange) throws Exception {
-        //1.只能调换未发生的时间的课程
-        //2.只能调换每周都上的课程
-        //3.单双周暂不支持
-        //4.调换其他老师的课程，先判断该被调课老师在当前时间是否有其它课
-        Date fromDay = courseExchange.getFromDay();
-        Integer weekDay = getWeekDay(fromDay);
-        CourseDetail courseDetail = courseDetailDao.getCourseDetailById(courseExchange.getFromId());
-        CourseDetail toDetail = courseDetailDao.getCourseDetailById(courseExchange.getToId());
-        List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(toDetail.getCourseTeacherId(), weekDay);
-        //判断当天该老师是否有本节课
-        for (CourseDetail bean : courseDetails) {
-            if (bean.getCourseNum() == courseDetail.getCourseNum()) {
-                return JsonResultUtil.error(JsonResultEnum.TIME_CONFLICT);
+        Long id = courseExchange.getId();
+        if(id != null){
+            courseExchangeDao.update(courseExchange);
+        }else{
+            //1.只能调换未发生的时间的课程
+            //2.只能调换每周都上的课程
+            //3.单双周暂不支持
+            //4.调换其他老师的课程，先判断该被调课老师在当前时间是否有其它课
+            Date fromDay = courseExchange.getFromDay();
+            Integer weekDay = getWeekDay(fromDay);
+            CourseDetail courseDetail = courseDetailDao.getCourseDetailById(courseExchange.getFromId());
+            CourseDetail toDetail = courseDetailDao.getCourseDetailById(courseExchange.getToId());
+            List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(toDetail.getCourseTeacherId(), weekDay);
+            //判断当天该老师是否有本节课
+            for (CourseDetail bean : courseDetails) {
+                if (bean.getCourseNum() == courseDetail.getCourseNum()) {
+                    return JsonResultUtil.error(JsonResultEnum.TIME_CONFLICT);
+                }
             }
+            //可以调课
+            int i = courseExchangeDao.addCourseExchange(courseExchange);
+            id = courseExchange.getId();
         }
-        //可以调课
-        int i = courseExchangeDao.addCourseExchange(courseExchange);
 
-        return JsonResultUtil.success(courseExchange.getId());
+        return JsonResultUtil.success(id);
     }
 
     /**

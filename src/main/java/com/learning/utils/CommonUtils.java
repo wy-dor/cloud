@@ -158,4 +158,13 @@ public class CommonUtils {
         }
 
     }
+
+    public static Boolean findInStrList(String str, List<String> strList) {
+        for (String s : strList) {
+            if(s.equals(str)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

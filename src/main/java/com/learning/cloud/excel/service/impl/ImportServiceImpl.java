@@ -69,12 +69,23 @@ public class ImportServiceImpl implements ImportService {
             Row rowTitle = sheet.getRow(2);
             int lastCellNum = rowTitle.getLastCellNum();
             //获取科目类型
+            //进行判断，存在没有的科目时进行提示
+            String subjects = gradeModule.getSubjects();
+            List<String> moduleSubjectList = new ArrayList<>();
+            List<Map<String, Object>> subjectsParse = (List<Map<String, Object>>) JSON.parse(subjects);
+            for (Map<String, Object> map : subjectsParse) {
+                moduleSubjectList.add(map.get("courseName").toString());
+            }
             for (int i = 3; i < lastCellNum - 1; i++) {
                 //如果是分数制需要将拼接的总分去掉
                 String subject = rowTitle.getCell(i).getStringCellValue();
                 if(gradeModule.getScoringRoles() == 1){
                     int index = subject.indexOf("(");
                     subject = subject.substring(0,index);
+                }
+                Boolean inStrList = CommonUtils.findInStrList(subject, moduleSubjectList);
+                if(!inStrList){
+                    throw new Exception("该成绩发布下不需录入" + subject + "成绩");
                 }
                 subjectList.add(subject);
             }
