@@ -88,6 +88,10 @@ public class GradeModuleServiceImpl implements GradeModuleService {
             String s = JSON.toJSONString(mapList);
             gradeModule.setSubjects(s);
         }*/
+        String classesStr = gradeModule.getClassesStr();
+        if(classesStr.equals("")){
+            return JsonResultUtil.error(0,"成绩模板格式错误，班级不能为空！");
+        }
         Long id = gradeModule.getId();
         if(id == null){
             Date date = new Date();
