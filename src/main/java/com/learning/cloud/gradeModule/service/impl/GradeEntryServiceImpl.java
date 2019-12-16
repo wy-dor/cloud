@@ -240,7 +240,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             statisticMapArr[subjectCounts] = fullTempMap;
 
             //统计数据保留两位有效数字
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+            java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
             //用于对应统计数组的统计成绩列表
             try {
                 for (int i = 0; i < subjectMarksStrListArr.length; i++) {
