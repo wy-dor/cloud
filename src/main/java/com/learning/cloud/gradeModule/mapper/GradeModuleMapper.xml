@@ -100,6 +100,9 @@
       <if test="classesStr != null">
         classes_str,
       </if>
+      <if test="gradesStr != null">
+        grades_str,
+      </if>
       <if test="visibleRange != null">
         visible_range,
       </if>
@@ -158,6 +161,9 @@
       </if>
       <if test="classesStr != null">
         #{classesStr,jdbcType=VARCHAR},
+      </if>
+      <if test="gradesStr != null">
+        #{gradesStr,jdbcType=VARCHAR},
       </if>
       <if test="visibleRange != null">
         #{visibleRange,jdbcType=SMALLINT},
@@ -218,6 +224,9 @@
       </if>
       <if test="classesStr != null">
         classes_str = #{classesStr,jdbcType=VARCHAR},
+      </if>
+      <if test="gradesStr != null">
+        grades_str = #{gradesStr,jdbcType=VARCHAR},
       </if>
       <if test="visibleRange != null">
         visible_range = #{visibleRange,jdbcType=SMALLINT},

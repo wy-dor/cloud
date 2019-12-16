@@ -53,4 +53,6 @@ public class GradeModule extends BaseEntity {
     private String userAvatar;
 
     private List<Integer> classIds;
+
+    private String gradesStr;
 }

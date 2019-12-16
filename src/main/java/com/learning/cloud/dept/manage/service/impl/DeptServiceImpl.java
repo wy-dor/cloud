@@ -284,7 +284,7 @@ public class DeptServiceImpl implements DeptService {
                                             } else{
                                                 campusId = c.getId();
                                             }
-
+                                            //班级增加
                                             gradeClass.setCampusId(campusId);
                                             gradeClass.setSessionName(sessionName);
                                             gradeClass.setGradeName(gradeName);

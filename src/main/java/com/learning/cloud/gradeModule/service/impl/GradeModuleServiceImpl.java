@@ -51,6 +51,8 @@ public class GradeModuleServiceImpl implements GradeModuleService {
         if(classesAddingWay == 2){
             Map<String,String> map = new HashMap<>();
             List<String> gradeNamesStr = gradeModule.getGradeNamesStr();
+            String gradesStr = String.join(",",gradeNamesStr);
+            gradeModule.setGradesStr(gradesStr);
             for (String s : gradeNamesStr) {
                 if(s.contains("\"")){
                     s = s.replace("\"","");
