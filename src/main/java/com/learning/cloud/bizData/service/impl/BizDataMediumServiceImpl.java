@@ -26,7 +26,6 @@ import com.learning.cloud.user.teacher.dao.TeacherDao;
 import com.learning.cloud.user.teacher.entity.Teacher;
 import com.learning.cloud.user.user.dao.UserDao;
 import com.learning.cloud.user.user.entity.User;
-import com.learning.cloud.workProcess.dao.ProcessInstanceDao;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -145,7 +144,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     if (parse.get("student") != null) {
                         List<String> studentDepts = parse.get("student");
                         roleType = 4;
-                        Map<String, Object> map = getClassInfo(studentDepts);
+                        Map<String, Object> map = getClassInfo(studentDepts, roleType);
                         campusId = (Integer) map.get("campusId");
 
                         Student student = new Student();
@@ -153,7 +152,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         student.setStudentName(name);
                         String classStrs = (map.get("classStrs")).toString();
                         if (!classStrs.equals("")) {
-                            Integer classId = Integer.parseInt(classStrs);
+                            Integer classId = Integer.parseInt(classStrs.split(",")[0]);
                             student.setClassId(classId);
                         }
                         student.setCampusId(campusId);
@@ -203,7 +202,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
 
                             roleType = 3;
 
-                            Map<String, Object> map = getClassInfo(teacherDepts_2);
+                            Map<String, Object> map = getClassInfo(teacherDepts_2, roleType);
                             campusId = (Integer) map.get("campusId");
 
                             Teacher teacher = new Teacher();
@@ -222,14 +221,13 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                         }
                         if (parse.get("guardian") != null) {
                             List<String> guardianDepts = parse.get("guardian");
-                            if (roleType != 3) {
-                                roleType = 2;
-                            } else {
-                                //即为老师又为家长
+                            roleType = 2;
+                            Map<String, Object> map = getClassInfo(guardianDepts, roleType);
+
+                            //即为老师又为家长
+                            if (roleType == 3) {
                                 roleType = 6;
                             }
-
-                            Map<String, Object> map = getClassInfo(guardianDepts);
                             campusId = (Integer) map.get("campusId");
 
                             Parent parent = new Parent();
@@ -383,12 +381,28 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         return JsonResultUtil.success();
     }
 
-    public Map<String, Object> getClassInfo(List<String> deptStrList) {
+    //推送数据tags中student会出现部门id为学生部门id而非班级部门id
+    public Map<String, Object> getClassInfo(List<String> deptStrList, Integer roleType) {
         String classStrs = "";
         Integer campusId = null;
         Map<String, Object> map = new HashMap<>();
         for (String deptId : deptStrList) {
             GradeClass byDeptId = gradeClassDao.getByDeptId(Long.parseLong(deptId));
+            //角色后的部门id不为班级id而是对应直接部门id的情况下
+            if(byDeptId == null){
+                GradeClass gc = new GradeClass();
+                if(roleType == 4){
+                    gc.setSDeptId(Long.parseLong(deptId));
+                }else if(roleType == 3){
+                    gc.setTDeptId(Long.parseLong(deptId));
+                }else if(roleType == 2){
+                    gc.setPDeptId(Long.parseLong(deptId));
+                }
+                List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
+                if(byGradeClass != null && byGradeClass.size() > 0){
+                    byDeptId = byGradeClass.get(0);
+                }
+            }
             //班级信息已存在
             if (byDeptId != null) {
                 campusId = byDeptId.getCampusId();

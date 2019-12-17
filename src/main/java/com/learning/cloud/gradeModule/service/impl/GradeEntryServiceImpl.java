@@ -324,7 +324,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
     public JsonResult getGradeEntryForStudent(Long moduleId, String userId) {
         Student student = studentDao.getByUserId(userId);
         Integer classId = student.getClassId();
-        String studentName = student.getStudentName();
+        String studentName = student.getStudentName().replace(" ","");
         GradeEntry ge = new GradeEntry();
         ge.setModuleId(moduleId);
         ge.setClassId(classId);
