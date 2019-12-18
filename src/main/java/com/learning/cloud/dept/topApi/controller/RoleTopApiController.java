@@ -8,10 +8,15 @@ import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.School;
 import com.learning.cloud.util.ServiceResult;
+import com.learning.domain.JsonResult;
+import com.learning.utils.JsonResultUtil;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RoleTopApiController {
@@ -51,7 +56,7 @@ public class RoleTopApiController {
     }
 
     @GetMapping("/getStudentUserIdByParent")
-    public ServiceResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException{
+    public JsonResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException{
         GradeClass byId = gradeClassDao.getById(classId);
         Long topClassId = byId.getDeptId();
         Integer schoolId = byId.getSchoolId();
@@ -60,10 +65,17 @@ public class RoleTopApiController {
         String accessToken = authenService.getAccessToken(corpId);
         OapiEduGuardianGetResponse response = roleTopApiService.getEduParent(topClassId, userId, accessToken);
         OapiEduGuardianGetResponse.GuardianRespone result = response.getResult();
+        List<String> useridList = new ArrayList<>();
         if(result == null){
-            return ServiceResult.failure("0","请求不到学生userId");
+            return JsonResultUtil.error(0,"请求不到学生userId");
+        }else{
+            List<OapiEduGuardianGetResponse.Relations> relations = result.getRelations();
+            for (OapiEduGuardianGetResponse.Relations relation : relations) {
+                String studentUserid = relation.getStudentUserid();
+                useridList.add(studentUserid);
+            }
         }
-        return ServiceResult.success(result);
+        return JsonResultUtil.success(useridList);
     }
 
     @GetMapping("/getEduRoles")

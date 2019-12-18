@@ -55,17 +55,19 @@
 
         <!--钉钉开发-->
         <dependency>
-            <groupId>com.taobao</groupId>
-            <artifactId>taobao-sdk-java-auto</artifactId>
-            <version>1.0</version>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>top-api-sdk-dev</artifactId>
+            <version>ding-open-mc-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/taobao-sdk-java-auto_1479188381469-20191217.jar</systemPath>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.taobao.top</groupId>-->
-            <!--<artifactId>lippi-oapi-encrpt</artifactId>-->
-            <!--<version>dingtalk-SNAPSHOT</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>-->
-        <!--</dependency>-->
+        <!--<dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>lippi-oapi-encrpt</artifactId>
+            <version>dingtalk-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
+        </dependency>-->
 
         <!-- JSON -->
         <dependency>
