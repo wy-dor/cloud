@@ -59,6 +59,14 @@ public class ExportServiceImpl implements ExportService {
         String classesStr = gradeModule.getClassesStr();
         Map<String, String> classMap = (Map<String, String>) JSON.parse(classesStr);
         Set<String> classIdStrs = classMap.keySet();
+        //针对班级别名进行修改
+        for (String classIdStr : classIdStrs) {
+            String className = classMap.get(classIdStr);
+            if(className.contains("(")){
+                String abbrClassName = className.substring(0,className.indexOf("("));
+                classMap.put(classIdStr,abbrClassName);
+            }
+        }
         List<Student> stuList = new ArrayList<>();
         for (String classIdStr : classIdStrs) {
             Integer classId = Integer.parseInt(classIdStr);
@@ -295,6 +303,11 @@ public class ExportServiceImpl implements ExportService {
             if (classStuNum != null && classStuNum != 0) {
                 fullClassIdList.add(classId1);
             }
+            String className = classMapByModule.get(key);
+            if(className.contains("(")){
+                String abbrClassName = className.substring(0,className.indexOf("("));
+                classMapByModule.put(key,abbrClassName);
+            }
         }
 
         //所有科目信息
@@ -316,6 +329,7 @@ public class ExportServiceImpl implements ExportService {
         if (classId != null && (doneClassSubjectInModule == null || doneClassSubjectInModule.size() == 0)) {
             undoneClassMention.append(classMapByModule.get(classId.toString()) + "还没有录入成绩，请录入");
         }
+
         //"提示：XXX班的数学，语文成绩还没有录入，请继续录入"
         for (GradeEntry ge : doneClassSubjectInModule) {
             Integer classId2 = ge.getClassId();

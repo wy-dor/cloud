@@ -2,7 +2,6 @@ package com.learning.cloud.excel.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.learning.cloud.excel.service.ImportService;
-import com.learning.cloud.gradeModule.dao.GradeEntryDao;
 import com.learning.cloud.gradeModule.dao.GradeModuleDao;
 import com.learning.cloud.gradeModule.entity.GradeEntry;
 import com.learning.cloud.gradeModule.entity.GradeModule;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +27,6 @@ public class ImportServiceImpl implements ImportService {
 
     @Autowired
     private GradeModuleDao gradeModuleDao;
-
-    @Autowired
-    private GradeEntryDao gradeEntryDao;
 
     @Autowired
     private GradeEntryService gradeEntryService;
@@ -57,6 +52,10 @@ public class ImportServiceImpl implements ImportService {
             Set<String> keySet = parse.keySet();
             for (String classId : keySet) {
                 String className = parse.get(classId);
+                //针对有别名的情况
+                if(className.contains("(")){
+                    className = className.substring(0,className.indexOf("("));
+                }
                 classMap.put(className,classId);
             }
             InputStream in = file.getInputStream();
@@ -98,10 +97,14 @@ public class ImportServiceImpl implements ImportService {
                 List<Map<String,String>> markMapList = new ArrayList<>();
                 GradeEntry ge = new GradeEntry();
                 String className = r.getCell(0).getStringCellValue().trim();
-                if(classMap.get(className) == null){
+                String abbrClassName = className;
+                if(className.contains("(")){
+                    abbrClassName = className.substring(0,className.indexOf("("));
+                }
+                if(classMap.get(abbrClassName) == null){
                     throw new Exception("该成绩模板中不存在" + className);
                 }
-                String classIdStr = classMap.get(className);
+                String classIdStr = classMap.get(abbrClassName);
                 int classId = Integer.parseInt(classIdStr);
                 String stuName = r.getCell(1).getStringCellValue().trim();
                 //判断学号，学号能为空
