@@ -22,27 +22,27 @@ public class DutyCheckTypeController {
     private DutyCheckTypeService dutyCheckTypeService;
 
     @PostMapping("/addDutyCheckType")
-    public JsonResult addDutyCheckType(DutyCheckType dutyCheckType)throws Exception{
+    public JsonResult addDutyCheckType(DutyCheckType dutyCheckType) throws Exception {
         return dutyCheckTypeService.addDutyCheckType(dutyCheckType);
     }
 
     @PostMapping("/deleteDutyCheckType")
-    public JsonResult deleteDutyCheckType(Long id)throws Exception{
+    public JsonResult deleteDutyCheckType(Long id) throws Exception {
         return dutyCheckTypeService.deleteDutyCheckType(id);
     }
 
     @PostMapping("/updateDutyCheckType")
-    public JsonResult updateDutyCheckType(DutyCheckType dutyCheckType)throws Exception{
+    public JsonResult updateDutyCheckType(DutyCheckType dutyCheckType) throws Exception {
         return dutyCheckTypeService.updateDutyCheckType(dutyCheckType);
     }
 
     @GetMapping("/getDutyCheckTypeByTypeId")
-    public JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType)throws Exception{
+    public JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType) throws Exception {
         return dutyCheckTypeService.getDutyCheckTypeByTypeId(dutyCheckType);
     }
 
     @GetMapping("/getDutyCheckTypeById")
-    public JsonResult getDutyCheckTypeById(Long id)throws Exception{
+    public JsonResult getDutyCheckTypeById(Long id) throws Exception {
         return dutyCheckTypeService.getDutyCheckTypeById(id);
     }
 }

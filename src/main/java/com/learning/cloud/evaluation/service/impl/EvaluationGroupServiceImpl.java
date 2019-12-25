@@ -80,10 +80,10 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
         String studentUserIds = evaluationGroup.getStudentUserIds();
         List<StuInfo> stuInfoList = new ArrayList<>();
         String[] split = studentUserIds.split(",");
-        if(split.length > 0){
+        if (split.length > 0) {
             for (String s : split) {
                 StuInfo stuInfo = studentDao.getStuInfoByUserId(s);
-                if(stuInfo != null){
+                if (stuInfo != null) {
                     stuInfoList.add(stuInfo);
                 }
             }
@@ -122,7 +122,7 @@ public class EvaluationGroupServiceImpl implements EvaluationGroupService {
     }
 
     @Override
-    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan  evaluationGroupPlan) {
+    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan) {
         List<EvaluationGroup> evaluationGroupScoreList = groupDao.getEvaluationGroupScoreList(evaluationGroupPlan);
         for (EvaluationGroup evaluationGroup : evaluationGroupScoreList) {
             setStuList(evaluationGroup);

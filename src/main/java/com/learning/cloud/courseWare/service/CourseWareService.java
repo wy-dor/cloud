@@ -5,13 +5,13 @@ import com.learning.domain.JsonResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CourseWareService {
-    JsonResult addCourseWare(CourseWare courseWare)throws Exception;
+    JsonResult addCourseWare(CourseWare courseWare) throws Exception;
 
-    JsonResult getCourseWare(String day, Long cdId)throws Exception;
+    JsonResult getCourseWare(String day, Long cdId) throws Exception;
 
-    JsonResult likeThisCourseWare(Long id)throws Exception;
+    JsonResult likeThisCourseWare(Long id) throws Exception;
 
-    JsonResult getMyCourseWare(Long teacherId)throws Exception;
+    JsonResult getMyCourseWare(Long teacherId) throws Exception;
 
-     String SaveFile(MultipartFile file, Long teacherId);
+    String SaveFile(MultipartFile file, Long teacherId);
 }

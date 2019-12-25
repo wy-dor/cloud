@@ -5,26 +5,26 @@ import com.learning.domain.JsonResult;
 
 public interface ScoreboardService {
 
-    JsonResult getSchoolScore(Long schoolId)throws Exception;
+    JsonResult getSchoolScore(Long schoolId) throws Exception;
 
-    JsonResult updateSchoolScore(Long schoolId)throws Exception;
+    JsonResult updateSchoolScore(Long schoolId) throws Exception;
 
-    JsonResult getClassScore(Long classId)throws Exception;
+    JsonResult getClassScore(Long classId) throws Exception;
 
-    JsonResult updateClassScore(Long classId)throws Exception;
+    JsonResult updateClassScore(Long classId) throws Exception;
 
 
-    JsonResult getTeacherRank(ScoreRank scoreRank)throws Exception;
+    JsonResult getTeacherRank(ScoreRank scoreRank) throws Exception;
 
 //    JsonResult getParentRank(Long parentId)throws Exception;
 
-    JsonResult getClassRank(Long schoolId)throws Exception;
+    JsonResult getClassRank(Long schoolId) throws Exception;
 
-    JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception;
+    JsonResult getBureauPersonnelRank(ScoreRank scoreRank) throws Exception;
 
-    JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception;
+    JsonResult getSchoolRank(ScoreRank scoreRank) throws Exception;
 
-    JsonResult getPersonnelRank(ScoreRank scoreRank)throws Exception;
+    JsonResult getPersonnelRank(ScoreRank scoreRank) throws Exception;
 
-    JsonResult getClassRankFromDuty(ScoreRank scoreRank)throws Exception;
+    JsonResult getClassRankFromDuty(ScoreRank scoreRank) throws Exception;
 }

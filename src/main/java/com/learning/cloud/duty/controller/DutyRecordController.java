@@ -25,38 +25,38 @@ public class DutyRecordController {
     private DutyRecordService dutyRecordService;
 
     @PostMapping("/addDutyRecord")
-    public JsonResult addDutyRecord(DutyRecord dutyRecord)throws Exception{
+    public JsonResult addDutyRecord(DutyRecord dutyRecord) throws Exception {
         return dutyRecordService.addDutyRecord(dutyRecord);
     }
 
     @PostMapping("/deleteDutyRecord")
-    public JsonResult deleteDutyRecord(Long id)throws Exception{
+    public JsonResult deleteDutyRecord(Long id) throws Exception {
         return dutyRecordService.deleteDutyRecord(id);
     }
 
     @PostMapping("/updateDutyRecord")
-    public JsonResult updateDutyRecord(DutyRecord dutyRecord)throws Exception{
+    public JsonResult updateDutyRecord(DutyRecord dutyRecord) throws Exception {
         return dutyRecordService.updateDutyRecord(dutyRecord);
     }
 
     @GetMapping("/getDutyRecordByClassId")
-    public JsonResult getDutyRecordByClassId(DutyRecord dutyRecord)throws Exception{
+    public JsonResult getDutyRecordByClassId(DutyRecord dutyRecord) throws Exception {
         return dutyRecordService.getDutyRecordByClassId(dutyRecord);
     }
 
     // 批量插入记录
     @PostMapping("/addDutyRecordList")
-    public JsonResult addDutyRecordList(@RequestBody List<DutyRecord> dutyRecordList)throws Exception{
+    public JsonResult addDutyRecordList(@RequestBody List<DutyRecord> dutyRecordList) throws Exception {
         return dutyRecordService.addDutyRecordList(dutyRecordList);
     }
 
     @PostMapping("/addDutyPics")
-    public JsonResult addDutyPics(@RequestParam(value = "fileList",required = false)List<MultipartFile> fileList) throws Exception {
+    public JsonResult addDutyPics(@RequestParam(value = "fileList", required = false) List<MultipartFile> fileList) throws Exception {
         return dutyRecordService.addPics(fileList);
     }
 
     @PostMapping("/setTeachersForDutyCheck")
-    public JsonResult setTeachersForDutyCheck(String teacherIds, Integer dutyInspector){
+    public JsonResult setTeachersForDutyCheck(String teacherIds, Integer dutyInspector) {
         return dutyRecordService.setTeachersForDutyCheck(teacherIds, dutyInspector);
     }
 

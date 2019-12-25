@@ -261,10 +261,10 @@ public class DeptServiceImpl implements DeptService {
                                 for (OapiDepartmentListResponse.Department dept_4 : departmentList_0) {
                                     //班级
                                     Long pId_4 = dept_4.getParentid();
-                                    if(pId_4.equals(gradeDeptId)){
+                                    if (pId_4.equals(gradeDeptId)) {
                                         Long classDeptId = dept_4.getId();
                                         classDeptIdList2.add(classDeptId.toString());
-                                        Boolean found = CommonUtils.findInStrList(classDeptId.toString(),classDeptIdList1);
+                                        Boolean found = CommonUtils.findInStrList(classDeptId.toString(), classDeptIdList1);
                                         if (!found) {
                                             GradeClass gradeClass = new GradeClass();
                                             gradeClass.setDeptId(classDeptId);
@@ -281,7 +281,7 @@ public class DeptServiceImpl implements DeptService {
                                                 campus.setCampusName(dept_1.getName());
                                                 campusDao.insert(campus);
                                                 campusId = campus.getId();
-                                            } else{
+                                            } else {
                                                 campusId = c.getId();
                                             }
                                             //班级增加

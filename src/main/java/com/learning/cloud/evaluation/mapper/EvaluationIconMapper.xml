@@ -3,10 +3,10 @@
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationIconDao">
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationIcon">
-    select *
-    from evaluation_icon
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_icon
+        where id = #{id}
+    </select>
 
     <select id="getByIcon" parameterType="com.learning.cloud.evaluation.entity.EvaluationIcon"
             resultType="com.learning.cloud.evaluation.entity.EvaluationIcon">
@@ -33,8 +33,8 @@
     </select>
 
     <delete id="deleteById" parameterType="java.lang.Long">
-    delete from evaluation_icon
-    where id = #{id}
+        delete from evaluation_icon
+        where id = #{id}
     </delete>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"

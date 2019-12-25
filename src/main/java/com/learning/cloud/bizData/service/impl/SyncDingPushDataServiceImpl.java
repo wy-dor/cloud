@@ -140,7 +140,7 @@ public class SyncDingPushDataServiceImpl implements SyncDingPushDataService {
 
     public void authSuit(Map<String, Object> map) {
         //auth_corp_info
-        Map<String,Object> authCorp = (Map<String, Object>)map.get("auth_corp_info");
+        Map<String, Object> authCorp = (Map<String, Object>) map.get("auth_corp_info");
         AuthCorpInfo authCorpInfo = new AuthCorpInfo();
         String corpId = String.valueOf(authCorp.get("corpid"));
         String corpName = String.valueOf(authCorp.get("corp_name"));
@@ -172,7 +172,7 @@ public class SyncDingPushDataServiceImpl implements SyncDingPushDataService {
             school.setOrgUserCount(orgUserCount);
             school.setOrgActiveUserCount(orgActiveUserCount);
             schoolDao.insert(school);
-            log.info("新增学校:"+corpName+"/"+corpId);
+            log.info("新增学校:" + corpName + "/" + corpId);
         } else if (industry.equals("教育行政机构")) {
             authCorpInfo.setIndustryType(2);
             Bureau bureau = new Bureau();
@@ -181,10 +181,10 @@ public class SyncDingPushDataServiceImpl implements SyncDingPushDataService {
             bureau.setOrgUserCount(orgUserCount);
             bureau.setOrgActiveUserCount(orgActiveUserCount);
             bureauDao.insert(bureau);
-            log.info("新增教育局:"+corpName+"/"+corpId);
+            log.info("新增教育局:" + corpName + "/" + corpId);
         }
         //插入公司授权信息
-         authCorpInfoDao.insert(authCorpInfo);
+        authCorpInfoDao.insert(authCorpInfo);
         log.info("新增公司授权信息");
         //auth_info 保存应用信息
         Map<String, Object> authInfo = (Map<String, Object>) map.get("auth_info");

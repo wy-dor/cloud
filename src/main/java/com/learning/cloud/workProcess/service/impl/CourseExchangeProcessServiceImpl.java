@@ -71,7 +71,7 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
     public JsonResult createCourseExchangeProcess(String corpId) throws Exception {
         //判断模板是否已经创建
         Process pro = processDao.getCourseProcess(corpId);
-        if(pro!=null){
+        if (pro != null) {
             return JsonResultUtil.success("流程模板已经创建");
         }
         // 根据corpId获取学校信息
@@ -171,7 +171,6 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
         formComponentList.add(singleInput4);
 
 
-
         //8.申请理由
         OapiProcessSaveRequest.FormComponentVo multipleInput = new OapiProcessSaveRequest.FormComponentVo();
         multipleInput.setComponentName("TextareaField");
@@ -199,10 +198,10 @@ public class CourseExchangeProcessServiceImpl implements CourseExchangeProcessSe
 
         OapiProcessSaveResponse response = client.execute(request, authenService.getAccessToken(corpId));
         //保存流程创建模板
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             OapiProcessSaveResponse.ProcessTopVo v = response.getResult();
             process.setProcessCode(v.getProcessCode());
-            process.setStatus((short)1);
+            process.setStatus((short) 1);
             processDao.update(process);
         }
         System.out.println(JSON.toJSONString(response));

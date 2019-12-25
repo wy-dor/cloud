@@ -1,261 +1,265 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.gradeModule.dao.GradeModuleDao">
-  <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-      select *
-      from grade_module
-      where id = #{id}
-      limit 1
+    <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+        select *
+        from grade_module
+        where id = #{id}
+        limit 1
     </select>
 
-  <select id="getGradeModulesForClass" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-    select *
-      from grade_module
-      where classes_str like concat("%\"",#{classId},"\":%")
-      <if test="term != null">
-        and term = #{term}
-      </if>
-      and status = 1
-      order by create_time desc, start_time desc
-  </select>
+    <select id="getGradeModulesForClass" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry"
+            resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+        select *
+        from grade_module
+        where classes_str like concat("%\"",#{classId},"\":%")
+        <if test="term != null">
+            and term = #{term}
+        </if>
+        and status = 1
+        order by create_time desc, start_time desc
+    </select>
 
-  <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-    select c.* from
-    (select a.*
-    from grade_module a
-    where visible_range = 1
-    <foreach collection="classIds" item="classId" open="and (" close=")" separator=" or">
-      classes_str like CONCAT('%"',#{classId},'":%')
-    </foreach>
-    union
-    select b.*
-    from grade_module b
-    where visible_range = 2
-    and user_id = #{userId}) c
-    <where>
-      <if test="status != null">
-        and c.status = #{status}
-      </if>
-      <if test="term != null and term != ''">
-        and c.term = #{term}
-      </if>
-      <if test="title != null and title != ''">
-        and c.title like CONCAT('%', #{title}, '%')
-      </if>
-    </where>
-    order by c.create_time desc, c.start_time desc
-  </select>
+    <select id="getAllGradeModule" parameterType="com.learning.cloud.gradeModule.entity.GradeModule"
+            resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+        select c.* from
+        (select a.*
+        from grade_module a
+        where visible_range = 1
+        <foreach collection="classIds" item="classId" open="and (" close=")" separator=" or">
+            classes_str like CONCAT('%"',#{classId},'":%')
+        </foreach>
+        union
+        select b.*
+        from grade_module b
+        where visible_range = 2
+        and user_id = #{userId}) c
+        <where>
+            <if test="status != null">
+                and c.status = #{status}
+            </if>
+            <if test="term != null and term != ''">
+                and c.term = #{term}
+            </if>
+            <if test="title != null and title != ''">
+                and c.title like CONCAT('%', #{title}, '%')
+            </if>
+        </where>
+        order by c.create_time desc, c.start_time desc
+    </select>
 
-  <select id="getAllGradeModuleForAdministrator" parameterType="com.learning.cloud.gradeModule.entity.GradeModule" resultType="com.learning.cloud.gradeModule.entity.GradeModule">
-    select *
-    from grade_module
-    where school_id = #{schoolId}
-    <if test="status != null">
-      and status = #{status}
-    </if>
-    <if test="term != null and term != ''">
-      and term = #{term}
-    </if>
-    <if test="title != null and title != ''">
-      and title like CONCAT('%', #{title}, '%')
-    </if>
-    order by create_time desc, start_time desc
-  </select>
+    <select id="getAllGradeModuleForAdministrator" parameterType="com.learning.cloud.gradeModule.entity.GradeModule"
+            resultType="com.learning.cloud.gradeModule.entity.GradeModule">
+        select *
+        from grade_module
+        where school_id = #{schoolId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="term != null and term != ''">
+            and term = #{term}
+        </if>
+        <if test="title != null and title != ''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        order by create_time desc, start_time desc
+    </select>
 
-  <delete id="deleteGradeModule" parameterType="java.lang.Long">
-    delete from grade_module
-    where id = #{id}
-  </delete>
+    <delete id="deleteGradeModule" parameterType="java.lang.Long">
+        delete from grade_module
+        where id = #{id}
+    </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.gradeModule.entity.GradeModule">
-    insert into grade_module
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="title != null">
-        title,
-      </if>
-      <if test="term != null">
-        term,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="scoringRoles != null">
-        scoring_roles,
-      </if>
-      <if test="rankModule != null">
-        rank_module,
-      </if>
-      <if test="subjects != null">
-        subjects,
-      </if>
-      <if test="classesStr != null">
-        classes_str,
-      </if>
-      <if test="gradesStr != null">
-        grades_str,
-      </if>
-      <if test="visibleRange != null">
-        visible_range,
-      </if>
-      <if test="notifyToEntry != null">
-        notify_to_entry,
-      </if>
-      <if test="deadline != null">
-        deadline,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="classesAddingWay != null">
-        classes_adding_way,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="userAvatar != null">
-        user_avatar,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="term != null">
-        #{term,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=VARCHAR},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="scoringRoles != null">
-        #{scoringRoles,jdbcType=SMALLINT},
-      </if>
-      <if test="rankModule != null">
-        #{rankModule,jdbcType=SMALLINT},
-      </if>
-      <if test="subjects != null">
-        #{subjects,jdbcType=VARCHAR},
-      </if>
-      <if test="classesStr != null">
-        #{classesStr,jdbcType=VARCHAR},
-      </if>
-      <if test="gradesStr != null">
-        #{gradesStr,jdbcType=VARCHAR},
-      </if>
-      <if test="visibleRange != null">
-        #{visibleRange,jdbcType=SMALLINT},
-      </if>
-      <if test="notifyToEntry != null">
-        #{notifyToEntry,jdbcType=SMALLINT},
-      </if>
-      <if test="deadline != null">
-        #{deadline,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="classesAddingWay != null">
-        #{classesAddingWay,jdbcType=SMALLINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=VARCHAR},
-      </if>
-      <if test="userAvatar != null">
-        #{userAvatar,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.gradeModule.entity.GradeModule">
+        insert into grade_module
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="term != null">
+                term,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="scoringRoles != null">
+                scoring_roles,
+            </if>
+            <if test="rankModule != null">
+                rank_module,
+            </if>
+            <if test="subjects != null">
+                subjects,
+            </if>
+            <if test="classesStr != null">
+                classes_str,
+            </if>
+            <if test="gradesStr != null">
+                grades_str,
+            </if>
+            <if test="visibleRange != null">
+                visible_range,
+            </if>
+            <if test="notifyToEntry != null">
+                notify_to_entry,
+            </if>
+            <if test="deadline != null">
+                deadline,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="classesAddingWay != null">
+                classes_adding_way,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="userAvatar != null">
+                user_avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="term != null">
+                #{term,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="scoringRoles != null">
+                #{scoringRoles,jdbcType=SMALLINT},
+            </if>
+            <if test="rankModule != null">
+                #{rankModule,jdbcType=SMALLINT},
+            </if>
+            <if test="subjects != null">
+                #{subjects,jdbcType=VARCHAR},
+            </if>
+            <if test="classesStr != null">
+                #{classesStr,jdbcType=VARCHAR},
+            </if>
+            <if test="gradesStr != null">
+                #{gradesStr,jdbcType=VARCHAR},
+            </if>
+            <if test="visibleRange != null">
+                #{visibleRange,jdbcType=SMALLINT},
+            </if>
+            <if test="notifyToEntry != null">
+                #{notifyToEntry,jdbcType=SMALLINT},
+            </if>
+            <if test="deadline != null">
+                #{deadline,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="classesAddingWay != null">
+                #{classesAddingWay,jdbcType=SMALLINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="userAvatar != null">
+                #{userAvatar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="update" parameterType="com.learning.cloud.gradeModule.entity.GradeModule">
-    update grade_module
-    <set>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="term != null">
-        term = #{term,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        start_time = #{startTime,jdbcType=VARCHAR},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="scoringRoles != null">
-        scoring_roles = #{scoringRoles,jdbcType=SMALLINT},
-      </if>
-      <if test="rankModule != null">
-        rank_module = #{rankModule,jdbcType=SMALLINT},
-      </if>
-      <if test="subjects != null">
-        subjects = #{subjects,jdbcType=VARCHAR},
-      </if>
-      <if test="classesStr != null">
-        classes_str = #{classesStr,jdbcType=VARCHAR},
-      </if>
-      <if test="gradesStr != null">
-        grades_str = #{gradesStr,jdbcType=VARCHAR},
-      </if>
-      <if test="visibleRange != null">
-        visible_range = #{visibleRange,jdbcType=SMALLINT},
-      </if>
-      <if test="notifyToEntry != null">
-        notify_to_entry = #{notifyToEntry,jdbcType=SMALLINT},
-      </if>
-      <if test="deadline != null">
-        deadline = #{deadline,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="classesAddingWay != null">
-        classes_adding_way = #{classesAddingWay,jdbcType=SMALLINT},
-      </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-      userId = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="publishTime != null">
-        publish_time = #{publishTime,jdbcType=VARCHAR},
-      </if>
-      <if test="userAvatar != null">
-        user_avatar = #{userAvatar,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    <update id="update" parameterType="com.learning.cloud.gradeModule.entity.GradeModule">
+        update grade_module
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="term != null">
+                term = #{term,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="scoringRoles != null">
+                scoring_roles = #{scoringRoles,jdbcType=SMALLINT},
+            </if>
+            <if test="rankModule != null">
+                rank_module = #{rankModule,jdbcType=SMALLINT},
+            </if>
+            <if test="subjects != null">
+                subjects = #{subjects,jdbcType=VARCHAR},
+            </if>
+            <if test="classesStr != null">
+                classes_str = #{classesStr,jdbcType=VARCHAR},
+            </if>
+            <if test="gradesStr != null">
+                grades_str = #{gradesStr,jdbcType=VARCHAR},
+            </if>
+            <if test="visibleRange != null">
+                visible_range = #{visibleRange,jdbcType=SMALLINT},
+            </if>
+            <if test="notifyToEntry != null">
+                notify_to_entry = #{notifyToEntry,jdbcType=SMALLINT},
+            </if>
+            <if test="deadline != null">
+                deadline = #{deadline,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="classesAddingWay != null">
+                classes_adding_way = #{classesAddingWay,jdbcType=SMALLINT},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime,jdbcType=VARCHAR},
+            </if>
+            <if test="userAvatar != null">
+                user_avatar = #{userAvatar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>

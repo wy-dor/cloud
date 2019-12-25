@@ -15,7 +15,7 @@ public class BizDataMediumController {
     private BizDataMediumService bizDataMediumService;
 
     @GetMapping("/initBizDataMedium")
-    public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception{
+    public JsonResult initBizDataMedium(SyncBizDataMedium syncBizDataMedium) throws Exception {
         return bizDataMediumService.initBizDataMedium(syncBizDataMedium);
     }
 

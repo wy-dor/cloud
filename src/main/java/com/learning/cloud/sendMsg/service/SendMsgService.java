@@ -9,9 +9,9 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface SendMsgService {
-    JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo)throws Exception;
+    JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo) throws Exception;
 
     JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception;
 
-    JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo)throws Exception;
+    JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception;
 }

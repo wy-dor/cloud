@@ -23,18 +23,18 @@ public class CourseExcelController {
 
     //下载课表
     @GetMapping("/exportCourseTemplet")
-    public JsonResult exportCourseTemplet(String classIds, Long schoolId)throws Exception{
+    public JsonResult exportCourseTemplet(String classIds, Long schoolId) throws Exception {
         return courseExcelService.exportCourseTemplet(classIds, schoolId);
     }
 
     @GetMapping("/getInfoBeforeImportCourse")
-    public JsonResult getInfoBeforeImportCourse(@RequestParam("schoolId") Long schoolId, Long classId)throws Exception{
-        return courseExcelService.getInfoBeforeImportCourse(schoolId,classId);
+    public JsonResult getInfoBeforeImportCourse(@RequestParam("schoolId") Long schoolId, Long classId) throws Exception {
+        return courseExcelService.getInfoBeforeImportCourse(schoolId, classId);
     }
 
     //上传课表
     @PostMapping("/importCourseTemplet")
-    public JsonResult importCourseTemplet(@RequestParam("file") MultipartFile file, @RequestParam("schoolId") Long schoolId) throws Exception{
-        return courseExcelService.importCourseTemplet(file,schoolId);
+    public JsonResult importCourseTemplet(@RequestParam("file") MultipartFile file, @RequestParam("schoolId") Long schoolId) throws Exception {
+        return courseExcelService.importCourseTemplet(file, schoolId);
     }
 }

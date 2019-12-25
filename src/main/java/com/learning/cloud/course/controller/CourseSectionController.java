@@ -23,61 +23,61 @@ public class CourseSectionController {
 
     //新增时令主表
     @PostMapping("/addSectionArray")
-    public JsonResult addSectionArray(CourseSectionArray courseSectionArray)throws Exception{
+    public JsonResult addSectionArray(CourseSectionArray courseSectionArray) throws Exception {
         return courseSectionService.addSectionArray(courseSectionArray);
     }
+
     //保存时令主表
     @PostMapping("/saveSectionArray")
-    public JsonResult saveSectionArray(@RequestParam(value="id",required = true) Long id,
-                                       @RequestParam(value="name",required = true) String name)throws Exception{
-        return courseSectionService.saveSectionArray(id,name);
+    public JsonResult saveSectionArray(@RequestParam(value = "id", required = true) Long id,
+                                       @RequestParam(value = "name", required = true) String name) throws Exception {
+        return courseSectionService.saveSectionArray(id, name);
     }
 
     //获取学校生效的时令主表
     @GetMapping("/getSchoolSectionArray")
-    public JsonResult getSchoolSectionArray(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+    public JsonResult getSchoolSectionArray(@RequestParam(value = "schoolId", required = true) Long schoolId) throws Exception {
         return courseSectionService.getSchoolSectionArray(schoolId);
     }
 
     //获取时令主表列表
     @GetMapping("/getSchoolSectionList")
-    public JsonResult getSchoolSectionList(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+    public JsonResult getSchoolSectionList(@RequestParam(value = "schoolId", required = true) Long schoolId) throws Exception {
         return courseSectionService.getSchoolSectionList(schoolId);
     }
 
     //设置时令启用
     @PostMapping("/setSectionArrayActive")
-    public JsonResult setSectionArrayActive(Long id,Long schoolId)throws Exception{
-        return courseSectionService.setSectionArrayActive(id,schoolId);
+    public JsonResult setSectionArrayActive(Long id, Long schoolId) throws Exception {
+        return courseSectionService.setSectionArrayActive(id, schoolId);
     }
 
     //新增时令时间
     @PostMapping("/addSection")
-    public JsonResult addSection(CourseSection courseSection)throws Exception{
+    public JsonResult addSection(CourseSection courseSection) throws Exception {
         return courseSectionService.addSection(courseSection);
     }
 
     @PostMapping("/editSection")
-    public JsonResult editSection(CourseSection courseSection)throws Exception{
+    public JsonResult editSection(CourseSection courseSection) throws Exception {
         return courseSectionService.editSection(courseSection);
     }
 
     @GetMapping("/getSchoolSection")
-    public JsonResult getSchoolSection(@RequestParam(value="id",required = true) Long id)throws Exception{
+    public JsonResult getSchoolSection(@RequestParam(value = "id", required = true) Long id) throws Exception {
         return courseSectionService.getSchoolSection(id);
     }
 
 
     @PostMapping("/deleteSection")
-    public JsonResult deleteSection(@RequestParam(value="id",required = true) Long id)throws Exception{
+    public JsonResult deleteSection(@RequestParam(value = "id", required = true) Long id) throws Exception {
         return courseSectionService.deleteSection(id);
     }
 
     @PostMapping("/deleteSchoolSectionBySectionId")
-    public JsonResult deleteSchoolSection(@RequestParam(value="sectionId",required = true) Long sectionId)throws Exception{
+    public JsonResult deleteSchoolSection(@RequestParam(value = "sectionId", required = true) Long sectionId) throws Exception {
         return courseSectionService.deleteSchoolSection(sectionId);
     }
-
 
 
 }

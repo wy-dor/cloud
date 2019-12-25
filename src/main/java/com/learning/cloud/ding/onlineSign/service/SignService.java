@@ -8,15 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface SignService {
 
-    JsonResult addSignTask(Sign sign)throws Exception;
+    JsonResult addSignTask(Sign sign) throws Exception;
 
     JsonResult getAllTasks(Parent parent) throws Exception;
 
-    JsonResult getValidTaskList(Parent parent)throws Exception;
+    JsonResult getValidTaskList(Parent parent) throws Exception;
 
-    JsonResult signName(SignRecord signRecord, MultipartFile file)throws Exception;
+    JsonResult signName(SignRecord signRecord, MultipartFile file) throws Exception;
 
-    JsonResult setStateInvalid(Integer signId)throws Exception;
+    JsonResult setStateInvalid(Integer signId) throws Exception;
 
     JsonResult getUnsignedTasks(Parent parent) throws Exception;
 
@@ -26,7 +26,7 @@ public interface SignService {
 
     JsonResult getRecordsBySignId(Sign sign) throws Exception;
 
-    JsonResult getSignTaskById(Integer id)throws Exception;
+    JsonResult getSignTaskById(Integer id) throws Exception;
 
-    JsonResult getIsSignFlag(String userId, Integer signId)throws Exception;
+    JsonResult getIsSignFlag(String userId, Integer signId) throws Exception;
 }

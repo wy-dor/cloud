@@ -28,27 +28,27 @@ public class CourseWareController {
     private CourseWareService courseWareService;
 
     @PostMapping("/addCourseWare")
-    public JsonResult addCourseWare(CourseWare courseWare)throws Exception{
+    public JsonResult addCourseWare(CourseWare courseWare) throws Exception {
         return courseWareService.addCourseWare(courseWare);
     }
 
     @GetMapping("/getCourseWare")
-    public JsonResult getCourseWare(@RequestParam(value="day",required = false) String day,
-                                    @RequestParam(value="cdId",required = false) Long cdId
-                                    )throws Exception{
+    public JsonResult getCourseWare(@RequestParam(value = "day", required = false) String day,
+                                    @RequestParam(value = "cdId", required = false) Long cdId
+    ) throws Exception {
         return courseWareService.getCourseWare(day, cdId);
     }
 
     @GetMapping("/downLoadFile")
-    public JsonResult downLoadFile(HttpServletResponse response, String filePath) throws Exception{
+    public JsonResult downLoadFile(HttpServletResponse response, String filePath) throws Exception {
         OutputStream out = null;
         InputStream in = null;
         File file = new File(filePath);
         try {
-            if(file.exists()){
+            if (file.exists()) {
                 String fileName = file.getName();
                 response.setContentType("application/octet-stream");
-                response.addHeader("Content-Disposition", "attachment; filename="+fileName);
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
                 in = new FileInputStream(file);
                 byte[] by = new byte[in.available()];
                 in.read(by);
@@ -56,13 +56,13 @@ public class CourseWareController {
                 out.write(by);
                 file.delete();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new MyException(JsonResultEnum.FILE_DOWNLOAD_ERROR);
-        }finally {
-            if(out!=null){
+        } finally {
+            if (out != null) {
                 out.close();
             }
-            if(in!=null){
+            if (in != null) {
                 in.close();
             }
         }
@@ -70,12 +70,12 @@ public class CourseWareController {
     }
 
     @PostMapping("/likeThisCourseWare")
-    public JsonResult likeThisCourseWare(@RequestParam(value="id",required = false) Long id)throws Exception{
+    public JsonResult likeThisCourseWare(@RequestParam(value = "id", required = false) Long id) throws Exception {
         return courseWareService.likeThisCourseWare(id);
     }
 
     @GetMapping("/getMyCourseWare")
-    public JsonResult getMyCourseWare(@RequestParam(value="teacherId",required = true) Long teacherId)throws Exception{
+    public JsonResult getMyCourseWare(@RequestParam(value = "teacherId", required = true) Long teacherId) throws Exception {
         return courseWareService.getMyCourseWare(teacherId);
     }
 

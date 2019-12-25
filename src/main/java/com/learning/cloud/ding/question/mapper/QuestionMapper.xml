@@ -2,107 +2,112 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.ding.question.dao.QuestionDao">
 
-  <insert id="addQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.question.entity.Question">
-    insert into question
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="createUserId != null">
-        create_user_id,
-      </if>
-      <if test="createName != null">
-        create_name,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="question != null">
-        question,
-      </if>
-      <if test="sPicId != null">
-        s_pic_id,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="createUserId != null">
-        #{createUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="createName != null">
-        #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=VARCHAR},
-      </if>
-      <if test="question != null">
-        #{question,jdbcType=VARCHAR},
-      </if>
-      <if test="sPicId != null">
-        #{sPicId,jdbcType=BIGINT},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addQuestion" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.ding.question.entity.Question">
+        insert into question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="question != null">
+                question,
+            </if>
+            <if test="sPicId != null">
+                s_pic_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="question != null">
+                #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="sPicId != null">
+                #{sPicId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getQuestion" parameterType="com.learning.cloud.ding.question.entity.Question" resultType="com.learning.cloud.ding.question.entity.Question">
-    select a.*, IFNULL(c.answer_num,0) answer_num from
-    question a
-    left join (select b.question_id,count(distinct b.answer_user_id) as answer_num from answer b GROUP BY b.question_id) c
-    on a.id = c.question_id
-    where a.status!=3
-    <if test="createUserId!=null">
-      and a.create_user_id = #{createUserId}
-    </if>
-    <if test="type!=null">
-      and a.type = #{type}
-    </if>
-    <if test="status!=null">
-      and a.status = #{status}
-    </if>
-    order by a.create_time desc,c.answer_num desc
-  </select>
+    <select id="getQuestion" parameterType="com.learning.cloud.ding.question.entity.Question"
+            resultType="com.learning.cloud.ding.question.entity.Question">
+        select a.*, IFNULL(c.answer_num,0) answer_num from
+        question a
+        left join (select b.question_id,count(distinct b.answer_user_id) as answer_num from answer b GROUP BY
+        b.question_id) c
+        on a.id = c.question_id
+        where a.status!=3
+        <if test="createUserId!=null">
+            and a.create_user_id = #{createUserId}
+        </if>
+        <if test="type!=null">
+            and a.type = #{type}
+        </if>
+        <if test="status!=null">
+            and a.status = #{status}
+        </if>
+        order by a.create_time desc,c.answer_num desc
+    </select>
 
-  <select id="getQuestionById" parameterType="java.lang.Long" resultType="com.learning.cloud.ding.question.entity.Question">
-    select *
-    from question
-    where id = #{id}
-    limit 1
-  </select>
+    <select id="getQuestionById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.ding.question.entity.Question">
+        select *
+        from question
+        where id = #{id}
+        limit 1
+    </select>
 
-  <update id="deleteQuestion" parameterType="java.lang.Long">
-    update question set status = 3
-    where id = #{id}
-  </update>
+    <update id="deleteQuestion" parameterType="java.lang.Long">
+        update question set status = 3
+        where id = #{id}
+    </update>
 
-  <select id="getQuestionImIN" parameterType="com.learning.cloud.ding.question.entity.Question" resultType="com.learning.cloud.ding.question.entity.Question">
-    select a.*, IFNULL(c.answer_num,0) answer_num
-    from question a
-    left join (select b.question_id,count(*) as answer_num from answer b GROUP BY b.question_id) c
-    on a.id = c.question_id
-    left join (select d.answer_user_id, d.question_id from answer d GROUP BY d.question_id,d.answer_user_id) e
-    on e.question_id = a.id
-    where a.status!=3
-    <if test="answerUserId!=null">
-      and e.answer_user_id = #{answerUserId}
-    </if>
-    <if test="type!=null">
-      and a.type = #{type}
-    </if>
-    <if test="status!=null">
-      and a.status = #{status}
-    </if>
-    order by c.answer_num desc, a.create_time
-  </select>
+    <select id="getQuestionImIN" parameterType="com.learning.cloud.ding.question.entity.Question"
+            resultType="com.learning.cloud.ding.question.entity.Question">
+        select a.*, IFNULL(c.answer_num,0) answer_num
+        from question a
+        left join (select b.question_id,count(*) as answer_num from answer b GROUP BY b.question_id) c
+        on a.id = c.question_id
+        left join (select d.answer_user_id, d.question_id from answer d GROUP BY d.question_id,d.answer_user_id) e
+        on e.question_id = a.id
+        where a.status!=3
+        <if test="answerUserId!=null">
+            and e.answer_user_id = #{answerUserId}
+        </if>
+        <if test="type!=null">
+            and a.type = #{type}
+        </if>
+        <if test="status!=null">
+            and a.status = #{status}
+        </if>
+        order by c.answer_num desc, a.create_time
+    </select>
 
-  <update id="updateSmallPic" parameterType="java.lang.Long">
-    update question set s_pic_id = #{sPicId}
-    where id = #{id}
-  </update>
+    <update id="updateSmallPic" parameterType="java.lang.Long">
+        update question set s_pic_id = #{sPicId}
+        where id = #{id}
+    </update>
 
-  <update id="closeQuestion" parameterType="java.lang.Long">
-    update question set status = 2
-    where id = #{id}
-  </update>
+    <update id="closeQuestion" parameterType="java.lang.Long">
+        update question set status = 2
+        where id = #{id}
+    </update>
 </mapper>

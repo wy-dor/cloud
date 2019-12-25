@@ -33,7 +33,7 @@ public class test {
     private AuthenService authenService;
 
     @GetMapping("/createProcess")
-    public JsonResult createProcess(String corpId)throws Exception{
+    public JsonResult createProcess(String corpId) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/process/save");
 
         OapiProcessSaveRequest request = new OapiProcessSaveRequest();
@@ -248,7 +248,7 @@ public class test {
     }
 
     @GetMapping("/sendProcess")
-    public JsonResult sendProcess(String processCode, String cropId)throws Exception{
+    public JsonResult sendProcess(String processCode, String cropId) throws Exception {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/create");
         OapiProcessinstanceCreateRequest request = new OapiProcessinstanceCreateRequest();
         request.setProcessCode(processCode);
@@ -376,7 +376,7 @@ public class test {
         request.setCcPosition("START_FINISH");
         request.setDeptId(-1L);
         request.setAgentId(292060704L);
-        OapiProcessinstanceCreateResponse response = client.execute(request,authenService.getAccessToken(cropId));
+        OapiProcessinstanceCreateResponse response = client.execute(request, authenService.getAccessToken(cropId));
 
         System.out.println(JSON.toJSONString(response));
         return JsonResultUtil.success(response);

@@ -14,28 +14,28 @@ public class EvaluationGroupPlanController {
     private EvaluationGroupPlanService groupPlanService;
 
     @PostMapping("/addEvaluationGroupPlan")
-    public JsonResult addEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
+    public JsonResult addEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan) {
         return groupPlanService.addEvaluationGroupPlan(evaluationGroupPlan);
     }
 
     @PostMapping("updateEvaluationGroupPlan")
-    public JsonResult updateEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
+    public JsonResult updateEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan) {
         return groupPlanService.updateEvaluationGroupPlan(evaluationGroupPlan);
     }
 
     @GetMapping("/getEvaluationGroupPlanById")
-    public JsonResult getEvaluationGroupPlanById(Long id){
+    public JsonResult getEvaluationGroupPlanById(Long id) {
         return groupPlanService.getEvaluationGroupPlanById(id);
     }
 
     //删除指定分组方案及其下分组
     @GetMapping("/deleteEvaluationGroupPlanById")
-    public JsonResult deleteEvaluationGroupPlanById(Long id){
+    public JsonResult deleteEvaluationGroupPlanById(Long id) {
         return groupPlanService.deleteEvaluationGroupPlanById(id);
     }
 
     @GetMapping("/getEvaluationGroupPlan")
-    public JsonResult getEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan){
+    public JsonResult getEvaluationGroupPlan(EvaluationGroupPlan evaluationGroupPlan) {
         return groupPlanService.getEvaluationGroupPlan(evaluationGroupPlan);
     }
 }

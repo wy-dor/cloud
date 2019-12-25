@@ -12,7 +12,7 @@ public class WangEditorUtil {
         return success(null);
     }
 
-    public static WangEditor error(){
+    public static WangEditor error() {
         WangEditor we = new WangEditor();
         we.setErrno(-1);
         return we;

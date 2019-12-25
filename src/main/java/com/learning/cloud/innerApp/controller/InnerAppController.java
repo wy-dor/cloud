@@ -22,18 +22,18 @@ public class InnerAppController {
 
     @GetMapping("/innerAppLogin")
     public ServiceResult innerAppLogin(String authCode) throws ApiException {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Integer schoolId = null;
         String accessToken = innerAppService.getToken();
-        String userId = innerAppService.getUserId(accessToken,authCode);
-        map.put("userId",userId);
+        String userId = innerAppService.getUserId(accessToken, authCode);
+        map.put("userId", userId);
         //todo
         //        //userId是否会出现对应多个schoolId的情况
         //        //若出现如何处理数据
         User user = userDao.getByUserId(userId);
-        if(user != null){
+        if (user != null) {
             schoolId = user.getSchoolId();
-            map.put("schoolId",schoolId);
+            map.put("schoolId", schoolId);
         }
         return ServiceResult.success(map);
     }
@@ -44,7 +44,7 @@ public class InnerAppController {
     }
 
     @GetMapping("/getSchoolDeptIds")
-    public ServiceResult getSchoolDeptIds() throws ApiException{
+    public ServiceResult getSchoolDeptIds() throws ApiException {
         return ServiceResult.success(innerAppService.getSchoolDeptIds());
     }
 

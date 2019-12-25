@@ -44,6 +44,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
 
     /**
      * 获取学校的积分值，取老师的平均值*系数和家长的平均值*系数
+     *
      * @param schoolId
      * @return
      * @throws Exception
@@ -59,6 +60,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
      * 每天6点刷新最新的积分，
      * 手动刷新时只能触发一个学校的积分刷新
      * 老师积分占0.8，家长积分占0.2
+     *
      * @param schoolId
      * @return
      * @throws Exception
@@ -68,51 +70,51 @@ public class ScoreboardServiceImpl implements ScoreboardService {
         School school = schoolDao.getBySchoolId(schoolId.intValue());
         double teacherAvg = 0.0;
         double parentAvg = 0.0;
-        if(schoolId!=null){
+        if (schoolId != null) {
             //获取所有老师
             List<Teacher> teachers = teacherDao.getTeacherIds(schoolId);
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();
-            if(ts>0){
-                for(Teacher te: teachers){
+            if (ts > 0) {
+                for (Teacher te : teachers) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
                     sum_teacher_score += score;
                 }
-                teacherAvg = sum_teacher_score/ts;
-            }else{
+                teacherAvg = sum_teacher_score / ts;
+            } else {
                 teacherAvg = 0.0;
             }
             //取家长最新积分
             List<Parent> parents = parentDao.getParents(schoolId);
             Long sum_parent_score = new Long(0);
             int ps = parents.size();
-            if(ps>0){
-                for(Parent pa : parents){
+            if (ps > 0) {
+                for (Parent pa : parents) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
-                    if(score!=0){
+                    if (score != 0) {
                         sum_parent_score += score;
-                    }else {
+                    } else {
                         ps--;
                     }
                 }
-                if(ps>0){
-                    parentAvg = sum_parent_score/ps;
+                if (ps > 0) {
+                    parentAvg = sum_parent_score / ps;
                 }
-            }else {
+            } else {
                 parentAvg = 0.0;
             }
 
             //计算最终的积分
-            double score = teacherAvg*0.8 + parentAvg*0.2;
+            double score = teacherAvg * 0.8 + parentAvg * 0.2;
             //保存到数据库表中
             SchoolScoreboard schoolScoreboard = new SchoolScoreboard();
             schoolScoreboard.setSchoolId(schoolId);
@@ -120,13 +122,14 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             schoolScoreboard.setBureauId(school.getBureauId().longValue());
             int i = scoreboardDao.addSchoolScoreboard(schoolScoreboard);
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.SCORE_SCHOOL_ID_NEED);
         }
     }
 
     /**
      * 获取班级的积分
+     *
      * @param classId
      * @return
      * @throws Exception
@@ -140,7 +143,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     @Override
     public JsonResult updateClassScore(Long classId) throws Exception {
         GradeClass gradeClass = gradeClassDao.getById(classId.intValue());
-        if(classId!=null){
+        if (classId != null) {
             double teacherAvg = 0.0;
             double parentAvg = 0.0;
             //获取所有老师
@@ -148,44 +151,44 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             //取老师最新的积分
             Long sum_teacher_score = new Long(0);
             int ts = teachers.size();
-            if(ts>0){
-                for(Teacher te: teachers){
+            if (ts > 0) {
+                for (Teacher te : teachers) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(te.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
                     sum_teacher_score += score;
                 }
-                teacherAvg = sum_teacher_score/ts;
-            }else{
+                teacherAvg = sum_teacher_score / ts;
+            } else {
                 teacherAvg = 0.0;
             }
             //取家长最新积分
             List<Parent> parents = parentDao.getParents(classId);
             Long sum_parent_score = new Long(0);
             int ps = parents.size();
-            if(ps>0){
-                for(Parent pa : parents){
+            if (ps > 0) {
+                for (Parent pa : parents) {
                     ScoreRecord last = scoreRecordDao.getLastScoreRecord(pa.getUserId());
                     Long score = new Long(0);
-                    if(last!=null){
-                        score = last.getScore()==null?0:last.getScore();
+                    if (last != null) {
+                        score = last.getScore() == null ? 0 : last.getScore();
                     }
-                    if(score!=0){
+                    if (score != 0) {
                         sum_parent_score += score;
-                    }else {
+                    } else {
                         ps--;
                     }
                 }
-                if(ps>0){
-                    parentAvg = sum_parent_score/ps;
+                if (ps > 0) {
+                    parentAvg = sum_parent_score / ps;
                 }
-            }else {
+            } else {
                 parentAvg = 0.0;
             }
             //计算最终的积分
-            double score = teacherAvg*0.8 + parentAvg*0.2;
+            double score = teacherAvg * 0.8 + parentAvg * 0.2;
             //保存到数据库表中
             ClassScoreboard classScoreboard = new ClassScoreboard();
             classScoreboard.setClassId(classId);
@@ -194,14 +197,14 @@ public class ScoreboardServiceImpl implements ScoreboardService {
             classScoreboard.setBureauId(gradeClass.getBureauId().longValue());
             int i = scoreboardDao.addClassScoreboard(classScoreboard);
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.SCORE_SCHOOL_ID_NEED);
         }
     }
 
 
     @Override
-    public JsonResult getTeacherRank(ScoreRank scoreRank) throws Exception{
+    public JsonResult getTeacherRank(ScoreRank scoreRank) throws Exception {
         List<ScoreRank> scoreRanks = scoreboardDao.getTeacherRank(scoreRank);
         return JsonResultUtil.success(new PageEntity<>(scoreRanks));
     }

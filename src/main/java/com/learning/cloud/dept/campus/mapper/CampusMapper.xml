@@ -1,114 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.dept.campus.dao.CampusDao">
-  <resultMap id="BaseResultMap" type="com.learning.cloud.dept.campus.entity.Campus">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="campus_name" jdbcType="VARCHAR" property="campusName" />
-    <result column="school_id" jdbcType="INTEGER" property="schoolId" />
-    <result column="campus_type" jdbcType="INTEGER" property="campusType" />
-    <result column="state" jdbcType="INTEGER" property="state" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.learning.cloud.dept.campus.entity.Campus">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="campus_name" jdbcType="VARCHAR" property="campusName"/>
+        <result column="school_id" jdbcType="INTEGER" property="schoolId"/>
+        <result column="campus_type" jdbcType="INTEGER" property="campusType"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+    </resultMap>
 
-  <select id="getByDeptId" parameterType="java.lang.Long" resultType="com.learning.cloud.dept.campus.entity.Campus">
-    select *
-    from edu_campus
-    where dept_id = #{deptId}
-  </select>
+    <select id="getByDeptId" parameterType="java.lang.Long" resultType="com.learning.cloud.dept.campus.entity.Campus">
+        select *
+        from edu_campus
+        where dept_id = #{deptId}
+    </select>
 
-  <select id="getByCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus" resultType="com.learning.cloud.dept.campus.entity.Campus">
-    select *
-    from edu_campus
-    <where>
-      <if test="deptId != null">
-        and dept_id = #{deptId}
-      </if>
-      <if test="campusName != null">
-        and campus_name = #{campusName}
-      </if>
-      <if test="schoolId != null">
-        and school_id = #{schoolId}
-      </if>
-      <if test="topCampusId != null">
-        and top_campus_id = #{topCampusId}
-      </if>
-    </where>
-  </select>
+    <select id="getByCampus" parameterType="com.learning.cloud.dept.campus.entity.Campus"
+            resultType="com.learning.cloud.dept.campus.entity.Campus">
+        select *
+        from edu_campus
+        <where>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="campusName != null">
+                and campus_name = #{campusName}
+            </if>
+            <if test="schoolId != null">
+                and school_id = #{schoolId}
+            </if>
+            <if test="topCampusId != null">
+                and top_campus_id = #{topCampusId}
+            </if>
+        </where>
+    </select>
 
-  <select id="getSchoolCampuses" parameterType="java.lang.Integer" resultType="com.learning.cloud.dept.campus.entity.Campus">
-    select *
-    from edu_campus
-    where school_id = #{schoolId}
-  </select>
+    <select id="getSchoolCampuses" parameterType="java.lang.Integer"
+            resultType="com.learning.cloud.dept.campus.entity.Campus">
+        select *
+        from edu_campus
+        where school_id = #{schoolId}
+    </select>
 
-  <update id="updateCampusType" parameterType="java.lang.Integer">
-    update edu_campus
-    set campus_type = 1
-    where school_id = #{schoolId}
-  </update>
+    <update id="updateCampusType" parameterType="java.lang.Integer">
+        update edu_campus
+        set campus_type = 1
+        where school_id = #{schoolId}
+    </update>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.dept.campus.entity.Campus">
-    insert into edu_campus
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="campusName != null">
-        campus_name,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="campusType != null">
-        campus_type,
-      </if>
-      <if test="deptId != null">
-        dept_id,
-      </if>
-      <if test="state != null">
-        state,
-      </if>
-      <if test="topCampusId != null">
-        top_campus_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="campusName != null">
-        #{campusName,jdbcType=VARCHAR},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="campusType != null">
-        #{campusType,jdbcType=INTEGER},
-      </if>
-      <if test="deptId != null">
-        #{deptId,jdbcType=BIGINT},
-      </if>
-      <if test="state != null">
-        #{state,jdbcType=INTEGER},
-      </if>
-      <if test="topCampusId != null">
-        #{topCampusId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.dept.campus.entity.Campus">
+        insert into edu_campus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="campusName != null">
+                campus_name,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="campusType != null">
+                campus_type,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="topCampusId != null">
+                top_campus_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="campusName != null">
+                #{campusName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="campusType != null">
+                #{campusType,jdbcType=INTEGER},
+            </if>
+            <if test="deptId != null">
+                #{deptId,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="topCampusId != null">
+                #{topCampusId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="update" parameterType="com.learning.cloud.dept.campus.entity.Campus">
-    update edu_campus
-    <set>
-      <if test="campusName != null">
-        campus_name = #{campusName,jdbcType=VARCHAR},
-      </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="deptId != null">
-        dept_id = #{deptId,jdbcType=BIGINT},
-      </if>
-      <if test="state != null">
-        state = #{state,jdbcType=INTEGER},
-      </if>
-      <if test="topCampusId != null">
-        top_campus_id = #{topCampusId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <update id="update" parameterType="com.learning.cloud.dept.campus.entity.Campus">
+        update edu_campus
+        <set>
+            <if test="campusName != null">
+                campus_name = #{campusName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="topCampusId != null">
+                top_campus_id = #{topCampusId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

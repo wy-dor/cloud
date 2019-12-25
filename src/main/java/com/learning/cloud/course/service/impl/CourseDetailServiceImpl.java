@@ -38,15 +38,15 @@ public class CourseDetailServiceImpl implements CourseDetailService {
 
     @Override
     public JsonResult editCourseDetail(CourseDetail courseDetail) throws Exception {
-        int i  = courseDetailDao.editCourseDetail(courseDetail);
+        int i = courseDetailDao.editCourseDetail(courseDetail);
         return null;
     }
 
     @Override
     public JsonResult getTeacherCourseDetail(String teacherIds, Integer weekDay) throws Exception {
-        List<String> teachers =  Arrays.asList(teacherIds.split(","));
+        List<String> teachers = Arrays.asList(teacherIds.split(","));
         List<CourseDetail> results = new ArrayList<>();
-        for(String teacherId: teachers){
+        for (String teacherId : teachers) {
             List<CourseDetail> courseDetails = courseDetailDao.getTeacherCourseDetail(Long.parseLong(teacherId), weekDay);
             results.addAll(courseDetails);
         }
@@ -62,9 +62,9 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     @Override
     public JsonResult deleteCourseDetailById(Long id) throws Exception {
         int i = courseDetailDao.deleteCourseDetailById(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }
@@ -72,9 +72,9 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     @Override
     public JsonResult deleteAllCourseDetail(Long courseId) throws Exception {
         int i = courseDetailDao.deleteAllCourseDetail(courseId);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }

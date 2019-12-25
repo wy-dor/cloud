@@ -1,142 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.parent.dao.ParentDao">
-  <select id="getByUserId" parameterType="java.lang.String"
-          resultType="com.learning.cloud.user.parent.entity.Parent">
-    select *
-    from user_parent
-    where user_id = #{userId}
-    order by id desc
-    limit 1
-  </select>
+    <select id="getByUserId" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.parent.entity.Parent">
+        select *
+        from user_parent
+        where user_id = #{userId}
+        order by id desc
+        limit 1
+    </select>
 
-  <select id="listParentInClass" parameterType="java.lang.String" resultType="com.learning.cloud.user.parent.entity.Parent">
-    select *
-    from user_parent
-    where FIND_IN_SET(#{classId},class_id)
-  </select>
+    <select id="listParentInClass" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.parent.entity.Parent">
+        select *
+        from user_parent
+        where FIND_IN_SET(#{classId},class_id)
+    </select>
 
-  <select id="listParentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
-    select user_id
-    from user_parent
-    where FIND_IN_SET(#{classId},class_id)
-  </select>
+    <select id="listParentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select user_id
+        from user_parent
+        where FIND_IN_SET(#{classId},class_id)
+    </select>
 
-  <select id="getParentInClass" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
-    select *
-    from user_parent
-    where user_id = #{userId}
-    and FIND_IN_SET(#{classId},class_id)
-    limit 1
-  </select>
+    <select id="getParentInClass" parameterType="com.learning.cloud.user.parent.entity.Parent"
+            resultType="com.learning.cloud.user.parent.entity.Parent">
+        select *
+        from user_parent
+        where user_id = #{userId}
+        and FIND_IN_SET(#{classId},class_id)
+        limit 1
+    </select>
 
-  <select id="getParentIdListInClass" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select id
-    from user_parent
-    where FIND_IN_SET(#{classId},class_id)
-  </select>
+    <select id="getParentIdListInClass" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select id
+        from user_parent
+        where FIND_IN_SET(#{classId},class_id)
+    </select>
 
-  <select id="getParentInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.user.parent.entity.Parent">
-    select *
-    from user_parent
-    where user_id = #{userId}
-    and school_id = #{schoolId}
-    limit 1
-  </select>
+    <select id="getParentInSchool" parameterType="com.learning.cloud.user.parent.entity.Parent"
+            resultType="com.learning.cloud.user.parent.entity.Parent">
+        select *
+        from user_parent
+        where user_id = #{userId}
+        and school_id = #{schoolId}
+        limit 1
+    </select>
 
-  <select id="getClassParentNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select count(id)
-    from user_parent
-    where FIND_IN_SET(#{classId},class_id)
-  </select>
+    <select id="getClassParentNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(id)
+        from user_parent
+        where FIND_IN_SET(#{classId},class_id)
+    </select>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.parent.entity.Parent">
-    insert into user_parent
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="parentName != null">
-        parent_name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="campusId != null">
-        campus_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="parentName != null">
-        #{parentName,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.user.parent.entity.Parent">
+        insert into user_parent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentName != null">
+                parent_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="campusId != null">
+                campus_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentName != null">
+                #{parentName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="update" parameterType="com.learning.cloud.user.parent.entity.Parent">
-    update user_parent
-    <set>
-      <if test="parentName != null">
-        parent_name = #{parentName,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="classId != null">
-        class_id = #{classId,jdbcType=VARCHAR},
-      </if>
-      <if test="bureauId != null">
-        bureau_id = #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-      avatar = #{avatar,jdbcType=VARCHAR},
-    </if>
-    </set>
-    where user_id = #{userId,jdbcType=VARCHAR}
-    <if test="schoolId != null">
-    and school_id = #{schoolId,jdbcType=INTEGER}
-    </if>
-  </update>
+    <update id="update" parameterType="com.learning.cloud.user.parent.entity.Parent">
+        update user_parent
+        <set>
+            <if test="parentName != null">
+                parent_name = #{parentName,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                campus_id = #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="classId != null">
+                class_id = #{classId,jdbcType=VARCHAR},
+            </if>
+            <if test="bureauId != null">
+                bureau_id = #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=VARCHAR}
+        <if test="schoolId != null">
+            and school_id = #{schoolId,jdbcType=INTEGER}
+        </if>
+    </update>
 
-  <select id="getParents" parameterType="java.lang.Long" resultType="com.learning.cloud.user.parent.entity.Parent">
-    select up.* from (
-    SELECT ec.id from edu_campus ec
-    LEFT JOIN edu_school es
-    on ec.school_id = es.id where es.id = #{schoolId}
-    ) as ca
-    LEFT JOIN user_parent up
-    on up.campus_id = ca.id
-  </select>
+    <select id="getParents" parameterType="java.lang.Long" resultType="com.learning.cloud.user.parent.entity.Parent">
+        select up.* from (
+        SELECT ec.id from edu_campus ec
+        LEFT JOIN edu_school es
+        on ec.school_id = es.id where es.id = #{schoolId}
+        ) as ca
+        LEFT JOIN user_parent up
+        on up.campus_id = ca.id
+    </select>
 
-  <delete id="delete" parameterType="java.lang.Integer">
-    delete from user_parent
-    where id = #{id}
-  </delete>
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from user_parent
+        where id = #{id}
+    </delete>
 </mapper>

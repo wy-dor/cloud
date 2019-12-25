@@ -14,7 +14,8 @@
         select * from process where corp_id = #{corpId}
     </select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.workProcess.entity.Process">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.workProcess.entity.Process">
         insert into process
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

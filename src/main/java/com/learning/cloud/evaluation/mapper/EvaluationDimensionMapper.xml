@@ -4,10 +4,10 @@
 
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
-    select *
-    from evaluation_dimension
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_dimension
+        where id = #{id}
+    </select>
 
     <select id="getByDimension" parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension"
             resultType="com.learning.cloud.evaluation.entity.EvaluationDimension">
@@ -39,9 +39,9 @@
     </select>
 
     <delete id="deleteById" parameterType="java.lang.Long">
-    delete from evaluation_dimension
-    where id = #{id}
-   </delete>
+        delete from evaluation_dimension
+        where id = #{id}
+    </delete>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.evaluation.entity.EvaluationDimension">

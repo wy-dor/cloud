@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.supervision.dao.SupervisionDao">
-    <select id="getSupervisionById" parameterType="java.lang.Long" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select *
-    from supervision
-    where id = #{id}
-  </select>
+    <select id="getSupervisionById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
+        select *
+        from supervision
+        where id = #{id}
+    </select>
 
-    <select id="getSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id,user_id
+    <select id="getSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
+        select
+        id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id,user_id
         from supervision
         <where>
             <if test="schoolId != null">
@@ -36,7 +39,8 @@
         order by upload_time desc
     </select>
 
-    <select id="getPicsForSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
+    <select id="getPicsForSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
         select id, pic_id, title
         from supervision
         where bureau_id = #{bureauId}
@@ -46,30 +50,32 @@
         limit 10
     </select>
 
-    <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select c.* from
-    (select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
-    from supervision a
-    where bureau_id = #{bureauId}
-    <if test="typeId != null">
-    and type_id = #{typeId}
-    </if>
-    and status &lt;&gt; 0 and school_id is not null
-    union all
-    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
-    from supervision b
-    where bureau_id = #{bureauId}
-    <if test="typeId != null">
-        and type_id = #{typeId}
-    </if>
-    and school_id is null) c
-    <if test="status != null">
-        where status = #{status}
-    </if>
-    order by upload_time desc
-  </select>
+    <select id="getBureauSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
+        select c.* from
+        (select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+        from supervision a
+        where bureau_id = #{bureauId}
+        <if test="typeId != null">
+            and type_id = #{typeId}
+        </if>
+        and status &lt;&gt; 0 and school_id is not null
+        union all
+        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+        from supervision b
+        where bureau_id = #{bureauId}
+        <if test="typeId != null">
+            and type_id = #{typeId}
+        </if>
+        and school_id is null) c
+        <if test="status != null">
+            where status = #{status}
+        </if>
+        order by upload_time desc
+    </select>
 
-    <select id="getAllValidSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision" resultType="com.learning.cloud.supervision.entity.Supervision">
+    <select id="getAllValidSupervision" parameterType="com.learning.cloud.supervision.entity.Supervision"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
         select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
         from supervision
         where bureau_id = #{bureauId}
@@ -84,110 +90,112 @@
         order by upload_time desc
     </select>
 
-    <select id="getToppingSupervision" parameterType="java.lang.Integer" resultType="com.learning.cloud.supervision.entity.Supervision">
-    select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
-    from supervision
-    where bureau_id = #{bureauId}
-    and status = 3
-    and topping = 1
-  </select>
+    <select id="getToppingSupervision" parameterType="java.lang.Integer"
+            resultType="com.learning.cloud.supervision.entity.Supervision">
+        select id,title,pic_id,origin,click_num,upload_time,update_time,type_id,status,topping,bureau_id,school_id
+        from supervision
+        where bureau_id = #{bureauId}
+        and status = 3
+        and topping = 1
+    </select>
 
     <update id="removeSupervisionById" parameterType="java.lang.Long">
-    update supervision
-    set status = 4
-    where id = #{id}
-  </update>
+        update supervision
+        set status = 4
+        where id = #{id}
+    </update>
 
     <delete id="deleteSupervisionById" parameterType="java.lang.Long">
-    delete from supervision
-    where id = #{id}
-  </delete>
+        delete from supervision
+        where id = #{id}
+    </delete>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.supervision.entity.Supervision">
-    insert into supervision
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="title != null">
-        title,
-      </if>
-      <if test="picId != null">
-        pic_id,
-      </if>
-      <if test="origin != null">
-        origin,
-      </if>
-      <if test="uploadTime != null">
-        upload_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="typeId != null">
-        type_id,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="topping != null">
-        topping,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-      <if test="detail != null">
-        detail,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
-      </if>
-      <if test="origin != null">
-        #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="uploadTime != null">
-        #{uploadTime,jdbcType=VARCHAR},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="typeId != null">
-        #{typeId,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="topping != null">
-        #{topping,jdbcType=SMALLINT},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="detail != null">
-        #{detail,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.supervision.entity.Supervision">
+        insert into supervision
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="picId != null">
+                pic_id,
+            </if>
+            <if test="origin != null">
+                origin,
+            </if>
+            <if test="uploadTime != null">
+                upload_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="topping != null">
+                topping,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+            <if test="detail != null">
+                detail,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="picId != null">
+                #{picId,jdbcType=BIGINT},
+            </if>
+            <if test="origin != null">
+                #{origin,jdbcType=VARCHAR},
+            </if>
+            <if test="uploadTime != null">
+                #{uploadTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="topping != null">
+                #{topping,jdbcType=SMALLINT},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="detail != null">
+                #{detail,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
     <update id="update" parameterType="com.learning.cloud.supervision.entity.Supervision">
         update supervision
@@ -223,7 +231,7 @@
                 user_id = #{userId,jdbcType=VARCHAR},
             </if>
         </set>
-        where id =  #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 
     <update id="increaseClick" parameterType="java.lang.Long">

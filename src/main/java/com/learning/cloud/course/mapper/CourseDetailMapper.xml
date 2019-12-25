@@ -2,177 +2,179 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.CourseDetailDao">
 
-  <insert id="addCourseDetail" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseDetail">
-    insert into course_detail
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="courseId != null">
-        course_id,
-      </if>
-      <if test="weekDay != null">
-        week_day,
-      </if>
-      <if test="courseNum != null">
-        course_num,
-      </if>
-      <if test="courseTime != null">
-        course_time,
-      </if>
-      <if test="courseType != null">
-        course_type,
-      </if>
-      <if test="courseName != null">
-        course_name,
-      </if>
-      <if test="courseTeacherId != null">
-        course_teacher_id,
-      </if>
-      <if test="courseTeacherName != null">
-        course_teacher_name,
-      </if>
-      <if test="weekType != null">
-        week_type,
-      </if>
-      <if test="courseTypeS != null">
-        course_type_s,
-      </if>
-      <if test="courseNameS != null">
-        course_name_s,
-      </if>
-      <if test="courseTeacherIdS != null">
-        course_teacher_id_s,
-      </if>
-      <if test="courseTeacherNameS != null">
-        course_teacher_name_s,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=BIGINT},
-      </if>
-      <if test="courseId != null">
-        #{courseId,jdbcType=BIGINT},
-      </if>
-      <if test="weekDay != null">
-        #{weekDay,jdbcType=INTEGER},
-      </if>
-      <if test="courseNum != null">
-        #{courseNum,jdbcType=INTEGER},
-      </if>
-      <if test="courseTime != null">
-        #{courseTime,jdbcType=VARCHAR},
-      </if>
-      <if test="courseType != null">
-        #{courseType,jdbcType=BIGINT},
-      </if>
-      <if test="courseName != null">
-        #{courseName,jdbcType=VARCHAR},
-      </if>
-      <if test="courseTeacherId != null">
-        #{courseTeacherId,jdbcType=BIGINT},
-      </if>
-      <if test="courseTeacherName != null">
-        #{courseTeacherName,jdbcType=VARCHAR},
-      </if>
-      <if test="weekType != null">
-        #{weekType,jdbcType=SMALLINT},
-      </if>
-      <if test="courseTypeS != null">
-        #{courseTypeS,jdbcType=BIGINT},
-      </if>
-      <if test="courseNameS != null">
-        #{courseNameS,jdbcType=VARCHAR},
-      </if>
-      <if test="courseTeacherIdS != null">
-        #{courseTeacherIdS,jdbcType=BIGINT},
-      </if>
-      <if test="courseTeacherNameS != null">
-        #{courseTeacherNameS,jdbcType=VARCHAR},
-      </if>
-    </trim>
-    ON DUPLICATE KEY UPDATE
-    <if test="weekType != null">
-      week_type=#{weekType},
-    </if>
-    course_type=#{courseType},course_name=#{courseName},course_teacher_id=#{courseTeacherId},course_teacher_name=#{courseTeacherName},
-    course_type_s=#{courseTypeS},course_name_s=#{courseNameS},course_teacher_id_s=#{courseTeacherIdS},course_teacher_name_s=#{courseTeacherNameS}
-  </insert>
+    <insert id="addCourseDetail" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.course.entity.CourseDetail">
+        insert into course_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="courseId != null">
+                course_id,
+            </if>
+            <if test="weekDay != null">
+                week_day,
+            </if>
+            <if test="courseNum != null">
+                course_num,
+            </if>
+            <if test="courseTime != null">
+                course_time,
+            </if>
+            <if test="courseType != null">
+                course_type,
+            </if>
+            <if test="courseName != null">
+                course_name,
+            </if>
+            <if test="courseTeacherId != null">
+                course_teacher_id,
+            </if>
+            <if test="courseTeacherName != null">
+                course_teacher_name,
+            </if>
+            <if test="weekType != null">
+                week_type,
+            </if>
+            <if test="courseTypeS != null">
+                course_type_s,
+            </if>
+            <if test="courseNameS != null">
+                course_name_s,
+            </if>
+            <if test="courseTeacherIdS != null">
+                course_teacher_id_s,
+            </if>
+            <if test="courseTeacherNameS != null">
+                course_teacher_name_s,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=BIGINT},
+            </if>
+            <if test="courseId != null">
+                #{courseId,jdbcType=BIGINT},
+            </if>
+            <if test="weekDay != null">
+                #{weekDay,jdbcType=INTEGER},
+            </if>
+            <if test="courseNum != null">
+                #{courseNum,jdbcType=INTEGER},
+            </if>
+            <if test="courseTime != null">
+                #{courseTime,jdbcType=VARCHAR},
+            </if>
+            <if test="courseType != null">
+                #{courseType,jdbcType=BIGINT},
+            </if>
+            <if test="courseName != null">
+                #{courseName,jdbcType=VARCHAR},
+            </if>
+            <if test="courseTeacherId != null">
+                #{courseTeacherId,jdbcType=BIGINT},
+            </if>
+            <if test="courseTeacherName != null">
+                #{courseTeacherName,jdbcType=VARCHAR},
+            </if>
+            <if test="weekType != null">
+                #{weekType,jdbcType=SMALLINT},
+            </if>
+            <if test="courseTypeS != null">
+                #{courseTypeS,jdbcType=BIGINT},
+            </if>
+            <if test="courseNameS != null">
+                #{courseNameS,jdbcType=VARCHAR},
+            </if>
+            <if test="courseTeacherIdS != null">
+                #{courseTeacherIdS,jdbcType=BIGINT},
+            </if>
+            <if test="courseTeacherNameS != null">
+                #{courseTeacherNameS,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <if test="weekType != null">
+            week_type=#{weekType},
+        </if>
+        course_type=#{courseType},course_name=#{courseName},course_teacher_id=#{courseTeacherId},course_teacher_name=#{courseTeacherName},
+        course_type_s=#{courseTypeS},course_name_s=#{courseNameS},course_teacher_id_s=#{courseTeacherIdS},course_teacher_name_s=#{courseTeacherNameS}
+    </insert>
 
-  <select id="getCourseDetailByClassId" resultType="com.learning.cloud.course.entity.CourseDetail">
-    select * from course_detail
-    where class_id = #{classId}
-    <if test="weekDay != null">
-      and week_day = #{weekDay}
-    </if>
-    order by week_day,course_num
-  </select>
+    <select id="getCourseDetailByClassId" resultType="com.learning.cloud.course.entity.CourseDetail">
+        select * from course_detail
+        where class_id = #{classId}
+        <if test="weekDay != null">
+            and week_day = #{weekDay}
+        </if>
+        order by week_day,course_num
+    </select>
 
-  <update id="editCourseDetail" parameterType="com.learning.cloud.course.entity.CourseDetail">
-    update course_detail
-    <set>
-      <if test="courseType != null">
-        course_type = #{courseType,jdbcType=SMALLINT},
-      </if>
-      <if test="courseName != null">
-        course_name = #{courseName,jdbcType=VARCHAR},
-      </if>
-      <if test="courseTeacherId != null">
-        course_teacher_id = #{courseTeacherId,jdbcType=BIGINT},
-      </if>
-      <if test="courseTeacherName != null">
-        course_teacher_name = #{courseTeacherName,jdbcType=VARCHAR},
-      </if>
+    <update id="editCourseDetail" parameterType="com.learning.cloud.course.entity.CourseDetail">
+        update course_detail
+        <set>
+            <if test="courseType != null">
+                course_type = #{courseType,jdbcType=SMALLINT},
+            </if>
+            <if test="courseName != null">
+                course_name = #{courseName,jdbcType=VARCHAR},
+            </if>
+            <if test="courseTeacherId != null">
+                course_teacher_id = #{courseTeacherId,jdbcType=BIGINT},
+            </if>
+            <if test="courseTeacherName != null">
+                course_teacher_name = #{courseTeacherName,jdbcType=VARCHAR},
+            </if>
 
-      <if test="weekType != null">
-        week_type = #{weekType,jdbcType=BIGINT},
-      </if>
-      <if test="courseTypeS != null">
-        course_type_s = #{courseTypeS,jdbcType=SMALLINT},
-      </if>
-      <if test="courseNameS != null">
-        course_name_s = #{courseNameS,jdbcType=VARCHAR},
-      </if>
-      <if test="courseTeacherIdS != null">
-        course_teacher_id_s = #{courseTeacherIdS,jdbcType=BIGINT},
-      </if>
-      <if test="courseTeacherNameS != null">
-        course_teacher_name_s = #{courseTeacherNameS,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
+            <if test="weekType != null">
+                week_type = #{weekType,jdbcType=BIGINT},
+            </if>
+            <if test="courseTypeS != null">
+                course_type_s = #{courseTypeS,jdbcType=SMALLINT},
+            </if>
+            <if test="courseNameS != null">
+                course_name_s = #{courseNameS,jdbcType=VARCHAR},
+            </if>
+            <if test="courseTeacherIdS != null">
+                course_teacher_id_s = #{courseTeacherIdS,jdbcType=BIGINT},
+            </if>
+            <if test="courseTeacherNameS != null">
+                course_teacher_name_s = #{courseTeacherNameS,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
-  <select id="getTeacherCourseDetail" resultType="com.learning.cloud.course.entity.CourseDetail">
-    select a.*,b.class_name from course_detail a
-    LEFT JOIN edu_grade_class b
-    on a.class_id = b.id
-    where ( a.course_teacher_id = #{teacherId} or a.course_teacher_id_s = #{teacherId} )
-    <if test="weekDay != null">
-      and a.week_day = #{weekDay}
-    </if>
-    order by a.week_day,a.course_num
-  </select>
+    <select id="getTeacherCourseDetail" resultType="com.learning.cloud.course.entity.CourseDetail">
+        select a.*,b.class_name from course_detail a
+        LEFT JOIN edu_grade_class b
+        on a.class_id = b.id
+        where ( a.course_teacher_id = #{teacherId} or a.course_teacher_id_s = #{teacherId} )
+        <if test="weekDay != null">
+            and a.week_day = #{weekDay}
+        </if>
+        order by a.week_day,a.course_num
+    </select>
 
-  <select id="getCourseDetailById" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseDetail">
-    select * from course_detail
-    where id = #{id}
-  </select>
+    <select id="getCourseDetailById" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.course.entity.CourseDetail">
+        select * from course_detail
+        where id = #{id}
+    </select>
 
-  <delete id="deleteCourseDetailById">
-    delete from course_detail
-    where id = #{id}
-  </delete>
+    <delete id="deleteCourseDetailById">
+        delete from course_detail
+        where id = #{id}
+    </delete>
 
-  <delete id="deleteAllCourseDetail">
-    delete from course_detail
-    where course_id = #{courseId}
-  </delete>
+    <delete id="deleteAllCourseDetail">
+        delete from course_detail
+        where course_id = #{courseId}
+    </delete>
 </mapper>

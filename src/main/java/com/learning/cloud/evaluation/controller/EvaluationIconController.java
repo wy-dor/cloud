@@ -22,26 +22,26 @@ public class EvaluationIconController {
     private EvaluationIconService iconService;
 
     @GetMapping("/getEvaluationIcon")
-    public JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon){
+    public JsonResult getEvaluationIcon(EvaluationIcon evaluationIcon) {
         return iconService.getEvaluationIcon(evaluationIcon);
     }
 
     @GetMapping("/listEvaluationIconWithDefault")
-    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType){
+    public JsonResult listEvaluationIconWithDefault(Integer schoolId, Integer iconType) {
         return iconService.listEvaluationIconWithDefault(schoolId, iconType);
     }
 
     @GetMapping("/getEvaluationIconById")
     public void getEvaluationIconById(Long id, HttpServletResponse response) throws IOException {
         EvaluationIcon evaluationIconById = iconService.getEvaluationIconById(id);
-        if(evaluationIconById == null){
+        if (evaluationIconById == null) {
             return;
         }
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] bytes = decoder.decodeBuffer(evaluationIconById.getPic());
-        for(int i=0; i<bytes.length;++i){
-            if(bytes[i]<0){
-                bytes[i]+=256;
+        for (int i = 0; i < bytes.length; ++i) {
+            if (bytes[i] < 0) {
+                bytes[i] += 256;
             }
         }
         ServletOutputStream out = response.getOutputStream();
@@ -52,17 +52,17 @@ public class EvaluationIconController {
     }
 
     @PostMapping("/addEvaluationIcon")
-    public JsonResult addEvaluationIcon(@RequestParam(value="file",required = false)MultipartFile file, EvaluationIcon evaluationIcon) throws Exception {
+    public JsonResult addEvaluationIcon(@RequestParam(value = "file", required = false) MultipartFile file, EvaluationIcon evaluationIcon) throws Exception {
         return iconService.addEvaluationIcon(file, evaluationIcon);
     }
 
     @PostMapping("/updateEvaluationIcon")
-    public JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon)  throws Exception{
+    public JsonResult updateEvaluationIcon(EvaluationIcon evaluationIcon) throws Exception {
         return iconService.updateEvaluationIcon(evaluationIcon);
     }
 
     @GetMapping("/deleteEvaluationIconById")
-    public JsonResult deleteEvaluationIconById(Long id){
+    public JsonResult deleteEvaluationIconById(Long id) {
         return iconService.deleteEvaluationIconById(id);
     }
 }

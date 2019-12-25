@@ -9,13 +9,13 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface DutyCheckTypeService {
-    JsonResult addDutyCheckType(DutyCheckType dutyCheckType)throws Exception;
+    JsonResult addDutyCheckType(DutyCheckType dutyCheckType) throws Exception;
 
-    JsonResult deleteDutyCheckType(Long id)throws Exception;
+    JsonResult deleteDutyCheckType(Long id) throws Exception;
 
-    JsonResult updateDutyCheckType(DutyCheckType dutyCheckType)throws Exception;
+    JsonResult updateDutyCheckType(DutyCheckType dutyCheckType) throws Exception;
 
-    JsonResult getDutyCheckTypeById(Long id)throws Exception;
+    JsonResult getDutyCheckTypeById(Long id) throws Exception;
 
-    JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType)throws Exception;
+    JsonResult getDutyCheckTypeByTypeId(DutyCheckType dutyCheckType) throws Exception;
 }

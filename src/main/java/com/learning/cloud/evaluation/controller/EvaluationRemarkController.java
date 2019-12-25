@@ -14,12 +14,12 @@ public class EvaluationRemarkController {
     private EvaluationRemarkService remarkService;
 
     @GetMapping("/getEvaluationRemark")
-    public JsonResult getEvaluationRemark(EvaluationRemark evaluationRemark){
+    public JsonResult getEvaluationRemark(EvaluationRemark evaluationRemark) {
         return remarkService.getEvaluationRemark(evaluationRemark);
     }
 
     @GetMapping("/getEvaluationRemarkById")
-    public JsonResult getEvaluationRemarkById(Long id){
+    public JsonResult getEvaluationRemarkById(Long id) {
         return remarkService.getEvaluationRemarkById(id);
     }
 
@@ -29,12 +29,12 @@ public class EvaluationRemarkController {
     }
 
     @PostMapping("/updateEvaluationRemark")
-    public JsonResult updateEvaluationRemark(EvaluationRemark evaluationRemark)  throws Exception{
+    public JsonResult updateEvaluationRemark(EvaluationRemark evaluationRemark) throws Exception {
         return remarkService.updateEvaluationRemark(evaluationRemark);
     }
 
     @GetMapping("/deleteEvaluationRemarkById")
-    public JsonResult deleteEvaluationRemarkById(Long id){
+    public JsonResult deleteEvaluationRemarkById(Long id) {
         return remarkService.deleteEvaluationRemarkById(id);
     }
 }

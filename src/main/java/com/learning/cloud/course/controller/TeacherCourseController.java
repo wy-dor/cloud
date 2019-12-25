@@ -22,14 +22,14 @@ public class TeacherCourseController {
     private TeacherCourseService teacherCourseService;
 
     @GetMapping("/getTeacherCourseTemplet")
-    public JsonResult getTeacherCourseTemplet(Long schoolId)throws Exception{
+    public JsonResult getTeacherCourseTemplet(Long schoolId) throws Exception {
         return teacherCourseService.getTeacherCourseTemplet(schoolId);
     }
 
     //导入excel
     @PostMapping("/importTeacherCourse")
-    public JsonResult importTeacherCourse(@RequestParam("file") MultipartFile file, @RequestParam("schoolId") Long schoolId) throws Exception{
-        return teacherCourseService.importTeacherCourse(file,schoolId);
+    public JsonResult importTeacherCourse(@RequestParam("file") MultipartFile file, @RequestParam("schoolId") Long schoolId) throws Exception {
+        return teacherCourseService.importTeacherCourse(file, schoolId);
     }
 
 }

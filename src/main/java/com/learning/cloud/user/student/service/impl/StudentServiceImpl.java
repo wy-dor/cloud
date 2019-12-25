@@ -41,9 +41,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public JsonResult getClassStudents(GradeClass gradeClass) {
         Integer id = gradeClass.getId();
-        if(id == null){
+        if (id == null) {
             List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gradeClass);
-            if(byGradeClass != null && byGradeClass.size() > 0){
+            if (byGradeClass != null && byGradeClass.size() > 0) {
                 id = byGradeClass.get(0).getId();
                 gradeClass.setId(id);
             }

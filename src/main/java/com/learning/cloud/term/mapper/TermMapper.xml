@@ -2,66 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.term.dao.TermDao">
 
-  <insert id="addTerm" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.term.entity.Term">
-    insert into term
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="termName != null">
-        term_name,
-      </if>
-      <if test="start != null">
-        start,
-      </if>
-      <if test="end != null">
-        end,
-      </if>
-      <if test="termYear != null">
-        term_year,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="termName != null">
-        #{termName,jdbcType=VARCHAR},
-      </if>
-      <if test="start != null">
-        #{start,jdbcType=DATE},
-      </if>
-      <if test="end != null">
-        #{end,jdbcType=DATE},
-      </if>
-      <if test="termYear != null">
-        #{termYear,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addTerm" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.term.entity.Term">
+        insert into term
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="termName != null">
+                term_name,
+            </if>
+            <if test="start != null">
+                start,
+            </if>
+            <if test="end != null">
+                end,
+            </if>
+            <if test="termYear != null">
+                term_year,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="termName != null">
+                #{termName,jdbcType=VARCHAR},
+            </if>
+            <if test="start != null">
+                #{start,jdbcType=DATE},
+            </if>
+            <if test="end != null">
+                #{end,jdbcType=DATE},
+            </if>
+            <if test="termYear != null">
+                #{termYear,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getSchoolTerm" resultType="com.learning.cloud.term.entity.Term">
-    select * from term
-    where school_id = #{schoolId}
-    and term_year = #{year}
-  </select>
+    <select id="getSchoolTerm" resultType="com.learning.cloud.term.entity.Term">
+        select * from term
+        where school_id = #{schoolId}
+        and term_year = #{year}
+    </select>
 
-  <update id="editSchoolTerm" parameterType="com.learning.cloud.term.entity.Term">
-    update term
-    <set>
-      <if test="start != null">
-        start = #{start,jdbcType=DATE},
-      </if>
-      <if test="end != null">
-        end = #{end,jdbcType=DATE},
-      </if>
-    </set>
-    where id = #{id,jdbcType=LONGVARCHAR}
-  </update>
+    <update id="editSchoolTerm" parameterType="com.learning.cloud.term.entity.Term">
+        update term
+        <set>
+            <if test="start != null">
+                start = #{start,jdbcType=DATE},
+            </if>
+            <if test="end != null">
+                end = #{end,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=LONGVARCHAR}
+    </update>
 </mapper>

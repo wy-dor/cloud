@@ -20,25 +20,25 @@ public class SignController {
 
     /*发布签字任务*/
     @PostMapping("/addSignTask")
-    public JsonResult addSignTask(Sign sign)throws Exception{
+    public JsonResult addSignTask(Sign sign) throws Exception {
         return signService.addSignTask(sign);
     }
 
     /*签字*/
     @PostMapping("/signName")
-    public JsonResult signName(@RequestParam(value = "file",required = false) MultipartFile file, SignRecord signRecord)throws Exception{
-        return signService.signName(signRecord,file);
+    public JsonResult signName(@RequestParam(value = "file", required = false) MultipartFile file, SignRecord signRecord) throws Exception {
+        return signService.signName(signRecord, file);
     }
 
     /*获取指定班级下所有签名任务，state为0时任务已失效*/
     /*classId*/
     @GetMapping("/getAllTasks")
-    public JsonResult getAllTasks(Parent parent)throws Exception{
+    public JsonResult getAllTasks(Parent parent) throws Exception {
         return signService.getAllTasks(parent);
     }
 
     @GetMapping("/getSignTaskById")
-    public JsonResult getSignTaskById(Integer id)throws Exception{
+    public JsonResult getSignTaskById(Integer id) throws Exception {
         return signService.getSignTaskById(id);
     }
 
@@ -63,25 +63,25 @@ public class SignController {
 
     /*获取每个签名任务需要签名的数量*/
     @GetMapping("/getSignNum")
-    public JsonResult getSignNum(Integer signId) throws Exception{
-        return  signService.getSignNum(signId);
+    public JsonResult getSignNum(Integer signId) throws Exception {
+        return signService.getSignNum(signId);
     }
 
     /*获取签名任务下已签名数量*/
     @GetMapping("/getRecordCount")
-    public JsonResult getRecordCount(Integer signId) throws Exception{
+    public JsonResult getRecordCount(Integer signId) throws Exception {
         return signService.getRecordCount(signId);
     }
 
     /*获取签名任务下已签名的签名记录*/
     @GetMapping("/getRecordsBySignId")
-    public JsonResult getRecordsBySignId(Sign sign) throws Exception{
+    public JsonResult getRecordsBySignId(Sign sign) throws Exception {
         return signService.getRecordsBySignId(sign);
     }
 
     //判断是否签名
     @GetMapping("/getIsSignFlag")
-    public JsonResult getIsSignFlag(String userId, Integer signId)throws Exception{
+    public JsonResult getIsSignFlag(String userId, Integer signId) throws Exception {
         return signService.getIsSignFlag(userId, signId);
     }
 }

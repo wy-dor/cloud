@@ -9,5 +9,5 @@ import java.util.Map;
 public interface BureauService {
     List<Bureau> getBureaus();
 
-    Map<String,Object> getOrgInfoByCorpId(String corpId);
+    Map<String, Object> getOrgInfoByCorpId(String corpId);
 }

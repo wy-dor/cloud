@@ -16,26 +16,27 @@ public class CommonUtils {
      * 生成I编号
      * uuid去除"-"
      */
-    public static String getRandomStr(){
+    public static String getRandomStr() {
         String uuid = UUID.randomUUID().toString();
-        return uuid.replace("-","");
+        return uuid.replace("-", "");
     }
 
     /**
      * 日期格式化
+     *
      * @param time
      * @param model
      * @return
      */
-    public static<T> String timeFormat(T time,String model){
+    public static <T> String timeFormat(T time, String model) {
         String res = "";
-        if(model.equals("")||model==null){
+        if (model.equals("") || model == null) {
             model = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(model);
         try {
             Date date = new Date();
-            if(time instanceof String){
+            if (time instanceof String) {
                 date = dateFormat.parse(time.toString());
             }
             res = dateFormat.format(date);
@@ -95,7 +96,7 @@ public class CommonUtils {
         OUTERMOST:
         for (String e1 : a1) {
             for (String e2 : a2) {
-                if (e1.equals(e2)){
+                if (e1.equals(e2)) {
                     String[] temp = new String[++size];
                     if (result != null) {
                         for (int i = 0; i < result.length; i++) {
@@ -127,15 +128,17 @@ public class CommonUtils {
         return l3;
     }
 
-    public static String toUtf8String(String s){
+    public static String toUtf8String(String s) {
         StringBuffer sb = new StringBuffer();
-        for (int i=0;i<s.length();i++){
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c >= 0 && c <= 255){sb.append(c);}
-            else{
+            if (c >= 0 && c <= 255) {
+                sb.append(c);
+            } else {
                 byte[] b;
-                try { b = Character.toString(c).getBytes("utf-8");}
-                catch (Exception ex) {
+                try {
+                    b = Character.toString(c).getBytes("utf-8");
+                } catch (Exception ex) {
                     System.out.println(ex);
                     b = new byte[0];
                 }
@@ -149,11 +152,11 @@ public class CommonUtils {
         return sb.toString();
     }
 
-    public static String StringListToString(List<String> list){
-        if(list!=null){
-            String str = String.join(",",list);
+    public static String StringListToString(List<String> list) {
+        if (list != null) {
+            String str = String.join(",", list);
             return str;
-        }else {
+        } else {
             return null;
         }
 
@@ -161,7 +164,7 @@ public class CommonUtils {
 
     public static Boolean findInStrList(String str, List<String> strList) {
         for (String s : strList) {
-            if(s.equals(str)){
+            if (s.equals(str)) {
                 return true;
             }
         }

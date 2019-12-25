@@ -171,16 +171,16 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                             List<String> teacherDepts_1 = new ArrayList<>();
                             List<String> teacherDepts_2 = new ArrayList<>();
 
-                            if(parse.get("teacher") != null){
+                            if (parse.get("teacher") != null) {
                                 teacherDepts = parse.get("teacher");
                             }
 
-                            if(parse.get("headmaster") != null){
+                            if (parse.get("headmaster") != null) {
                                 teacherDepts_1 = parse.get("headmaster");
                             }
 
                             //班主任和老师存在相同的班级
-                            if(teacherDepts.size() > 0 && teacherDepts_1.size() > 0){
+                            if (teacherDepts.size() > 0 && teacherDepts_1.size() > 0) {
                                 L1:
                                 for (String s1 : teacherDepts_1) {
                                     for (String s : teacherDepts) {
@@ -191,11 +191,11 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                                     teacherDepts.add(s1);
                                 }
                                 teacherDepts_2 = teacherDepts;
-                            }else{
+                            } else {
                                 //仅为班主任
-                                if(teacherDepts.size() == 0){
+                                if (teacherDepts.size() == 0) {
                                     teacherDepts_2 = teacherDepts_1;
-                                }else{
+                                } else {
                                     teacherDepts_2 = teacherDepts;
                                 }
                             }
@@ -274,8 +274,7 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
                     deptService.userSaveByRole(schoolId, corpId, campusId, apiUser, roleType, accessToken);
 
                 }
-            } else if (bizType == 14)
-            {
+            } else if (bizType == 14) {
                 if (syncAction.equals("org_dept_remove")) {
                     syncBizDataMediumDao.updateStatus(id);
                     continue LOOP;
@@ -389,17 +388,17 @@ public class BizDataMediumServiceImpl implements BizDataMediumService {
         for (String deptId : deptStrList) {
             GradeClass byDeptId = gradeClassDao.getByDeptId(Long.parseLong(deptId));
             //角色后的部门id不为班级id而是对应直接部门id的情况下
-            if(byDeptId == null){
+            if (byDeptId == null) {
                 GradeClass gc = new GradeClass();
-                if(roleType == 4){
+                if (roleType == 4) {
                     gc.setSDeptId(Long.parseLong(deptId));
-                }else if(roleType == 3){
+                } else if (roleType == 3) {
                     gc.setTDeptId(Long.parseLong(deptId));
-                }else if(roleType == 2){
+                } else if (roleType == 2) {
                     gc.setPDeptId(Long.parseLong(deptId));
                 }
                 List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
-                if(byGradeClass != null && byGradeClass.size() > 0){
+                if (byGradeClass != null && byGradeClass.size() > 0) {
                     byDeptId = byGradeClass.get(0);
                 }
             }

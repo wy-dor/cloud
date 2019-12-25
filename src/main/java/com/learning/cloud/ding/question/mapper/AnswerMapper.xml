@@ -2,53 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.ding.question.dao.AnswerDao">
 
-  <insert id="addAnswer" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.question.entity.Answer">
-    insert into answer
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="questionId != null">
-        question_id,
-      </if>
-      <if test="answerUserId != null">
-        answer_user_id,
-      </if>
-      <if test="answerName != null">
-        answer_name,
-      </if>
-      <if test="answerTime != null">
-        answer_time,
-      </if>
-      <if test="answerContent != null">
-        answer_content,
-      </if>
-      <if test="picId != null">
-        pic_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="questionId != null">
-        #{questionId,jdbcType=BIGINT},
-      </if>
-      <if test="answerUserId != null">
-        #{answerUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="answerName != null">
-        #{answerName,jdbcType=VARCHAR},
-      </if>
-      <if test="answerTime != null">
-        #{answerTime,jdbcType=VARCHAR},
-      </if>
-      <if test="answerContent != null">
-        #{answerContent,jdbcType=VARCHAR},
-      </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addAnswer" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.ding.question.entity.Answer">
+        insert into answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">
+                question_id,
+            </if>
+            <if test="answerUserId != null">
+                answer_user_id,
+            </if>
+            <if test="answerName != null">
+                answer_name,
+            </if>
+            <if test="answerTime != null">
+                answer_time,
+            </if>
+            <if test="answerContent != null">
+                answer_content,
+            </if>
+            <if test="picId != null">
+                pic_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">
+                #{questionId,jdbcType=BIGINT},
+            </if>
+            <if test="answerUserId != null">
+                #{answerUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="answerName != null">
+                #{answerName,jdbcType=VARCHAR},
+            </if>
+            <if test="answerTime != null">
+                #{answerTime,jdbcType=VARCHAR},
+            </if>
+            <if test="answerContent != null">
+                #{answerContent,jdbcType=VARCHAR},
+            </if>
+            <if test="picId != null">
+                #{picId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getAnswer" parameterType="java.lang.Long" resultType="com.learning.cloud.ding.question.entity.Answer">
-    select * from answer where question_id = #{questionId,jdbcType=BIGINT}
-    order by id
-  </select>
+    <select id="getAnswer" parameterType="java.lang.Long" resultType="com.learning.cloud.ding.question.entity.Answer">
+        select * from answer where question_id = #{questionId,jdbcType=BIGINT}
+        order by id
+    </select>
 
 </mapper>

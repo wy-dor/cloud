@@ -132,7 +132,7 @@ public class ProcessServiceImpl implements ProcessService {
         Process process = new Process();
         String params = JSON.toJSONString(formComponentList);
         process.setAgentId(corpAgent.getAgentId());
-        if(bureau!=null){
+        if (bureau != null) {
             process.setBureauId(bureau.getId());
         }
         process.setCorpId(corpId);
@@ -144,10 +144,10 @@ public class ProcessServiceImpl implements ProcessService {
 
         OapiProcessSaveResponse response = client.execute(request, authenService.getAccessToken(corpId));
         //保存流程创建模板
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             OapiProcessSaveResponse.ProcessTopVo v = response.getResult();
             process.setProcessCode(v.getProcessCode());
-            process.setStatus((short)1);
+            process.setStatus((short) 1);
             processDao.update(process);
         }
         System.out.println(JSON.toJSONString(response));

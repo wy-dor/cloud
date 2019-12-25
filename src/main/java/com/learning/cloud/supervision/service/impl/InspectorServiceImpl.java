@@ -28,14 +28,14 @@ public class InspectorServiceImpl implements InspectorService {
     public JsonResult addInspector(Inspector inspector) throws Exception {
         // 判断不能重名
         int count = inspectorDao.getInspectorByLogin(inspector);
-        if(count>0){
+        if (count > 0) {
             throw new MyException(JsonResultEnum.EXIST_INSPECTOR);
         }
         inspector.setLogin(inspector.getLogin().replaceAll(" ", ""));
         int i = inspectorDao.addInspector(inspector);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success(inspector.getId());
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
@@ -43,9 +43,9 @@ public class InspectorServiceImpl implements InspectorService {
     @Override
     public JsonResult deleteInspector(Long id) throws Exception {
         int i = inspectorDao.deleteInspector(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }
@@ -53,9 +53,9 @@ public class InspectorServiceImpl implements InspectorService {
     @Override
     public JsonResult updateInspector(Inspector inspector) throws Exception {
         int i = inspectorDao.updateInspector(inspector);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }
@@ -75,9 +75,9 @@ public class InspectorServiceImpl implements InspectorService {
     @Override
     public JsonResult resetPassword(Inspector inspector) throws Exception {
         int i = inspectorDao.resetPassword(inspector);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.RESET_ERROR);
         }
     }

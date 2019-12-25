@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.duty.dao.DutyRecordDao">
-    
+
     <select id="getRecordPointStatistics" parameterType="java.lang.String"
             resultType="com.learning.cloud.duty.entity.RecordStatistics">
         select a.class_id classId, SUBSTR(a.day,1,10) day, sum(a.point) point
         from
         (select dr.*, (dr.time *dct.point*dct.plus_minus) as point
-            from duty_record dr
-            left join duty_check_type dct
-            on dr.point_type = dct.id
-            where dr.day  between #{startTime} and #{endTime}
-            and dr.time>0
-            and FIND_IN_SET(dr.class_id, #{classIds})
+        from duty_record dr
+        left join duty_check_type dct
+        on dr.point_type = dct.id
+        where dr.day between #{startTime} and #{endTime}
+        and dr.time>0
+        and FIND_IN_SET(dr.class_id, #{classIds})
         ) a
         group by a.class_id, SUBSTR(a.day,1,10)
         order by a.class_id,SUBSTR(a.day,1,10)
@@ -20,8 +20,9 @@
 
     <select id="getDutyRecordByClassId" parameterType="com.learning.cloud.duty.entity.DutyRecord"
             resultType="com.learning.cloud.duty.entity.DutyRecord">
-      select * from (
-        select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point, u.user_name from
+        select * from (
+        select dr.*, CONCAT(dt.check_name,"-",dct.name) as name, (dr.time *dct.point*dct.plus_minus) as point,
+        u.user_name from
         duty_record dr
         left join duty_check_type dct
         on dr.point_type = dct.id
@@ -36,7 +37,7 @@
         ) u
         on dr.user_id = u.user_id
         where dr.class_id = #{classId}
-          and dr.time>0
+        and dr.time>0
         <if test="schoolId != null">
             and dr.school_id = #{schoolId,jdbcType=BIGINT}
         </if>

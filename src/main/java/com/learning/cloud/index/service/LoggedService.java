@@ -9,7 +9,7 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface LoggedService {
-    JsonResult addLoggedRecord(LoggedRecord loggedRecord)throws Exception;
+    JsonResult addLoggedRecord(LoggedRecord loggedRecord) throws Exception;
 
     void AddSchoolScoreFormActivity();
 }

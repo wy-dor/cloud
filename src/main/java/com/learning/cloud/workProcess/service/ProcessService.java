@@ -8,12 +8,12 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface ProcessService {
-    JsonResult createProcessExample(String corpId)throws Exception;
+    JsonResult createProcessExample(String corpId) throws Exception;
 
-    JsonResult getSchoolByBureau(Integer id)throws Exception;
+    JsonResult getSchoolByBureau(Integer id) throws Exception;
 
-    JsonResult getProcessById(Integer id)throws Exception;
+    JsonResult getProcessById(Integer id) throws Exception;
 
-    JsonResult getProcessByBureauId(String bureauId)throws Exception;
+    JsonResult getProcessByBureauId(String bureauId) throws Exception;
 
 }

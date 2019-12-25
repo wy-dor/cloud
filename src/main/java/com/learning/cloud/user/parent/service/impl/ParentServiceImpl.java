@@ -38,7 +38,7 @@ public class ParentServiceImpl implements ParentService {
         int i = 0;
         for (Parent parent : parentList) {
             int j = removeParentInClass(classId, parent);
-             i += j;
+            i += j;
         }
         return i;
     }
@@ -49,13 +49,13 @@ public class ParentServiceImpl implements ParentService {
         String classesStr = "," + classId1 + ",";
         String replace = classesStr.replace(classId + ",", "");
         String substring = "";
-        if(!replace.equals(",")){
+        if (!replace.equals(",")) {
             substring = replace.substring(1, replace.lastIndexOf(","));
         }
         int i = 0;
-        if(substring.equals("")){
+        if (substring.equals("")) {
             i = parentDao.delete(parent.getId());
-        }else{
+        } else {
             parent.setClassId(substring);
             i = parentDao.update(parent);
         }

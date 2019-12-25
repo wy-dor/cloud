@@ -19,7 +19,7 @@ public class School extends BaseEntity {
 
     //added
     private Long orgActiveUserCount;
-    
+
     private Long orgUserCount;
 
 }

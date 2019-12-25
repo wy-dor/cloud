@@ -25,24 +25,24 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
     private ScoreTypeDao scoreTypeDao;
 
     @Override
-    public JsonResult addScoreRecord(ScoreRecord scoreRecord) throws Exception{
+    public JsonResult addScoreRecord(ScoreRecord scoreRecord) throws Exception {
         // 获取用户最新的积分记录
         ScoreRecord last = scoreRecordDao.getLastScoreRecord(scoreRecord.getUserId());
         Long lastScore = new Long(0);
-        if(last!=null){
+        if (last != null) {
             lastScore = last.getScore();
         }
         ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecord.getScoreTypeId());
-        if(scoreType==null){
+        if (scoreType == null) {
             return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
         }
         // 判断同一项每日加分次数
-        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordTimeByType(scoreRecord.getScoreTypeId(),scoreRecord.getUserId());
-        if(scoreRecords.size()>=scoreType.getTime()){
+        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordTimeByType(scoreRecord.getScoreTypeId(), scoreRecord.getUserId());
+        if (scoreRecords.size() >= scoreType.getTime()) {
             return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
         }
         scoreRecord.setScoreBeforeRecord(lastScore);
-        scoreRecord.setScore(lastScore+scoreType.getScore());
+        scoreRecord.setScore(lastScore + scoreType.getScore());
         int i = scoreRecordDao.addScoreRecord(scoreRecord);
         return JsonResultUtil.success(scoreRecord.getId());
     }
@@ -58,26 +58,26 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         // 获取用户最新的积分记录
         ScoreRecordSchool last = scoreRecordDao.getLastScoreRecordSchool(scoreRecordSchool.getSchoolId());
         Long lastScore = new Long(0);
-        if(last!=null){
+        if (last != null) {
             lastScore = last.getScore();
         }
         ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecordSchool.getScoreTypeId());
-        if(scoreType==null){
+        if (scoreType == null) {
             return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
         }
         // 判断同一项每日加分次数
-        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordSchoolTimeByType(scoreRecordSchool.getScoreTypeId(),scoreRecordSchool.getSchoolId());
-        if(scoreRecords.size()>=scoreType.getTime()){
+        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordSchoolTimeByType(scoreRecordSchool.getScoreTypeId(), scoreRecordSchool.getSchoolId());
+        if (scoreRecords.size() >= scoreType.getTime()) {
             return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
         }
         Long add = new Long(0);
-        if(scoreType.getScore()==0){
+        if (scoreType.getScore() == 0) {
             add = scoreRecordSchool.getScore();
-        }else{
+        } else {
             add = scoreType.getScore().longValue();
         }
         scoreRecordSchool.setScoreBeforeRecord(lastScore);
-        scoreRecordSchool.setScore(lastScore+add);
+        scoreRecordSchool.setScore(lastScore + add);
         int i = scoreRecordDao.addScoreRecordSchool(scoreRecordSchool);
         return JsonResultUtil.success(scoreRecordSchool.getId());
     }
@@ -87,20 +87,20 @@ public class ScoreRecordServiceImpl implements ScoreRecordService {
         // 获取用户最新的积分记录
         ScoreRecordClass last = scoreRecordDao.getLastScoreRecordClass(scoreRecordClass.getClassId());
         Long lastScore = new Long(0);
-        if(last!=null){
+        if (last != null) {
             lastScore = last.getScore();
         }
         ScoreType scoreType = scoreTypeDao.getScoreTypeById(scoreRecordClass.getScoreTypeId());
-        if(scoreType==null){
+        if (scoreType == null) {
             return JsonResultUtil.error(JsonResultEnum.NO_SCORE_ACTION);
         }
         // 判断同一项每日加分次数
-        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordClassTimeByType(scoreRecordClass.getScoreTypeId(),scoreRecordClass.getClassId());
-        if(scoreRecords.size()>=scoreType.getTime()){
+        List<ScoreRecord> scoreRecords = scoreRecordDao.getRecordClassTimeByType(scoreRecordClass.getScoreTypeId(), scoreRecordClass.getClassId());
+        if (scoreRecords.size() >= scoreType.getTime()) {
             return JsonResultUtil.error(JsonResultEnum.SCORE_TIME_LIMIT);
         }
         scoreRecordClass.setScoreBeforeRecord(lastScore);
-        scoreRecordClass.setScore(lastScore+scoreType.getScore());
+        scoreRecordClass.setScore(lastScore + scoreType.getScore());
         int i = scoreRecordDao.addScoreRecordClass(scoreRecordClass);
         return JsonResultUtil.success(scoreRecordClass.getId());
     }

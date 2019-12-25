@@ -25,26 +25,26 @@ public class AdminServiceImpl implements AdminService {
     private AuthenService authenService;
 
     @Override
-    public String getMainAdmin(String corpId) throws Exception{
+    public String getMainAdmin(String corpId) throws Exception {
         //获取主管理员
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_admin");
         OapiUserGetAdminRequest request = new OapiUserGetAdminRequest();
         request.setHttpMethod("GET");
         OapiUserGetAdminResponse response = client.execute(request, authenService.getAccessToken(corpId));
         String mainUser = "";
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             List<OapiUserGetAdminResponse.AdminList> adminLists = response.getAdminList();
-            for(int i=0;i<adminLists.size();i++){
-                if(adminLists.get(i).getSysLevel()==1){
+            for (int i = 0; i < adminLists.size(); i++) {
+                if (adminLists.get(i).getSysLevel() == 1) {
                     mainUser = adminLists.get(i).getUserid();
                 }
             }
-            if(mainUser.isEmpty()){
+            if (mainUser.isEmpty()) {
                 return adminLists.get(0).getUserid();
-            }else {
+            } else {
                 return mainUser;
             }
-        }else {
+        } else {
             throw new MyException(JsonResultEnum.DING_SYSADMIN_ERROR);
         }
     }

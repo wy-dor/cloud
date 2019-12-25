@@ -60,9 +60,9 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
     @Override
     public JsonResult addCourseExchange(CourseExchange courseExchange) throws Exception {
         Long id = courseExchange.getId();
-        if(id != null){
+        if (id != null) {
             courseExchangeDao.update(courseExchange);
-        }else{
+        } else {
             //1.只能调换未发生的时间的课程
             //2.只能调换每周都上的课程
             //3.单双周暂不支持
@@ -95,7 +95,7 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
      * @throws Exception
      */
     @Override
-    public JsonResult getCourseExchange(Long classId, String day){
+    public JsonResult getCourseExchange(Long classId, String day) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (day != null) {
 
@@ -141,10 +141,10 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
                 String result = responseProcessInstance.getResult();
                 if (status.equals("COMPLETED") || status.equals("TERMINATED")) {
                     Integer exchangeStatus = 2;
-                    if(status.equals("TERMINATED")){
+                    if (status.equals("TERMINATED")) {
                         exchangeStatus = 0;
-                    }else {
-                        if(result.equals("refuse")){
+                    } else {
+                        if (result.equals("refuse")) {
                             exchangeStatus = 0;
                         }
                     }
@@ -153,7 +153,7 @@ public class CourseExchangeServiceImpl implements CourseExchangeService {
                     //审批实例表更新状态
                     ProcessInstance instance = new ProcessInstance();
                     instance.setProcessInstanceId(processInstanceId);
-                    instance.setStatus((short)2);
+                    instance.setStatus((short) 2);
                     processInstanceDao.update(instance);
                 }
             }

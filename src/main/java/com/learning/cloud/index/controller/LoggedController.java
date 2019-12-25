@@ -20,12 +20,12 @@ public class LoggedController {
     private LoggedService loggedService;
 
     @PostMapping("/addLoggedRecord")
-    public JsonResult addLoggedRecord(LoggedRecord loggedRecord)throws Exception{
+    public JsonResult addLoggedRecord(LoggedRecord loggedRecord) throws Exception {
         return loggedService.addLoggedRecord(loggedRecord);
     }
 
     @GetMapping("/refreshSchoolActiveScore")
-    public void refreshSchoolActiveScore(){
+    public void refreshSchoolActiveScore() {
         loggedService.AddSchoolScoreFormActivity();
     }
 

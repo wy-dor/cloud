@@ -15,28 +15,28 @@ public class ScoreboardController {
     private ScoreboardService scoreboardService;
 
     @GetMapping("/getSchoolScore")
-    public JsonResult getSchoolScore(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+    public JsonResult getSchoolScore(@RequestParam(value = "schoolId", required = true) Long schoolId) throws Exception {
         return scoreboardService.getSchoolScore(schoolId);
     }
 
     @PostMapping("/updateSchoolScore")
-    public JsonResult updateSchoolScore(Long schoolId)throws Exception{
+    public JsonResult updateSchoolScore(Long schoolId) throws Exception {
         return scoreboardService.updateSchoolScore(schoolId);
     }
 
     @GetMapping("/getClassScore")
-    public JsonResult getClassScore(@RequestParam(value="classId",required = true) Long classId)throws Exception{
+    public JsonResult getClassScore(@RequestParam(value = "classId", required = true) Long classId) throws Exception {
         return scoreboardService.getClassScore(classId);
     }
 
     @PostMapping("/updateClassScore")
-    public JsonResult updateClassScore(Long classId)throws Exception{
+    public JsonResult updateClassScore(Long classId) throws Exception {
         return scoreboardService.updateClassScore(classId);
     }
 
 
     @GetMapping("/getTeacherRank")
-    public JsonResult getTeacherRank(ScoreRank scoreRank)throws Exception{
+    public JsonResult getTeacherRank(ScoreRank scoreRank) throws Exception {
         return scoreboardService.getTeacherRank(scoreRank);
     }
 
@@ -47,24 +47,24 @@ public class ScoreboardController {
 
     // 获取教育局内部人员排名
     @GetMapping("/getBureauPersonnelRank")
-    public JsonResult getBureauPersonnelRank(ScoreRank scoreRank)throws Exception{
+    public JsonResult getBureauPersonnelRank(ScoreRank scoreRank) throws Exception {
         return scoreboardService.getBureauPersonnelRank(scoreRank);
     }
 
     // 获取学校排名
     @GetMapping("/getSchoolRank")
-    public JsonResult getSchoolRank(ScoreRank scoreRank)throws Exception{
+    public JsonResult getSchoolRank(ScoreRank scoreRank) throws Exception {
         return scoreboardService.getSchoolRank(scoreRank);
     }
 
     @GetMapping("/getPersonnelRank")
-    public JsonResult getPersonnelRank(ScoreRank scoreRank)throws Exception{
+    public JsonResult getPersonnelRank(ScoreRank scoreRank) throws Exception {
         return scoreboardService.getPersonnelRank(scoreRank);
     }
 
     //获取班级积分排名，每日积分
     @GetMapping("/getClassRankFromDuty")
-    public JsonResult getClassRankFromDuty(ScoreRank scoreRank)throws Exception{
+    public JsonResult getClassRankFromDuty(ScoreRank scoreRank) throws Exception {
         return scoreboardService.getClassRankFromDuty(scoreRank);
     }
 }

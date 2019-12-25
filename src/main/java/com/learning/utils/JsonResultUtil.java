@@ -9,7 +9,7 @@ import com.learning.enums.JsonResultEnum;
  */
 public class JsonResultUtil {
 
-    public static JsonResult success(Object object){
+    public static JsonResult success(Object object) {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(1);
         jsonResult.setMsg("成功");
@@ -17,18 +17,18 @@ public class JsonResultUtil {
         return jsonResult;
     }
 
-    public static JsonResult success(){
+    public static JsonResult success() {
         return success(null);
     }
 
-    public static JsonResult error(Integer code, String msg){
+    public static JsonResult error(Integer code, String msg) {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(code);
         jsonResult.setMsg(msg);
         return jsonResult;
     }
 
-    public static JsonResult error(JsonResultEnum jsonResultEnum){
+    public static JsonResult error(JsonResultEnum jsonResultEnum) {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(jsonResultEnum.getCode());
         jsonResult.setMsg(jsonResultEnum.getMsg());

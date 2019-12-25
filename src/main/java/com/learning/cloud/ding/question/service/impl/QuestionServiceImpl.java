@@ -41,6 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 新增提问
+     *
      * @param question
      * @return
      */
@@ -53,7 +54,7 @@ public class QuestionServiceImpl implements QuestionService {
             question.setPicId(picId);
         }*/
         //压缩图片并进行保存
-        if(file != null) {
+        if (file != null) {
             long picId = reduceImg(file);
             //将压缩后的图片id保存到记录
             question.setSPicId(picId);
@@ -63,10 +64,10 @@ public class QuestionServiceImpl implements QuestionService {
         return JsonResultUtil.success(question.getId());
     }
 
-    private Long addPicture(MultipartFile file) throws Exception{
+    private Long addPicture(MultipartFile file) throws Exception {
         Picture picture = new Picture();
         //有图片需要先上传图片
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
             BASE64Encoder encoder = new BASE64Encoder();
             //base64转图
             String pic = encoder.encode(file.getBytes());
@@ -79,11 +80,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 根据条件获取提问问题
-     * @param question
-     * type类型
-     * status状态
-     * pageSize每页条数
-     * pageNum开始页
+     *
+     * @param question type类型
+     *                 status状态
+     *                 pageSize每页条数
+     *                 pageNum开始页
      */
     @Override
     public JsonResult getQuestion(Question question) throws Exception {
@@ -102,7 +103,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public JsonResult addAnswer(MultipartFile file, Answer answer) throws Exception {
-        if(file!=null) {
+        if (file != null) {
 //            Long picId = addPicture(file);
             Long picId = reduceImg(file);
             answer.setPicId(picId);
@@ -113,6 +114,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 获取问题的回答类容
+     *
      * @param answer
      */
     @Override
@@ -123,20 +125,22 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 删除提问
+     *
      * @param id
      */
     @Override
     public JsonResult deleteQuestion(Long id) throws Exception {
         int i = questionDao.deleteQuestion(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
-            return JsonResultUtil.error(1010,"删除失败，请联系管理员");
+        } else {
+            return JsonResultUtil.error(1010, "删除失败，请联系管理员");
         }
     }
 
     /**
      * 获取我参与的提问
+     *
      * @param question
      */
     @Override
@@ -147,10 +151,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 压缩图片
+     *
      * @return
      */
     @Override
-    public Long reduceImg(MultipartFile file)throws Exception{
+    public Long reduceImg(MultipartFile file) throws Exception {
         String sp = base64Reduce(file);
         Picture picture = new Picture();
         picture.setPic(sp);
@@ -160,14 +165,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /*
-    *
-    **/
+     *
+     **/
     //手机宽度 375 320
     //高度
     @Override
     public String base64Reduce(MultipartFile file) throws Exception {
         //500KB以内不压缩
-        if(file.getBytes().length < 500 * 1024 * 8){
+        if (file.getBytes().length < 500 * 1024 * 8) {
             BASE64Encoder encoder = new BASE64Encoder();
             //base64转图
             String encode = encoder.encode(file.getBytes());
@@ -175,7 +180,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
         String pathName = System.getProperty("user.dir") + File.separator + "upload";
         File f = new File(pathName);
-        if(!f.exists()){
+        if (!f.exists()) {
             f.mkdirs();
         }
         File toFile = new File(pathName + File.separator + file.getOriginalFilename());
@@ -191,7 +196,7 @@ public class QuestionServiceImpl implements QuestionService {
         int destHeight = originHeight * destWidth / originWidth;
 
         // 构造一个类型为预定义图像类型之一的 BufferedImage
-        BufferedImage tag = new BufferedImage(destWidth,destHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage tag = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_RGB);
 
         //绘制图像
         //Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
@@ -209,12 +214,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void inputStreamToFile(InputStream inputStream, File toFile) throws Exception{
+    public void inputStreamToFile(InputStream inputStream, File toFile) throws Exception {
         OutputStream outputStream = new FileOutputStream(toFile);
         int bytesRead = 0;
         byte[] buffer = new byte[8192];
-        while ((bytesRead = inputStream.read(buffer,0,8192))!=-1){
-            outputStream.write(buffer,0,bytesRead);
+        while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
         outputStream.close();
         inputStream.close();
@@ -226,10 +231,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public JsonResult closeQuestion(Long id) throws Exception {
         int i = questionDao.closeQuestion(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
-            return JsonResultUtil.error(1010,"关闭失败，请联系管理员");
+        } else {
+            return JsonResultUtil.error(1010, "关闭失败，请联系管理员");
         }
     }
 

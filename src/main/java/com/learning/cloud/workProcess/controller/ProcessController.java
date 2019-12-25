@@ -23,26 +23,26 @@ public class ProcessController {
      * 2.组织公文，教育局审核后在各个学校自动发起管理员公文，由指定用户审批或评论后确认。
      */
     @PostMapping("/createProcessExample")
-    public JsonResult createProcessExample(String corpId)throws Exception{
+    public JsonResult createProcessExample(String corpId) throws Exception {
         //创建固定格式，填充对应字段值
         return processService.createProcessExample(corpId);
     }
 
     //获取公文流转需要的组织
     @GetMapping("/getSchoolByBureau")
-    public JsonResult getSchoolByBureau(Integer id)throws Exception{
+    public JsonResult getSchoolByBureau(Integer id) throws Exception {
         return processService.getSchoolByBureau(id);
     }
 
     //获取流程模板信息
     @GetMapping("/getProcessById")
-    public JsonResult getProcessById(Integer id)throws Exception{
+    public JsonResult getProcessById(Integer id) throws Exception {
         return processService.getProcessById(id);
     }
 
     //获取教育局的流程信息
     @GetMapping("/getProcessByBureauId")
-    public JsonResult getProcessByBureauId(String bureauId)throws Exception{
+    public JsonResult getProcessByBureauId(String bureauId) throws Exception {
         return processService.getProcessByBureauId(bureauId);
     }
 

@@ -13,7 +13,7 @@ public class CampusController {
 
     /*获取学校下所有的校区列表*/
     @GetMapping("/getSchoolCampuses")
-    public JsonResult getSchoolCampuses(Integer schoolId){
+    public JsonResult getSchoolCampuses(Integer schoolId) {
         return campusService.getSchoolCampuses(schoolId);
     }
 }

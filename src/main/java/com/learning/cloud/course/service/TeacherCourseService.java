@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface TeacherCourseService {
 
-    JsonResult importTeacherCourse(MultipartFile file, Long schoolId)throws Exception;
+    JsonResult importTeacherCourse(MultipartFile file, Long schoolId) throws Exception;
 
-    JsonResult getTeacherCourseTemplet(Long schoolId)throws Exception;
+    JsonResult getTeacherCourseTemplet(Long schoolId) throws Exception;
 }

@@ -15,7 +15,7 @@ public class UserController {
     private UserDao userDao;
 
     @GetMapping("/getUserByUserId")
-    public JsonResult getUserByUserId(String userId){
+    public JsonResult getUserByUserId(String userId) {
         User byUserId = userDao.getByUserId(userId);
         return JsonResultUtil.success(byUserId);
     }

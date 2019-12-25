@@ -2,73 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.duty.dao.DutyTypeDao">
 
-  <select id="getDutyTypeBySchoolId" parameterType="com.learning.cloud.duty.entity.DutyType" resultType="com.learning.cloud.duty.entity.DutyType">
-    select * from duty_type
-    where school_id = #{schoolId}
-  </select>
+    <select id="getDutyTypeBySchoolId" parameterType="com.learning.cloud.duty.entity.DutyType"
+            resultType="com.learning.cloud.duty.entity.DutyType">
+        select * from duty_type
+        where school_id = #{schoolId}
+    </select>
 
-  <select id="getTotalPointInSchool" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select sum(org_point) from duty_type
-    where school_id = #{schoolId}
-  </select>
+    <select id="getTotalPointInSchool" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select sum(org_point) from duty_type
+        where school_id = #{schoolId}
+    </select>
 
-  <select id="getDutyTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyType">
-    select * from duty_type
-    where id = #{id}
-  </select>
+    <select id="getDutyTypeById" parameterType="java.lang.Long" resultType="com.learning.cloud.duty.entity.DutyType">
+        select * from duty_type
+        where id = #{id}
+    </select>
 
-  <delete id="deleteDutyType" parameterType="java.lang.Long">
-    delete from duty_type
-    where id = #{id}
-  </delete>
+    <delete id="deleteDutyType" parameterType="java.lang.Long">
+        delete from duty_type
+        where id = #{id}
+    </delete>
 
-  <insert id="addDutyType" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.duty.entity.DutyType">
-    insert into duty_type
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="checkName != null">
-        check_name,
-      </if>
-      <if test="orgPoint != null">
-        org_point,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="checkName != null">
-        #{checkName,jdbcType=VARCHAR},
-      </if>
-      <if test="orgPoint != null">
-        #{orgPoint,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addDutyType" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.duty.entity.DutyType">
+        insert into duty_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="checkName != null">
+                check_name,
+            </if>
+            <if test="orgPoint != null">
+                org_point,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="checkName != null">
+                #{checkName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgPoint != null">
+                #{orgPoint,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updateDutyType" parameterType="com.learning.cloud.duty.entity.DutyType">
-    update duty_type
-    <set>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="checkName != null">
-        check_name = #{checkName,jdbcType=VARCHAR},
-      </if>
-      <if test="orgPoint != null">
-        org_point = #{orgPoint,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    <update id="updateDutyType" parameterType="com.learning.cloud.duty.entity.DutyType">
+        update duty_type
+        <set>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="checkName != null">
+                check_name = #{checkName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgPoint != null">
+                org_point = #{orgPoint,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 
 
 </mapper>

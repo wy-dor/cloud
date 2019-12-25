@@ -1,85 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.index.dao.AuthAppInfoDao">
-  
-  <select id="findByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.index.entity.AuthAppInfo">
-    select *
-    from auth_app_info
-    where corp_id = #{corpId}
-    limit 1
-  </select>
 
-  <select id="getCorpAccessToken" parameterType="java.lang.String" resultType="java.lang.String">
-    select corp_access_token
-    from auth_app_info
-    where corp_id = #{corpId}
-  </select>
+    <select id="findByCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.index.entity.AuthAppInfo">
+        select *
+        from auth_app_info
+        where corp_id = #{corpId}
+        limit 1
+    </select>
 
-  <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
-    insert into auth_app_info
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="corpId != null">
-        corp_id,
-      </if>
-      <if test="corpName != null">
-        corp_name,
-      </if>
-      <if test="corpAccessToken != null">
-        corp_access_token,
-      </if>
-      <if test="createdTime != null">
-        created_time,
-      </if>
-      <if test="suiteTicket != null">
-        suite_ticket,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="corpId != null">
-        #{corpId,jdbcType=VARCHAR},
-      </if>
-      <if test="corpName != null">
-        #{corpName,jdbcType=VARCHAR},
-      </if>
-      <if test="corpAccessToken != null">
-        #{corpAccessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="createdTime != null">
-        #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="suiteTicket != null">
-        #{suiteTicket,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <select id="getCorpAccessToken" parameterType="java.lang.String" resultType="java.lang.String">
+        select corp_access_token
+        from auth_app_info
+        where corp_id = #{corpId}
+    </select>
 
-  <update id="update" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
-    update auth_app_info
-    <set>
-      <if test="corpName != null">
-        corp_name = #{corpName,jdbcType=VARCHAR},
-      </if>
-      <if test="corpAccessToken != null">
-        corp_access_token = #{corpAccessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="state != null">
-        state = #{state,jdbcType=SMALLINT},
-      </if>
-      <if test="suiteTicket != null">
-        suite_ticket = #{suiteTicket,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where corp_id = #{corpId,jdbcType=VARCHAR}
-  </update>
+    <insert id="insert" useGeneratedKeys="true" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
+        insert into auth_app_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="corpId != null">
+                corp_id,
+            </if>
+            <if test="corpName != null">
+                corp_name,
+            </if>
+            <if test="corpAccessToken != null">
+                corp_access_token,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="suiteTicket != null">
+                suite_ticket,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="corpId != null">
+                #{corpId,jdbcType=VARCHAR},
+            </if>
+            <if test="corpName != null">
+                #{corpName,jdbcType=VARCHAR},
+            </if>
+            <if test="corpAccessToken != null">
+                #{corpAccessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="suiteTicket != null">
+                #{suiteTicket,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="listAuthAppInfo" resultType="com.learning.cloud.index.entity.AuthAppInfo">
-    select *
-    from auth_app_info
-  </select>
+    <update id="update" parameterType="com.learning.cloud.index.entity.AuthAppInfo">
+        update auth_app_info
+        <set>
+            <if test="corpName != null">
+                corp_name = #{corpName,jdbcType=VARCHAR},
+            </if>
+            <if test="corpAccessToken != null">
+                corp_access_token = #{corpAccessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=SMALLINT},
+            </if>
+            <if test="suiteTicket != null">
+                suite_ticket = #{suiteTicket,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where corp_id = #{corpId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="listAuthAppInfo" resultType="com.learning.cloud.index.entity.AuthAppInfo">
+        select *
+        from auth_app_info
+    </select>
 </mapper>

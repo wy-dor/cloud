@@ -14,34 +14,34 @@ public class NewsTypeController {
     private NewsTypeService newsTypeService;
 
     @PostMapping("/addNewsType")
-    public JsonResult addNewsType(NewsType newsType){
+    public JsonResult addNewsType(NewsType newsType) {
         return newsTypeService.addNewsType(newsType);
     }
 
     @PostMapping("updateNewsType")
-    public JsonResult updateNewsType(NewsType newsType){
+    public JsonResult updateNewsType(NewsType newsType) {
         return newsTypeService.updateNewsType(newsType);
     }
 
     @GetMapping("/getNewsTypeByTypeId")
-    public JsonResult getNewsTypeByTypeId(Integer typeId){
+    public JsonResult getNewsTypeByTypeId(Integer typeId) {
         return newsTypeService.getNewsTypeByTypeId(typeId);
     }
 
     //根级类型的parentId为0
     @GetMapping("/getNewsTypesByParentId")
-    public JsonResult getNewsTypesByParentId(NewsType newsType){
+    public JsonResult getNewsTypesByParentId(NewsType newsType) {
         return newsTypeService.getNewsTypesByParentId(newsType);
     }
 
     //删除指定类型及其下子类型
     @GetMapping("/deleteNewsType")
-    public JsonResult deleteNewsType(Integer typeId){
+    public JsonResult deleteNewsType(Integer typeId) {
         return newsTypeService.deleteNewsType(typeId);
     }
 
     @GetMapping("/getAllNewsType")
-    public JsonResult getAllNewsType(NewsType newsType){
+    public JsonResult getAllNewsType(NewsType newsType) {
         return newsTypeService.getAllNewsType(newsType);
     }
 }

@@ -72,7 +72,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         String[] split = userIds.split(",");
         for (String s : split) {
             Student byUserId = studentDao.getByUserId(s);
-            if(byUserId != null){
+            if (byUserId != null) {
                 BigDecimal totalScore = byUserId.getTotalScore();
                 byUserId.setTotalScore(totalScore.add(score));
                 studentDao.update(byUserId);
@@ -121,7 +121,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
                 String[] split = userIds.split(",");
                 for (String s : split) {
                     Student byUserId = studentDao.getByUserId(s);
-                    if(byUserId != null){
+                    if (byUserId != null) {
                         studentList.add(byUserId);
                     }
                 }
@@ -135,14 +135,14 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
                     String[] split1 = userIds.split(",");
                     for (String userId : split1) {
                         Student byUserId = studentDao.getByUserId(userId);
-                        if(byUserId != null){
+                        if (byUserId != null) {
                             studentList.add(byUserId);
                         }
                     }
                 }
             }
             //若记录中的用户均被删除 则该记录不返回展示
-            if(studentList.size() > 0){
+            if (studentList.size() > 0) {
                 record.setStudentList(studentList);
                 recordList.add(record);
             }
@@ -158,7 +158,7 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
 
     @Override
     public JsonResult getRecordStatisticsForStudent(String studentUserId) {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         List<RecordStatisticsForStudent> dimensionList = recordDao.getRecordStatisticsForStudent(studentUserId);
         BigDecimal totalPraiseScore = new BigDecimal("0");
         BigDecimal totalCriticalScore = new BigDecimal("0");
@@ -168,18 +168,18 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
             totalPraiseScore = totalPraiseScore.add(praiseItemScore);
             totalCriticalScore = totalCriticalScore.add(criticalItemScore);
         }
-        map.put("dimensionList",dimensionList);
-        map.put("totalCriticalCount",totalCriticalScore);
-        map.put("totalPraiseCount",totalPraiseScore);
+        map.put("dimensionList", dimensionList);
+        map.put("totalCriticalCount", totalCriticalScore);
+        map.put("totalPraiseCount", totalPraiseScore);
         return JsonResultUtil.success(map);
     }
 
     @Override
     public JsonResult getRecordStatisticsForStudentInToday(EvaluationRecord evaluationRecord) {
-        Map<String,Object> map = new HashMap();
+        Map<String, Object> map = new HashMap();
         List<EvaluationRecord> recordListForStudent = recordDao.getByRecord(evaluationRecord);
         PageEntity<EvaluationRecord> pageEntity = new PageEntity<>(recordListForStudent);
-        map.put("pageEntity",pageEntity);
+        map.put("pageEntity", pageEntity);
         //获取今日记录数据统计
         EvaluationRecord record = new EvaluationRecord();
         Date date = new Date();
@@ -194,14 +194,14 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService {
         for (EvaluationRecord r : recordList) {
             //指定用户获取今日评价统计数据
             BigDecimal score = r.getScore();
-            if (score.compareTo(BigDecimal.ZERO) == 1){
+            if (score.compareTo(BigDecimal.ZERO) == 1) {
                 todayPraiseScore = todayPraiseScore.add(score);
-            }else{
+            } else {
                 todayCriticalScore = todayCriticalScore.add(score);
             }
         }
-        map.put("todayCriticalCount",todayCriticalScore);
-        map.put("todayPraiseCount",todayPraiseScore);
+        map.put("todayCriticalCount", todayCriticalScore);
+        map.put("todayPraiseCount", todayPraiseScore);
         return JsonResultUtil.success(map);
     }
 

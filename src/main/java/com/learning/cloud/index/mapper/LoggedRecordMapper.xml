@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.index.dao.LoggedDao">
 
-  <insert id="addLoggedRecord" parameterType="com.learning.cloud.index.entity.LoggedRecord">
-    insert into logged_record (user_id, corp_id)
-    values ( #{userId,jdbcType=VARCHAR},
-      #{corpId,jdbcType=VARCHAR} )
-    on duplicate key update logged_time = #{loggedTime},time = time + 1
-  </insert>
+    <insert id="addLoggedRecord" parameterType="com.learning.cloud.index.entity.LoggedRecord">
+        insert into logged_record (user_id, corp_id)
+        values ( #{userId,jdbcType=VARCHAR},
+        #{corpId,jdbcType=VARCHAR} )
+        on duplicate key update logged_time = #{loggedTime},time = time + 1
+    </insert>
 
-  <select id="getActiveUserByCorpId" resultType="java.lang.Integer">
-    select count(*) from logged_record
-    where corp_id = #{corpId} and date(logged_time) = date_sub(curdate(),interval 1 day)
-  </select>
+    <select id="getActiveUserByCorpId" resultType="java.lang.Integer">
+        select count(*) from logged_record
+        where corp_id = #{corpId} and date(logged_time) = date_sub(curdate(),interval 1 day)
+    </select>
 
 </mapper>

@@ -33,18 +33,18 @@ public class DingUtils {
     public static AuthenService authenService;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         authenService = service;
     }
 
 
     // 获取用户所在企业的token
-    public static String getAccessToken(String corpId)throws Exception{
+    public static String getAccessToken(String corpId) throws Exception {
         return authenService.getAccessToken(corpId);
     }
 
     // 获取应用后台免登的accessToken，本接口获取的accessToken只在微应用后台管理免登服务中使用。
-    public static String getIsvAccessToken()throws Exception{
+    public static String getIsvAccessToken() throws Exception {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sso/gettoken");
         OapiSsoGettokenRequest request = new OapiSsoGettokenRequest();
         request.setCorpid(CORP_ID);
@@ -55,18 +55,18 @@ public class DingUtils {
     }
 
     // 获取应用管理员的身份信息
-    public static JsonResult getAdministrator(String code)throws Exception{
+    public static JsonResult getAdministrator(String code) throws Exception {
         String isvAccessToken = getIsvAccessToken();
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sso/getuserinfo");
         OapiSsoGetuserinfoRequest request = new OapiSsoGetuserinfoRequest();
         request.setCode(code);
         request.setHttpMethod("GET");
-        OapiSsoGetuserinfoResponse response = client.execute(request,isvAccessToken);
+        OapiSsoGetuserinfoResponse response = client.execute(request, isvAccessToken);
         return JsonResultUtil.success(response);
     }
 
     // 第三方企业应用登录，获取用户信息userid
-    public static JsonResult getUserInfo(String authCode, String corpid)throws Exception{
+    public static JsonResult getUserInfo(String authCode, String corpid) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
         OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
         request.setCode(authCode);
@@ -76,24 +76,24 @@ public class DingUtils {
     }
 
     // 第三方扫码登录，用户授权的临时授权码code，获取用户信息openid
-    public static JsonResult getUserInfoByCode(String authCode,String appId, String appSecret)throws Exception{
-        DefaultDingTalkClient  client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sns/getuserinfo_bycode");
+    public static JsonResult getUserInfoByCode(String authCode, String appId, String appSecret) throws Exception {
+        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/sns/getuserinfo_bycode");
         OapiSnsGetuserinfoBycodeRequest req = new OapiSnsGetuserinfoBycodeRequest();
         req.setTmpAuthCode(authCode);
-        OapiSnsGetuserinfoBycodeResponse response = client.execute(req,appId,appSecret);
+        OapiSnsGetuserinfoBycodeResponse response = client.execute(req, appId, appSecret);
         return JsonResultUtil.success(response);
     }
 
     // 获取用户详情
-    public static OapiUserGetResponse getUserByUserid(String userid, String corpid)throws Exception{
+    public static OapiUserGetResponse getUserByUserid(String userid, String corpid) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userid);
         request.setHttpMethod("GET");
         OapiUserGetResponse response = client.execute(request, getAccessToken(corpid));
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             return response;
-        }else {
+        } else {
             log.error("获取用户详情失败");
             return null;
         }
@@ -101,7 +101,7 @@ public class DingUtils {
     }
 
     // unionid换取userid
-    public static String getUseridByUnionid(String unionid, String corpid)throws Exception{
+    public static String getUseridByUnionid(String unionid, String corpid) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getUseridByUnionid");
         OapiUserGetUseridByUnionidRequest request = new OapiUserGetUseridByUnionidRequest();
         request.setUnionid(unionid);

@@ -3,11 +3,11 @@
 <mapper namespace="com.learning.cloud.gradeModule.dao.GradeEntryDao">
 
     <select id="getById" parameterType="java.lang.Long" resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
-      select *
-      from grade_entry
-      where id = #{id}
-      limit 1
-   </select>
+        select *
+        from grade_entry
+        where id = #{id}
+        limit 1
+    </select>
 
     <select id="getByGradeEntry" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry"
             resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
@@ -31,12 +31,12 @@
 
     <select id="getAllGradeEntry" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry"
             resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
-    select *
-    from grade_entry
-    where classId = #{classId}
-    and module_id = #{moduleId}
-    order by id desc
-  </select>
+        select *
+        from grade_entry
+        where classId = #{classId}
+        and module_id = #{moduleId}
+        order by id desc
+    </select>
 
     <delete id="deleteByModuleId" parameterType="java.lang.Long">
         delete from grade_entry
@@ -104,7 +104,7 @@
                 marks = #{marks,jdbcType=LONGVARCHAR},
             </if>
             <if test="studentNo != null">
-               student_no = #{studentNo,jdbcType=VARCHAR},
+                student_no = #{studentNo,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id}
@@ -112,17 +112,17 @@
 
     <select id="getDoneClassSubjectInModule" parameterType="com.learning.cloud.gradeModule.entity.GradeEntry"
             resultType="com.learning.cloud.gradeModule.entity.GradeEntry">
-    select g.class_id classId,g.marks
-    from grade_entry g
-    RIGHT JOIN
-    (select class_id,min(id) minId
-    from grade_entry
-    where module_id = #{moduleId}
-    group by class_id) t
-    on g.class_id = t.class_id
-    and g.id = t.minId
-    <if test="classId != null">
-        where g.class_id = #{classId}
-    </if>
-  </select>
+        select g.class_id classId,g.marks
+        from grade_entry g
+        RIGHT JOIN
+        (select class_id,min(id) minId
+        from grade_entry
+        where module_id = #{moduleId}
+        group by class_id) t
+        on g.class_id = t.class_id
+        and g.id = t.minId
+        <if test="classId != null">
+            where g.class_id = #{classId}
+        </if>
+    </select>
 </mapper>

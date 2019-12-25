@@ -38,7 +38,7 @@ public class PictureServiceImpl implements PictureService {
     public JsonResult addPic(MultipartFile file) throws Exception {
         Picture picture = new Picture();
         //有图片需要先上传图片
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
             BASE64Encoder encoder = new BASE64Encoder();
             //base64转图
             String pic = encoder.encode(file.getBytes());

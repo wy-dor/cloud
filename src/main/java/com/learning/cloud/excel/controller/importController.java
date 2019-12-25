@@ -15,7 +15,7 @@ public class importController {
     private ImportService importService;
 
     @PostMapping("/importExcelGradeEntries")
-    public JsonResult importExcelGradeEntries(@RequestParam("file") MultipartFile file, @RequestParam("moduleId") Long moduleId) throws Exception{
-        return importService.importExcelGradeEntries(file,moduleId);
+    public JsonResult importExcelGradeEntries(@RequestParam("file") MultipartFile file, @RequestParam("moduleId") Long moduleId) throws Exception {
+        return importService.importExcelGradeEntries(file, moduleId);
     }
 }

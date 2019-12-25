@@ -19,12 +19,12 @@ public class TermController {
     private TermService termService;
 
     @GetMapping("/getSchoolTerm")
-    public JsonResult getSchoolTerm(@RequestParam(value="schoolId",required = true) Long schoolId)throws Exception{
+    public JsonResult getSchoolTerm(@RequestParam(value = "schoolId", required = true) Long schoolId) throws Exception {
         return termService.getSchoolTerm(schoolId);
     }
 
     @PostMapping("/editSchoolTerm")
-    public JsonResult editSchoolTerm(Term term)throws Exception{
+    public JsonResult editSchoolTerm(Term term) throws Exception {
         return termService.editSchoolTerm(term);
     }
 }

@@ -24,11 +24,11 @@ public class PreLessonController {
     private QuestionService questionService;
 
     @PostMapping("/addPreLesson")
-    public JsonResult addPreLesson(@RequestParam(value = "picFiles",required = false) MultipartFile[] picFiles,
-                                   /*@RequestParam(value = "fileList",required = false) List<MultipartFile> fileList,*/
+    public JsonResult addPreLesson(@RequestParam(value = "picFiles", required = false) MultipartFile[] picFiles,
+            /*@RequestParam(value = "fileList",required = false) List<MultipartFile> fileList,*/
                                    PreLesson preLesson) throws Exception {
         List<Long> ids = new ArrayList<>();
-        if(picFiles != null && picFiles.length != 0){
+        if (picFiles != null && picFiles.length != 0) {
             for (int i = 0; i < picFiles.length; i++) {
                 Long picFileId = questionService.reduceImg(picFiles[i]);
                 ids.add(picFileId);
@@ -39,17 +39,17 @@ public class PreLessonController {
     }
 
     @GetMapping("/deletePreLesson")
-    public JsonResult deletePreLesson(Long id){
+    public JsonResult deletePreLesson(Long id) {
         return preLessonService.deletePreLesson(id);
     }
 
     @GetMapping("/getPreLessonById")
-    public JsonResult getPreLessonById(Long id){
+    public JsonResult getPreLessonById(Long id) {
         return preLessonService.getPreLessonById(id);
     }
 
     @GetMapping("/getAllPreLessons")
-    public JsonResult getAllPreLessons(PreLesson preLesson){
+    public JsonResult getAllPreLessons(PreLesson preLesson) {
         return preLessonService.getAllPreLessons(preLesson);
     }
 

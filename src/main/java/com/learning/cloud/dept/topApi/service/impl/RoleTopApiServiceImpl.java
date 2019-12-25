@@ -94,7 +94,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         Boolean flag = true;
         Long pageNo = 1L;
         List<OapiEduStudentListResponse.StudentRespone> allList = new ArrayList<>();
-        while(flag){
+        while (flag) {
             req.setPageNo(pageNo);
             req.setPageSize(10L);
             OapiEduStudentListResponse rsp = client.execute(req, accessToken);
@@ -112,16 +112,16 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
                 student.setStudentNo(studentNo);
                 student.setStudentName(name);
                 student.setSchoolId(schoolId);
-                if(byUserId != null){
+                if (byUserId != null) {
                     studentDao.update(student);
-                }else{
+                } else {
                     studentDao.insert(student);
                 }
             }
             allList.addAll(list);
-            if(result.getHasMore()){
+            if (result.getHasMore()) {
                 pageNo += 1;
-            }else{
+            } else {
                 flag = false;
             }
         }
@@ -136,16 +136,16 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         Boolean flag = true;
         Long pageNo = 1L;
         List<OapiEduStudentListResponse.StudentRespone> allList = new ArrayList<>();
-        while(flag){
+        while (flag) {
             req.setPageNo(pageNo);
             req.setPageSize(10L);
             OapiEduStudentListResponse rsp = client.execute(req, accessToken);
             OapiEduStudentListResponse.PageResult result = rsp.getResult();
             List<OapiEduStudentListResponse.StudentRespone> list = result.getList();
             allList.addAll(list);
-            if(result.getHasMore()){
+            if (result.getHasMore()) {
                 pageNo += 1;
-            }else{
+            } else {
                 flag = false;
             }
         }
@@ -231,7 +231,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         Boolean flag = true;
         Long pageNo = 1L;
         List<OapiEduGuardianListResponse.GuardianRespone> allList = new ArrayList<>();
-        while(flag){
+        while (flag) {
             req.setPageNo(pageNo);
             req.setPageSize(10L);
             OapiEduGuardianListResponse rsp = client.execute(req, accessToken);
@@ -245,16 +245,16 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
                 parent.setSchoolId(schoolId);
                 Parent parentInSchool = parentDao.getParentInSchool(parent);
                 parent.setParentName(nick);
-                if(parentInSchool != null){
+                if (parentInSchool != null) {
                     parentDao.insert(parent);
-                }else{
+                } else {
                     parentDao.update(parent);
                 }
             }
             allList.addAll(list);
-            if(result.getHasMore()){
+            if (result.getHasMore()) {
                 pageNo += 1;
-            }else{
+            } else {
                 flag = false;
             }
         }
@@ -269,16 +269,16 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         Boolean flag = true;
         Long pageNo = 1L;
         List<OapiEduGuardianListResponse.GuardianRespone> allList = new ArrayList<>();
-        while(flag){
+        while (flag) {
             req.setPageNo(pageNo);
             req.setPageSize(10L);
             OapiEduGuardianListResponse rsp = client.execute(req, accessToken);
             OapiEduGuardianListResponse.PageResult result = rsp.getResult();
             List<OapiEduGuardianListResponse.GuardianRespone> list = result.getList();
             allList.addAll(list);
-            if(result.getHasMore()){
+            if (result.getHasMore()) {
                 pageNo += 1;
-            }else{
+            } else {
                 flag = false;
             }
         }
@@ -313,7 +313,7 @@ public class RoleTopApiServiceImpl implements RoleTopApiService {
         List<OapiEduTeacherListResponse.TeacherRespone> result = rsp.getResult();
         String advisorTeacherUserId = "";
         for (OapiEduTeacherListResponse.TeacherRespone teacherRespone : result) {
-            if(teacherRespone.getIsAdviser().equals(new Long("1"))){
+            if (teacherRespone.getIsAdviser().equals(new Long("1"))) {
                 advisorTeacherUserId = teacherRespone.getTeacherUserid();
             }
         }

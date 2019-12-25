@@ -4,10 +4,10 @@
 
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationItem">
-    select *
-    from evaluation_item
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_item
+        where id = #{id}
+    </select>
 
     <select id="getByItem" parameterType="com.learning.cloud.evaluation.entity.EvaluationItem"
             resultType="com.learning.cloud.evaluation.entity.EvaluationItem">

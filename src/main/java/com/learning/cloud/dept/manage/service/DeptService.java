@@ -14,7 +14,7 @@ public interface DeptService {
 
     void saveUserInClass(Long deptId) throws ApiException;
 
-    Map<String, String> getUserRole(String userId, String accessToken, String avatar ,String corpId) throws ApiException;
+    Map<String, String> getUserRole(String userId, String accessToken, String avatar, String corpId) throws ApiException;
 
     OapiDepartmentListIdsResponse getDeptListIds(String pDeptId, String accessToken) throws ApiException;
 
@@ -34,7 +34,7 @@ public interface DeptService {
 
     OapiDepartmentListParentDeptsResponse getListParentDeptsByUser(String userId, String accessToken) throws ApiException;
 
-    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user, int roleType, String accessToken) ;
+    void userSaveByRole(Integer schoolId, String corpId, Integer campusId, OapiUserListbypageResponse.Userlist user, int roleType, String accessToken);
 
     void recurseGetUser(Long departmentId, String accessToken, String corpId, Integer schoolId);
 

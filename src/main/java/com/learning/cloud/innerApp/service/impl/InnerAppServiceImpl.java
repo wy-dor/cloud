@@ -28,13 +28,13 @@ public class InnerAppServiceImpl implements InnerAppService {
     private DeptService deptService;
 
     public ServiceResult getSchoolDeptIds() throws ApiException {
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         String accessToken = getToken();
         OapiDepartmentListResponse resp = deptService.getDeptList("1", accessToken, 1);
         List<OapiDepartmentListResponse.Department> deptList = resp.getDepartment();
         for (OapiDepartmentListResponse.Department dept : deptList) {
             //递归得到学校部门id
-            if(dept.getSourceIdentifier() != null){
+            if (dept.getSourceIdentifier() != null) {
                 String deptIdStr = dept.getParentid().toString();
                 getSchoolDepts(map, deptList, deptIdStr);
             }
@@ -53,14 +53,14 @@ public class InnerAppServiceImpl implements InnerAppService {
         return userId;
     }
 
-    private void getSchoolDepts(Map<String,String> map, List<OapiDepartmentListResponse.Department> deptList, String deptIdStr) {
+    private void getSchoolDepts(Map<String, String> map, List<OapiDepartmentListResponse.Department> deptList, String deptIdStr) {
         for (OapiDepartmentListResponse.Department department : deptList) {
-            if(department.getId().toString().equals(deptIdStr)){
-                if(department.getSourceIdentifier() == null){
-                    map.put(deptIdStr,department.getName());
-                }else{
+            if (department.getId().toString().equals(deptIdStr)) {
+                if (department.getSourceIdentifier() == null) {
+                    map.put(deptIdStr, department.getName());
+                } else {
                     deptIdStr = department.getParentid().toString();
-                    getSchoolDepts(map,deptList,deptIdStr);
+                    getSchoolDepts(map, deptList, deptIdStr);
                 }
             }
         }

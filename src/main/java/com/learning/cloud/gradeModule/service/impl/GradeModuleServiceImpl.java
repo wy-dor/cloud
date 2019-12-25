@@ -44,20 +44,20 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     public JsonResult saveGradeModule(GradeModule gradeModule) {
         Integer classesAddingWay = gradeModule.getClassesAddingWay();
         //如果选择班级方式为年级添加
-        if(classesAddingWay == 2){
-            Map<String,String> map = new HashMap<>();
+        if (classesAddingWay == 2) {
+            Map<String, String> map = new HashMap<>();
             List<String> gradeNamesStr = gradeModule.getGradeNamesStr();
-            String gradesStr = String.join(",",gradeNamesStr);
+            String gradesStr = String.join(",", gradeNamesStr);
             gradeModule.setGradesStr(gradesStr);
             for (String s : gradeNamesStr) {
-                if(s.contains("\"")){
-                    s = s.replace("\"","");
+                if (s.contains("\"")) {
+                    s = s.replace("\"", "");
                 }
-                if(s.contains("[")){
-                    s = s.replace("[","");
+                if (s.contains("[")) {
+                    s = s.replace("[", "");
                 }
-                if(s.contains("]")){
-                    s = s.replace("]","");
+                if (s.contains("]")) {
+                    s = s.replace("]", "");
                 }
                 //获取分校下指定年级名称的班级列表
                 Integer campusId = gradeClassService.getCampusIdForTeacher(gradeModule.getUserId(), gradeModule.getSchoolId());
@@ -66,7 +66,7 @@ public class GradeModuleServiceImpl implements GradeModuleService {
                 gc.setGradeName(s);
                 List<GradeClass> byGradeClass = gradeClassDao.getByGradeClass(gc);
                 for (GradeClass gc_1 : byGradeClass) {
-                    map.put(gc_1.getId().toString(),gc_1.getClassName());
+                    map.put(gc_1.getId().toString(), gc_1.getClassName());
                 }
             }
             String classMapStr = JSON.toJSONString(map);
@@ -87,17 +87,17 @@ public class GradeModuleServiceImpl implements GradeModuleService {
             gradeModule.setSubjects(s);
         }*/
         String classesStr = gradeModule.getClassesStr();
-        if(classesStr.equals("")){
-            return JsonResultUtil.error(0,"成绩模板格式错误，班级不能为空！");
+        if (classesStr.equals("")) {
+            return JsonResultUtil.error(0, "成绩模板格式错误，班级不能为空！");
         }
         Long id = gradeModule.getId();
-        if(id == null){
+        if (id == null) {
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             gradeModule.setCreateTime(dateFormat.format(date));
             gradeModuleDao.insert(gradeModule);
             id = gradeModule.getId();
-        }else{
+        } else {
             gradeModuleDao.update(gradeModule);
         }
         return JsonResultUtil.success(id);
@@ -110,7 +110,7 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     }
 
     @Override
-    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule){
+    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule) {
         List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModuleForAdministrator(gradeModule);
         return JsonResultUtil.success(new PageEntity<>(gradeModuleList));
     }
@@ -118,7 +118,7 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     @Override
     public JsonResult getAllGradeModule(GradeModule gradeModule) {
         List<Integer> classIds = gradeModule.getClassIds();
-        if(classIds == null || classIds.size() == 0){
+        if (classIds == null || classIds.size() == 0) {
             return JsonResultUtil.success(null);
         }
         List<GradeModule> gradeModuleList = gradeModuleDao.getAllGradeModule(gradeModule);
@@ -142,7 +142,7 @@ public class GradeModuleServiceImpl implements GradeModuleService {
     public JsonResult updateGradeModule(GradeModule gradeModule) {
         Integer status = gradeModule.getStatus();
         //成绩发布更新
-        if(status != null && status == 1){
+        if (status != null && status == 1) {
             Long moduleId = gradeModule.getId();
             GradeModule byId = gradeModuleDao.getById(moduleId);
             StringBuilder undoneClassMention = new StringBuilder("");

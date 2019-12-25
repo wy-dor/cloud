@@ -9,13 +9,13 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface CourseExchangeService {
-    JsonResult addCourseExchange(CourseExchange courseExchange)throws Exception;
+    JsonResult addCourseExchange(CourseExchange courseExchange) throws Exception;
 
     JsonResult getCourseExchange(Long classId, String day);
 
-    JsonResult getMyExchange(Long teacherId, Integer status)throws Exception;
+    JsonResult getMyExchange(Long teacherId, Integer status) throws Exception;
 
-    JsonResult confirmExchange(CourseExchange courseExchange)throws Exception;
+    JsonResult confirmExchange(CourseExchange courseExchange) throws Exception;
 
     void renewCourseExchangeStatus(CourseExchange courseExchange) throws Exception;
 }

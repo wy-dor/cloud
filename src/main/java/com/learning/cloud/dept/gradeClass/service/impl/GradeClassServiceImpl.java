@@ -52,7 +52,7 @@ public class GradeClassServiceImpl implements GradeClassService {
         String[] idList = teacher.getClassIds().split(",");
         for (String idStr : idList) {
             GradeClass byId = gradeClassDao.getById(Integer.parseInt(idStr));
-            if(byId != null){
+            if (byId != null) {
                 classList.add(byId);
             }
         }
@@ -82,13 +82,13 @@ public class GradeClassServiceImpl implements GradeClassService {
 
     @Override
     public JsonResult getClassDetails(Integer classId) {
-        Map<String,Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         Integer teacherNum = teacherDao.getClassTeacherNum(classId);
-        map.put("teacherNum",teacherNum);
+        map.put("teacherNum", teacherNum);
         Integer stuNum = studentDao.getClassStuNum(classId);
-        map.put("stuNum",stuNum);
+        map.put("stuNum", stuNum);
         Integer parentNum = parentDao.getClassParentNum(classId.toString());
-        map.put("parentNum",parentNum);
+        map.put("parentNum", parentNum);
         return JsonResultUtil.success(map);
     }
 
@@ -114,9 +114,9 @@ public class GradeClassServiceImpl implements GradeClassService {
     @Override
     public JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass) {
         List<String> gradeNameList = null;
-        if(gradeClass.getCampusId() != null){
+        if (gradeClass.getCampusId() != null) {
             gradeNameList = gradeClassDao.getAllGradeName(gradeClass.getCampusId());
-        }else{
+        } else {
             gradeNameList = gradeClassDao.getAllGradeNameBySchoolId(gradeClass.getSchoolId());
         }
         return JsonResultUtil.success(gradeNameList);
@@ -137,9 +137,9 @@ public class GradeClassServiceImpl implements GradeClassService {
     @Override
     public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
         Integer campusId = getCampusIdForTeacher(userId, schoolId);
-        if(campusId == null){
+        if (campusId == null) {
             log.info("根据老师信息获取学校下所有班级失败");
-            return JsonResultUtil.error(0,"根据老师信息获取学校下所有班级失败");
+            return JsonResultUtil.error(0, "根据老师信息获取学校下所有班级失败");
         }
         GradeClass gradeClass = new GradeClass();
         gradeClass.setCampusId(campusId);
@@ -154,7 +154,7 @@ public class GradeClassServiceImpl implements GradeClassService {
         user.setUserId(userId);
         user.setRoleType(3);
         User bySchoolRoleIdentity = userDao.getBySchoolRoleIdentity(user);
-        if(bySchoolRoleIdentity == null){
+        if (bySchoolRoleIdentity == null) {
             log.info("不存在该老师");
             return null;
         }

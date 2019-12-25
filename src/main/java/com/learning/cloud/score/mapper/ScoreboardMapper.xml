@@ -2,174 +2,186 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.score.dao.ScoreboardDao">
 
-  <select id="getSchoolScore" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.SchoolScoreboard">
-    select * from school_scoreboard
-    where school_id = #{schoolId}
-  </select>
+    <select id="getSchoolScore" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.score.entity.SchoolScoreboard">
+        select * from school_scoreboard
+        where school_id = #{schoolId}
+    </select>
 
-  <insert id="addSchoolScoreboard" parameterType="com.learning.cloud.score.entity.SchoolScoreboard">
-    insert into school_scoreboard
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-      <if test="lastTime != null">
-        last_time,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=INTEGER},
-      </if>
-      <if test="lastTime != null">
-        #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=BIGINT},
-      </if>
-    </trim>
-    on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
-  </insert>
+    <insert id="addSchoolScoreboard" parameterType="com.learning.cloud.score.entity.SchoolScoreboard">
+        insert into school_scoreboard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+            <if test="lastTime != null">
+                last_time,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=INTEGER},
+            </if>
+            <if test="lastTime != null">
+                #{lastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=BIGINT},
+            </if>
+        </trim>
+        on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
+    </insert>
 
-  <select id="getClassScore" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
-    select * from class_scoreboard
-    where class_id = #{classId}
-  </select>
+    <select id="getClassScore" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.score.entity.ClassScoreboard">
+        select * from class_scoreboard
+        where class_id = #{classId}
+    </select>
 
-  <insert id="addClassScoreboard" parameterType="com.learning.cloud.score.entity.ClassScoreboard">
-    insert into class_scoreboard
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-      <if test="lastTime != null">
-        last_time,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=INTEGER},
-      </if>
-      <if test="lastTime != null">
-        #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=BIGINT},
-      </if>
-    </trim>
-    on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
-  </insert>
+    <insert id="addClassScoreboard" parameterType="com.learning.cloud.score.entity.ClassScoreboard">
+        insert into class_scoreboard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+            <if test="lastTime != null">
+                last_time,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=INTEGER},
+            </if>
+            <if test="lastTime != null">
+                #{lastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=BIGINT},
+            </if>
+        </trim>
+        on DUPLICATE KEY UPDATE score = #{score,jdbcType=INTEGER}
+    </insert>
 
-  <select id="getTeacherRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    select sr.score, ut.teacher_name name,es.school_name from user_teacher ut
-    RIGHT join
-    (SELECT sr1.* FROM score_record sr1 LEFT JOIN
-    score_record sr2 on (sr1.user_id = sr2.user_id and sr1.id &lt; sr2.id)
-    WHERE sr2.id is null) sr
-    on
-    sr.user_id = ut.user_id
-    left join edu_school es
-    on ut.school_id = es.id
-    where ut.bureau_id = #{bureauId}
-    ORDER BY  score desc,ut.user_id
-  </select>
+    <select id="getTeacherRank" parameterType="com.learning.cloud.score.entity.ScoreRank"
+            resultType="com.learning.cloud.score.entity.ScoreRank">
+        select sr.score, ut.teacher_name name,es.school_name from user_teacher ut
+        RIGHT join
+        (SELECT sr1.* FROM score_record sr1 LEFT JOIN
+        score_record sr2 on (sr1.user_id = sr2.user_id and sr1.id &lt; sr2.id)
+        WHERE sr2.id is null) sr
+        on
+        sr.user_id = ut.user_id
+        left join edu_school es
+        on ut.school_id = es.id
+        where ut.bureau_id = #{bureauId}
+        ORDER BY score desc,ut.user_id
+    </select>
 
-  <select id="getClassRank" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ClassScoreboard">
-    select cs.*,ec.class_name from class_scoreboard cs
-		right JOIN edu_grade_class ec
-		on cs.class_id = ec.id
-    where cs.school_id = #{schoolId}
-    order by score
-  </select>
+    <select id="getClassRank" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.score.entity.ClassScoreboard">
+        select cs.*,ec.class_name from class_scoreboard cs
+        right JOIN edu_grade_class ec
+        on cs.class_id = ec.id
+        where cs.school_id = #{schoolId}
+        order by score
+    </select>
 
-  <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT f.user_name name, f.avatar, p.score
-    FROM(
-    SELECT u.user_id, u.user_name ,u.avatar FROM user u left join bureau b on u.corp_id = b.corp_id where b.id = #{bureauId}
-    ) f
-    LEFT JOIN
-    (
-    select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
-    ) p
-    on f.user_id = p.user_id
-    ORDER BY p.score desc
-  </select>
+    <select id="getBureauPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank"
+            resultType="com.learning.cloud.score.entity.ScoreRank">
+        SELECT f.user_name name, f.avatar, p.score
+        FROM(
+        SELECT u.user_id, u.user_name ,u.avatar FROM user u left join bureau b on u.corp_id = b.corp_id where b.id =
+        #{bureauId}
+        ) f
+        LEFT JOIN
+        (
+        select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id =
+        sc.user_id and sc.id &lt; id )
+        ) p
+        on f.user_id = p.user_id
+        ORDER BY p.score desc
+    </select>
 
-  <select id="getSchoolRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT es.school_name name,p.score from edu_school es
-    LEFT JOIN (
-    select sc.school_id,sc.score,sc.bureau_id from score_record_school as sc where not exists(
-      select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
-      )
-    ) p on es.id = p.school_id where p.bureau_id = #{bureauId}
-    ORDER BY p.score desc, p.school_id
-  </select>
+    <select id="getSchoolRank" parameterType="com.learning.cloud.score.entity.ScoreRank"
+            resultType="com.learning.cloud.score.entity.ScoreRank">
+        SELECT es.school_name name,p.score from edu_school es
+        LEFT JOIN (
+        select sc.school_id,sc.score,sc.bureau_id from score_record_school as sc where not exists(
+        select 1 from score_record_school where school_id = sc.school_id and sc.id &lt; id
+        )
+        ) p on es.id = p.school_id where p.bureau_id = #{bureauId}
+        ORDER BY p.score desc, p.school_id
+    </select>
 
-  <select id="getPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    SELECT f.user_name name, f.avatar,f.user_id, p.score
-    FROM(
-    SELECT user_id, user_name, avatar FROM(
-    select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id and  (a.role_type=3 or a.role_type=5)
-    where b.id = #{schoolId}
-    ) c GROUP BY c.user_id,c.user_name, c.avatar
-    )f
-    left join
-    (
-    select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id = sc.user_id and sc.id &lt; id )
-    ) p
-    on f.user_id = p.user_id
-    ORDER BY p.score desc,f.user_id
-  </select>
+    <select id="getPersonnelRank" parameterType="com.learning.cloud.score.entity.ScoreRank"
+            resultType="com.learning.cloud.score.entity.ScoreRank">
+        SELECT f.user_name name, f.avatar,f.user_id, p.score
+        FROM(
+        SELECT user_id, user_name, avatar FROM(
+        select a.user_id, a.user_name, a.avatar from user a LEFT JOIN edu_school b on a.corp_id = b.corp_id and
+        (a.role_type=3 or a.role_type=5)
+        where b.id = #{schoolId}
+        ) c GROUP BY c.user_id,c.user_name, c.avatar
+        )f
+        left join
+        (
+        select sc.user_id,sc.score from score_record as sc where not exists(select 1 from score_record where user_id =
+        sc.user_id and sc.id &lt; id )
+        ) p
+        on f.user_id = p.user_id
+        ORDER BY p.score desc,f.user_id
+    </select>
 
-  <select id="getClassRankFromDuty" parameterType="com.learning.cloud.score.entity.ScoreRank" resultType="com.learning.cloud.score.entity.ScoreRank">
-    select CONCAT(b.grade_name,b.class_name) name, c.score score from (
-      SELECT a.class_id, SUM(a.showPoint) score from (
-         SELECT class_id,(point*plus_minus*time) showPoint
-         from duty_record dr
-                LEFT JOIN duty_check_type dct on
-             dr.point_type = dct.id
-         where TO_DAYS(day) = TO_DAYS(#{day})
-           and school_id = #{schoolId}
-       ) a GROUP BY a.class_id
-    ) c
-    left join edu_grade_class b
-    on c.class_id = b.id
-    order by score desc,c.class_id
-  </select>
+    <select id="getClassRankFromDuty" parameterType="com.learning.cloud.score.entity.ScoreRank"
+            resultType="com.learning.cloud.score.entity.ScoreRank">
+        select CONCAT(b.grade_name,b.class_name) name, c.score score from (
+        SELECT a.class_id, SUM(a.showPoint) score from (
+        SELECT class_id,(point*plus_minus*time) showPoint
+        from duty_record dr
+        LEFT JOIN duty_check_type dct on
+        dr.point_type = dct.id
+        where TO_DAYS(day) = TO_DAYS(#{day})
+        and school_id = #{schoolId}
+        ) a GROUP BY a.class_id
+        ) c
+        left join edu_grade_class b
+        on c.class_id = b.id
+        order by score desc,c.class_id
+    </select>
 </mapper>

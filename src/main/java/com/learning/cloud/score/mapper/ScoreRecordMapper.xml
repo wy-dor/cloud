@@ -2,188 +2,194 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.score.dao.ScoreRecordDao">
 
-  <insert id="addScoreRecord" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.score.entity.ScoreRecord">
-    insert into score_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="recordTime != null">
-        record_time,
-      </if>
-      <if test="scoreTypeId != null">
-        score_type_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="scoreBeforeRecord != null">
-        score_before_record,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="recordTime != null">
-        #{recordTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="scoreTypeId != null">
-        #{scoreTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="scoreBeforeRecord != null">
-        #{scoreBeforeRecord,jdbcType=BIGINT},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addScoreRecord" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.score.entity.ScoreRecord">
+        insert into score_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="recordTime != null">
+                record_time,
+            </if>
+            <if test="scoreTypeId != null">
+                score_type_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="scoreBeforeRecord != null">
+                score_before_record,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="recordTime != null">
+                #{recordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scoreTypeId != null">
+                #{scoreTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="scoreBeforeRecord != null">
+                #{scoreBeforeRecord,jdbcType=BIGINT},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getLastScoreRecord" parameterType="java.lang.String" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select * from score_record
-    where user_id = #{userId}
-    order by id desc limit 1
-  </select>
+    <select id="getLastScoreRecord" parameterType="java.lang.String"
+            resultType="com.learning.cloud.score.entity.ScoreRecord">
+        select * from score_record
+        where user_id = #{userId}
+        order by id desc limit 1
+    </select>
 
-  <select id="getRecordTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select * from score_record
-    where score_type_id = #{scoreTypeId}
-    and user_id = #{userId}
-    and date(record_time) = curdate();
-  </select>
+    <select id="getRecordTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
+        select * from score_record
+        where score_type_id = #{scoreTypeId}
+        and user_id = #{userId}
+        and date(record_time) = curdate();
+    </select>
 
-  <select id="getLastScoreRecordSchool" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecordSchool">
-    select * from score_record_school
-    where school_id = #{schoolId}
-    order by id desc limit 1
-  </select>
+    <select id="getLastScoreRecordSchool" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.score.entity.ScoreRecordSchool">
+        select * from score_record_school
+        where school_id = #{schoolId}
+        order by id desc limit 1
+    </select>
 
-  <select id="getRecordSchoolTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select * from score_record_school
-    where score_type_id = #{scoreTypeId}
-      and school_id = #{schoolId}
-      and date(record_time) = curdate();
-  </select>
+    <select id="getRecordSchoolTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
+        select * from score_record_school
+        where score_type_id = #{scoreTypeId}
+        and school_id = #{schoolId}
+        and date(record_time) = curdate();
+    </select>
 
-  <insert id="addScoreRecordSchool" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.score.entity.ScoreRecordSchool">
-    insert into score_record_school
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="recordTime != null">
-        record_time,
-      </if>
-      <if test="scoreTypeId != null">
-        score_type_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-      <if test="scoreBeforeRecord != null">
-        score_before_record,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="recordTime != null">
-        #{recordTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="scoreTypeId != null">
-        #{scoreTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=BIGINT},
-      </if>
-      <if test="scoreBeforeRecord != null">
-        #{scoreBeforeRecord,jdbcType=BIGINT},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addScoreRecordSchool" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.score.entity.ScoreRecordSchool">
+        insert into score_record_school
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="recordTime != null">
+                record_time,
+            </if>
+            <if test="scoreTypeId != null">
+                score_type_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+            <if test="scoreBeforeRecord != null">
+                score_before_record,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="recordTime != null">
+                #{recordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scoreTypeId != null">
+                #{scoreTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=BIGINT},
+            </if>
+            <if test="scoreBeforeRecord != null">
+                #{scoreBeforeRecord,jdbcType=BIGINT},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getLastScoreRecordClass" parameterType="java.lang.Long" resultType="com.learning.cloud.score.entity.ScoreRecordClass">
-    select * from score_record_class
-    where class_id = #{classId}
-    order by id desc limit 1
-  </select>
+    <select id="getLastScoreRecordClass" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.score.entity.ScoreRecordClass">
+        select * from score_record_class
+        where class_id = #{classId}
+        order by id desc limit 1
+    </select>
 
-  <select id="getRecordClassTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
-    select * from score_record_class
-    where score_type_id = #{scoreTypeId}
-      and class_id = #{classId}
-      and date(record_time) = curdate();
-  </select>
+    <select id="getRecordClassTimeByType" resultType="com.learning.cloud.score.entity.ScoreRecord">
+        select * from score_record_class
+        where score_type_id = #{scoreTypeId}
+        and class_id = #{classId}
+        and date(record_time) = curdate();
+    </select>
 
-  <insert id="addScoreRecordClass" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.score.entity.ScoreRecordClass">
-    insert into score_record_class
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="recordTime != null">
-        record_time,
-      </if>
-      <if test="scoreTypeId != null">
-        score_type_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="scoreBeforeRecord != null">
-        score_before_record,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="recordTime != null">
-        #{recordTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="scoreTypeId != null">
-        #{scoreTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=BIGINT},
-      </if>
-      <if test="scoreBeforeRecord != null">
-        #{scoreBeforeRecord,jdbcType=BIGINT},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addScoreRecordClass" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.score.entity.ScoreRecordClass">
+        insert into score_record_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="recordTime != null">
+                record_time,
+            </if>
+            <if test="scoreTypeId != null">
+                score_type_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="scoreBeforeRecord != null">
+                score_before_record,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="recordTime != null">
+                #{recordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scoreTypeId != null">
+                #{scoreTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=BIGINT},
+            </if>
+            <if test="scoreBeforeRecord != null">
+                #{scoreBeforeRecord,jdbcType=BIGINT},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 
 
 </mapper>

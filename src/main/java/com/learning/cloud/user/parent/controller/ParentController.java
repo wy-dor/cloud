@@ -21,7 +21,7 @@ public class ParentController {
 
     /*获取指定班级的家长数量*/
     @GetMapping("/getClassParentNum")
-    public JsonResult getClassParentNum(Integer classId){
+    public JsonResult getClassParentNum(Integer classId) {
         return parentService.getClassParentNum(classId);
     }
 

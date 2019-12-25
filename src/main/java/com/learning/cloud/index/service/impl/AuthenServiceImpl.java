@@ -59,12 +59,12 @@ public class AuthenServiceImpl implements AuthenService {
 //        AuthAppInfo byCorpId = authAppInfoDao.findByCorpId(authCorpId);
 //        String suiteTicket = byCorpId.getSuiteTicket();
         SyncBizData forSuiteTicket = syncBizDataDao.getForSuiteTicket();
-        if (forSuiteTicket == null){
+        if (forSuiteTicket == null) {
             throw new ApiException("没有suiteTicket的推送");
         }
         Map<String, String> parse = (Map<String, String>) JSON.parse(forSuiteTicket.getBizData());
         String suiteTicket = parse.get("suiteTicket");
-        String accessToken = getURLAccessToken(authCorpId,suiteTicket);
+        String accessToken = getURLAccessToken(authCorpId, suiteTicket);
 //        String accessToken = byCorpId.getCorpAccessToken();
 //        Date updateTime = byCorpId.getUpdateTime();
 //        Date now = new Date();
@@ -93,7 +93,7 @@ public class AuthenServiceImpl implements AuthenService {
 
     /*获取角色下的员工列表*/
     @Override
-    public OapiRoleSimplelistResponse getRoleSimpleList(long roleId,String accessToken) throws ApiException {
+    public OapiRoleSimplelistResponse getRoleSimpleList(long roleId, String accessToken) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/simplelist");
         OapiRoleSimplelistRequest request = new OapiRoleSimplelistRequest();
         request.setRoleId(roleId);

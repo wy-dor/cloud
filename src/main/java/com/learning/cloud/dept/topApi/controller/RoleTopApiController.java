@@ -34,29 +34,29 @@ public class RoleTopApiController {
     private GradeClassDao gradeClassDao;
 
     @GetMapping("/getEduStudent")
-    public ServiceResult getEduStudent(Long topClassId, String studentUserId, String accessToken) throws ApiException{
-        return roleTopApiService.getEduStudent(topClassId,studentUserId,accessToken);
+    public ServiceResult getEduStudent(Long topClassId, String studentUserId, String accessToken) throws ApiException {
+        return roleTopApiService.getEduStudent(topClassId, studentUserId, accessToken);
     }
 
     @GetMapping("/listAndSaveEduStudent")
-    public ServiceResult listAndSaveEduStudent(Integer schoolId, Long topClassId, String accessToken) throws ApiException{
-        return roleTopApiService.listAndSaveEduStudent(schoolId,topClassId,accessToken);
+    public ServiceResult listAndSaveEduStudent(Integer schoolId, Long topClassId, String accessToken) throws ApiException {
+        return roleTopApiService.listAndSaveEduStudent(schoolId, topClassId, accessToken);
     }
 
     @GetMapping("/listAndSaveEduParent")
-    public ServiceResult listAndSaveEduParent(Integer schoolId, Long topClassId, String accessToken) throws ApiException{
-        return roleTopApiService.listAndSaveEduParent(schoolId,topClassId,accessToken);
+    public ServiceResult listAndSaveEduParent(Integer schoolId, Long topClassId, String accessToken) throws ApiException {
+        return roleTopApiService.listAndSaveEduParent(schoolId, topClassId, accessToken);
     }
 
     @GetMapping("/getEduParent")
-    public ServiceResult getEduParent(Long topClassId, String userId, String accessToken) throws ApiException{
+    public ServiceResult getEduParent(Long topClassId, String userId, String accessToken) throws ApiException {
         OapiEduGuardianGetResponse response = roleTopApiService.getEduParent(topClassId, userId, accessToken);
         OapiEduGuardianGetResponse.GuardianRespone result = response.getResult();
         return ServiceResult.success(result);
     }
 
     @GetMapping("/getStudentUserIdByParent")
-    public JsonResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException{
+    public JsonResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException {
         GradeClass byId = gradeClassDao.getById(classId);
         Long topClassId = byId.getDeptId();
         Integer schoolId = byId.getSchoolId();
@@ -66,9 +66,9 @@ public class RoleTopApiController {
         OapiEduGuardianGetResponse response = roleTopApiService.getEduParent(topClassId, userId, accessToken);
         OapiEduGuardianGetResponse.GuardianRespone result = response.getResult();
         List<String> useridList = new ArrayList<>();
-        if(result == null){
-            return JsonResultUtil.error(0,"请求不到学生userId");
-        }else{
+        if (result == null) {
+            return JsonResultUtil.error(0, "请求不到学生userId");
+        } else {
             List<OapiEduGuardianGetResponse.Relations> relations = result.getRelations();
             for (OapiEduGuardianGetResponse.Relations relation : relations) {
                 String studentUserid = relation.getStudentUserid();
@@ -79,23 +79,23 @@ public class RoleTopApiController {
     }
 
     @GetMapping("/getEduRoles")
-    public ServiceResult getEduRoles(String userId, String accessToken) throws ApiException{
-        return roleTopApiService.getEduRoles(userId,accessToken);
+    public ServiceResult getEduRoles(String userId, String accessToken) throws ApiException {
+        return roleTopApiService.getEduRoles(userId, accessToken);
     }
 
     @GetMapping("/listEduParent")
-    public ServiceResult listEduParent(Long classId, String accessToken) throws ApiException{
-        return roleTopApiService.listEduParent(classId,accessToken);
+    public ServiceResult listEduParent(Long classId, String accessToken) throws ApiException {
+        return roleTopApiService.listEduParent(classId, accessToken);
     }
 
     @GetMapping("/listEduStudent")
-    public ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException{
-        return roleTopApiService.listEduStudent(classId,accessToken);
+    public ServiceResult listEduStudent(Long classId, String accessToken) throws ApiException {
+        return roleTopApiService.listEduStudent(classId, accessToken);
     }
 
     @GetMapping("/getAdvisorUserIdInClass")
     public ServiceResult getAdvisorUserIdInClass(Long deptId, String accessToken) throws ApiException {
         String userId = roleTopApiService.getAdvisorUserIdInClass(deptId, accessToken);
-        return  ServiceResult.success(userId);
+        return ServiceResult.success(userId);
     }
 }

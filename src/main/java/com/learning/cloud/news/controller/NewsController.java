@@ -16,64 +16,64 @@ public class NewsController {
     private NewsService newsService;
 
     @GetMapping("/getNews")
-    public JsonResult getNews(News news){
+    public JsonResult getNews(News news) {
         return newsService.getNews(news);
     }
 
     // 教育局获取所有学校提交的，审批后以及已撤销的新闻
     @GetMapping("/getBureauNews")
-    public JsonResult getBureauNews(News news){
+    public JsonResult getBureauNews(News news) {
         return newsService.getBureauNews(news);
     }
 
     @GetMapping("/getAllValidNews")
-    public JsonResult getAllValidNews(News news){
+    public JsonResult getAllValidNews(News news) {
         return newsService.getAllValidNews(news);
     }
 
     @GetMapping("/updateTopping")
-    public JsonResult updateTopping(Long id){
+    public JsonResult updateTopping(Long id) {
         return newsService.updateTopping(id);
     }
 
     @GetMapping("/getNewsById")
-    public JsonResult getNewsById(long id){
+    public JsonResult getNewsById(long id) {
         return newsService.getNewsById(id);
     }
 
     @PostMapping("/addNews")
-    public JsonResult addNews(@RequestParam(value="file",required = false)MultipartFile file, News news) throws Exception {
+    public JsonResult addNews(@RequestParam(value = "file", required = false) MultipartFile file, News news) throws Exception {
         return newsService.addNews(file, news);
     }
 
     @PostMapping("/updateNews")
-    public JsonResult updateNews(@RequestParam(value = "file",required = false)MultipartFile file,News news)  throws Exception{
-        return newsService.updateNews(file,news);
+    public JsonResult updateNews(@RequestParam(value = "file", required = false) MultipartFile file, News news) throws Exception {
+        return newsService.updateNews(file, news);
     }
 
     @GetMapping("removeNewsById")
-    public JsonResult removeNewsById(Long id){
+    public JsonResult removeNewsById(Long id) {
         return newsService.removeNewsById(id);
     }
 
     @GetMapping("/deleteNewsById")
-    public JsonResult deleteNewsById(Long id){
+    public JsonResult deleteNewsById(Long id) {
         return newsService.deleteNewsById(id);
     }
 
     @PostMapping("/batchUpdateNews")
-    public JsonResult batchUpdateNews(String ids,Integer status){
-        return newsService.batchUpdateNews(ids,status);
+    public JsonResult batchUpdateNews(String ids, Integer status) {
+        return newsService.batchUpdateNews(ids, status);
     }
 
     @GetMapping("/getToppingNews")
-    public JsonResult getToppingNews(Integer bureauId){
+    public JsonResult getToppingNews(Integer bureauId) {
         return newsService.getToppingNews(bureauId);
     }
 
     //取消置顶
     @GetMapping("/unsetToppingInNews")
-    public JsonResult unsetToppingInNews(Long id){
+    public JsonResult unsetToppingInNews(Long id) {
         return newsService.unsetToppingInNews(id);
     }
 }

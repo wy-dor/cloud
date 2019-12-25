@@ -2,17 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.TeacherCourseDao">
 
-  <select id="getTeacherCourseByClassId" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.TeacherCourse">
-    select *
-    from user_teacher_course
-    where class_id = #{classId}
-  </select>
+    <select id="getTeacherCourseByClassId" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.course.entity.TeacherCourse">
+        select *
+        from user_teacher_course
+        where class_id = #{classId}
+    </select>
 
-  <insert id="setTeacherCourseTypeEveryClass" parameterType="com.learning.cloud.course.entity.TeacherCourse">
-    insert into user_teacher_course
-    (teacher_id,class_id,course_type_id,school_id)
-    values
-    (#{teacheId}, #{classId}, #{courseTypeId}, #{schoolId})
-    ON DUPLICATE KEY UPDATE course_type_id= #{courseTypeId}
-  </insert>
+    <insert id="setTeacherCourseTypeEveryClass" parameterType="com.learning.cloud.course.entity.TeacherCourse">
+        insert into user_teacher_course
+        (teacher_id,class_id,course_type_id,school_id)
+        values
+        (#{teacheId}, #{classId}, #{courseTypeId}, #{schoolId})
+        ON DUPLICATE KEY UPDATE course_type_id= #{courseTypeId}
+    </insert>
 </mapper>

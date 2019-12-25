@@ -17,9 +17,9 @@ import java.util.List;
  * @Desc:
  */
 public interface PictureService {
-    Picture getPicById(Long picId)throws Exception;
+    Picture getPicById(Long picId) throws Exception;
 
-    JsonResult addPic(MultipartFile file)throws Exception;
+    JsonResult addPic(MultipartFile file) throws Exception;
 
     List<String> uploadPics(List<MultipartFile> fileList, HttpServletRequest request) throws Exception;
 }

@@ -24,7 +24,7 @@ public class ProcessInstanceController {
 
     //创建实例
     @PostMapping("/createProcessInstance")
-    public JsonResult createProcessInstance(ProcessValue processValue)throws Exception{
+    public JsonResult createProcessInstance(ProcessValue processValue) throws Exception {
         return processInstanceService.createProcessInstance(processValue);
     }
 
@@ -35,12 +35,12 @@ public class ProcessInstanceController {
 //    }
 
     @GetMapping("/getInstanceStatus")
-    public JsonResult getInstanceStatus(String processInstanceId,String corpId)throws Exception{
+    public JsonResult getInstanceStatus(String processInstanceId, String corpId) throws Exception {
         OapiProcessinstanceGetResponse response = processInstanceService.getInstanceStatus(processInstanceId, corpId);
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             OapiProcessinstanceGetResponse.ProcessInstanceTopVo p = response.getProcessInstance();
-            return  JsonResultUtil.success(p);
-        }else {
+            return JsonResultUtil.success(p);
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }

@@ -19,8 +19,8 @@ public class ScoreTypeController {
     private ScoreTypeService scoreTypeService;
 
     @PostMapping("/addScoreType")
-    public JsonResult addScoreType(ScoreType scoreType) throws Exception{
-       return  scoreTypeService.addScoreType(scoreType);
+    public JsonResult addScoreType(ScoreType scoreType) throws Exception {
+        return scoreTypeService.addScoreType(scoreType);
     }
 
     @PostMapping("/editScoreType")
@@ -29,7 +29,7 @@ public class ScoreTypeController {
     }
 
     @GetMapping("/getOrganizeScoreType")
-    public JsonResult getOrganizeScoreType(ScoreType scoreType)throws Exception{
+    public JsonResult getOrganizeScoreType(ScoreType scoreType) throws Exception {
         return scoreTypeService.getOrganizeScoreType(scoreType);
     }
 }

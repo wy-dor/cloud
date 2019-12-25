@@ -23,38 +23,38 @@ public class InspectorController {
 
     // 新增督学
     @PostMapping("/addInspector")
-    public JsonResult addInspector(Inspector inspector)throws Exception{
+    public JsonResult addInspector(Inspector inspector) throws Exception {
         return inspectorService.addInspector(inspector);
     }
 
     // 删除督学
     @PostMapping("/deleteInspector")
-    public JsonResult deleteInspector(Long id)throws Exception{
+    public JsonResult deleteInspector(Long id) throws Exception {
         return inspectorService.deleteInspector(id);
     }
 
     // 修改督学
     @PostMapping("/updateInspector")
-    public JsonResult updateInspector(Inspector inspector)throws Exception{
+    public JsonResult updateInspector(Inspector inspector) throws Exception {
         return inspectorService.updateInspector(inspector);
     }
 
     // 查看督学
     @GetMapping("/getInspector")
-    public JsonResult getInspector(Inspector inspector)throws Exception{
+    public JsonResult getInspector(Inspector inspector) throws Exception {
         return inspectorService.getInspector(inspector);
     }
 
     // 督学登录
     @PostMapping("/loginInspector")
-    public JsonResult loginInspector(@RequestParam(value="login",required = true) String login,
-                                     @RequestParam(value="password",required = true) String password)throws Exception{
+    public JsonResult loginInspector(@RequestParam(value = "login", required = true) String login,
+                                     @RequestParam(value = "password", required = true) String password) throws Exception {
         return inspectorService.loginInspector(login, password);
     }
 
     // 重置密码
     @PostMapping("/resetPassword")
-    public JsonResult resetPassword(Inspector inspector)throws Exception{
+    public JsonResult resetPassword(Inspector inspector) throws Exception {
         return inspectorService.resetPassword(inspector);
     }
 }

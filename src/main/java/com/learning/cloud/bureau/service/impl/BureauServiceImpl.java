@@ -29,22 +29,22 @@ public class BureauServiceImpl implements BureauService {
     }
 
     @Override
-    public Map<String,Object> getOrgInfoByCorpId(String corpId) {
-        Map<String,Object> map = new HashMap<>();
+    public Map<String, Object> getOrgInfoByCorpId(String corpId) {
+        Map<String, Object> map = new HashMap<>();
         Integer bureauId;
         School byCorpId = schoolDao.getSchoolByCorpId(corpId);
-        if(byCorpId == null){
+        if (byCorpId == null) {
             Bureau bureau = bureauDao.getByCorpId(corpId);
             bureauId = bureau.getId();
-            map.put("isSchool",false);
-        }else{
+            map.put("isSchool", false);
+        } else {
             bureauId = byCorpId.getBureauId();
             String schoolName = byCorpId.getSchoolName();
-            map.put("isSchool",true);
-            map.put("schoolName",schoolName);
-            map.put("schoolId",byCorpId.getId());
+            map.put("isSchool", true);
+            map.put("schoolName", schoolName);
+            map.put("schoolId", byCorpId.getId());
         }
-        map.put("bureauId",bureauId);
+        map.put("bureauId", bureauId);
         return map;
     }
 }

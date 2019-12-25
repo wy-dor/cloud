@@ -1,195 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.teacher.dao.TeacherDao">
-  <select id="getTeachers" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    <where>
-      <if test="campusId != null">
-        and campus_id = #{campusId}
-      </if>
-      <if test="schoolId != null">
+    <select id="getTeachers" parameterType="com.learning.cloud.user.teacher.entity.Teacher"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        <where>
+            <if test="campusId != null">
+                and campus_id = #{campusId}
+            </if>
+            <if test="schoolId != null">
+                and school_id = #{schoolId}
+            </if>
+            <if test="bureauId != null">
+                and bureau_id = #{bureauId}
+            </if>
+            <if test="dutyInspector != null">
+                and duty_inspector = #{dutyInspector}
+            </if>
+        </where>
+    </select>
+
+    <select id="getClassTeachers" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where find_in_set(#{id},class_ids)
+    </select>
+
+    <select id="getClassTeachersWithCourseType" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where find_in_set(#{id},class_ids)
+        and course_type is not null
+    </select>
+
+    <select id="listTeacherInClass" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where FIND_IN_SET(#{classId},class_ids)
+    </select>
+
+    <select id="listTeacherUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select user_id
+        from user_teacher
+        where FIND_IN_SET(#{classId},class_ids)
+    </select>
+
+    <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where user_id = #{userId}
         and school_id = #{schoolId}
-      </if>
-      <if test="bureauId != null">
-        and bureau_id = #{bureauId}
-      </if>
-      <if test="dutyInspector != null">
-        and duty_inspector = #{dutyInspector}
-      </if>
-    </where>
-  </select>
+        limit 1
+    </select>
 
-  <select id="getClassTeachers" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where find_in_set(#{id},class_ids)
-  </select>
+    <select id="ListTeacherInSchool" parameterType="java.lang.Integer"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select a.*, b.course_name
+        from user_teacher a
+        left join course_type b
+        on a.course_type = b.id
+        where a.school_id = #{schoolId}
+    </select>
 
-  <select id="getClassTeachersWithCourseType" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where find_in_set(#{id},class_ids)
-    and course_type is not null
-  </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where id = #{teacherId}
+    </select>
 
-  <select id="listTeacherInClass" parameterType="java.lang.String" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where FIND_IN_SET(#{classId},class_ids)
-  </select>
+    <select id="getByUserId" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select *
+        from user_teacher
+        where user_id = #{userId}
+        limit 1
+    </select>
 
-  <select id="listTeacherUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
-    select user_id
-    from user_teacher
-    where FIND_IN_SET(#{classId},class_ids)
-  </select>
+    <select id="getClassTeacherNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(id)
+        from user_teacher
+        where find_in_set(#{classId},class_ids)
+    </select>
 
-  <select id="getTeacherInSchool" parameterType="com.learning.cloud.user.teacher.entity.Teacher" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where user_id = #{userId}
-    and school_id = #{schoolId}
-    limit 1
-  </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.user.teacher.entity.Teacher">
+        insert into user_teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teacherName != null">
+                teacher_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="campusId != null">
+                campus_id,
+            </if>
+            <if test="classIds != null">
+                class_ids,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="bureauId != null">
+                bureau_id,
+            </if>
+            <if test="courseType != null">
+                course_type,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teacherName != null">
+                #{teacherName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="classIds != null">
+                #{classIds,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="bureauId != null">
+                #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="courseType != null">
+                #{courseType,jdbcType=BIGINT},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="ListTeacherInSchool" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select a.*, b.course_name
-    from user_teacher a
-    left join course_type b
-    on a.course_type = b.id
-    where a.school_id = #{schoolId}
-  </select>
+    <update id="update" parameterType="com.learning.cloud.user.teacher.entity.Teacher">
+        update user_teacher
+        <set>
+            <if test="teacherName != null">
+                teacher_name = #{teacherName,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                campus_id = #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="classIds != null">
+                class_ids = #{classIds,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolId != null">
+                school_id = #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="bureauId != null">
+                bureau_id = #{bureauId,jdbcType=INTEGER},
+            </if>
+            <if test="courseType != null">
+                course_type = #{courseType,jdbcType=BIGINT},
+            </if>
+            <if test="dutyInspector != null">
+                duty_inspector = #{dutyInspector,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where
+        <choose>
+            <when test="id != null">
+                id = #{id}
+            </when>
+            <otherwise>
+                user_id = #{userId}
+            </otherwise>
+        </choose>
+    </update>
 
-  <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where id = #{teacherId}
-  </select>
+    <select id="getTeacherIds" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.user.teacher.entity.Teacher">
+        select ut.* from
+        (
+        SELECT ec.id from edu_campus ec
+        LEFT JOIN edu_school es
+        on ec.school_id = es.id
+        where es.id = #{classId}
+        ) as ca
+        LEFT JOIN user_teacher ut
+        on ut.campus_id = ca.id
+    </select>
 
-  <select id="getByUserId" parameterType="java.lang.String"
-          resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select *
-    from user_teacher
-    where user_id = #{userId}
-    limit 1
-  </select>
-
-  <select id="getClassTeacherNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select count(id)
-    from user_teacher
-    where find_in_set(#{classId},class_ids)
-  </select>
-
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.teacher.entity.Teacher">
-    insert into user_teacher
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="teacherName != null">
-        teacher_name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="campusId != null">
-        campus_id,
-      </if>
-      <if test="classIds != null">
-        class_ids,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="bureauId != null">
-        bureau_id,
-      </if>
-      <if test="courseType != null">
-        course_type,
-      </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="teacherName != null">
-        #{teacherName,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="classIds != null">
-        #{classIds,jdbcType=VARCHAR},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="bureauId != null">
-        #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="courseType != null">
-        #{courseType,jdbcType=BIGINT},
-      </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-
-  <update id="update" parameterType="com.learning.cloud.user.teacher.entity.Teacher">
-    update user_teacher
-    <set>
-      <if test="teacherName != null">
-        teacher_name = #{teacherName,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="classIds != null">
-        class_ids = #{classIds,jdbcType=VARCHAR},
-      </if>
-      <if test="schoolId != null">
-        school_id = #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="bureauId != null">
-        bureau_id = #{bureauId,jdbcType=INTEGER},
-      </if>
-      <if test="courseType != null">
-        course_type = #{courseType,jdbcType=BIGINT},
-      </if>
-      <if test="dutyInspector != null">
-        duty_inspector = #{dutyInspector,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where
-    <choose>
-      <when test="id != null">
-        id = #{id}
-      </when>
-      <otherwise>
-        user_id = #{userId}
-      </otherwise>
-    </choose>
-  </update>
-
-  <select id="getTeacherIds" parameterType="java.lang.Long" resultType="com.learning.cloud.user.teacher.entity.Teacher">
-    select ut.* from
-    (
-    SELECT ec.id from edu_campus ec
-    LEFT JOIN edu_school es
-    on ec.school_id = es.id
-    where es.id = #{classId}
-    ) as ca
-    LEFT JOIN user_teacher ut
-    on ut.campus_id = ca.id
-  </select>
-
-  <delete id="delete" parameterType="java.lang.Integer">
-    delete from user_teacher
-    where id = #{id}
-  </delete>
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from user_teacher
+        where id = #{id}
+    </delete>
 </mapper>

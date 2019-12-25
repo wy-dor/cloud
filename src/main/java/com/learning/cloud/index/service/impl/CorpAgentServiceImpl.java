@@ -29,10 +29,10 @@ public class CorpAgentServiceImpl implements CorpAgentService {
         return agentId;
     }
 
-    public Boolean getIsSchool(String corpId){
+    public Boolean getIsSchool(String corpId) {
         AuthCorpInfo info = authCorpInfoDao.getCorpInfoByCorpId(corpId);
         Boolean flag = false;
-        if(info.getIndustry().equals("初中等教育")){
+        if (info.getIndustry().equals("初中等教育")) {
             flag = true;
         }
         return flag;

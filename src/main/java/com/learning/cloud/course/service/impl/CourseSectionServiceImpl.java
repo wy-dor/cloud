@@ -35,9 +35,9 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     @Override
     public JsonResult editSection(CourseSection courseSection) throws Exception {
         int i = courseSectionDao.editSection(courseSection);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }
@@ -55,21 +55,21 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     public JsonResult saveSectionArray(Long id, String name) throws Exception {
         List<CourseSection> courseSections = courseSectionDao.getSchoolSection(id);
         List<SectionArray> sectionArrays = new ArrayList<>();
-        if(courseSections!=null&&courseSections.size()>0){
+        if (courseSections != null && courseSections.size() > 0) {
             //存储为json数组
-            for(CourseSection bean : courseSections){
+            for (CourseSection bean : courseSections) {
                 SectionArray sa = new SectionArray();
                 sa.setName(bean.getName());
-                sa.setTime(bean.getStart()+"-"+bean.getEnd());
+                sa.setTime(bean.getStart() + "-" + bean.getEnd());
                 sectionArrays.add(sa);
             }
         }
         String sectionArray = JSON.toJSONString(sectionArrays);
         //存储section_array
         int i = courseSectionDao.saveSectionArray(id, sectionArray, name);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
@@ -102,14 +102,14 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     @Override
     public JsonResult setSectionArrayActive(Long id, Long schoolId) throws Exception {
         int i = courseSectionDao.setSectionArrayBlock(id, schoolId);
-        if(i>=0){
+        if (i >= 0) {
             int j = courseSectionDao.setSectionArrayActive(id);
-            if(j>0){
+            if (j > 0) {
                 return JsonResultUtil.success();
-            }else {
+            } else {
                 return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
             }
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }
@@ -117,9 +117,9 @@ public class CourseSectionServiceImpl implements CourseSectionService {
     @Override
     public JsonResult addSectionArray(CourseSectionArray courseSectionArray) throws Exception {
         int i = courseSectionDao.addSectionArray(courseSectionArray);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success(courseSectionArray.getId());
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }

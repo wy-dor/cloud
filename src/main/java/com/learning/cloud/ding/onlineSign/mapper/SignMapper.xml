@@ -2,165 +2,170 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.ding.onlineSign.dao.SignDao">
 
-  <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    select *
-    from sign
-    where id = #{id}
-    limit 1
-  </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+        select *
+        from sign
+        where id = #{id}
+        limit 1
+    </select>
 
-  <select id="getIsSignFlag" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
-    select * from sign_record
-    where user_id = #{userId} and sign_id = #{signId}
-  </select>
+    <select id="getIsSignFlag" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+        select * from sign_record
+        where user_id = #{userId} and sign_id = #{signId}
+    </select>
 
-  <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
-          parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    insert into sign
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        title,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="teacherId != null">
-        teacher_id,
-      </if>
-      <if test="classIds != null">
-        class_ids,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="teacherId != null">
-        #{teacherId,jdbcType=INTEGER},
-      </if>
-      <if test="classIds != null">
-        #{classIds,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addSignTask" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.ding.onlineSign.entity.Sign">
+        insert into sign
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="teacherId != null">
+                teacher_id,
+            </if>
+            <if test="classIds != null">
+                class_ids,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="teacherId != null">
+                #{teacherId,jdbcType=INTEGER},
+            </if>
+            <if test="classIds != null">
+                #{classIds,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getValidTaskList" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    select *
-    from sign
-    where state = 1
-    and FIND_IN_SET(#{classId},class_ids)
-    order by end_time desc
-  </select>
+    <select id="getValidTaskList" parameterType="com.learning.cloud.user.parent.entity.Parent"
+            resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+        select *
+        from sign
+        where state = 1
+        and FIND_IN_SET(#{classId},class_ids)
+        order by end_time desc
+    </select>
 
-  <select id="getAllTasks" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    select *
-    from sign
-    where FIND_IN_SET(#{classId},class_ids)
-    order by state desc,end_time desc
-  </select>
+    <select id="getAllTasks" parameterType="com.learning.cloud.user.parent.entity.Parent"
+            resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+        select *
+        from sign
+        where FIND_IN_SET(#{classId},class_ids)
+        order by state desc,end_time desc
+    </select>
 
-  <select id="getUnsignedTasks" parameterType="com.learning.cloud.user.parent.entity.Parent" resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
-    select a.*
-    from (
-	select s.*
-    from sign s
-    <foreach collection="classIdStrList" index="index" item="item" open="where " separator=" or">
-      FIND_IN_SET(#{item} ,class_ids)
-    </foreach>
-    ) a
-	where a.id not in
-	(
-	select sign_id
-    from sign_record
-    where user_id = #{userId}
-	)
-	and a.state = 1
-  </select>
+    <select id="getUnsignedTasks" parameterType="com.learning.cloud.user.parent.entity.Parent"
+            resultType="com.learning.cloud.ding.onlineSign.entity.Sign">
+        select a.*
+        from (
+        select s.*
+        from sign s
+        <foreach collection="classIdStrList" index="index" item="item" open="where " separator=" or">
+            FIND_IN_SET(#{item} ,class_ids)
+        </foreach>
+        ) a
+        where a.id not in
+        (
+        select sign_id
+        from sign_record
+        where user_id = #{userId}
+        )
+        and a.state = 1
+    </select>
 
-  <update id="setStateInvalid" parameterType="java.lang.Integer">
-    update sign
-    set state = 0
-    where id = #{signId}
-  </update>
+    <update id="setStateInvalid" parameterType="java.lang.Integer">
+        update sign
+        set state = 0
+        where id = #{signId}
+    </update>
 
-  <insert id="signName" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
-    insert into sign_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="parentName != null">
-        parent_name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="parentId != null">
-        parent_id,
-      </if>
-      <if test="signId != null">
-        sign_id,
-      </if>
-      <if test="signTime != null">
-        sign_time,
-      </if>
-      <if test="picId != null">
-        pic_id,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="parentName != null">
-        #{parentName,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null">
-        #{parentId,jdbcType=INTEGER},
-      </if>
-      <if test="signId != null">
-        #{signId,jdbcType=INTEGER},
-      </if>
-      <if test="signTime != null">
-        #{signTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="picId != null">
-        #{picId,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="signName" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+        insert into sign_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentName != null">
+                parent_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="signId != null">
+                sign_id,
+            </if>
+            <if test="signTime != null">
+                sign_time,
+            </if>
+            <if test="picId != null">
+                pic_id,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentName != null">
+                #{parentName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="signId != null">
+                #{signId,jdbcType=INTEGER},
+            </if>
+            <if test="signTime != null">
+                #{signTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picId != null">
+                #{picId,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getRecordNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select count(*)
-    from sign_record
-    where sign_id = #{signId}
-  </select>
+    <select id="getRecordNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*)
+        from sign_record
+        where sign_id = #{signId}
+    </select>
 
-  <select id="getRecordsBySignId" parameterType="com.learning.cloud.ding.onlineSign.entity.Sign" resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
-    select *
-    from sign_record
-    where sign_id = #{id}
-  </select>
+    <select id="getRecordsBySignId" parameterType="com.learning.cloud.ding.onlineSign.entity.Sign"
+            resultType="com.learning.cloud.ding.onlineSign.entity.SignRecord">
+        select *
+        from sign_record
+        where sign_id = #{id}
+    </select>
 
 </mapper>

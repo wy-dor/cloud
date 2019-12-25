@@ -21,24 +21,24 @@ public class CourseExchangeController {
     private CourseExchangeService courseExchangeService;
 
     @PostMapping("/addCourseExchange")
-    public JsonResult addCourseExchange(CourseExchange courseExchange)throws Exception{
+    public JsonResult addCourseExchange(CourseExchange courseExchange) throws Exception {
         return courseExchangeService.addCourseExchange(courseExchange);
     }
 
     @GetMapping("/getCourseExchange")
-    public JsonResult getCourseExchange(@RequestParam(value="classId",required = false) Long classId,
-            @RequestParam(value="day",required = false) String day){
-        return courseExchangeService.getCourseExchange(classId,day);
+    public JsonResult getCourseExchange(@RequestParam(value = "classId", required = false) Long classId,
+                                        @RequestParam(value = "day", required = false) String day) {
+        return courseExchangeService.getCourseExchange(classId, day);
     }
 
     //获取老师未完成的调课
     @GetMapping("/getMyExchange")
-    public JsonResult getMyExchange(@RequestParam(value="teacherId",required = true) Long teacherId, Integer status)throws Exception{
+    public JsonResult getMyExchange(@RequestParam(value = "teacherId", required = true) Long teacherId, Integer status) throws Exception {
         return courseExchangeService.getMyExchange(teacherId, status);
     }
 
     @PostMapping("/confirmExchange")
-    public JsonResult confirmExchange(CourseExchange courseExchange)throws Exception{
+    public JsonResult confirmExchange(CourseExchange courseExchange) throws Exception {
         return courseExchangeService.confirmExchange(courseExchange);
     }
 

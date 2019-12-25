@@ -29,13 +29,13 @@ public class TermServiceImpl implements TermService {
     public JsonResult getSchoolTerm(Long schoolId) throws Exception {
         String year = getYear(0);
         List<Term> terms = termDao.getSchoolTerm(schoolId, year);
-        if(terms==null||terms.size()<=0){
+        if (terms == null || terms.size() <= 0) {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             //自动插入学校的学期
             //学期名称 (year-1)-year;year-（year+1）
-            String termName_F = getYear(-1)+"-"+getYear(0)+"学年 第二学期";
-            String start_F = getYear(0)+"-02-15";
-            String end_F = getYear(0)+"-06-30";
+            String termName_F = getYear(-1) + "-" + getYear(0) + "学年 第二学期";
+            String start_F = getYear(0) + "-02-15";
+            String end_F = getYear(0) + "-06-30";
             Term term_F = new Term();
             term_F.setTermName(termName_F);
             term_F.setSchoolId(schoolId);
@@ -43,9 +43,9 @@ public class TermServiceImpl implements TermService {
             term_F.setEnd(format.parse(end_F));
             term_F.setTermYear(year);
             int i = termDao.addTerm(term_F);
-            String termName_S = getYear(0)+"-"+getYear(1)+"学年 第一学期";
-            String start_S = getYear(0)+"-09-01";
-            String end_S = getYear(1)+"-01-30";
+            String termName_S = getYear(0) + "-" + getYear(1) + "学年 第一学期";
+            String start_S = getYear(0) + "-09-01";
+            String end_S = getYear(1) + "-01-30";
             Term term_S = new Term();
             term_S.setTermName(termName_S);
             term_S.setSchoolId(schoolId);
@@ -62,9 +62,9 @@ public class TermServiceImpl implements TermService {
     @Override
     public JsonResult editSchoolTerm(Term term) throws Exception {
         int i = termDao.editSchoolTerm(term);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }

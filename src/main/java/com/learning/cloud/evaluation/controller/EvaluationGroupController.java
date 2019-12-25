@@ -19,18 +19,18 @@ public class EvaluationGroupController {
     private EvaluationGroupService groupService;
 
     @GetMapping("/getEvaluationGroup")
-    public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup){
+    public JsonResult getEvaluationGroup(EvaluationGroup evaluationGroup) {
         List<EvaluationGroup> groupList = groupService.getEvaluationGroup(evaluationGroup);
         return JsonResultUtil.success(new PageEntity<>(groupList));
     }
 
     @GetMapping("/getEvaluationGroupScoreList")
-    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan ){
+    public JsonResult getEvaluationGroupScoreList(EvaluationGroupPlan evaluationGroupPlan) {
         return groupService.getEvaluationGroupScoreList(evaluationGroupPlan);
     }
 
     @GetMapping("/getEvaluationGroupById")
-    public JsonResult getEvaluationGroupById(Long id){
+    public JsonResult getEvaluationGroupById(Long id) {
         return groupService.getEvaluationGroupById(id);
     }
 
@@ -40,18 +40,18 @@ public class EvaluationGroupController {
     }
 
     @PostMapping("/updateEvaluationGroup")
-    public JsonResult updateEvaluationGroup(EvaluationGroup evaluationGroup)  throws Exception{
+    public JsonResult updateEvaluationGroup(EvaluationGroup evaluationGroup) throws Exception {
         return groupService.updateEvaluationGroup(evaluationGroup);
     }
 
     @GetMapping("/deleteEvaluationGroupById")
-    public JsonResult deleteEvaluationGroupById(Long id){
+    public JsonResult deleteEvaluationGroupById(Long id) {
         return groupService.deleteEvaluationGroupById(id);
     }
 
     @PostMapping("/batchUpdateEvaluationGroup")
-    public JsonResult batchUpdateEvaluationGroup(String ids,Integer status){
-        return groupService.batchUpdateEvaluationGroup(ids,status);
+    public JsonResult batchUpdateEvaluationGroup(String ids, Integer status) {
+        return groupService.batchUpdateEvaluationGroup(ids, status);
     }
 }
 

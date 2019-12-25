@@ -14,25 +14,25 @@ import java.io.InputStream;
  * @Desc:
  */
 public interface QuestionService {
-    JsonResult addQuestion(MultipartFile file, Question question)throws Exception;
+    JsonResult addQuestion(MultipartFile file, Question question) throws Exception;
 
-    JsonResult getQuestion(Question question)throws Exception;
+    JsonResult getQuestion(Question question) throws Exception;
 
-    JsonResult addAnswer(MultipartFile file, Answer answer)throws Exception;
+    JsonResult addAnswer(MultipartFile file, Answer answer) throws Exception;
 
-    JsonResult getAnswer(Answer questionId)throws Exception;
+    JsonResult getAnswer(Answer questionId) throws Exception;
 
-    JsonResult deleteQuestion(Long id)throws Exception;
+    JsonResult deleteQuestion(Long id) throws Exception;
 
-    JsonResult getQuestionIn(Question question)throws Exception;
+    JsonResult getQuestionIn(Question question) throws Exception;
 
     void inputStreamToFile(InputStream inputStream, File toFile) throws Exception;
 
-    JsonResult closeQuestion(Long id)throws Exception;
+    JsonResult closeQuestion(Long id) throws Exception;
 
     JsonResult deleteBatchQuestions(String questionIds);
 
-    Long reduceImg(MultipartFile file)throws Exception;
+    Long reduceImg(MultipartFile file) throws Exception;
 
     String base64Reduce(MultipartFile file) throws Exception;
 

@@ -6,5 +6,5 @@ package com.learning.cloud.user.admin.service;
  * @Desc:
  */
 public interface AdminService {
-    String getMainAdmin(String corpId)throws Exception;
+    String getMainAdmin(String corpId) throws Exception;
 }

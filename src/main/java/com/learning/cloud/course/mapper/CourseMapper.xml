@@ -2,120 +2,122 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.CourseDao">
 
-  <delete id="deleteGradeClass" parameterType="java.lang.Integer">
-    delete from course
-    where class_id = #{classId}
-  </delete>
+    <delete id="deleteGradeClass" parameterType="java.lang.Integer">
+        delete from course
+        where class_id = #{classId}
+    </delete>
 
-  <insert id="addCourse" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.Course">
-    insert into course
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="classId != null">
-        class_id,
-      </if>
-      <if test="gradeName != null">
-        grade_name,
-      </if>
-      <if test="termId != null">
-        term_id,
-      </if>
-      <if test="lastTime != null">
-        last_time,
-      </if>
-      <if test="lastModifier != null">
-        last_modifier,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="className != null">
-        class_name,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="classId != null">
-        #{classId,jdbcType=BIGINT},
-      </if>
-      <if test="gradeName != null">
-        #{gradeName,jdbcType=VARCHAR},
-      </if>
-      <if test="termId != null">
-        #{termId,jdbcType=BIGINT},
-      </if>
-      <if test="lastTime != null">
-        #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifier != null">
-        #{lastModifier,jdbcType=BIGINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="className != null">
-        #{className,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addCourse" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.course.entity.Course">
+        insert into course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="classId != null">
+                class_id,
+            </if>
+            <if test="gradeName != null">
+                grade_name,
+            </if>
+            <if test="termId != null">
+                term_id,
+            </if>
+            <if test="lastTime != null">
+                last_time,
+            </if>
+            <if test="lastModifier != null">
+                last_modifier,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="className != null">
+                class_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="classId != null">
+                #{classId,jdbcType=BIGINT},
+            </if>
+            <if test="gradeName != null">
+                #{gradeName,jdbcType=VARCHAR},
+            </if>
+            <if test="termId != null">
+                #{termId,jdbcType=BIGINT},
+            </if>
+            <if test="lastTime != null">
+                #{lastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifier != null">
+                #{lastModifier,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="className != null">
+                #{className,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="getCourseByClassId" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.Course">
-    select * from course
-    where class_id = #{classId}
-  </select>
+    <select id="getCourseByClassId" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.Course">
+        select * from course
+        where class_id = #{classId}
+    </select>
 
-  <update id="editCourse" parameterType="com.learning.cloud.course.entity.Course">
-    update course
-    <set>
-      <if test="termId != null">
-        term_id = #{termId,jdbcType=BIGINT},
-      </if>
-      <if test="lastTime != null">
-        last_time = #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifier != null">
-        last_modifier = #{lastModifier,jdbcType=BIGINT},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=LONGVARCHAR}
-  </update>
+    <update id="editCourse" parameterType="com.learning.cloud.course.entity.Course">
+        update course
+        <set>
+            <if test="termId != null">
+                term_id = #{termId,jdbcType=BIGINT},
+            </if>
+            <if test="lastTime != null">
+                last_time = #{lastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=LONGVARCHAR}
+    </update>
 
-  <select id="getSchoolCourse" parameterType="com.learning.cloud.course.entity.Course" resultType="com.learning.cloud.course.entity.Course">
-    select a.*,b.term_name from course a left join term b
-    on a.term_id = b.id
-    where a.school_id = #{schoolId}
-    <if test="gradeName != null">
-      and a.grade_name like CONCAT('%',#{gradeName},'%')
-    </if>
-    <if test="status != null">
-      and a.status = #{status}
-    </if>
-    <if test="termId != null">
-      and a.term_id = #{termId}
-    </if>
-  </select>
+    <select id="getSchoolCourse" parameterType="com.learning.cloud.course.entity.Course"
+            resultType="com.learning.cloud.course.entity.Course">
+        select a.*,b.term_name from course a left join term b
+        on a.term_id = b.id
+        where a.school_id = #{schoolId}
+        <if test="gradeName != null">
+            and a.grade_name like CONCAT('%',#{gradeName},'%')
+        </if>
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+        <if test="termId != null">
+            and a.term_id = #{termId}
+        </if>
+    </select>
 
-  <update id="publishCourse">
-    update course set status = 2
-    where id = #{id}
-  </update>
+    <update id="publishCourse">
+        update course set status = 2
+        where id = #{id}
+    </update>
 </mapper>

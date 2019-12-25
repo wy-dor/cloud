@@ -32,31 +32,31 @@ public class ImportServiceImpl implements ImportService {
     private GradeEntryService gradeEntryService;
 
     @Override
-    public JsonResult importExcelGradeEntries(MultipartFile file, Long moduleId){
+    public JsonResult importExcelGradeEntries(MultipartFile file, Long moduleId) {
         try {
             if (file == null) {
                 throw new Exception("文件不能为空");
             }
             GradeModule gradeModule = gradeModuleDao.getById(moduleId);
-            if(gradeModule == null){
+            if (gradeModule == null) {
                 throw new Exception("当下没有成绩");
             }
 
             //将classId:className重新存储为className:classId方便根据班级名称存储classId
             String classesStr = gradeModule.getClassesStr();
-            if(classesStr.equals("")){
+            if (classesStr.equals("")) {
                 throw new Exception("该成绩发布下没有班级");
             }
             Map<String, String> parse = (Map<String, String>) JSON.parse(classesStr);
-            Map<String,String> classMap = new HashMap<>();
+            Map<String, String> classMap = new HashMap<>();
             Set<String> keySet = parse.keySet();
             for (String classId : keySet) {
                 String className = parse.get(classId);
                 //针对有别名的情况
-                if(className.contains("(")){
-                    className = className.substring(0,className.indexOf("("));
+                if (className.contains("(")) {
+                    className = className.substring(0, className.indexOf("("));
                 }
-                classMap.put(className,classId);
+                classMap.put(className, classId);
             }
             InputStream in = file.getInputStream();
             //excel
@@ -78,12 +78,12 @@ public class ImportServiceImpl implements ImportService {
             for (int i = 3; i < lastCellNum - 1; i++) {
                 //如果是分数制需要将拼接的总分去掉
                 String subject = rowTitle.getCell(i).getStringCellValue();
-                if(gradeModule.getScoringRoles() == 1){
+                if (gradeModule.getScoringRoles() == 1) {
                     int index = subject.indexOf("(");
-                    subject = subject.substring(0,index);
+                    subject = subject.substring(0, index);
                 }
                 Boolean inStrList = CommonUtils.findInStrList(subject, moduleSubjectList);
-                if(!inStrList){
+                if (!inStrList) {
                     throw new Exception("该成绩发布下不需录入" + subject + "成绩");
                 }
                 subjectList.add(subject);
@@ -94,14 +94,14 @@ public class ImportServiceImpl implements ImportService {
                     continue;
                 }
                 //存储成绩
-                List<Map<String,String>> markMapList = new ArrayList<>();
+                List<Map<String, String>> markMapList = new ArrayList<>();
                 GradeEntry ge = new GradeEntry();
                 String className = r.getCell(0).getStringCellValue().trim();
                 String abbrClassName = className;
-                if(className.contains("(")){
-                    abbrClassName = className.substring(0,className.indexOf("("));
+                if (className.contains("(")) {
+                    abbrClassName = className.substring(0, className.indexOf("("));
                 }
-                if(classMap.get(abbrClassName) == null){
+                if (classMap.get(abbrClassName) == null) {
                     throw new Exception("该成绩模板中不存在" + className);
                 }
                 String classIdStr = classMap.get(abbrClassName);
@@ -119,11 +119,11 @@ public class ImportServiceImpl implements ImportService {
 
                 //对成绩进行处理
                 for (int i = 3; i < lastCellNum - 1; i++) {
-                    Map<String,String> map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     String value = getCellValue(r.getCell(i));
                     String courseName = subjectList.get(i - 3);
-                    map.put("courseName",courseName);
-                    map.put("value",value);
+                    map.put("courseName", courseName);
+                    map.put("value", value);
                     markMapList.add(map);
                 }
                 String marks = JSON.toJSONString(markMapList);
@@ -132,7 +132,7 @@ public class ImportServiceImpl implements ImportService {
                 gradeEntryService.saveEntryMarks(ge, marks);
             }
         } catch (Exception e) {
-            return JsonResultUtil.error(0,e.getMessage());
+            return JsonResultUtil.error(0, e.getMessage());
         }
 
         return JsonResultUtil.success("录入成功");

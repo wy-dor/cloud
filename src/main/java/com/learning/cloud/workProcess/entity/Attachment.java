@@ -8,7 +8,7 @@ import lombok.Data;
  * @Desc:
  */
 @Data
-public class Attachment{
+public class Attachment {
     private String fileId;
     private String fileName;
     private String fileType;

@@ -6,11 +6,11 @@ import com.learning.cloud.score.entity.ScoreRecordSchool;
 import com.learning.domain.JsonResult;
 
 public interface ScoreRecordService {
-    JsonResult addScoreRecord(ScoreRecord scoreRecord)throws Exception;
+    JsonResult addScoreRecord(ScoreRecord scoreRecord) throws Exception;
 
-    JsonResult getUserScore(String userId)throws Exception;
+    JsonResult getUserScore(String userId) throws Exception;
 
-    JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool)throws Exception;
+    JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool) throws Exception;
 
-    JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass)throws Exception;
+    JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass) throws Exception;
 }

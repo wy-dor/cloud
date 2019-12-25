@@ -40,16 +40,16 @@ public class EvaluationIconServiceImpl implements EvaluationIconService {
         Integer builtin = evaluationIcon.getBuiltin();
         String encode = "";
         //内置则不压缩
-        if(builtin != null && builtin == 1){
+        if (builtin != null && builtin == 1) {
             BASE64Encoder encoder = new BASE64Encoder();
             //base64转图
             encode = encoder.encode(file.getBytes());
-        }else{
+        } else {
             InputStream inputStream = null;
             inputStream = file.getInputStream();
             String pathName = System.getProperty("user.dir") + File.separator + "upload";
             File f = new File(pathName);
-            if(!f.exists()){
+            if (!f.exists()) {
                 f.mkdirs();
             }
             File toFile = new File(pathName + File.separator + file.getOriginalFilename());

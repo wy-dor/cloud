@@ -54,7 +54,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         List<String> classes = Arrays.asList(classIds.split(","));
         List<String> ps = new ArrayList<>();
         Integer schoolId = null;
-        for(String classId: classes){
+        for (String classId : classes) {
             GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
             String parentDepId = String.valueOf(gradeClass.getPDeptId());
             ps.add(parentDepId);
@@ -73,9 +73,9 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
         msg.getLink().setTitle(msgInfo.getTitle());
         msg.getLink().setText(msgInfo.getText());
-        msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId="+signId+"&link=true");
+        msg.getLink().setMessageUrl("eapp://pages/signOnline/signDetail/signDetail?signId=" + signId + "&link=true");
         msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
-        return SendWorkMsg(workMsg,msg);
+        return SendWorkMsg(workMsg, msg);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         String accessToken = authenService.getAccessToken(corpId);
         Long deptId = gradeClass.getDeptId();
         String advisorUserIdInClass = roleTopApiService.getAdvisorUserIdInClass(deptId, accessToken);
-        if(advisorUserIdInClass.equals("")){
+        if (advisorUserIdInClass.equals("")) {
             return JsonResultUtil.success("该班级下暂时没有设置班主任");
         }
         // 获取agent_id
@@ -103,9 +103,9 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
         msg.getLink().setTitle(msgInfo.getTitle());
         msg.getLink().setText(msgInfo.getText());
-        msg.getLink().setMessageUrl("eapp://pages/duty/classHygiene/classHygiene?classId="+classId+"&date="+date);
+        msg.getLink().setMessageUrl("eapp://pages/duty/classHygiene/classHygiene?classId=" + classId + "&date=" + date);
         msg.getLink().setPicUrl("https://static.dingtalk.com/media/lALPDeC2uNV20CPMkMyQ_144_144.png");
-        return SendWorkMsg(workMsg,msg);
+        return SendWorkMsg(workMsg, msg);
     }
 
 
@@ -119,7 +119,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         // 获取agent_id
         CorpAgent corpAgent = corpAgentDao.getByCorpId(school.getCorpId());
         Boolean success = true;
-        for(String classId: classes){
+        for (String classId : classes) {
             List<String> ps = new ArrayList<>();
             GradeClass gradeClass = gradeClassDao.getById(Integer.valueOf(classId));
             String parentDeptId = String.valueOf(gradeClass.getPDeptId());
@@ -135,17 +135,17 @@ public class SendMsgServiceImpl implements SendMsgService {
             msg.getActionCard().setTitle(msgInfo.getTitle());
             msg.getActionCard().setMarkdown(msgInfo.getText());
             msg.getActionCard().setSingleTitle("查看成绩");
-            msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId="+moduleId+"&classId="+classId);
+            msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId=" + moduleId + "&classId=" + classId);
             JsonResult jsonResult = SendWorkMsg(workMsg, msg);
             Integer code = jsonResult.getCode();
-            if(code != 1){
+            if (code != 1) {
                 success = false;
             }
         }
-        if (success){
+        if (success) {
             return JsonResultUtil.success();
-        }else{
-            return JsonResultUtil.error(0,"还有班级成绩未发送成功");
+        } else {
+            return JsonResultUtil.error(0, "还有班级成绩未发送成功");
         }
     }
 }

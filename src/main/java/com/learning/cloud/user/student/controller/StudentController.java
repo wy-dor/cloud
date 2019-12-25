@@ -23,23 +23,23 @@ public class StudentController {
 
     /*获取指定班级的学生数量*/
     @GetMapping("/getClassStudentNum")
-    public JsonResult getClassStudentNum(Integer classId){
+    public JsonResult getClassStudentNum(Integer classId) {
         return studentService.getClassStudentNum(classId);
     }
 
     /*获取指定班级下的学生列表*/
     @GetMapping("/getClassStudents")
-    public JsonResult getClassStudents(GradeClass gradeClass){
+    public JsonResult getClassStudents(GradeClass gradeClass) {
         return studentService.getClassStudents(gradeClass);
     }
 
     /*对学生姓名进行模糊查询*/
     @GetMapping("/getStudentsByName")
-    public JsonResult getStudentsByName(Student student){
+    public JsonResult getStudentsByName(Student student) {
         return studentService.getStudentsByName(student);
     }
 
-    
+
 }
 
 

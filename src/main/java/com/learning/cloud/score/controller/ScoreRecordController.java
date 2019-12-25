@@ -17,25 +17,24 @@ public class ScoreRecordController {
     private ScoreRecordService scoreRecordService;
 
     @PostMapping("/addScoreRecord")
-    public JsonResult addScoreRecord(ScoreRecord scoreRecord)throws Exception{
+    public JsonResult addScoreRecord(ScoreRecord scoreRecord) throws Exception {
         return scoreRecordService.addScoreRecord(scoreRecord);
     }
 
     @GetMapping("/getUserScore")
-    public JsonResult getUserScore(@RequestParam(value="userId",required = true) String userId)throws Exception{
+    public JsonResult getUserScore(@RequestParam(value = "userId", required = true) String userId) throws Exception {
         return scoreRecordService.getUserScore(userId);
     }
 
     @PostMapping("/addScoreRecordSchool")
-    public JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool)throws Exception{
+    public JsonResult addScoreRecordSchool(ScoreRecordSchool scoreRecordSchool) throws Exception {
         return scoreRecordService.addScoreRecordSchool(scoreRecordSchool);
     }
 
     @PostMapping("/addScoreRecordClass")
-    public JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass)throws Exception{
+    public JsonResult addScoreRecordClass(ScoreRecordClass scoreRecordClass) throws Exception {
         return scoreRecordService.addScoreRecordClass(scoreRecordClass);
     }
-
 
 
 }

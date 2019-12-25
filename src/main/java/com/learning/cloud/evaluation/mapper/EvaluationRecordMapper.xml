@@ -3,10 +3,10 @@
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationRecordDao">
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationRecord">
-    select *
-    from evaluation_record
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_record
+        where id = #{id}
+    </select>
 
     <select id="getByRecord" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord"
             resultType="com.learning.cloud.evaluation.entity.EvaluationRecord">
@@ -47,7 +47,8 @@
 
     <select id="getRecordStatisticsForStudent" parameterType="java.lang.String"
             resultType="com.learning.cloud.evaluation.entity.RecordStatisticsForStudent">
-        select a.dimension_name, a.icon_id, IFNULL(b.praiseItemScore, 0) praiseItemCount, IFNULL(b.criticalItemScore, 0) criticalItemCount
+        select a.dimension_name, a.icon_id, IFNULL(b.praiseItemScore, 0) praiseItemCount, IFNULL(b.criticalItemScore, 0)
+        criticalItemCount
         from evaluation_dimension a
         left join
         (select c.dimension_id, sum(case when SIGN(c.score) = 1 then c.score else 0 end) praiseItemScore,
@@ -59,9 +60,9 @@
     </select>
 
     <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">
-    delete from evaluation_record
-    where id = #{id}
-  </delete>
+        delete from evaluation_record
+        where id = #{id}
+    </delete>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.evaluation.entity.EvaluationRecord">

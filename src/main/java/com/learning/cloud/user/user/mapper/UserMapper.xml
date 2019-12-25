@@ -1,185 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.user.user.dao.UserDao">
-  <select id="getByUnionId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
-    select *
-    from user
-    where union_id = #{unionId}
-  </select>
+    <select id="getByUnionId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+        select *
+        from user
+        where union_id = #{unionId}
+    </select>
 
-  <select id="getByUserId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
-    select *
-    from user
-    where user_id = #{userId}
-    order by id desc
-    limit 1
-  </select>
+    <select id="getByUserId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+        select *
+        from user
+        where user_id = #{userId}
+        order by id desc
+        limit 1
+    </select>
 
-  <select id="getBySchoolRoleIdentity" parameterType="com.learning.cloud.user.user.entity.User" resultType="com.learning.cloud.user.user.entity.User">
-    select *
-    from user
-    where
-    <choose>
-      <when test="unionId != null">
-        union_id = #{unionId}
-      </when>
-      <otherwise>
-        user_id = #{userId}
-      </otherwise>
-    </choose>
-    and school_id = #{schoolId}
-    <if test="roleType != null">
-        and role_type = #{roleType}
-    </if>
-    order by role_type
-    limit 1
-  </select>
+    <select id="getBySchoolRoleIdentity" parameterType="com.learning.cloud.user.user.entity.User"
+            resultType="com.learning.cloud.user.user.entity.User">
+        select *
+        from user
+        where
+        <choose>
+            <when test="unionId != null">
+                union_id = #{unionId}
+            </when>
+            <otherwise>
+                user_id = #{userId}
+            </otherwise>
+        </choose>
+        and school_id = #{schoolId}
+        <if test="roleType != null">
+            and role_type = #{roleType}
+        </if>
+        order by role_type
+        limit 1
+    </select>
 
-  <select id="getUserByUserIdAndCorpId" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
-    select * from user
-    where user_id = #{userId}
-    and corp_id = #{corpId}
-  </select>
+    <select id="getUserByUserIdAndCorpId" parameterType="java.lang.String"
+            resultType="com.learning.cloud.user.user.entity.User">
+        select * from user
+        where user_id = #{userId}
+        and corp_id = #{corpId}
+    </select>
 
-  <delete id="deleteUserInCorp" parameterType="com.learning.cloud.user.user.entity.User">
-    delete from user
-    where user_id = #{userId}
-    and corp_id = #{corpId}
-    <if test="roleType != null">
-      and role_type = #{roleType}
-    </if>
-  </delete>
+    <delete id="deleteUserInCorp" parameterType="com.learning.cloud.user.user.entity.User">
+        delete from user
+        where user_id = #{userId}
+        and corp_id = #{corpId}
+        <if test="roleType != null">
+            and role_type = #{roleType}
+        </if>
+    </delete>
 
-  <select id="getUserRole234" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
-    select * from user
-    where user_id = #{userId}
-    and corp_id = #{corpId}
-    and role_type &lt; 5
-  </select>
+    <select id="getUserRole234" parameterType="java.lang.String" resultType="com.learning.cloud.user.user.entity.User">
+        select * from user
+        where user_id = #{userId}
+        and corp_id = #{corpId}
+        and role_type &lt; 5
+    </select>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.user.user.entity.User">
-    insert into user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="unionId != null">
-        union_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="campusId != null">
-        campus_id,
-      </if>
-      <if test="roleType != null">
-        role_type,
-      </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-      <if test="active != null">
-        active,
-      </if>
-      <if test="corpId != null">
-        corp_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="unionId != null">
-        #{unionId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=INTEGER},
-      </if>
-      <if test="campusId != null">
-        #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="roleType != null">
-        #{roleType,jdbcType=SMALLINT},
-      </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=INTEGER},
-      </if>
-      <if test="active != null">
-        #{active,jdbcType=SMALLINT},
-      </if>
-      <if test="corpId != null">
-        #{corpId,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.user.user.entity.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="unionId != null">
+                union_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="campusId != null">
+                campus_id,
+            </if>
+            <if test="roleType != null">
+                role_type,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="active != null">
+                active,
+            </if>
+            <if test="corpId != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="unionId != null">
+                #{unionId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="campusId != null">
+                #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="roleType != null">
+                #{roleType,jdbcType=SMALLINT},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=INTEGER},
+            </if>
+            <if test="active != null">
+                #{active,jdbcType=SMALLINT},
+            </if>
+            <if test="corpId != null">
+                #{corpId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updateRole5ToOtherRole" parameterType="com.learning.cloud.user.user.entity.User">
-    update user
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=INTEGER},
-      </if>
-      <if test="corpId != null">
-        corp_id = #{corpId,jdbcType=VARCHAR},
-      </if>
-      <if test="roleType != null">
-        role_type = #{roleType,jdbcType=SMALLINT}
-      </if>
-    </set>
-    where union_id = #{unionId,jdbcType=VARCHAR}
-    and school_id = #{schoolId,jdbcType=INTEGER}
-    and role_type = 5
-  </update>
+    <update id="updateRole5ToOtherRole" parameterType="com.learning.cloud.user.user.entity.User">
+        update user
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                campus_id = #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=INTEGER},
+            </if>
+            <if test="corpId != null">
+                corp_id = #{corpId,jdbcType=VARCHAR},
+            </if>
+            <if test="roleType != null">
+                role_type = #{roleType,jdbcType=SMALLINT}
+            </if>
+        </set>
+        where union_id = #{unionId,jdbcType=VARCHAR}
+        and school_id = #{schoolId,jdbcType=INTEGER}
+        and role_type = 5
+    </update>
 
-  <update id="updateWithSpecificRole" parameterType="com.learning.cloud.user.user.entity.User">
-    update user
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="campusId != null">
-        campus_id = #{campusId,jdbcType=INTEGER},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=INTEGER},
-      </if>
-      <if test="corpId != null">
-        corp_id = #{corpId,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where union_id = #{unionId,jdbcType=VARCHAR}
-    and school_id = #{schoolId,jdbcType=INTEGER}
-    and role_type = #{roleType,jdbcType=SMALLINT}
-  </update>
+    <update id="updateWithSpecificRole" parameterType="com.learning.cloud.user.user.entity.User">
+        update user
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="campusId != null">
+                campus_id = #{campusId,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=INTEGER},
+            </if>
+            <if test="corpId != null">
+                corp_id = #{corpId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where union_id = #{unionId,jdbcType=VARCHAR}
+        and school_id = #{schoolId,jdbcType=INTEGER}
+        and role_type = #{roleType,jdbcType=SMALLINT}
+    </update>
 
-  <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">
-    update user
-    set supervisor = #{supervisor}
-    where user_id = #{userId}
-    and schoolId = #{schoolId}
-  </update>
+    <update id="updateToBeSupervisor" parameterType="com.learning.cloud.user.user.entity.User">
+        update user
+        set supervisor = #{supervisor}
+        where user_id = #{userId}
+        and schoolId = #{schoolId}
+    </update>
 </mapper>

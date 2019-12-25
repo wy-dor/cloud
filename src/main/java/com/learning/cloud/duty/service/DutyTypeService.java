@@ -10,13 +10,13 @@ import com.learning.utils.JsonResultUtil;
  * @Desc:
  */
 public interface DutyTypeService {
-    JsonResult addDutyType(DutyType dutyType)throws Exception;
+    JsonResult addDutyType(DutyType dutyType) throws Exception;
 
-    JsonResult deleteDutyType(Long id)throws Exception;
+    JsonResult deleteDutyType(Long id) throws Exception;
 
-    JsonResult updateDutyType(DutyType dutyType)throws Exception;
+    JsonResult updateDutyType(DutyType dutyType) throws Exception;
 
-    JsonResult getDutyTypeBySchoolId(DutyType dutyType)throws Exception;
+    JsonResult getDutyTypeBySchoolId(DutyType dutyType) throws Exception;
 
-    JsonResult getDutyTypeById(Long id)throws Exception;
+    JsonResult getDutyTypeById(Long id) throws Exception;
 }

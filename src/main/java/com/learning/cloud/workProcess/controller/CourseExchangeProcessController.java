@@ -21,19 +21,19 @@ public class CourseExchangeProcessController {
     private CourseExchangeProcessService courseExchangeProcessService;
 
     @PostMapping("/createCourseExchangeProcess")
-    public JsonResult createCourseExchangeProcess(String corpId)throws Exception{
+    public JsonResult createCourseExchangeProcess(String corpId) throws Exception {
         //创建固定格式，填充对应字段值
         return courseExchangeProcessService.createCourseExchangeProcess(corpId);
     }
 
     @PostMapping("/createCourseExchangeProcessInstance")
-    public JsonResult createCourseExchangeProcessInstance(CourseInstance courseInstance)throws Exception{
+    public JsonResult createCourseExchangeProcessInstance(CourseInstance courseInstance) throws Exception {
         return courseExchangeProcessService.createCourseExchangeProcessInstance(courseInstance);
     }
 
     //获取学校的流程模板
     @GetMapping("/getCourseProcess")
-    public JsonResult getCourseProcess(String corpId)throws Exception{
+    public JsonResult getCourseProcess(String corpId) throws Exception {
         return courseExchangeProcessService.getCourseProcess(corpId);
     }
 }

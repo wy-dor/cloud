@@ -11,33 +11,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GradeEntryController {
-    
+
     @Autowired
     private GradeEntryService gradeEntryService;
-    
+
     @PostMapping("/saveGradeEntry")
-    public JsonResult saveGradeEntry(GradeEntryJsonStr gradeEntryJsonStr){
+    public JsonResult saveGradeEntry(GradeEntryJsonStr gradeEntryJsonStr) {
         return gradeEntryService.saveGradeEntry(gradeEntryJsonStr);
     }
 
     @GetMapping("/getGradeEntryById")
-    public JsonResult getGradeEntryById(Long id){
+    public JsonResult getGradeEntryById(Long id) {
         return gradeEntryService.getGradeEntryById(id);
     }
 
     @GetMapping("/getByGradeEntry")
-    public JsonResult getByGradeEntry(GradeEntry gradeEntry){
+    public JsonResult getByGradeEntry(GradeEntry gradeEntry) {
         return gradeEntryService.getByGradeEntry(gradeEntry);
     }
 
     @GetMapping("/getGradeEntryStatistics")
-    public JsonResult getGradeEntryStatistics(GradeEntry gradeEntry){
+    public JsonResult getGradeEntryStatistics(GradeEntry gradeEntry) {
         return gradeEntryService.getGradeEntryStatistics(gradeEntry);
     }
 
     @GetMapping("/getGradeEntryForStudent")
-    public JsonResult getGradeEntryForStudent(Long moduleId, String userId){
-        return gradeEntryService.getGradeEntryForStudent(moduleId,userId);
+    public JsonResult getGradeEntryForStudent(Long moduleId, String userId) {
+        return gradeEntryService.getGradeEntryForStudent(moduleId, userId);
     }
 
 }

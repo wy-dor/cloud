@@ -55,7 +55,7 @@ public class SignServiceImpl implements SignService {
     /*家长进行签字*/
     @Override
     public JsonResult signName(SignRecord signRecord, MultipartFile file) throws Exception {
-        if(file != null){
+        if (file != null) {
             Long picId = questionService.reduceImg(file);
             signRecord.setPicId(picId);
         }
@@ -71,7 +71,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public JsonResult getUnsignedTasks(Parent parent) throws Exception{
+    public JsonResult getUnsignedTasks(Parent parent) throws Exception {
         String classId = parent.getClassId();
         String[] split = classId.split(",");
         List<String> strings = Arrays.asList(split);

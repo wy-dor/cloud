@@ -16,37 +16,37 @@ public class GradeModuleController {
     private GradeModuleService gradeModuleService;
 
     @PostMapping("/saveGradeModule")
-    public JsonResult saveGradeModule(GradeModule gradeModule){
+    public JsonResult saveGradeModule(GradeModule gradeModule) {
         return gradeModuleService.saveGradeModule(gradeModule);
     }
 
     @GetMapping("/getGradeModuleById")
-    public JsonResult getGradeModuleById(Long id){
+    public JsonResult getGradeModuleById(Long id) {
         return gradeModuleService.getGradeModuleById(id);
     }
 
     @GetMapping("/getAllGradeModule")
-    public JsonResult getAllGradeModule(GradeModule gradeModule){
+    public JsonResult getAllGradeModule(GradeModule gradeModule) {
         return gradeModuleService.getAllGradeModule(gradeModule);
     }
 
     @GetMapping("/getAllGradeModuleForAdministrator")
-    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule){
+    public JsonResult getAllGradeModuleForAdministrator(GradeModule gradeModule) {
         return gradeModuleService.getAllGradeModuleForAdministrator(gradeModule);
     }
 
     @GetMapping("/deleteGradeModule")
-    public JsonResult deleteGradeModule(Long id){
+    public JsonResult deleteGradeModule(Long id) {
         return gradeModuleService.deleteGradeModule(id);
     }
 
     @GetMapping("/getGradeModulesForClass")
-    public JsonResult getGradeModulesForClass(GradeEntry gradeEntry){
+    public JsonResult getGradeModulesForClass(GradeEntry gradeEntry) {
         return gradeModuleService.getGradeModulesForClass(gradeEntry);
     }
 
     @GetMapping("/updateGradeModule")
-    public JsonResult updateGradeModule(GradeModule gradeModule){
+    public JsonResult updateGradeModule(GradeModule gradeModule) {
         return gradeModuleService.updateGradeModule(gradeModule);
     }
 }

@@ -45,7 +45,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
     private GradeClassDao gradeClassDao;
 
     @Override
-    public ServiceResult initTopClassIdInSchool(Integer schoolId, String accessToken) throws ApiException{
+    public ServiceResult initTopClassIdInSchool(Integer schoolId, String accessToken) throws ApiException {
         List<OapiEduClassListResponse.ClassResponse> allList = new ArrayList<>();
         List<OapiEduCampusListResponse.CampusResponse> campusList = getAndSaveCampusList(schoolId, accessToken);
         for (OapiEduCampusListResponse.CampusResponse campusResponse : campusList) {
@@ -89,7 +89,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             campus.setCampusName(name);
             Campus c = campusDao.getByCampus(campus);
             campus.setTopCampusId(topCampusId);
-            if(size > 1){
+            if (size > 1) {
                 campus.setState(1);
             }
             if (c == null) {
@@ -112,7 +112,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/get");
         OapiProcessinstanceGetRequest request = new OapiProcessinstanceGetRequest();
         request.setProcessInstanceId(topCampusId.toString());
-        OapiProcessinstanceGetResponse response = client.execute(request,accessToken);
+        OapiProcessinstanceGetResponse response = client.execute(request, accessToken);
         return ServiceResult.success(response);
     }
 
@@ -134,9 +134,9 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             eduPeriod.setPeriodName(name);
             eduPeriod.setPeriodType(periodType);
             eduPeriod.setTopCampusId(topCampusId);
-            if(byPeriod != null && byPeriod.size() > 0){
+            if (byPeriod != null && byPeriod.size() > 0) {
                 eduPeriodDao.update(eduPeriod);
-            }else{
+            } else {
                 eduPeriodDao.insert(eduPeriod);
             }
         }
@@ -165,9 +165,9 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
             eduGrade.setTopPeriodId(topPeriodId);
             eduGrade.setGradeLevel(gradeLevel);
             eduGrade.setStartYear(startYear);
-            if(byGrade != null && byGrade.size() > 0){
+            if (byGrade != null && byGrade.size() > 0) {
                 eduGradeDao.update(eduGrade);
-            }else{
+            } else {
                 eduGradeDao.insert(eduGrade);
             }
         }
@@ -182,7 +182,7 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
         Boolean flag = true;
         Long pageNo = 1L;
         List<OapiEduClassListResponse.ClassResponse> allList = new ArrayList<>();
-        while(flag){
+        while (flag) {
             req.setPageNo(pageNo);
             req.setPageSize(20L);
             OapiEduClassListResponse rsp = client.execute(req, accessToken);
@@ -207,18 +207,18 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
                 gradeClass.setTopGradeId(gradeId);
                 gradeClass.setTopPeriodId(periodId);
                 gradeClass.setTopCampusId(topCampusId);
-                if(byGradeClass != null && byGradeClass.size() > 0){
+                if (byGradeClass != null && byGradeClass.size() > 0) {
                     Integer id = byGradeClass.get(0).getId();
                     gradeClass.setId(id);
                     gradeClassDao.update(gradeClass);
-                }else{
+                } else {
                     gradeClassDao.insert(gradeClass);
                 }
             }
             //是否继续查询
-            if(result.getHasMore()){
+            if (result.getHasMore()) {
                 pageNo += 1;
-            }else{
+            } else {
                 flag = false;
             }
         }
@@ -236,7 +236,6 @@ public class DeptTopApiServiceImpl implements DeptTopApiService {
         OapiEduClassGetResponse rsp = client.execute(req, accessToken);
         return ServiceResult.success(rsp);
     }
-
 
 
 }

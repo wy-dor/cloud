@@ -9,15 +9,15 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface InspectorService {
-    JsonResult addInspector(Inspector inspector)throws Exception;
+    JsonResult addInspector(Inspector inspector) throws Exception;
 
-    JsonResult deleteInspector(Long id)throws Exception;
+    JsonResult deleteInspector(Long id) throws Exception;
 
-    JsonResult updateInspector(Inspector inspector)throws Exception;
+    JsonResult updateInspector(Inspector inspector) throws Exception;
 
-    JsonResult getInspector(Inspector inspector)throws Exception;
+    JsonResult getInspector(Inspector inspector) throws Exception;
 
-    JsonResult loginInspector(String login, String password)throws Exception;
+    JsonResult loginInspector(String login, String password) throws Exception;
 
-    JsonResult resetPassword(Inspector inspector)throws Exception;
+    JsonResult resetPassword(Inspector inspector) throws Exception;
 }

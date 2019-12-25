@@ -39,26 +39,26 @@ public class CourseWareServiceImpl implements CourseWareService {
 
     @Override
     public String SaveFile(MultipartFile file, Long teacherId) {
-        try{
-            if(file!=null&&!file.isEmpty()){
+        try {
+            if (file != null && !file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                String rootPath = System.getProperty("user.dir")+"/ware_"+String.valueOf(teacherId);
-                String filePath = (rootPath+"/"+fileName).replace("\\","/");
+                String rootPath = System.getProperty("user.dir") + "/ware_" + String.valueOf(teacherId);
+                String filePath = (rootPath + "/" + fileName).replace("\\", "/");
                 File fp = new File(new File(filePath).getParent());
-                if(!fp.exists()){
+                if (!fp.exists()) {
                     fp.mkdirs();
                 }
                 FileOutputStream out = new FileOutputStream(filePath);
                 InputStream is = null;
                 try {
                     is = file.getInputStream();
-                    byte[] b=new byte[is.available()];
+                    byte[] b = new byte[is.available()];
                     is.read(b);
                     out.write(b);
-                    return filePath ;
-                }catch (Exception e){
+                    return filePath;
+                } catch (Exception e) {
 
-                }finally {
+                } finally {
                     if (is != null) {
                         is.close();
                     }
@@ -70,10 +70,10 @@ public class CourseWareServiceImpl implements CourseWareService {
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-       return null;
+        return null;
     }
 
     //获取课件
@@ -86,9 +86,9 @@ public class CourseWareServiceImpl implements CourseWareService {
     @Override
     public JsonResult likeThisCourseWare(Long id) throws Exception {
         int i = courseWareDao.likeThisCourseWare(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }

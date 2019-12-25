@@ -25,52 +25,52 @@ public class GradeClassController {
     /*获取学校或分校下的班级列表*/
     /*参数为schoolId或者id(分校)*/
     @GetMapping("/getClassesByCampus")
-    public ServiceResult getClassesByCampus(Campus campus){
+    public ServiceResult getClassesByCampus(Campus campus) {
         return gradeClassService.getClassesByCampus(campus);
     }
 
     /*获取班级下老师，家长，学生的数量*/
     @GetMapping("/getClassDetails")
-    public JsonResult getClassDetails(Integer classId){
+    public JsonResult getClassDetails(Integer classId) {
         return gradeClassService.getClassDetails(classId);
     }
 
     /*学校下递进条件查询班级，依次添加查询条件*/
     @GetMapping("/getByGradeClass")
-    public JsonResult getByGradeClass(GradeClass gradeClass){
+    public JsonResult getByGradeClass(GradeClass gradeClass) {
         return gradeClassService.getByGradeClass(gradeClass);
     }
 
     /*根据班级id获取班级信息，参数id*/
     @GetMapping("/getGradeClassById")
-    public JsonResult getGradeClassById(Integer id){
+    public JsonResult getGradeClassById(Integer id) {
         return gradeClassService.getGradeClassById(id);
     }
 
     /*根据班级id字符串获取班级信息*/
     @GetMapping("/listGradeClassByIds")
-    public JsonResult listGradeClassByIds(String classIds){
+    public JsonResult listGradeClassByIds(String classIds) {
         return gradeClassService.listGradeClassByIds(classIds);
     }
 
     @GetMapping("getAllGradeName")
-    public JsonResult getAllGradeName(Integer schoolId, String userId){
+    public JsonResult getAllGradeName(Integer schoolId, String userId) {
         return gradeClassService.getAllGradeName(schoolId, userId);
     }
 
     @GetMapping("/listGradeClassByTeacherInSchool")
-    public JsonResult listGradeClassByTeacherInSchool(String userId,Integer schoolId){
+    public JsonResult listGradeClassByTeacherInSchool(String userId, Integer schoolId) {
         return gradeClassService.listGradeClassByTeacherInSchool(userId, schoolId);
     }
 
     @GetMapping("/getCampusIdByUserIdAndSchoolId")
-    public JsonResult getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId){
+    public JsonResult getCampusIdByUserIdAndSchoolId(String userId, Integer schoolId) {
         Integer campusId = gradeClassService.getCampusIdForTeacher(userId, schoolId);
         return JsonResultUtil.success(campusId);
     }
 
     @GetMapping("/getAllGradeNameByGradeClass")
-    public JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass){
+    public JsonResult getAllGradeNameByGradeClass(GradeClass gradeClass) {
         return gradeClassService.getAllGradeNameByGradeClass(gradeClass);
     }
 

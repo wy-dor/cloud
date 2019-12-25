@@ -3,10 +3,10 @@
 <mapper namespace="com.learning.cloud.evaluation.dao.EvaluationGroupDao">
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">
-    select *
-    from evaluation_group
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_group
+        where id = #{id}
+    </select>
 
     <select id="getByGroup" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroup"
             resultType="com.learning.cloud.evaluation.entity.EvaluationGroup">

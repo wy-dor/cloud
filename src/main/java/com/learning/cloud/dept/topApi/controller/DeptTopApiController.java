@@ -28,12 +28,12 @@ public class DeptTopApiController {
     private SchoolDao schoolDao;
 
     @GetMapping("/getTopCampusList")
-    public ServiceResult getTopCampusList(String accessToken) throws ApiException{
+    public ServiceResult getTopCampusList(String accessToken) throws ApiException {
         return deptTopApiService.getTopCampusList(accessToken);
     }
 
     @GetMapping("/initTopClassIdInSchool")
-    public ServiceResult initTopClassIdInSchool(Integer schoolId) throws ApiException{
+    public ServiceResult initTopClassIdInSchool(Integer schoolId) throws ApiException {
 //        School bySchoolId = schoolDao.getBySchoolId(schoolId);
 //        String corpId = bySchoolId.getCorpId();
 //        String accessToken = authenService.getAccessToken(corpId);
@@ -42,7 +42,7 @@ public class DeptTopApiController {
     }
 
     @GetMapping("/getAndSaveCampusList")
-    public ServiceResult getAndSaveCampusList(Integer schoolId) throws ApiException{
+    public ServiceResult getAndSaveCampusList(Integer schoolId) throws ApiException {
         School bySchoolId = schoolDao.getBySchoolId(schoolId);
         String corpId = bySchoolId.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
@@ -51,12 +51,12 @@ public class DeptTopApiController {
     }
 
     @GetMapping("/getProcessInstance")
-    public ServiceResult getProcessInstance(Integer schoolId, Long topCampusId) throws ApiException{
-        return deptTopApiService.getProcessInstance(schoolId,topCampusId);
+    public ServiceResult getProcessInstance(Integer schoolId, Long topCampusId) throws ApiException {
+        return deptTopApiService.getProcessInstance(schoolId, topCampusId);
     }
 
     @GetMapping("/getAndSavePeriodList")
-    public ServiceResult getAndSavePeriodList(Integer schoolId, Long topCampusId) throws ApiException{
+    public ServiceResult getAndSavePeriodList(Integer schoolId, Long topCampusId) throws ApiException {
         School bySchoolId = schoolDao.getBySchoolId(schoolId);
         String corpId = bySchoolId.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
@@ -65,7 +65,7 @@ public class DeptTopApiController {
     }
 
     @GetMapping("/getAndSaveGradeList")
-    public ServiceResult getAndSaveGradeList(Integer schoolId, Long topPeriodId) throws ApiException{
+    public ServiceResult getAndSaveGradeList(Integer schoolId, Long topPeriodId) throws ApiException {
         School bySchoolId = schoolDao.getBySchoolId(schoolId);
         String corpId = bySchoolId.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
@@ -74,7 +74,7 @@ public class DeptTopApiController {
     }
 
     @GetMapping("/getAndSaveClassList")
-    public ServiceResult getAndSaveClassList(Integer schoolId, Long topGradeId) throws ApiException{
+    public ServiceResult getAndSaveClassList(Integer schoolId, Long topGradeId) throws ApiException {
         School bySchoolId = schoolDao.getBySchoolId(schoolId);
         String corpId = bySchoolId.getCorpId();
         String accessToken = authenService.getAccessToken(corpId);
@@ -83,8 +83,8 @@ public class DeptTopApiController {
     }
 
     @GetMapping("/getEduClass")
-    public ServiceResult getEduClass(Integer schoolId, Long topClassId) throws ApiException{
-        return deptTopApiService.getEduClass(schoolId,topClassId);
+    public ServiceResult getEduClass(Integer schoolId, Long topClassId) throws ApiException {
+        return deptTopApiService.getEduClass(schoolId, topClassId);
     }
 
 }

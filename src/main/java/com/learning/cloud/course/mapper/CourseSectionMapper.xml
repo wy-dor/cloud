@@ -1,128 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.cloud.course.dao.CourseSectionDao">
-  <insert id="addSection" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseSection">
-    insert into course_section
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="sectionId != null">
-        section_id,
-      </if>
-      <if test="schoolId != null">
-        school_id,
-      </if>
-      <if test="timeFrame != null">
-        time_frame,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="start != null">
-        start,
-      </if>
-      <if test="end != null">
-        end,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="sectionId != null">
-        #{sectionId,jdbcType=BIGINT},
-      </if>
-      <if test="schoolId != null">
-        #{schoolId,jdbcType=BIGINT},
-      </if>
-      <if test="timeFrame != null">
-        #{timeFrame,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="start != null">
-        #{start,jdbcType=VARCHAR},
-      </if>
-      <if test="end != null">
-        #{end,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=SMALLINT},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addSection" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.course.entity.CourseSection">
+        insert into course_section
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="sectionId != null">
+                section_id,
+            </if>
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="timeFrame != null">
+                time_frame,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="start != null">
+                start,
+            </if>
+            <if test="end != null">
+                end,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sectionId != null">
+                #{sectionId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=BIGINT},
+            </if>
+            <if test="timeFrame != null">
+                #{timeFrame,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="start != null">
+                #{start,jdbcType=VARCHAR},
+            </if>
+            <if test="end != null">
+                #{end,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=SMALLINT},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="editSection" parameterType="com.learning.cloud.course.entity.CourseSection">
-    update course_section
-    <set>
-      <if test="timeFrame != null">
-        time_frame = #{timeFrame,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="start != null">
-        start = #{start,jdbcType=VARCHAR},
-      </if>
-      <if test="end != null">
-        end = #{end,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=SMALLINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=LONGVARCHAR}
-  </update>
+    <update id="editSection" parameterType="com.learning.cloud.course.entity.CourseSection">
+        update course_section
+        <set>
+            <if test="timeFrame != null">
+                time_frame = #{timeFrame,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="start != null">
+                start = #{start,jdbcType=VARCHAR},
+            </if>
+            <if test="end != null">
+                end = #{end,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=LONGVARCHAR}
+    </update>
 
-  <select id="getSchoolSection" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSection">
-    select * from course_section
-    where section_id= #{id}
-    order by start
-  </select>
+    <select id="getSchoolSection" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.course.entity.CourseSection">
+        select * from course_section
+        where section_id= #{id}
+        order by start
+    </select>
 
-  <update id="saveSectionArray">
-    update course_section_array set
-      content = #{sectionArray},name = #{name}
-      where id = #{id}
-  </update>
+    <update id="saveSectionArray">
+        update course_section_array set
+        content = #{sectionArray},name = #{name}
+        where id = #{id}
+    </update>
 
-  <delete id="deleteSection">
-    delete from course_section
-    where id = #{id}
-  </delete>
+    <delete id="deleteSection">
+        delete from course_section
+        where id = #{id}
+    </delete>
 
-  <delete id="deleteSchoolSection">
-    delete from course_section
-    where section_id = #{sectionId}
-  </delete>
+    <delete id="deleteSchoolSection">
+        delete from course_section
+        where section_id = #{sectionId}
+    </delete>
 
-  <select id="getSchoolSectionArray" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSectionArray">
-    select * from course_section_array
-    where school_id = #{schoolId}
-    and status = 1
-  </select>
+    <select id="getSchoolSectionArray" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.course.entity.CourseSectionArray">
+        select * from course_section_array
+        where school_id = #{schoolId}
+        and status = 1
+    </select>
 
-  <select id="getSchoolSectionList" parameterType="java.lang.Long" resultType="com.learning.cloud.course.entity.CourseSectionArray">
-    select * from course_section_array
-    where school_id = #{schoolId}
-  </select>
+    <select id="getSchoolSectionList" parameterType="java.lang.Long"
+            resultType="com.learning.cloud.course.entity.CourseSectionArray">
+        select * from course_section_array
+        where school_id = #{schoolId}
+    </select>
 
-  <update id="setSectionArrayBlock">
-    update course_section_array set status = 0
-    where id != #{id} and school_id = #{schoolId}
-  </update>
-  <update id="setSectionArrayActive">
-    update course_section_array set status = 1
-    where id = #{id}
-  </update>
+    <update id="setSectionArrayBlock">
+        update course_section_array set status = 0
+        where id != #{id} and school_id = #{schoolId}
+    </update>
+    <update id="setSectionArrayActive">
+        update course_section_array set status = 1
+        where id = #{id}
+    </update>
 
-  <insert id="addSectionArray" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.course.entity.CourseSectionArray">
-    insert into course_section_array
-      (school_id,name) values (#{schoolId},#{name})
-  </insert>
+    <insert id="addSectionArray" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.learning.cloud.course.entity.CourseSectionArray">
+        insert into course_section_array
+        (school_id,name) values (#{schoolId},#{name})
+    </insert>
 </mapper>

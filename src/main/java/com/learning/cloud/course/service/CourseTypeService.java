@@ -9,9 +9,9 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface CourseTypeService {
-    JsonResult getSchoolCourseType(Long schoolId)throws Exception;
+    JsonResult getSchoolCourseType(Long schoolId) throws Exception;
 
-    JsonResult addSchoolCourseType(CourseType courseType)throws Exception;
+    JsonResult addSchoolCourseType(CourseType courseType) throws Exception;
 
-    JsonResult deleteCourseType(Long id)throws Exception;
+    JsonResult deleteCourseType(Long id) throws Exception;
 }

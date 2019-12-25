@@ -48,27 +48,27 @@ public class SendUtils {
      * 发送工作通知消息
      * 企业工作通知会话中某个微应用的名义推送到员工的通知消息
      */
-    public static JsonResult SendWorkMsg(WorkMsg workMsg, OapiMessageCorpconversationAsyncsendV2Request.Msg msg)throws Exception{
+    public static JsonResult SendWorkMsg(WorkMsg workMsg, OapiMessageCorpconversationAsyncsendV2Request.Msg msg) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient(SEND_WORK_MSG_URL);
         OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
         request.setAgentId(Long.valueOf(workMsg.getAgentId()));
-        if(workMsg.getUserIdList() != null){
+        if (workMsg.getUserIdList() != null) {
             request.setUseridList(StringListToString(workMsg.getUserIdList()));
         }
-        if(workMsg.getDeptIdList() != null){
+        if (workMsg.getDeptIdList() != null) {
             request.setDeptIdList(StringListToString(workMsg.getDeptIdList()));
         }
-        if(workMsg.getToAllUser() != null){
+        if (workMsg.getToAllUser() != null) {
             request.setToAllUser(workMsg.getToAllUser());
         }
         request.setMsg(msg);
         // 发送消息
-        OapiMessageCorpconversationAsyncsendV2Response response = client.execute(request,getAccessToken(workMsg.getCorpId()));
-        if(response.isSuccess()){
-            log.info("发送消息成功：corpid"+workMsg.getCorpId());
+        OapiMessageCorpconversationAsyncsendV2Response response = client.execute(request, getAccessToken(workMsg.getCorpId()));
+        if (response.isSuccess()) {
+            log.info("发送消息成功：corpid" + workMsg.getCorpId());
             return JsonResultUtil.success();
-        }else {
-            log.info("发送消息失败"+response.getMsg());
+        } else {
+            log.info("发送消息失败" + response.getMsg());
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
@@ -78,35 +78,35 @@ public class SendUtils {
      * 发送普通消息
      * 员工个人在使用应用时，可以通过界面操作的方式往群或其他人的会话里推送消息
      */
-    public static void SendGeneralMsg(GeneralMsg generalMsg, OapiMessageSendToConversationRequest.Msg msg)throws Exception{
+    public static void SendGeneralMsg(GeneralMsg generalMsg, OapiMessageSendToConversationRequest.Msg msg) throws Exception {
         DingTalkClient client = new DefaultDingTalkClient(SEND_GENERAL_MSG_URL);
 
         OapiMessageSendToConversationRequest request = new OapiMessageSendToConversationRequest();
         request.setSender(generalMsg.getSender());
         request.setCid(generalMsg.getCid());
 
-        if(msg.getMsgtype().equals("text")){
+        if (msg.getMsgtype().equals("text")) {
             OapiMessageSendToConversationRequest.Text text = new OapiMessageSendToConversationRequest.Text();
             text.setContent("测试测试");
             msg.setText(text);
             msg.setMsgtype("text");
-        }else if(msg.getMsgtype().equals("image")){
+        } else if (msg.getMsgtype().equals("image")) {
             OapiMessageSendToConversationRequest.Image image = new OapiMessageSendToConversationRequest.Image();
             image.setMediaId("@lADOdvRYes0CbM0CbA");
             msg.setImage(image);
             msg.setMsgtype("image");
-        }else if(msg.getMsgtype().equals("file")){
+        } else if (msg.getMsgtype().equals("file")) {
             OapiMessageSendToConversationRequest.File file = new OapiMessageSendToConversationRequest.File();
             file.setMediaId("@lADOdvRYes0CbM0CbA");
             msg.setFile(file);
             msg.setMsgtype("file");
-        }else if(msg.getMsgtype().equals("markdown")){
+        } else if (msg.getMsgtype().equals("markdown")) {
             OapiMessageSendToConversationRequest.Markdown markdown = new OapiMessageSendToConversationRequest.Markdown();
             markdown.setText("# 这是支持markdown的文本 \\n## 标题2  \\n* 列表1 \\n![alt 啊](https://img.alicdn.com/tps/TB1XLjqNVXXXXc4XVXXXXXXXXXX-170-64.png)");
             markdown.setTitle("首屏会话透出的展示内容");
             msg.setMarkdown(markdown);
             msg.setMsgtype("markdown");
-        }else if(msg.getMsgtype().equals("action_card")){
+        } else if (msg.getMsgtype().equals("action_card")) {
             OapiMessageSendToConversationRequest.ActionCard actionCard = new OapiMessageSendToConversationRequest.ActionCard();
             actionCard.setTitle("是透出到会话列表和通知的文案");
             actionCard.setMarkdown("持markdown格式的正文内");
@@ -114,7 +114,7 @@ public class SendUtils {
             actionCard.setSingleUrl("https://open.dingtalk.com");
             msg.setActionCard(actionCard);
             msg.setMsgtype("action_card");
-        }else if(msg.getMsgtype().equals("link")){
+        } else if (msg.getMsgtype().equals("link")) {
             OapiMessageSendToConversationRequest.Link link = new OapiMessageSendToConversationRequest.Link();
             link.setMessageUrl("https://www.baidu.com/");
             link.setPicUrl("@lADOdvRYes0CbM0CbA");
@@ -125,10 +125,10 @@ public class SendUtils {
         }
         request.setMsg(msg);
         OapiMessageSendToConversationResponse response = client.execute(request, getAccessToken(generalMsg.getCorpId()));
-        if(response.isSuccess()){
-            log.info("发送消息成功：corpid"+generalMsg.getCorpId());
-        }else {
-            log.info("发送消息失败"+response.getMsg());
+        if (response.isSuccess()) {
+            log.info("发送消息成功：corpid" + generalMsg.getCorpId());
+        } else {
+            log.info("发送消息失败" + response.getMsg());
         }
     }
 

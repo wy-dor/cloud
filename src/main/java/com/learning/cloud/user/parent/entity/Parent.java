@@ -2,6 +2,7 @@ package com.learning.cloud.user.parent.entity;
 
 import com.learning.domain.BaseEntity;
 import lombok.Data;
+
 import java.util.List;
 
 @Data

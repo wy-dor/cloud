@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -79,8 +80,8 @@ public class GradeEntryServiceImpl implements GradeEntryService {
     public void saveEntryMarks(GradeEntry gradeEntry, String marks) {
         List<GradeEntry> byGradeEntry = gradeEntryDao.getByGradeEntry(gradeEntry);
         Long entryId = null;
-        if(byGradeEntry != null && byGradeEntry.size() > 0){
-            entryId  = byGradeEntry.get(0).getId();
+        if (byGradeEntry != null && byGradeEntry.size() > 0) {
+            entryId = byGradeEntry.get(0).getId();
         }
         if (entryId == null || entryId == 0) {
             //空字符串替换为"缺考"
@@ -219,8 +220,8 @@ public class GradeEntryServiceImpl implements GradeEntryService {
             for (GradeEntry entry : gradeEntries) {
                 String marks = entry.getMarks();
                 List<Map<String, String>> parse = (List<Map<String, String>>) JSON.parse(marks);
-                if(parse.size() != subjectCounts){
-                    return JsonResultUtil.error(0,"科目未完全录入");
+                if (parse.size() != subjectCounts) {
+                    return JsonResultUtil.error(0, "科目未完全录入");
                 }
                 //总分计算
                 double markSum = 0;
@@ -255,7 +256,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
                     statisticMapArr[i] = tempMap;
                 }
             } catch (Exception e) {
-                return JsonResultUtil.error(0,"科目未完全录入");
+                return JsonResultUtil.error(0, "科目未完全录入");
             }
 
         } else {
@@ -324,7 +325,7 @@ public class GradeEntryServiceImpl implements GradeEntryService {
     public JsonResult getGradeEntryForStudent(Long moduleId, String userId) {
         Student student = studentDao.getByUserId(userId);
         Integer classId = student.getClassId();
-        String studentName = student.getStudentName().replace(" ","");
+        String studentName = student.getStudentName().replace(" ", "");
         GradeEntry ge = new GradeEntry();
         ge.setModuleId(moduleId);
         ge.setClassId(classId);
@@ -333,6 +334,22 @@ public class GradeEntryServiceImpl implements GradeEntryService {
         GradeEntry gradeEntry = null;
         if (byGradeEntry != null && byGradeEntry.size() > 0) {
             gradeEntry = byGradeEntry.get(0);
+            BigDecimal totalPoints = new BigDecimal("0");
+            String marks = gradeEntry.getMarks();
+            List<Map<String, String>> parse = (List<Map<String, String>>) JSON.parse(marks);
+            for (Map<String, String> courseValueMap : parse) {
+                    String value = courseValueMap.get("value");
+                    if (!value.equals("缺考") && !value.equals("")) {
+                        BigDecimal point = null;
+                        try {
+                            point = new BigDecimal(value);
+                        } catch (Exception e) {
+                            point = new BigDecimal("0");
+                        }
+                        totalPoints = totalPoints.add(point);
+                    }
+            }
+            gradeEntry.setTotalPoints(totalPoints);
         }
         return JsonResultUtil.success(gradeEntry);
     }

@@ -35,9 +35,9 @@ public class SchoolServiceImpl implements SchoolService {
     public JsonResult getSchoolIdByCorpId(String corpId) {
         Integer schoolId = null;
         School school = schoolDao.getSchoolByCorpId(corpId);
-        if(school != null){
+        if (school != null) {
             schoolId = school.getId();
-        }else{
+        } else {
             schoolId = -1;
         }
         return JsonResultUtil.success(schoolId);

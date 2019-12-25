@@ -25,53 +25,53 @@
 
     <select id="getStuInfoByUserId" parameterType="java.lang.String"
             resultType="com.learning.cloud.evaluation.entity.StuInfo">
-    select student_name, user_id, student_no
-    from user_student
-    where user_id = #{userId}
-    limit 1
-  </select>
+        select student_name, user_id, student_no
+        from user_student
+        where user_id = #{userId}
+        limit 1
+    </select>
 
     <select id="listStuInfoInClass" parameterType="java.lang.Integer"
             resultType="com.learning.cloud.evaluation.entity.StuInfo">
-    select student_name, user_id, student_no
-    from user_student
-    where class_id = #{id}
-  </select>
+        select student_name, user_id, student_no
+        from user_student
+        where class_id = #{id}
+    </select>
 
     <select id="getByUserId" parameterType="java.lang.String"
             resultType="com.learning.cloud.user.student.entity.Student">
-    select *
-    from user_student
-    where user_id = #{userId}
-    limit 1
-  </select>
+        select *
+        from user_student
+        where user_id = #{userId}
+        limit 1
+    </select>
 
     <select id="getClassStuNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select count(id)
-    from user_student
-    where class_id = #{classId}
-  </select>
+        select count(id)
+        from user_student
+        where class_id = #{classId}
+    </select>
 
     <select id="getClassStudents" parameterType="com.learning.cloud.dept.gradeClass.entity.GradeClass"
             resultType="com.learning.cloud.user.student.entity.Student">
-    select *
-    from user_student
-    where class_id = #{id}
-    order by id
-  </select>
+        select *
+        from user_student
+        where class_id = #{id}
+        order by id
+    </select>
 
     <select id="listStudentUserIdInClass" parameterType="java.lang.Integer" resultType="java.lang.String">
-    select user_id
-    from user_student
-    where class_id = #{classId}
-  </select>
+        select user_id
+        from user_student
+        where class_id = #{classId}
+    </select>
 
     <select id="getStudentsByName" parameterType="com.learning.cloud.user.student.entity.Student"
             resultType="com.learning.cloud.user.student.entity.Student">
-    select *
-    from user_student
-    where student_name like concat('%',#{studentName},'%')
-  </select>
+        select *
+        from user_student
+        where student_name like concat('%',#{studentName},'%')
+    </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.user.student.entity.Student">
@@ -156,17 +156,17 @@
     </update>
 
     <delete id="delete" parameterType="java.lang.Integer">
-    delete from user_student
-    where id = #{id}
-  </delete>
+        delete from user_student
+        where id = #{id}
+    </delete>
 
     <delete id="deleteByUserId" parameterType="java.lang.String">
-    delete from user_student
-    where user_id = #{userId}
-  </delete>
+        delete from user_student
+        where user_id = #{userId}
+    </delete>
 
     <delete id="deleteByClassId" parameterType="java.lang.Integer">
-    delete from user_student
-    where class_id = #{classId}
-  </delete>
+        delete from user_student
+        where class_id = #{classId}
+    </delete>
 </mapper>

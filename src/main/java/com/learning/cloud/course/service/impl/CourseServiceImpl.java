@@ -38,9 +38,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public JsonResult editCourse(Course course) throws Exception {
         int i = courseDao.editCourse(course);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }
@@ -54,9 +54,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public JsonResult publishCourse(Long id) throws Exception {
         int i = courseDao.publishCourse(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
     }

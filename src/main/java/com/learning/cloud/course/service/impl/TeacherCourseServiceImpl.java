@@ -66,7 +66,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         List<Teacher> teachers = teacherDao.ListTeacherInSchool(schoolId.intValue());
         List<CourseType> courseTypes = courseTypeDao.getSchoolCourseType(schoolId);
 
-        String s = courseTypes.stream().map(CourseType::getCourseName).collect(Collectors.joining( ";"));
+        String s = courseTypes.stream().map(CourseType::getCourseName).collect(Collectors.joining(";"));
         //生成模板
         HSSFWorkbook wb = new HSSFWorkbook();
         //创建table
@@ -74,7 +74,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         HSSFRow row0 = sheet.createRow(0);
         row0.setHeightInPoints(90);
         HSSFCell cell = row0.createCell(0);
-        cell.setCellValue(A0+s);
+        cell.setCellValue(A0 + s);
         //合并单元格
         CellRangeAddress region = new CellRangeAddress(
                 0,//first row
@@ -151,21 +151,21 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         //从第三行开始
         for (int i = 2; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-                Cell cellTeacher = row.getCell(0);
-                Cell cellCourse = row.getCell(1);
-                if(cellCourse==null){
-                    throw new MyException(JsonResultEnum.TEACHER_NO_COURSE);
-                }
-                if (cellTeacher != null) {
-                    String teacherName = cellTeacher.getStringCellValue();
-                    String courseName = cellCourse.getStringCellValue();
-                    Long courseType = courseList.get(courseName);
-                    Integer teacherId = teacherNameList.get(teacherName);
-                    Teacher teacher = new Teacher();
-                    teacher.setId(teacherId);
-                    teacher.setCourseType(courseType);
-                    teacherDao.update(teacher);
-                }
+            Cell cellTeacher = row.getCell(0);
+            Cell cellCourse = row.getCell(1);
+            if (cellCourse == null) {
+                throw new MyException(JsonResultEnum.TEACHER_NO_COURSE);
+            }
+            if (cellTeacher != null) {
+                String teacherName = cellTeacher.getStringCellValue();
+                String courseName = cellCourse.getStringCellValue();
+                Long courseType = courseList.get(courseName);
+                Integer teacherId = teacherNameList.get(teacherName);
+                Teacher teacher = new Teacher();
+                teacher.setId(teacherId);
+                teacher.setCourseType(courseType);
+                teacherDao.update(teacher);
+            }
         }
         return JsonResultUtil.success();
     }

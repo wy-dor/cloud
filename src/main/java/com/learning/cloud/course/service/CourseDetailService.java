@@ -9,17 +9,17 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface CourseDetailService {
-    JsonResult getCourseDetailByClassId(Long classId, Integer weekDay)throws Exception;
+    JsonResult getCourseDetailByClassId(Long classId, Integer weekDay) throws Exception;
 
-    JsonResult addCourseDetail(CourseDetail courseDetail)throws Exception;
+    JsonResult addCourseDetail(CourseDetail courseDetail) throws Exception;
 
-    JsonResult editCourseDetail(CourseDetail courseDetail)throws Exception;
+    JsonResult editCourseDetail(CourseDetail courseDetail) throws Exception;
 
-    JsonResult getTeacherCourseDetail(String teacherIds, Integer weekDay)throws Exception;
+    JsonResult getTeacherCourseDetail(String teacherIds, Integer weekDay) throws Exception;
 
-    JsonResult getCourseDetailById(Long id)throws Exception;
+    JsonResult getCourseDetailById(Long id) throws Exception;
 
-    JsonResult deleteCourseDetailById(Long id)throws Exception;
+    JsonResult deleteCourseDetailById(Long id) throws Exception;
 
-    JsonResult deleteAllCourseDetail(Long courseId)throws Exception;
+    JsonResult deleteAllCourseDetail(Long courseId) throws Exception;
 }

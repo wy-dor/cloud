@@ -62,9 +62,9 @@ public class ExportServiceImpl implements ExportService {
         //针对班级别名进行修改
         for (String classIdStr : classIdStrs) {
             String className = classMap.get(classIdStr);
-            if(className.contains("(")){
-                String abbrClassName = className.substring(0,className.indexOf("("));
-                classMap.put(classIdStr,abbrClassName);
+            if (className.contains("(")) {
+                String abbrClassName = className.substring(0, className.indexOf("("));
+                classMap.put(classIdStr, abbrClassName);
             }
         }
         List<Student> stuList = new ArrayList<>();
@@ -195,7 +195,7 @@ public class ExportServiceImpl implements ExportService {
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
         File file = new File(rootPath + "/" + "export");
-        if(!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");
@@ -222,7 +222,7 @@ public class ExportServiceImpl implements ExportService {
         String startTimeReplace = startTime.replace("-", "");
         String endTimeReplace = endTime.replace("-", "");
         HSSFCell c0 = row_0.createCell(0);
-        c0.setCellValue(startTimeReplace + "-" + endTimeReplace +" 检查统计");
+        c0.setCellValue(startTimeReplace + "-" + endTimeReplace + " 检查统计");
         CellRangeAddress range = new CellRangeAddress(0, 0, 0, 7);
         sheet.addMergedRegion(range);
         HSSFCellStyle style = wb.createCellStyle();
@@ -236,7 +236,7 @@ public class ExportServiceImpl implements ExportService {
 
         String[] weekDays = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         for (int i = 0; i < 7; i++) {
-            row_1.createCell(i+1).setCellValue(weekDays[i]);
+            row_1.createCell(i + 1).setCellValue(weekDays[i]);
         }
 
 
@@ -246,7 +246,7 @@ public class ExportServiceImpl implements ExportService {
         List<RecordStatistics> rsList = (List<RecordStatistics>) map.get("rsList");
         //根据班级名称找数据
         for (int i = 0; i < classNameList.size(); i++) {
-            HSSFRow r = sheet.createRow(i+2);
+            HSSFRow r = sheet.createRow(i + 2);
             String className = classNameList.get(i);
             r.createCell(0).setCellValue(className);
             //班级下周几
@@ -254,9 +254,9 @@ public class ExportServiceImpl implements ExportService {
                 for (RecordStatistics rs : rsList) {
                     String day = rs.getDay();
                     String weekday = day.substring(11);
-                    if(className.equals(rs.getClassName()) && weekDays[j].equals(weekday)){
+                    if (className.equals(rs.getClassName()) && weekDays[j].equals(weekday)) {
                         BigDecimal point = rs.getPoint();
-                        r.createCell(j+1).setCellValue(point.toString());
+                        r.createCell(j + 1).setCellValue(point.toString());
                     }
                 }
             }
@@ -267,7 +267,7 @@ public class ExportServiceImpl implements ExportService {
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
         File file = new File(rootPath + "/" + "export");
-        if(!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");
@@ -278,7 +278,7 @@ public class ExportServiceImpl implements ExportService {
         out.close();
         DownloadBean download = new DownloadBean();
         download.setFilePath(filePath);
-        download.setTitle(startTimeReplace + "-" + endTimeReplace +" 检查统计.xls");
+        download.setTitle(startTimeReplace + "-" + endTimeReplace + " 检查统计.xls");
         return JsonResultUtil.success(download);
     }
 
@@ -304,9 +304,9 @@ public class ExportServiceImpl implements ExportService {
                 fullClassIdList.add(classId1);
             }
             String className = classMapByModule.get(key);
-            if(className.contains("(")){
-                String abbrClassName = className.substring(0,className.indexOf("("));
-                classMapByModule.put(key,abbrClassName);
+            if (className.contains("(")) {
+                String abbrClassName = className.substring(0, className.indexOf("("));
+                classMapByModule.put(key, abbrClassName);
             }
         }
 
@@ -445,7 +445,7 @@ public class ExportServiceImpl implements ExportService {
         // 生成文件 程序所在目录
         String rootPath = System.getProperty("user.dir");
         File file = new File(rootPath + "/" + "export");
-        if(!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         String filePath = (rootPath + "/export/" + fileName).replace("\\", "/");

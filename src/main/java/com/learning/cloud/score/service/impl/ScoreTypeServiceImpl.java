@@ -27,9 +27,9 @@ public class ScoreTypeServiceImpl implements ScoreTypeService {
     @Override
     public JsonResult editScoreType(ScoreType scoreType) throws Exception {
         int i = scoreTypeDao.editScoreType(scoreType);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATE_ERROR);
         }
 

@@ -27,7 +27,7 @@ public class TeacherServiceImpl implements TeacherService {
     private CourseTypeDao courseTypeDao;
 
     @Override
-    public JsonResult listTeacher(Teacher teacher){
+    public JsonResult listTeacher(Teacher teacher) {
         List<Teacher> teachers = teacherDao.getTeachers(teacher);
         return JsonResultUtil.success(new PageEntity<>(teachers));
     }
@@ -36,7 +36,7 @@ public class TeacherServiceImpl implements TeacherService {
     public ServiceResult getByUserId(String userId) {
         Teacher byUserId = teacherDao.getByUserId(userId);
         Long courseTypeId = byUserId.getCourseType();
-        if(courseTypeId != null){
+        if (courseTypeId != null) {
             String courseName = courseTypeDao.getByTypeId(courseTypeId).getCourseName();
             byUserId.setCourseName(courseName);
         }
@@ -54,7 +54,7 @@ public class TeacherServiceImpl implements TeacherService {
         List<Teacher> teacherList = teacherDao.getClassTeachers(gradeClass);
         for (Teacher teacher : teacherList) {
             Long courseTypeId = teacher.getCourseType();
-            if(courseTypeId != null){
+            if (courseTypeId != null) {
                 String courseName = courseTypeDao.getByTypeId(courseTypeId).getCourseName();
                 teacher.setCourseName(courseName);
             }
@@ -76,7 +76,7 @@ public class TeacherServiceImpl implements TeacherService {
         List<String> ss = Arrays.asList(split);
         String classIdStr = classId.toString();
         for (String s : ss) {
-            if(s.equals(classIdStr)){
+            if (s.equals(classIdStr)) {
                 ss.remove(s);
                 break;
             }
@@ -115,13 +115,13 @@ public class TeacherServiceImpl implements TeacherService {
         String classesStr = "," + classIds + ",";
         String replace = classesStr.replace(classId + ",", "");
         String substring = "";
-        if(!replace.equals(",")){
+        if (!replace.equals(",")) {
             substring = replace.substring(1, replace.lastIndexOf(","));
         }
         int i = 0;
-        if(substring.equals("")){
+        if (substring.equals("")) {
             i = teacherDao.delete(teacher.getId());
-        }else{
+        } else {
             teacher.setClassIds(substring);
             i = teacherDao.update(teacher);
         }

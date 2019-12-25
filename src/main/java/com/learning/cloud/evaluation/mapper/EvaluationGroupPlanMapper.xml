@@ -4,10 +4,10 @@
 
     <select id="getById" parameterType="java.lang.Long"
             resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
-    select *
-    from evaluation_group_plan
-    where id = #{id}
-  </select>
+        select *
+        from evaluation_group_plan
+        where id = #{id}
+    </select>
 
     <select id="getByGroupPlan" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan"
             resultType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
@@ -31,9 +31,9 @@
     </select>
 
     <delete id="deleteById" parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">
-    delete from evaluation_group_plan
-    where id = #{id}
-  </delete>
+        delete from evaluation_group_plan
+        where id = #{id}
+    </delete>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.learning.cloud.evaluation.entity.EvaluationGroupPlan">

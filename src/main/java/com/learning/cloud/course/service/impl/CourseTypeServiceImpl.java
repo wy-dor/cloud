@@ -37,9 +37,9 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     @Override
     public JsonResult deleteCourseType(Long id) throws Exception {
         int i = courseTypeDao.deleteCourseType(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }

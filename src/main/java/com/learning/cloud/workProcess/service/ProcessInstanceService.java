@@ -10,9 +10,9 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface ProcessInstanceService {
-    JsonResult createProcessInstance(ProcessValue process)throws Exception;
+    JsonResult createProcessInstance(ProcessValue process) throws Exception;
 
-    JsonResult getLastDocumentNo(Integer bureauId)throws Exception;
+    JsonResult getLastDocumentNo(Integer bureauId) throws Exception;
 
-    OapiProcessinstanceGetResponse getInstanceStatus(String processInstanceId, String corpId)throws Exception;
+    OapiProcessinstanceGetResponse getInstanceStatus(String processInstanceId, String corpId) throws Exception;
 }

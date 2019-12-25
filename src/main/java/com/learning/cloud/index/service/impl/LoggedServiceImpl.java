@@ -40,38 +40,37 @@ public class LoggedServiceImpl implements LoggedService {
         //插入登录记录，每个人一条，存在就更新最新时间
 
         int i = loggedDao.addLoggedRecord(loggedRecord);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
 
     //获取学校每日登录人数，计算
     @Override
-    public void AddSchoolScoreFormActivity(){
+    public void AddSchoolScoreFormActivity() {
         List<School> schools = schoolDao.getSchools();
         //循环获取学校的登录比例
-        for(School school : schools){
+        for (School school : schools) {
             Integer activeUser = loggedDao.getActiveUserByCorpId(school.getCorpId());
             //按比例计算分值，加入到积分中。
-            if(school.getOrgActiveUserCount()!=null){
+            if (school.getOrgActiveUserCount() != null) {
                 Integer all = school.getOrgActiveUserCount().intValue();
-                Integer point = activeUser*100/all;//-128～127可以直接比较
-                if(50<=point&&point<60){
+                Integer point = activeUser * 100 / all;//-128～127可以直接比较
+                if (50 <= point && point < 60) {
                     point = 10;
-                }else if(60<=point&&point<70){
+                } else if (60 <= point && point < 70) {
                     point = 15;
-                }else if(70<=point&&point<80){
+                } else if (70 <= point && point < 80) {
                     point = 20;
-                }
-                else if(80<=point&&point<90){
+                } else if (80 <= point && point < 90) {
                     point = 30;
-                }else if(90<=point&&point<100){
+                } else if (90 <= point && point < 100) {
                     point = 40;
-                }else if(100==point){
+                } else if (100 == point) {
                     point = 50;
-                }else{
+                } else {
                     point = 5;
                 }
                 //插入积分

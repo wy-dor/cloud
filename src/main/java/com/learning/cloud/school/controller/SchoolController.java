@@ -15,12 +15,12 @@ public class SchoolController {
 
     //根据corpId获取schoolId
     @GetMapping("/getSchoolIdByCorpId")
-    public JsonResult getSchoolIdByCorpId(String corpId){
+    public JsonResult getSchoolIdByCorpId(String corpId) {
         return schoolService.getSchoolIdByCorpId(corpId);
     }
 
     @GetMapping("/getBySchool")
-    public JsonResult getBySchool(School school){
+    public JsonResult getBySchool(School school) {
         return schoolService.getBySchool(school);
     }
 }

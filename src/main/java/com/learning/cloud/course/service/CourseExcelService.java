@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @Desc:
  */
 public interface CourseExcelService {
-    JsonResult exportCourseTemplet(String classIds, Long schoolId)throws Exception;
+    JsonResult exportCourseTemplet(String classIds, Long schoolId) throws Exception;
 
-    JsonResult importCourseTemplet(MultipartFile file, Long schoolId)throws Exception;
+    JsonResult importCourseTemplet(MultipartFile file, Long schoolId) throws Exception;
 
-    JsonResult getInfoBeforeImportCourse(Long schoolId, Long classId)throws Exception;
+    JsonResult getInfoBeforeImportCourse(Long schoolId, Long classId) throws Exception;
 }

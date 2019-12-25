@@ -17,13 +17,13 @@ public class ExceptionHandle {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public JsonResult handle(Exception e){
-        if(e instanceof MyException){
+    public JsonResult handle(Exception e) {
+        if (e instanceof MyException) {
             MyException myException = (MyException) e;
             return JsonResultUtil.error(myException.getCode(), myException.getMessage());
-        }else {
-            log.error("[系统异常]{}",e);
-            return JsonResultUtil.error(-1,"未知错误"+e.getMessage());
+        } else {
+            log.error("[系统异常]{}", e);
+            return JsonResultUtil.error(-1, "未知错误" + e.getMessage());
         }
     }
 }

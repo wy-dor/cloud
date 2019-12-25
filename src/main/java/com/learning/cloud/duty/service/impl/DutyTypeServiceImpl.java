@@ -26,9 +26,9 @@ public class DutyTypeServiceImpl implements DutyTypeService {
     @Override
     public JsonResult addDutyType(DutyType dutyType) throws Exception {
         int i = dutyTypeDao.addDutyType(dutyType);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success(dutyType.getId());
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
@@ -36,9 +36,9 @@ public class DutyTypeServiceImpl implements DutyTypeService {
     @Override
     public JsonResult deleteDutyType(Long id) throws Exception {
         int i = dutyTypeDao.deleteDutyType(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }
@@ -46,9 +46,9 @@ public class DutyTypeServiceImpl implements DutyTypeService {
     @Override
     public JsonResult updateDutyType(DutyType dutyType) throws Exception {
         int i = dutyTypeDao.updateDutyType(dutyType);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATENONE);
         }
     }

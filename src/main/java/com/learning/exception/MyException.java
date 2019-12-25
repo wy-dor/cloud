@@ -8,11 +8,13 @@ import lombok.Setter;
  * Created by yu on 2018/9/16.
  * spring 只回滚RuntimeException
  */
-public class MyException extends RuntimeException{
+public class MyException extends RuntimeException {
 
-    @Getter @Setter private Integer code;
+    @Getter
+    @Setter
+    private Integer code;
 
-    public MyException(JsonResultEnum jsonResultEnum){
+    public MyException(JsonResultEnum jsonResultEnum) {
         super(jsonResultEnum.getMsg());
         this.code = jsonResultEnum.getCode();
     }

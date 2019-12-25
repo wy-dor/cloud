@@ -25,9 +25,9 @@ public class DutyCheckTypeServiceImpl implements DutyCheckTypeService {
     @Override
     public JsonResult addDutyCheckType(DutyCheckType dutyCheckType) throws Exception {
         int i = dutyCheckTypeDao.addDutyCheckType(dutyCheckType);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success(dutyCheckType.getId());
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.ERROR);
         }
     }
@@ -35,9 +35,9 @@ public class DutyCheckTypeServiceImpl implements DutyCheckTypeService {
     @Override
     public JsonResult deleteDutyCheckType(Long id) throws Exception {
         int i = dutyCheckTypeDao.deleteDutyCheckType(id);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.DELETE_ERROR);
         }
     }
@@ -45,9 +45,9 @@ public class DutyCheckTypeServiceImpl implements DutyCheckTypeService {
     @Override
     public JsonResult updateDutyCheckType(DutyCheckType dutyCheckType) throws Exception {
         int i = dutyCheckTypeDao.updateDutyCheckType(dutyCheckType);
-        if(i>0){
+        if (i > 0) {
             return JsonResultUtil.success();
-        }else {
+        } else {
             return JsonResultUtil.error(JsonResultEnum.UPDATENONE);
         }
     }

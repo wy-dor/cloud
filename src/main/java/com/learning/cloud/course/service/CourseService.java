@@ -9,13 +9,13 @@ import com.learning.domain.JsonResult;
  * @Desc:
  */
 public interface CourseService {
-    JsonResult getCourseByClassId(Long classId)throws Exception;
+    JsonResult getCourseByClassId(Long classId) throws Exception;
 
-    JsonResult addCourse(Course course)throws Exception;
+    JsonResult addCourse(Course course) throws Exception;
 
-    JsonResult editCourse(Course course)throws Exception;
+    JsonResult editCourse(Course course) throws Exception;
 
-    JsonResult getSchoolCourse(Course course)throws Exception;
+    JsonResult getSchoolCourse(Course course) throws Exception;
 
-    JsonResult publishCourse(Long id)throws Exception;
+    JsonResult publishCourse(Long id) throws Exception;
 }

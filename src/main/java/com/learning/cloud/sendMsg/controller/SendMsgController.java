@@ -23,18 +23,18 @@ public class SendMsgController {
      * 内容为签字链接，指点打开可以签字
      */
     @PostMapping("/sendSignLink")
-    public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo)throws Exception{
+    public JsonResult sendSignLink(String classIds, Integer signId, MsgInfo msgInfo) throws Exception {
         return sendMsgService.sendSignLink(classIds, signId, msgInfo);
 
     }
 
     @PostMapping("/sendDutyMsgToAdvisor")
-    public JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception{
+    public JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception {
         return sendMsgService.sendDutyMsgToAdvisor(classId, date, msgInfo);
     }
 
     @PostMapping("/sendPerformanceCard")
-    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo)throws Exception{
+    public JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception {
         return sendMsgService.sendPerformanceCard(classIds, moduleId, msgInfo);
     }
 

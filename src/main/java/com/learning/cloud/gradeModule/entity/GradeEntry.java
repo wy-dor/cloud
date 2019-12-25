@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Data
 public class GradeEntry extends BaseEntity {
     private Long id;
@@ -24,4 +26,5 @@ public class GradeEntry extends BaseEntity {
 
     private String term;
 
+    private BigDecimal totalPoints;
 }
