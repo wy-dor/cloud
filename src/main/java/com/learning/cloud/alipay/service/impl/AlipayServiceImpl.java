@@ -107,7 +107,7 @@ public class AlipayServiceImpl implements AlipayService {
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
 
-        return JsonResultUtil.success(JSON.toJSONString(request));
+        return JsonResultUtil.success(JSON.toJSONString(billParam));
 //        Date sendTime = new Date();
 //        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
@@ -187,7 +187,7 @@ public class AlipayServiceImpl implements AlipayService {
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
 
-        return JsonResultUtil.success(JSON.toJSONString(request));
+        return JsonResultUtil.success(JSON.toJSONString(billParam));
 //        Date sendTime = new Date();
 //        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
