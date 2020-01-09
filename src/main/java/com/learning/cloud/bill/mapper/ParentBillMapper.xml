@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.bill.dao.ParentBillDao">
+  <select id="getParentBillById" parameterType="java.lang.Integer" resultType="com.learning.cloud.bill.entity.ParentBill">
+    select *
+    from bill_parent
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getParentBill" parameterType="com.learning.cloud.bill.entity.ParentBill" resultType="com.learning.cloud.bill.entity.ParentBill">
+    select *
+    from bill_parent
+    where 1=1
+    <if test="state!=null">
+      and state = #{state}
+    </if>
+    <if test="name!=null">
+      and name like CONCAT('%',#{name},'%')
+    </if>
+    <if test="sendTime!=null">
+      and date(send_time) = #{sendTime}
+    </if>
+      and school_id = #{schoolId}
+    <if test="campusId!=null">
+      and campus_id = #{campusId}
+    </if>
+    <if test="userId!=null">
+      and user_id = #{userId}
+    </if>
+    <if test="classId!=null">
+      and class_id = #{classId}
+    </if>
+  </select>
+
+  <update id="deleteParentBillById">
+    update  bill_parent set
+    state = 0 where id = #{id}
+  </update>
+
+  <insert id="addParentBill" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bill.entity.ParentBill">
+    insert into bill_parent
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="campusId != null">
+        campus_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="chargeItems != null">
+        charge_items,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="campusId != null">
+        #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeItems != null">
+        #{chargeItems,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateParent" parameterType="java.lang.Integer">
+    update bill_parent set
+      state = 1 where id = #{id}
+  </update>
+
+</mapper>

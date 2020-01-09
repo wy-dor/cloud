@@ -21,7 +21,8 @@
         <system.node.version>v9.8.0</system.node.version>
         <system.npm.version>5.7.2</system.npm.version>
         <plugin.frontend.version>0.0.27</plugin.frontend.version>
-        <mybatis.generator.generatorConfig.xml>${basedir}/src/main/resources/generatorConfig.xml</mybatis.generator.generatorConfig.xml>
+        <mybatis.generator.generatorConfig.xml>${basedir}/src/main/resources/generatorConfig.xml
+        </mybatis.generator.generatorConfig.xml>
     </properties>
 
     <dependencies>

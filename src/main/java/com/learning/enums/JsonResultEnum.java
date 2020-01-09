@@ -52,6 +52,26 @@ public enum JsonResultEnum {
 
     DING_SPACE_ERROR(1081, "获取钉盘审批空间失败"),
     DING_SYSADMIN_ERROR(1082, "获取企业管理失败"),
+
+    SCHOOL_EXIST(1091,"已经存在的学校名称"),
+    SCHOOL_ICON(1092,"学校的校徽或logo只支持png和jpg两种格式，且必须指定一个"),
+    CAMPUS_EXIST(1093,"同一个学校不能存在相同的校区"),
+    CLASS_EXIST(1094,"同一个学校不能存在相同的班级"),
+    STUDENT_EXIST(1095,"同一个班级的同名学生家长手机号不能相同"),
+    SCHOOL_NEED(1096,"主校区编号参数缺失"),
+    SCHOOL_ID_REQUIRED(1097,"二维码必须根据学校信息获取"),
+    ERROR_QR_CODE(1098,"二维码暂时无法生成"),
+    BILLS_IN_TIME_ZERO(1099,"当前时间段内没有支付成功的账单"),
+
+    BILL_QUERY_UPDATE_ERROR(1101,"账单状态没有变化"),
+    ALI_CALLBACK_ERROR(1102,"支付宝账单回调异常"),
+    ALI_MODIFY_ERROR(1103,"支付宝确认异常"),
+    BILL_SEND_FAILURE(1104,"账单发送失败"),
+
+    SCHOOL_PID(1111,"学校的支付宝商户号没有维护"),
+    APP_AUTH_TOKEN(1112,"用户还没有授权，无法提交学校信息"),
+    
+
     ;
 
     @Getter

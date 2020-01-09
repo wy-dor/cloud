@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public class CommonUtils {
@@ -19,6 +16,15 @@ public class CommonUtils {
     public static String getRandomStr() {
         String uuid = UUID.randomUUID().toString();
         return uuid.replace("-", "");
+    }
+
+    /**
+     * 生成ISV端的缴费账单编号
+     * uuid去除"-"
+     */
+    public static String getIsvTradeNo(){
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replace("-","");
     }
 
     /**
@@ -169,5 +175,79 @@ public class CommonUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取当前时间24小时后的时间返回字符串
+     * yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public static String getFaceBillHoursLater(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE,calendar.get(Calendar.DATE)+1);
+        String dayAfter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
+        return dayAfter;
+    }
+
+
+    /**
+     * 去除学校类型的逗号分隔符
+     * @param type
+     * @return
+     */
+    public static String schoolTypeFormat(String type){
+        return type.replaceAll(",","");
+    }
+
+    /**
+     * 补全省市区code的位数，6位字符串
+     * @param code
+     * @return
+     */
+    public static String pcdCodeFormat(String code){
+        if(code.length()<6){
+            code = code + "000000";
+        }
+        return code.substring(0,6);//不包含最后一位的索引
+    }
+
+    /**
+     * 转化账单状态
+     */
+    public static String transformBillStatus(String status){
+        String res;
+        if(status.equals("NOT_PAY")){
+            res = PayConfig.NOT_PAY;
+        }else if(status.equals("PAYING")){
+            res = PayConfig.PAYING;
+        }else if(status.equals("PAY_SUCCESS")){
+            res = PayConfig.PAY_SUCCESS;
+        }else if(status.equals("BILLING_SUCCESS")){
+            res = PayConfig.BILLING_SUCCESS;
+        }else if(status.equals("TIMEOUT_CLOSED")){
+            res = PayConfig.TIMEOUT_CLOSED;
+        }else if(status.equals("ISV_CLOSED")){
+            res = PayConfig.ISV_CLOSED;
+        }else if(status.equals("FAILURE")){
+            res = PayConfig.FAILURE;
+        }//微信
+        else if(status.equals("SUCCESS")){
+            res = PayConfig.SUCCESS;
+        }else if(status.equals("REFUND")){
+            res = PayConfig.REFUND;
+        }else if(status.equals("NOTPAY")){
+            res = PayConfig.NOTPAY;
+        }else if(status.equals("CLOSED")){
+            res = PayConfig.CLOSED;
+        }else if(status.equals("REVOKED")){
+            res = PayConfig.REVOKED;
+        }else if(status.equals("USERPAYING")){
+            res = PayConfig.USERPAYING;
+        }else if(status.equals("PAYERROR")){
+            res = PayConfig.PAYERROR;
+        }else {
+            res = "未知";
+        }
+        return res;
     }
 }

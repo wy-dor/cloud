@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.school.dao.PaySchoolDao">
+
+    <select id="isPaySchoolNameExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(*)
+    from edu_school_pay
+    where school_name = #{schoolName}
+  </select>
+
+    <insert id="addPaySchool" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.school.entity.PaySchool">
+        insert into edu_school_pay
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null">
+                school_id,
+            </if>
+            <if test="schoolName != null">
+                school_name,
+            </if>
+            <if test="schoolType != null">
+                school_type,
+            </if>
+            <if test="provinceCode != null">
+                province_code,
+            </if>
+            <if test="provinceName != null">
+                province_name,
+            </if>
+            <if test="cityCode != null">
+                city_code,
+            </if>
+            <if test="cityName != null">
+                city_name,
+            </if>
+            <if test="districtCode != null">
+                district_code,
+            </if>
+            <if test="districtName != null">
+                district_name,
+            </if>
+            <if test="schoolPid != null">
+                school_pid,
+            </if>
+            <if test="schoolNo != null">
+                school_no,
+            </if>
+            <if test="schoolIcon != null">
+                school_icon,
+            </if>
+            <if test="schoolIconType != null">
+                school_icon_type,
+            </if>
+            <if test="schoolStdCode != null">
+                school_std_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null">
+                #{schoolId,jdbcType=INTEGER},
+            </if>
+            <if test="schoolName != null">
+                #{schoolName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolType != null">
+                #{schoolType,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceCode != null">
+                #{provinceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceName != null">
+                #{provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityCode != null">
+                #{cityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cityName != null">
+                #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="districtCode != null">
+                #{districtCode,jdbcType=VARCHAR},
+            </if>
+            <if test="districtName != null">
+                #{districtName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolPid != null">
+                #{schoolPid,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolNo != null">
+                #{schoolNo,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolIcon != null">
+                #{schoolIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolIconType != null">
+                #{schoolIconType,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolStdCode != null">
+                #{schoolStdCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePaySchool" parameterType="com.learning.cloud.school.entity.PaySchool">
+        update edu_school_pay
+        <set>
+            <if test="schoolName != null">
+                school_name = #{schoolName},
+            </if>
+            <if test="schoolType != null">
+                school_type = #{schoolType},
+            </if>
+            <if test="provinceCode != null">
+                province_code= #{provinceCode},
+            </if>
+            <if test="provinceName != null">
+                province_name = #{provinceName},
+            </if>
+            <if test="cityCode != null">
+                city_code = #{cityCode},
+            </if>
+            <if test="cityName != null">
+                city_name = #{cityName},
+            </if>
+            <if test="districtCode != null">
+                district_code = #{districtCode},
+            </if>
+            <if test="districtName != null">
+                district_name = #{districtName},
+            </if>
+            <if test="schoolPid != null">
+                school_pid = #{schoolPid},
+            </if>
+            <if test="schoolIcon != null">
+                school_icon = #{schoolIcon},
+            </if>
+            <if test="schoolIconType != null">
+                school_icon_type = #{schoolIconType},
+            </if>
+            <if test="schoolStdCode != null">
+                school_std_code = #{schoolStdCode},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getPaySchoolById" parameterType="java.lang.Integer" resultType="com.learning.cloud.school.entity.PaySchool">
+    select * from edu_school_pay
+    where school_id = #{schoolId}
+  </select>
+
+    <select id="getPaySchoolIdByNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select school_id from edu_school_pay
+    where school_no = #{schoolNo}
+  </select>
+
+    <update id="updatePaySchoolNo">
+    update edu_school_pay
+    set school_no = #{schoolNo}
+    where id = #{id}
+  </update>
+
+    <select id="getPaySchoolBillsInTime" parameterType="com.learning.cloud.school.entity.PaySchool"
+            resultType="com.learning.cloud.bill.entity.Bill">
+    select b.*
+    from edu_school_pay s
+    left join bill b
+    on s.id = b.school_id
+    where s.id=#{id}
+    <if test="campusId != null">
+        and b.campus_id = #{campusId}
+    </if>
+    and b.create_time between #{startTime} and #{endTime}
+    and (b.trade_status = 'PAY_SUCCESS' or b.trade_status = 'BILLING_SUCCESS' or b.trade_status = 'SUCCESS')
+  </select>
+
+    <select id="getPaySchoolTotalBillAmount" parameterType="com.learning.cloud.school.entity.PaySchool"
+            resultType="com.learning.cloud.bill.entity.AmountItems">
+    select s.id schoolId,s.school_name schoolName,sum(b.amount) totalAmount ,count(b.id) billCount
+    from edu_school_pay s
+    left join bill b
+    on s.id = b.school_id
+    where s.id = #{id}
+    and b.create_time between #{startTime} and #{endTime}
+    and (b.trade_status = 'PAY_SUCCESS' or b.trade_status = 'BILLING_SUCCESS' or b.trade_status = 'SUCCESS')
+	group by s.id
+  </select>
+
+    <select id="getPaySchoolMonthlyAmount" parameterType="com.learning.cloud.school.entity.PaySchool"
+            resultType="com.learning.cloud.bill.entity.AmountItems">
+    select s.id schoolId,s.school_name schoolName,sum(b.amount) totalAmount,count(b.id) billCount
+    from edu_school_pay s
+    left join bill b
+    on s.id = b.school_id
+    where s.id = #{id}
+    <if test="campusId != null">
+        and b.campus_id = #{campusId}
+    </if>
+    and b.create_time between #{startTime} and #{endTime}
+    and (b.trade_status = 'PAY_SUCCESS' or b.trade_status = 'BILLING_SUCCESS' or b.trade_status = 'SUCCESS')
+    </select>
+
+    <update id="updateAuthK12" parameterType="java.lang.Integer">
+        update edu_school_pay
+        set auth_k12 = 1
+        where id = #{schoolId}
+    </update>
+
+</mapper>

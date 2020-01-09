@@ -57,6 +57,14 @@ public class RoleTopApiController {
 
     @GetMapping("/getStudentUserIdByParent")
     public JsonResult getStudentUserIdByParent(String userId, Integer classId) throws ApiException {
+        List<String> useridList = getStuUserIdInClass(userId, classId);
+        if(useridList.size() == 0){
+            return JsonResultUtil.error(0, "请求不到学生userId");
+        }
+        return JsonResultUtil.success(useridList);
+    }
+
+    public List<String> getStuUserIdInClass(String userId, Integer classId) throws ApiException {
         GradeClass byId = gradeClassDao.getById(classId);
         Long topClassId = byId.getDeptId();
         Integer schoolId = byId.getSchoolId();
@@ -66,16 +74,29 @@ public class RoleTopApiController {
         OapiEduGuardianGetResponse response = roleTopApiService.getEduParent(topClassId, userId, accessToken);
         OapiEduGuardianGetResponse.GuardianRespone result = response.getResult();
         List<String> useridList = new ArrayList<>();
-        if (result == null) {
-            return JsonResultUtil.error(0, "请求不到学生userId");
-        } else {
+        if (result != null) {
             List<OapiEduGuardianGetResponse.Relations> relations = result.getRelations();
             for (OapiEduGuardianGetResponse.Relations relation : relations) {
                 String studentUserid = relation.getStudentUserid();
                 useridList.add(studentUserid);
             }
         }
-        return JsonResultUtil.success(useridList);
+        return useridList;
+    }
+
+    @GetMapping("/getStudentUserIdsByParentClassIds")
+    public JsonResult getStudentUserIdsByParentClassIds(String userId, String classIds) throws ApiException {
+        List<String> stuUserIdList = new ArrayList<>();
+        if(classIds.equals("")){
+            return JsonResultUtil.success(stuUserIdList);
+        }
+        String[] split = classIds.split(",");
+        for (String s : split) {
+            Integer classId = Integer.parseInt(s);
+            List<String> stuUserIdInClass = getStuUserIdInClass(userId, classId);
+            stuUserIdList.addAll(stuUserIdInClass);
+        }
+        return JsonResultUtil.success(stuUserIdList);
     }
 
     @GetMapping("/getEduRoles")

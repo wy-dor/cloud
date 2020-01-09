@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.bill.dao.PreBillDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.bill.entity.PreBill">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="school_id" jdbcType="VARCHAR" property="schoolId" />
+    <result column="student_name" jdbcType="VARCHAR" property="studentName" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="charge_bill_title" jdbcType="VARCHAR" property="chargeBillTitle" />
+    <result column="class_id" jdbcType="INTEGER" property="classId" />
+    <result column="grade_class" jdbcType="VARCHAR" property="gradeClass" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.learning.cloud.bill.entity.PreBill">
+    <result column="charge_item" jdbcType="LONGVARCHAR" property="chargeItem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, parent_id, school_id, student_name, amount, charge_bill_title, last_time
+  </sql>
+  <sql id="Blob_Column_List">
+    charge_item
+  </sql>
+
+  <insert id="addPreBill" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bill.entity.PreBill">
+    insert into bill_pre
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="campusId != null">
+        campus_id,
+      </if>
+      <if test="studentUserId != null">
+        student_user_id,
+      </if>
+      <if test="studentName != null">
+        student_name,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="chargeBillTitle != null">
+        charge_bill_title,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="gradeClass != null">
+        grade_class,
+      </if>
+      <if test="chargeItem != null">
+        charge_item,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="campusId != null">
+        #{campusId,jdbcType=INTEGER},
+      </if>
+      <if test="studentUserId != null">
+        #{studentUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="studentName != null">
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="chargeBillTitle != null">
+        #{chargeBillTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeClass != null">
+        #{gradeClass,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeItem != null">
+        #{chargeItem,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deletePreBillByParentId">
+    delete from
+    bill_pre where parent_id={id}
+  </delete>
+
+  <select id="getPreBillById" parameterType="java.lang.Integer" resultType="com.learning.cloud.bill.entity.PreBill">
+    select * from bill_pre
+    where id = #{id}
+  </select>
+
+</mapper>

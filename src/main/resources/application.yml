@@ -8,15 +8,15 @@ spring:
       max-request-size: 30MB
       enabled: true
 
-#  redis:
-#    host: 192.168.3.14
-#    port: 6379
-#    max-idle: 8
-#    min-idle: 0
-#    max-active: 8
-#    maxwait: -1
-#    timeout: 0
-#    isRedisCache: 1
+  #  redis:
+  #    host: 192.168.3.14
+  #    port: 6379
+  #    max-idle: 8
+  #    min-idle: 0
+  #    max-active: 8
+  #    maxwait: -1
+  #    timeout: 0
+  #    isRedisCache: 1
 
   # mysql配置
   datasource:
@@ -37,6 +37,31 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   mapperLocations: classpath:/com/learning/cloud/**/mapper/*.xml
+
+#系统配置
+user:
+  psd: 123456
+
+sys:
+  webUrl: http://www.k12pay.com
+
+ali:
+  isv:
+    pid: 2088431800965633
+    phone: 0527-87024016
+    name: 拾牛人工智能技术研发(南京)有限公司
+    notifyUrl: http://www.k12pay.com:8080/notify/payNotify
+  mini:
+    aliMiniUrl: pages/single/addBill/addBill
+  key:
+    appId: 2019080666140167
+    miniAppId: 2019040363778344
+    #应用私钥
+    private: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCV5mf94VJ3Xeqo20pfUclU16wTDrV/pZ6O5QsRfVnRoxZKDpNEaVAvidaOAhyUeI9Qko/D9VZQODtV/5mdtanpgjvWkv+wD/9Vzep3376Zb01Hm5i35nhYrlkfDEg3w27B1Jfxzj0BUyONx9D6tRoRcTPi/LFhYkOmFoKojtRPm6CmoZzLUhhVvGDAp70gYyWKhJYaVAcvv6ngKipKaGGJxLv6SK1V13V9UCEHGbrkZyNeD/ZsJZrEgBpIQimMvY9GxeCdVaIZfUj3E8KSjei3w7pqVJ7yKosB2UZPVXQHRccF3smnWMkTnN++w3znTQSqmvOAgGp/Hj2FjOZxbhidAgMBAAECggEAc4eGsocMle8OQmHwqhJQx1EJ0A5QGDc/QwaIR0yDAy1cqmsdWWaJZHopoH1EJbHdUs4Ce5cElQMhyCAc9w3iDJRRJglZgwpxUmJHyWfqcDr2JrBnPaUlL8P/8Av5RPEc1crR6I15OyImjsln6THXC4Zh5Rm4ZEPlu4Yx4VNjko5Bn0IbwmDRbnLx+2RlR/WStZEdTxi33Uao4Oe2FIQs5cLMysedR3UGDxgkuoNOs9MLSk5DZM66xMrRsTU3uLohxOm1wnnftOqfH42Wt0CYrqco6JNs4EhZxVznMZtDqNQ2SKRSAfpAs5T6VgqTlED9TgaYrEi+IbKxa4faHuIbAQKBgQDbLfUDKrk/nUSzh0atR7iH+tcTepR49b8bemVgnajzCBl0j/HzeWTVGFqsvqlz6u3LUXZGg1KvgZ5gbNc7SzQ3l9Yh3p959Ver0K+QhOupGKwUbochbCeZrAZdAMmZ8HIsoZh5bfQ+II/v0TTvWtPbnqaTYRL/hNgj4ot30+X8YQKBgQCvFQMxJZi3O6Idz0maNZBrSbxv4V9dTBVOGm4yJtJW43f0W7B3EMqqWRFKTc+QuQRAFu6KzdbyA8DHkmD7YhiUlCsaBi/GXp+TywGbA3hieZPdVLBcSXrHBDC7o4oXhDtLgRmgv3VLjlCHTYkm6+gTy5PXTfUYIQBqWnjDEeDlvQKBgQCbDSXY+a5XHFBvmHEdQDGAsKjZ9Mt3zpFFRQ7WjHHqi35GgVYuYWA9h58NuUty320deiFrvJcP5Wg+2oBgR9FGyrkG+NBknHVK7LRmTkHQO83wHkimEjbpdVKDFH2J0xlSDXcp3+j60lpA0wTZlq1tHgzFEdU4waeNq0PynwqBwQKBgBMizc2CWXW1e9ucO2QydI11arYjwOOWnEGEHAU5PwYmKIc5ukjZOf1ybLRdWtFrl25V006yfsrG5Dwr4JO5PgyHQUq/4FrjHrftmUhTEcZZmXK4feooUdYMvDLWBhLZ7g0rmBx8sJpIfL69F798S0pWltsSdzZi7QOyzb4sZxNVAoGAcLkJvPq6d4zgPr6NLZOyHFtUA1wM5wcGbBC9W3eemxq7nYDDMIWQjtp8QPTIH+C1wIc1/Grbj8YjIR2lhajqYcXi2O45SSAWngVhs/z7C3iXe5BxJeFRbReDdz7ThUPXaPqIP7tmsLsom1B4i/cXDp4Q38OQuyMYVWMgl2hHfXc=
+    #支付宝公钥
+    public: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiacZtNfG+u1iyXRBmPfXNn/SfmylpefBX0B+VOvFdVLB78C1Tbste3gS/FL2MejxFAVzUj3nrCyV82nyHBUktnSbFzz9K+VTrwipG51JBcwqosUf+ZW3MQgNdV8aEhZyp97uiBlYJFdnjNuvLcbRedJondUJtvp5r3fAS2MIDJxOSXi6EPHvm0HSC5sR/A4dHt5bo2uUaGiG4CLnMsaJgnftOKo9IZY/jFmt70ucIJo5wo4LKjP0l3U3jL0pOQe9v95q52KN128DLfpu3zcbZNuATbNvvUxCXao1WKRpE3NzLkdilRYLnk07nZWyOnfXI1yxefvE1UNl31ZMK+5YbwIDAQAB
+    #授权回调地址
+    authUrl: http://www.k12pay.com/main/callback #http://k12pay.com/return.html
 
 #pagehelper分页插件
 pagehelper:

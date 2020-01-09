@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.cloud.bill.dao.BillDao">
+  <resultMap id="BaseResultMap" type="com.learning.cloud.bill.entity.Bill">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="school_id" jdbcType="VARCHAR" property="schoolId" />
+    <result column="student_name" jdbcType="VARCHAR" property="studentName" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="gmt_end" jdbcType="VARCHAR" property="gmtEnd" />
+    <result column="end_enable" jdbcType="VARCHAR" property="endEnable" />
+    <result column="isv_trade_no" jdbcType="VARCHAR" property="isvTradeNo" />
+    <result column="charge_bill_title" jdbcType="VARCHAR" property="chargeBillTitle" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="trade_status" jdbcType="VARCHAR" property="tradeStatus" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="class_id" jdbcType="INTEGER" property="classId" />
+    <result column="grade_class" jdbcType="VARCHAR" property="gradeClass" />
+    <result column="parent_phone" jdbcType="VARCHAR" property="parentPhone" />
+    <result column="pay_type" jdbcType="SMALLINT" property="payType" />
+    <result column="state" jdbcType="SMALLINT" property="state" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.learning.cloud.bill.entity.Bill">
+    <result column="charge_item" jdbcType="LONGVARCHAR" property="chargeItem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, parent_id, school_id, student_name, amount, gmt_end, end_enable, isv_trade_no, 
+    charge_bill_title, create_time, remark, order_no, trade_no, trade_status, last_time,
+    parent_phone, pay_type, state, trade_info
+  </sql>
+  <sql id="Blob_Column_List">
+    charge_item
+  </sql>
+
+  <insert id="addBill" useGeneratedKeys="true" keyProperty="id" parameterType="com.learning.cloud.bill.entity.Bill">
+    insert into bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gmtEnd != null">
+        gmt_end,
+      </if>
+      <if test="endEnable != null">
+        end_enable,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="parentPhone != null">
+        parent_phone,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="preId != null">
+        pre_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gmtEnd != null">
+        #{gmtEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="endEnable != null">
+        #{endEnable,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="parentPhone != null">
+        #{parentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=SMALLINT},
+      </if>
+      <if test="preId != null">
+        #{pre_id,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateBillById" parameterType="com.learning.cloud.bill.entity.Bill">
+    update bill
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo},
+      </if>
+      <if test="sendTime != null">
+        last_time = #{sendTime},
+      </if>
+      <if test="isvTradeNo != null">
+        isv_trade_no = #{isvTradeNo},
+      </if>
+      <if test="tradeInfo != null">
+        trade_info = #{tradeInfo},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <update id="updateBillStateById" parameterType="com.learning.cloud.bill.entity.Bill">
+    update bill
+    <set>
+      <if test="tradeStatus != null">
+        trade_status = #{tradeStatus},
+      </if>
+      last_time = NOW(),
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="getCountByParentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from
+    bill where parent_id=#{parentId}
+  </select>
+
+  <delete id="deleteBillByParentId">
+    delete from
+    bill where parent_id={id}
+  </delete>
+
+  <select id="getSchoolBillInPeriod" parameterType="com.learning.cloud.bill.entity.BillSearch" resultType="com.learning.cloud.bill.entity.SumBillType">
+    select pay_type, sum(amount) amount
+    from bill
+    where last_time >= #{start}
+    and #{end} > last_time
+    and (trade_status = "BILLING_SUCCESS" or trade_status = "PAY_SUCCESS" or trade_status = "SUCCESS")
+    <if test="schoolId!=null">
+      and school_id = #{schoolId}
+    </if>
+    <if test="campusId!=null">
+      and campus_id = #{campusId}
+    </if>
+    GROUP BY pay_type
+  </select>
+
+  <select id="getSchoolBills" parameterType="com.learning.cloud.bill.entity.Bill" resultType="com.learning.cloud.bill.entity.Bill">
+    select * from bill b
+    left join bill_pre p
+    on b.pre_id = p.id
+    where school_id = #{schoolId}
+    <if test="campusId!=null">
+      and p.campus_id = #{campusId}
+    </if>
+    <if test="tradeStatus!=null">
+      and b.trade_status = #{tradeStatus}
+    </if>
+    <if test="studentName!=null">
+      and p.student_name like CONCAT('%',#{studentName},'%')
+    </if>
+    <if test="parentPhone!=null">
+      and b.parent_phone like CONCAT('%',#{parentPhone},'%')
+    </if>
+    <if test="gradeClass!=null">
+      and p.grade_class like CONCAT('%',#{gradeClass},'%')
+    </if>
+    <if test="chargeBillTitle!=null">
+      and p.charge_bill_title like CONCAT('%',#{chargeBillTitle},'%')
+    </if>
+    <if test="start!=null">
+      and b.create_time between #{start}
+      and #{end}
+    </if>
+    <if test="startC!=null">
+      and b.last_time between #{startC}
+      and #{endC}
+    </if>
+    <if test="parentId!=null">
+      and p.parent_id = #{parentId}
+    </if>
+    <if test="classIds!=null">
+      and p.class_id in (#{classIds})
+    </if>
+    <if test="preId != null">
+      pre_id = #{pre_id,jdbcType=INTEGER},
+    </if>
+    order by id desc
+  </select>
+
+  <select id="getSchoolBillsByParent" parameterType="java.lang.Integer" resultType="com.learning.cloud.bill.entity.Bill">
+    select * from bill
+    where parent_id = #{id}
+  </select>
+
+  <select id="getBillById" parameterType="java.lang.Integer" resultType="com.learning.cloud.bill.entity.Bill">
+    select * from bill
+    where id = #{id}
+  </select>
+
+  <update id="updateQueryStatus">
+    update bill
+    <set>
+      <if test="order_status != null">
+        trade_status = #{order_status},
+      </if>
+    </set>
+    where id = #{id} and isv_trade_no = #{out_trade_no}
+  </update>
+
+  <update id="updateCallBackByOrderNo">
+    update bill
+    set trade_status = "PAY_SUCCESS",
+        trade_no = #{tradeNo},
+        last_time = #{gmtPayment},
+        amount = #{totalAmount}
+    where order_no = #{outTradeNo}
+  </update>
+
+  <select id="getBillByOrderNo" parameterType="java.lang.String" resultType="com.learning.cloud.bill.entity.Bill">
+    select * from bill where
+    order_no = #{orderNo}
+  </select>
+
+  <select id="getUnConfirmedBills" resultType="com.learning.cloud.bill.entity.Bill">
+    select * from bill
+    where (trade_status != "BILLING_SUCCESS" or trade_status is NULL)
+    and pay_type = 1
+    and create_time >=  NOW() - interval 24 hour
+  </select>
+
+</mapper>
