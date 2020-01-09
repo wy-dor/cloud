@@ -13,7 +13,6 @@ import com.learning.cloud.alipay.entity.BillParam;
 import com.learning.cloud.alipay.entity.ChargeItems;
 import com.learning.cloud.alipay.entity.UserDetails;
 import com.learning.cloud.alipay.service.AlipayService;
-import com.learning.cloud.bill.dao.BillDao;
 import com.learning.cloud.bill.entity.Bill;
 import com.learning.cloud.bill.entity.ParentBill;
 import com.learning.utils.CommonUtils;
@@ -106,9 +105,9 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
         log.info(JSON.toJSONString(request));
         request.putOtherTextParam("app_auth_token", appAuthToken);
-//        request.setBizContent(JSON.toJSONString(billParam));
+        request.setBizContent(JSON.toJSONString(billParam));
 
-        return JsonResultUtil.success(JSON.toJSONString(billParam));
+        return JsonResultUtil.success(JSON.toJSONString(request));
 //        Date sendTime = new Date();
 //        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
@@ -186,9 +185,9 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
         log.info(JSON.toJSONString(request));
         request.putOtherTextParam("app_auth_token", appAuthToken);
-//        request.setBizContent(JSON.toJSONString(billParam));
+        request.setBizContent(JSON.toJSONString(billParam));
 
-        return JsonResultUtil.success(JSON.toJSONString(billParam));
+        return JsonResultUtil.success(JSON.toJSONString(request));
 //        Date sendTime = new Date();
 //        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
