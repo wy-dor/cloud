@@ -12,7 +12,7 @@
     <result column="grade_class" jdbcType="VARCHAR" property="gradeClass" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.learning.cloud.bill.entity.PreBill">
-    <result column="charge_item" jdbcType="LONGVARCHAR" property="chargeItem" />
+    <result column="charge_items" jdbcType="LONGVARCHAR" property="chargeItems" />
   </resultMap>
   <sql id="Base_Column_List">
     id, parent_id, school_id, student_name, amount, charge_bill_title, last_time
@@ -51,8 +51,8 @@
       <if test="gradeClass != null">
         grade_class,
       </if>
-      <if test="chargeItem != null">
-        charge_item,
+      <if test="chargeItems != null">
+        charge_items,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -83,8 +83,8 @@
       <if test="gradeClass != null">
         #{gradeClass,jdbcType=VARCHAR},
       </if>
-      <if test="chargeItem != null">
-        #{chargeItem,jdbcType=LONGVARCHAR},
+      <if test="chargeItems != null">
+        #{chargeItems,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>

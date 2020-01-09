@@ -98,6 +98,7 @@ public class ParentBillServiceImpl implements ParentBillService {
         GradeClass gc = gradeClassDao.getById(classId);
         String className = gc.getClassName();
         String chargeBillTitle = parentBill.getName();
+        String chargeItems = parentBill.getChargeItems();
         String amountStr = parentBill.getAmountStr();
         List<Map<String, Object>> parse = (List<Map<String, Object>>) JSON.parse(amountStr);
         for (Map<String, Object> map : parse) {
@@ -115,6 +116,7 @@ public class ParentBillServiceImpl implements ParentBillService {
             preBill.setGradeClass(className);
 //            preBill.setLastTime();
             preBill.setChargeBillTitle(chargeBillTitle);
+            preBill.setChargeItems(chargeItems);
             preBillDao.addPreBill(preBill);
         }
         return JsonResultUtil.success();

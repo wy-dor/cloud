@@ -35,6 +35,6 @@ public class PreBill extends BaseEntity {
     @NotNull(message = "班级必输")
     private String gradeClass;
 
-    private String chargeItem;
+    private String chargeItems;
 
 }
