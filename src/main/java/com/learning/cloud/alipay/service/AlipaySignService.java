@@ -1,6 +1,7 @@
 package com.learning.cloud.alipay.service;
 
 import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
+import com.learning.cloud.alipay.entity.BillParam;
 
 /**
  * @Author: yyt
@@ -9,5 +10,5 @@ import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
  */
 public interface AlipaySignService {
 
-    String getSignedOrder(AlipayEcoEduKtBillingSendRequest request)throws Exception;
+    String getSignedOrder(BillParam billParam)throws Exception;
 }

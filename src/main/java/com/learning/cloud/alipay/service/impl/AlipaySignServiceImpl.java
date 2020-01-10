@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
+import com.learning.cloud.alipay.entity.BillParam;
 import com.learning.cloud.alipay.service.AlipaySignService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class AlipaySignServiceImpl implements AlipaySignService {
     }
 
     @Override
-    public String getSignedOrder(AlipayEcoEduKtBillingSendRequest request)throws Exception{
+    public String getSignedOrder(BillParam billParam)throws Exception{
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date data=new Date(System.currentTimeMillis());
@@ -43,7 +44,7 @@ public class AlipaySignServiceImpl implements AlipaySignService {
         String sign_type = "RSA2";
         String version = "1.0";
 
-        String biz_content = JSON.toJSONString(request);
+        String biz_content = JSON.toJSONString(billParam);
 
         Map<String,String> paramMap = new HashMap<>();
         paramMap.put("app_id",app_id);

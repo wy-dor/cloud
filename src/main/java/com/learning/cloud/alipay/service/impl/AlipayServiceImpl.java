@@ -186,7 +186,7 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
-        String info = alipaySignService.getSignedOrder(request);
+        String info = alipaySignService.getSignedOrder(billParam);
 
         return JsonResultUtil.success(info);
 
