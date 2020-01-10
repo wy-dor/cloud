@@ -112,8 +112,7 @@ public class AlipayServiceImpl implements AlipayService {
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
 
-//        return JsonResultUtil.success(JSON.toJSONString(billParam));
-//        Date sendTime = new Date();
+
         AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
 //            log.info(response.getMsg());
@@ -189,6 +188,77 @@ public class AlipayServiceImpl implements AlipayService {
         String info = alipaySignService.getSignedOrder(billParam);
 
         return JsonResultUtil.success(info);
+
+    }
+
+    @Override
+    public JsonResult testSendAliEduBillOrder() throws Exception {
+        JsonResult jsonResult = null;
+        //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
+        PaySchool paySchool = paySchoolDao.getPaySchoolById(1);
+        String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
+        String childName = "小明";
+        String grade = "一年级";
+        String classIn = "一班";
+
+        //生成缴费账单编号
+        String isvTradeNo = CommonUtils.getIsvTradeNo();
+        //生成当面付账单名称
+        String chargeBillTitle = "测试缴费";
+        //当面付账单缴费项不可选
+        String chargeType = "M";
+        List<ChargeItems> chargeItems = JSON.parseArray("", ChargeItems.class);
+        //缴费截止时间,当面付默认截止时间为当前时间后24小时内支付
+        String gmtEnd = CommonUtils.getFaceBillHoursLater();
+        //Y为gmt_end生效，用户过期后，不能再缴费。
+        String endEnable = "Y";
+        BillParam billParam = new BillParam();
+        List<UserDetails> users = new ArrayList<>();
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser_mobile("13112345678");
+        users.add(userDetails);
+        //家长信息
+        billParam.setUsers(users);
+        //学校支付宝pid
+        billParam.setSchool_pid(paySchool.getSchoolPid());
+        //学校编码
+        billParam.setSchool_no(paySchool.getSchoolNo());
+        //孩子名字
+        billParam.setChild_name(childName);
+        //年级
+        billParam.setGrade(grade);
+        //班级
+        billParam.setClass_in(classIn);
+        billParam.setOut_trade_no(isvTradeNo);
+        billParam.setCharge_bill_title(chargeBillTitle);
+        billParam.setCharge_type(chargeType);
+        //缴费详情
+        billParam.setCharge_item(chargeItems);
+        //总金额
+        billParam.setAmount(new BigDecimal("0.01"));
+        billParam.setGmt_end(gmtEnd);
+        billParam.setEnd_enable(endEnable);
+        //Isv支付宝pid
+        billParam.setPartner_id(pid);
+        //组装完成，调用ali sdk
+        AlipayClient alipayClient = AlipayClientUtil.getClient(appId);
+        //发送缴费账单接口
+        AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
+        request.putOtherTextParam("app_auth_token", appAuthToken);
+        request.setBizContent(JSON.toJSONString(billParam));
+        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            log.info(response.getMsg());
+            //账单发送成功，获取返回值，更新bill
+            //支付宝－中小学－教育缴费的账单号 order_no
+
+            return JsonResultUtil.success(response.getOrderNo());
+
+        }else {
+            //更新状态
+            log.error(response.getMsg());
+            return null;
+        }
 
     }
 
