@@ -135,7 +135,7 @@ public class AlipayServiceImpl implements AlipayService {
         JsonResult jsonResult = null;
         //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
         PaySchool paySchool = paySchoolDao.getPaySchoolById(1);
-        String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
+
         String childName = "小明";
         String grade = "一年级";
         String classIn = "一班";
@@ -180,11 +180,7 @@ public class AlipayServiceImpl implements AlipayService {
         //Isv支付宝pid
         billParam.setPartner_id(pid);
         //组装完成，调用ali sdk
-        AlipayClient alipayClient = AlipayClientUtil.getClient(appId);
-        //发送缴费账单接口
-        AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
-        request.putOtherTextParam("app_auth_token", appAuthToken);
-        request.setBizContent(JSON.toJSONString(billParam));
+
         String info = alipaySignService.getSignedOrder(billParam);
 
         return JsonResultUtil.success(info);
@@ -197,7 +193,7 @@ public class AlipayServiceImpl implements AlipayService {
         //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
         PaySchool paySchool = paySchoolDao.getPaySchoolById(1);
         String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
-        String childName = "小明";
+        String childName = "于柠萌";
         String grade = "一年级";
         String classIn = "一班";
 
@@ -215,7 +211,7 @@ public class AlipayServiceImpl implements AlipayService {
         BillParam billParam = new BillParam();
         List<UserDetails> users = new ArrayList<>();
         UserDetails userDetails = new UserDetails();
-        userDetails.setUser_mobile("13112345678");
+        userDetails.setUser_mobile("15651999726");
         users.add(userDetails);
         //家长信息
         billParam.setUsers(users);
