@@ -51,7 +51,7 @@ public class AliBillServiceImpl implements AliBillService {
     public JsonResult getBillState(Integer id) throws Exception {
         Bill bill = billDao.getBillById(id);
         // 请求支付宝获取当前账单状态
-        PaySchool paySchool = paySchoolDao.getPaySchoolById(bill.getSchoolId());
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(bill.getSchoolId());
         String appAuthToken = "";
         String schoolPid = paySchool.getSchoolPid();
         String outTradeNo = bill.getOrderNo();
@@ -85,7 +85,7 @@ public class AliBillServiceImpl implements AliBillService {
     @Override
     public JsonResult modifyBillState(Integer id, Integer status) throws Exception {
         Bill bill = billDao.getBillById(id);
-        PaySchool paySchool = paySchoolDao.getPaySchoolById(bill.getSchoolId());
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(bill.getSchoolId());
 //        String appAuthToken = userDao.getAppAuthTokenById(paySchoolById.getPayUserId());
         String appAuthToken = "";
         String tradeNo = bill.getTradeNo();

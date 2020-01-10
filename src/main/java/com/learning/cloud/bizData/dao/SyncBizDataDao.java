@@ -14,6 +14,8 @@ public interface SyncBizDataDao {
 
     List<SyncBizData> getBizData(Integer bizType);
 
+    List<SyncBizData> getByBizData(SyncBizData syncBizData);
+
     SyncBizData getForSuiteTicket();
 
     List<SyncBizData> getAllBizData();

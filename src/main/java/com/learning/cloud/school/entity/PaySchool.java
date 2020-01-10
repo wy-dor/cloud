@@ -5,19 +5,12 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class PaySchool extends BaseEntity {
     private Integer id;
 
     private Integer schoolId;
-
-    private Integer payUserId;
-
-    private Integer agentId;
-
-    private Integer agentStaffId;
 
     @NotNull(message = "学校名称不能为空")
     private String schoolName;

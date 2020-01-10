@@ -9,8 +9,6 @@ import com.learning.cloud.bill.entity.Bill;
 import com.learning.cloud.bill.entity.BillSearch;
 import com.learning.cloud.bill.entity.SumBillType;
 import com.learning.cloud.bill.service.BillService;
-import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
-import com.learning.cloud.user.student.dao.StudentDao;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,6 @@ public class BillServiceImpl implements BillService {
     @Override
     public JsonResult addAndSendBill(Bill bill) throws Exception {
         String orderNo = "";
-        //账单类型1-支付宝当面付，2-微信当面付，3-支付宝教育缴费
         int i = billDao.addBill(bill);
 
         return JsonResultUtil.success(orderNo);
@@ -68,6 +65,11 @@ public class BillServiceImpl implements BillService {
         billDao.updateBillStateById("SUCCESS",bill.getId());
         return JsonResultUtil.success(bill.getStudentId());
     }
+
+//    @Override
+//    public JsonResult getBillsForParent(String userId){
+//
+//    }
 
 
 }

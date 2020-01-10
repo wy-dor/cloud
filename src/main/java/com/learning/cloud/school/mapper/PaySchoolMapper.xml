@@ -141,10 +141,10 @@
                 school_std_code = #{schoolStdCode},
             </if>
         </set>
-        where id = #{id}
+        where school_id = #{schoolId}
     </update>
 
-    <select id="getPaySchoolById" parameterType="java.lang.Integer" resultType="com.learning.cloud.school.entity.PaySchool">
+    <select id="getPaySchoolBySchoolId" parameterType="java.lang.Integer" resultType="com.learning.cloud.school.entity.PaySchool">
     select * from edu_school_pay
     where school_id = #{schoolId}
   </select>

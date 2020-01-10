@@ -49,7 +49,7 @@ public class AlipayServiceImpl implements AlipayService {
     public JsonResult sendAliEduBill(Bill bill, ParentBill parentBill) throws Exception {
         JsonResult jsonResult = null;
         //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
-        PaySchool paySchool = paySchoolDao.getPaySchoolById(bill.getSchoolId());
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(bill.getSchoolId());
         String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
         String childName = bill.getStudentName();
         String grade = "";
@@ -129,10 +129,10 @@ public class AlipayServiceImpl implements AlipayService {
     public JsonResult testSendAliEduBill() throws Exception {
         JsonResult jsonResult = null;
         //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
-        PaySchool paySchool = paySchoolDao.getPaySchoolById(1);
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(1);
         String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
         String childName = "小明";
-        String grade = "";
+        String grade = "一年级";
         String classIn = "一年级一班";
         Integer classId = 57;
         if (classId != null) {

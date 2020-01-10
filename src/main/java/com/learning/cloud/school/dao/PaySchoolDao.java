@@ -19,7 +19,7 @@ public interface PaySchoolDao {
     int updatePaySchool(PaySchool school);
 
     //账单接口调用学校信息
-    PaySchool getPaySchoolById(Integer schoolId);
+    PaySchool getPaySchoolBySchoolId(Integer schoolId);
 
     Integer getPaySchoolIdByNo(String schoolNo);
 

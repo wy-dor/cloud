@@ -12,6 +12,8 @@ public interface PaySchoolService {
 
     JsonResult getPaySchoolQrCodeUrl(Integer schoolId, Integer campusId)throws Exception;
 
+    JsonResult getDistrictForPaySchool(Integer schoolId);
+
     JsonResult getPaySchoolNoFromAli(Integer schoolId)throws Exception;
 
     JsonResult getPaySchoolById(Integer schoolId);

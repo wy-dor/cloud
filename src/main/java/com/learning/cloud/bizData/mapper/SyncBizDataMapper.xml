@@ -20,6 +20,30 @@
         and status = 0
     </select>
 
+    <select id="getByBizData" parameterType="com.learning.cloud.bizData.entity.SyncBizData"
+            resultType="com.learning.cloud.bizData.entity.SyncBizData">
+        SELECT *
+        FROM ding_cloud_push.open_sync_biz_data
+        <where>
+            <if test="bizType != null">
+                and biz_type = #{bizType}
+            </if>
+            <if test="corpId != null">
+                and corp_id = #{corpId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="bizId != null">
+                and biz_id = #{bizId}
+            </if>
+            <if test="subscribeId != null">
+                and subscribe_id = #{subscribeId}
+            </if>
+        </where>
+        order by id
+    </select>
+
     <select id="getForSuiteTicket" resultType="com.learning.cloud.bizData.entity.SyncBizData">
         SELECT *
         FROM ding_cloud_push.open_sync_biz_data
