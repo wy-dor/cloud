@@ -3,6 +3,8 @@ package com.learning.cloud.alipay.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
+import com.alipay.api.response.AlipayEcoEduKtBillingSendResponse;
+import com.learning.cloud.alipay.service.AlipaySignService;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.school.dao.PaySchoolDao;
@@ -40,6 +42,9 @@ public class AlipayServiceImpl implements AlipayService {
 
     @Autowired
     private GradeClassDao gradeClassDao;
+
+    @Autowired
+    private AlipaySignService alipaySignService;
 
     @Value("${ali.key.appId}")
     private String appId;
@@ -107,9 +112,9 @@ public class AlipayServiceImpl implements AlipayService {
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
 
-        return JsonResultUtil.success(JSON.toJSONString(billParam));
+//        return JsonResultUtil.success(JSON.toJSONString(billParam));
 //        Date sendTime = new Date();
-//        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
+        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
 //        if(response.isSuccess()){
 //            log.info(response.getMsg());
 //            //账单发送成功，获取返回值，更新bill
@@ -123,6 +128,7 @@ public class AlipayServiceImpl implements AlipayService {
 //            throw new PayException(JsonResultEnum.BILL_SEND_FAILURE);
 //        }
 
+        return null;
     }
 
     @Override
@@ -132,14 +138,9 @@ public class AlipayServiceImpl implements AlipayService {
         PaySchool paySchool = paySchoolDao.getPaySchoolById(1);
         String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
         String childName = "小明";
-        String grade = "";
-        String classIn = "一年级一班";
-        Integer classId = 57;
-        if (classId != null) {
-            GradeClass gc = gradeClassDao.getById(57);
-            grade = gc.getGradeName();
-            classIn = gc.getClassName();
-        }
+        String grade = "一年级";
+        String classIn = "一班";
+
         //生成缴费账单编号
         String isvTradeNo = CommonUtils.getIsvTradeNo();
         //生成当面付账单名称
@@ -174,7 +175,7 @@ public class AlipayServiceImpl implements AlipayService {
         //缴费详情
         billParam.setCharge_item(chargeItems);
         //总金额
-        billParam.setAmount(new BigDecimal("200.00"));
+        billParam.setAmount(new BigDecimal("0.01"));
         billParam.setGmt_end(gmtEnd);
         billParam.setEnd_enable(endEnable);
         //Isv支付宝pid
@@ -183,25 +184,11 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayClient alipayClient = AlipayClientUtil.getClient(appId);
         //发送缴费账单接口
         AlipayEcoEduKtBillingSendRequest request = new AlipayEcoEduKtBillingSendRequest();
-        log.info(JSON.toJSONString(request));
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent(JSON.toJSONString(billParam));
+        String info = alipaySignService.getSignedOrder(request);
 
-        return JsonResultUtil.success(JSON.toJSONString(billParam));
-//        Date sendTime = new Date();
-//        AlipayEcoEduKtBillingSendResponse response = alipayClient.execute(request);
-//        if(response.isSuccess()){
-//            log.info(response.getMsg());
-//            //账单发送成功，获取返回值，更新bill
-//            //支付宝－中小学－教育缴费的账单号 order_no
-//            billDao.updateBillById(response.getOrderNo(),sendTime,bill.getId(), isvTradeNo);
-//
-//        }else {
-//            //更新状态
-//            log.error(response.getMsg());
-//            billDao.updateBillStateById(PayConfig.FAILURE,bill.getId());
-//            throw new PayException(JsonResultEnum.BILL_SEND_FAILURE);
-//        }
+        return JsonResultUtil.success(info);
 
     }
 
