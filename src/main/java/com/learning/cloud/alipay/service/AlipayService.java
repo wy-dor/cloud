@@ -8,4 +8,6 @@ public interface AlipayService {
     JsonResult sendAliEduBill(Bill bill, ParentBill parentBill)throws Exception;
 
     JsonResult testSendAliEduBill() throws Exception;
+
+    JsonResult testSendAliEduBillOrder()throws Exception;
 }

@@ -22,4 +22,9 @@ public class AlipayController {
     public JsonResult testSendAliEduBill() throws Exception {
         return alipayService.testSendAliEduBill();
     }
+
+    @PostMapping("/testSendAliEduBillOrder")
+    public JsonResult testSendAliEduBillOrder() throws Exception {
+        return alipayService.testSendAliEduBillOrder();
+    }
 }
