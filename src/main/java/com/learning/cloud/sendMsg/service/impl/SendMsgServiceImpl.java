@@ -18,7 +18,6 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.sendMsg.entity.MsgInfo;
 import com.learning.cloud.sendMsg.entity.WorkMsg;
 import com.learning.cloud.sendMsg.service.SendMsgService;
-import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -208,6 +207,9 @@ public class SendMsgServiceImpl implements SendMsgService {
                 int k = 20 * i + j;
                 String userId = parentUserIdList.get(k);
                 parentUserIdList_temp.add(userId);
+                if(k == size - 1){
+                    break;
+                }
             }
             workMsg.setUserIdList(parentUserIdList_temp);
             JsonResult jsonResult = SendWorkMsg(workMsg, msg);
