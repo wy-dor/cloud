@@ -14,16 +14,17 @@ public class ParentBillController {
     @Autowired
     private ParentBillService parentBillService;
 
-    //删除
+    @GetMapping("/getParentBillById")
+    public JsonResult getParentBillById(Integer id){
+        return parentBillService.getParentBillById(id);
+    }
+
     @PostMapping("/deleteParentBill")
     public JsonResult deleteParentBill(Integer id)throws Exception{
         //删除父账单，先删除子账单
         return parentBillService.deleteParentBill(id);
     }
 
-    //下载
-
-    //展示
     @GetMapping("/getParentBill")
     public JsonResult getParentBill(ParentBill parentBill){
         return parentBillService.getParentBill(parentBill);
@@ -37,7 +38,7 @@ public class ParentBillController {
 
     //手机增加账单
     @PostMapping("/addParentBill")
-    public JsonResult addParentBill(ParentBill parentBill){
+    public JsonResult addParentBill(ParentBill parentBill) throws Exception {
         return parentBillService.addParentBill(parentBill);
     }
 }

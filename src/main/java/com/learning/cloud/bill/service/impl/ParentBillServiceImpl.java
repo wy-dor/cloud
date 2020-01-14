@@ -3,6 +3,8 @@ package com.learning.cloud.bill.service.impl;
 import com.learning.cloud.bill.dao.PreBillDao;
 import com.learning.cloud.bill.entity.PreBill;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.sendMsg.entity.MsgInfo;
+import com.learning.cloud.sendMsg.service.SendMsgService;
 import com.learning.domain.JsonResult;
 import com.learning.domain.PageEntity;
 import com.learning.enums.JsonResultEnum;
@@ -45,6 +47,16 @@ public class ParentBillServiceImpl implements ParentBillService {
 
     @Autowired
     private PreBillDao preBillDao;
+
+    @Autowired
+    private SendMsgService sendMsgService;
+
+    @Override
+    public JsonResult getParentBillById(Integer id){
+        //只能删除1-未发送，2-子账单空
+        ParentBill parentBill = parentBillDao.getParentBillById(id);
+        return JsonResultUtil.success(parentBill);
+    }
 
 
     @Override
@@ -89,13 +101,21 @@ public class ParentBillServiceImpl implements ParentBillService {
     }
 
     @Override
-    public JsonResult addParentBill(ParentBill parentBill) {
+    public JsonResult addParentBill(ParentBill parentBill) throws Exception {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = df.format(new Date());
         parentBill.setCreateTime(format);
         int i = parentBillDao.addParentBill(parentBill);
+        Integer parentId = parentBill.getId();
+        MsgInfo msgInfo = new MsgInfo();
+        msgInfo.setTitle("查看待缴费账单");
+        msgInfo.setText(parentBill.getName());
+        JsonResult jsonResult = sendMsgService.sendBillChargeLink(parentId, msgInfo);
+        if(jsonResult.getCode() == 0){
+            return JsonResultUtil.error(0,"账单信息通知发送失败");
+        }
         Integer schoolId = parentBill.getSchoolId();
-        Integer parentBillId = parentBill.getId();
+        Integer parentBillId = parentId;
         Integer campusId = parentBill.getCampusId();
         Integer classId = parentBill.getClassId();
         GradeClass gc = gradeClassDao.getById(classId);
@@ -141,7 +161,6 @@ public class ParentBillServiceImpl implements ParentBillService {
             preBill.setChargeItems(chargeItems);
             preBillDao.addPreBill(preBill);
         }
-
         return JsonResultUtil.success();
     }
 

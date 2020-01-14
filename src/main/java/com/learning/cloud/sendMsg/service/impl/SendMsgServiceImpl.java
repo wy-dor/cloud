@@ -165,8 +165,8 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
         msg.getActionCard().setTitle(msgInfo.getTitle());
         msg.getActionCard().setMarkdown(msgInfo.getText());
-        msg.getActionCard().setSingleTitle("查看账单");
-        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId=" + parentId);
+        msg.getActionCard().setSingleTitle("查看详情");
+        msg.getActionCard().setSingleUrl("pages/pay/parent/index/index");
         WorkMsg workMsg = new WorkMsg();
         workMsg.setToAllUser(false);
         workMsg.setCorpId(school.getCorpId());
