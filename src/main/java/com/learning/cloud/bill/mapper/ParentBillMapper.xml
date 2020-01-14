@@ -76,8 +76,8 @@
       <if test="amount != null">
         amount,
       </if>
-      <if test="user_id_str != null">
-        userIdStr,
+      <if test="userIdStr != null">
+        user_id_str,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
