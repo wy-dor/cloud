@@ -15,5 +15,5 @@ public interface SendMsgService {
 
     JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception;
 
-    JsonResult sendBillChargeLink(Integer parentId, MsgInfo msgInfo) throws Exception;
+    JsonResult sendBillChargeCard(Integer parentId, MsgInfo msgInfo) throws Exception;
 }

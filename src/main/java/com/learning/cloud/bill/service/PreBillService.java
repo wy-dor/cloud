@@ -7,4 +7,6 @@ public interface PreBillService {
     JsonResult addPreBill(PreBill preBill);
 
     JsonResult listPreBill(PreBill preBill);
+
+    JsonResult getPreBillById(Integer id);
 }

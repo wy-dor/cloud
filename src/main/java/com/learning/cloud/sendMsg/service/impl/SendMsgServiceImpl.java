@@ -1,6 +1,10 @@
 package com.learning.cloud.sendMsg.service.impl;
 
+import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
+import com.dingtalk.api.request.OapiEduStudentGetRequest;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
+import com.dingtalk.api.response.OapiEduStudentGetResponse;
 import com.learning.cloud.bill.dao.ParentBillDao;
 import com.learning.cloud.bill.entity.ParentBill;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
@@ -14,6 +18,7 @@ import com.learning.cloud.school.entity.School;
 import com.learning.cloud.sendMsg.entity.MsgInfo;
 import com.learning.cloud.sendMsg.entity.WorkMsg;
 import com.learning.cloud.sendMsg.service.SendMsgService;
+import com.learning.cloud.util.ServiceResult;
 import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -155,7 +160,7 @@ public class SendMsgServiceImpl implements SendMsgService {
     }
 
     @Override
-    public JsonResult sendBillChargeLink(Integer parentId, MsgInfo msgInfo) throws Exception {
+    public JsonResult sendBillChargeCard(Integer parentId, MsgInfo msgInfo) throws Exception {
         ParentBill parentBill = parentBillDao.getParentBillById(parentId);
         Integer schoolId = parentBill.getSchoolId();
         School school = schoolDao.getBySchoolId(schoolId);
@@ -171,18 +176,40 @@ public class SendMsgServiceImpl implements SendMsgService {
         workMsg.setToAllUser(false);
         workMsg.setCorpId(school.getCorpId());
         workMsg.setAgentId(corpAgent.getAgentId());
-        List<String> userIdList = Arrays.asList(parentBill.getUserIdStr().split(","));
-        int size = userIdList.size();
-        int circle = size / 20;
+        List<String> stuUserIdList = Arrays.asList(parentBill.getUserIdStr().split(","));
         Boolean success = true;
+        Integer classId = parentBill.getClassId();
+        GradeClass gradeClass = gradeClassDao.getById(classId);
+        String corpId = school.getCorpId();
+        String accessToken = authenService.getAccessToken(corpId);
+        Long deptId = gradeClass.getDeptId();
+        List<String> parentUserIdList = new ArrayList<>();
+        for (String userId : stuUserIdList) {
+            DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/student/get");
+            OapiEduStudentGetRequest req = new OapiEduStudentGetRequest();
+            req.setClassId(deptId);
+            req.setStudentUserid(userId);
+            OapiEduStudentGetResponse rsp = client.execute(req, accessToken);
+            OapiEduStudentGetResponse.StudentRespone result = rsp.getResult();
+            if(result == null){
+                return JsonResultUtil.error(0, "该班级下学生信息未及时同步，请先同步班级学生信息！");
+            }
+            List<OapiEduStudentGetResponse.GuardianRespone> guardians = result.getGuardians();
+            for (OapiEduStudentGetResponse.GuardianRespone guardian : guardians) {
+                String guardianUserId = guardian.getGuardianUserid();
+                parentUserIdList.add(guardianUserId);
+            }
+        }
+        int size = parentUserIdList.size();
+        int circle = size / 20;
         for (int i = 0; i <= circle; i++) {
-            List<String> stuUserIdList = new ArrayList<>();
+            List<String> parentUserIdList_temp = new ArrayList<>();
             for (int j = 0; j < 20; j++) {
                 int k = 20 * i + j;
-                String userId = userIdList.get(k);
-                stuUserIdList.add(userId);
+                String userId = parentUserIdList.get(k);
+                parentUserIdList_temp.add(userId);
             }
-            workMsg.setUserIdList(stuUserIdList);
+            workMsg.setUserIdList(parentUserIdList_temp);
             JsonResult jsonResult = SendWorkMsg(workMsg, msg);
             Integer code = jsonResult.getCode();
             if (code != 1) {

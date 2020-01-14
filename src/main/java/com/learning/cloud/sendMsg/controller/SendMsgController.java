@@ -38,4 +38,9 @@ public class SendMsgController {
         return sendMsgService.sendPerformanceCard(classIds, moduleId, msgInfo);
     }
 
+    @PostMapping("/sendBillChargeCard")
+    public JsonResult sendBillChargeCard(Integer parentId, MsgInfo msgInfo) throws Exception {
+        return sendMsgService.sendBillChargeCard(parentId, msgInfo);
+    }
+
 }

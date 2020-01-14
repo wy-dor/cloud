@@ -32,5 +32,10 @@ public class PreBillServiceImpl implements PreBillService {
         return JsonResultUtil.success(new PageEntity<>(preBillList));
     }
 
+    @Override
+    public JsonResult getPreBillById(Integer id) {
+        PreBill preBill = billDao.getPreBillById(id);
+        return JsonResultUtil.success(preBill);
+    }
 
 }

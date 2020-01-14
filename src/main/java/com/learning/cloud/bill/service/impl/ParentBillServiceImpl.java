@@ -110,7 +110,7 @@ public class ParentBillServiceImpl implements ParentBillService {
         MsgInfo msgInfo = new MsgInfo();
         msgInfo.setTitle("查看待缴费账单");
         msgInfo.setText(parentBill.getName());
-        JsonResult jsonResult = sendMsgService.sendBillChargeLink(parentId, msgInfo);
+        JsonResult jsonResult = sendMsgService.sendBillChargeCard(parentId, msgInfo);
         if(jsonResult.getCode() == 0){
             return JsonResultUtil.error(0,"账单信息通知发送失败");
         }

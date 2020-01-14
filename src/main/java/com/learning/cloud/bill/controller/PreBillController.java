@@ -6,6 +6,7 @@ import com.learning.domain.JsonResult;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,11 @@ public class PreBillController {
     @PostMapping("listPreBill")
     public JsonResult listPreBill(PreBill preBill){
         return preBillService.listPreBill(preBill);
+    }
+
+    @GetMapping("/getPreBillById")
+    public JsonResult getPreBillById(Integer id){
+        return preBillService.getPreBillById(id);
     }
 
 }
