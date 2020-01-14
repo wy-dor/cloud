@@ -170,7 +170,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         msg.getActionCard().setTitle(msgInfo.getTitle());
         msg.getActionCard().setMarkdown(msgInfo.getText());
         msg.getActionCard().setSingleTitle("查看详情");
-        msg.getActionCard().setSingleUrl("pages/pay/parent/index/index?classId=" + parentBill.getClassId());
+        msg.getActionCard().setSingleUrl("eapp://pages/pay/parent/index/index?classId=" + parentBill.getClassId());
         WorkMsg workMsg = new WorkMsg();
         workMsg.setToAllUser(false);
         workMsg.setCorpId(school.getCorpId());
