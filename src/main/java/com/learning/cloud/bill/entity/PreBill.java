@@ -37,4 +37,6 @@ public class PreBill extends BaseEntity {
 
     private String chargeItems;
 
+    private Integer state;
+
 }

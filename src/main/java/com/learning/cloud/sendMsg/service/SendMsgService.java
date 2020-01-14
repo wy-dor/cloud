@@ -14,4 +14,6 @@ public interface SendMsgService {
     JsonResult sendDutyMsgToAdvisor(Integer classId, String date, MsgInfo msgInfo) throws Exception;
 
     JsonResult sendPerformanceCard(String classIds, Integer moduleId, MsgInfo msgInfo) throws Exception;
+
+    JsonResult sendBillChargeLink(Integer parentId, MsgInfo msgInfo) throws Exception;
 }

@@ -15,7 +15,7 @@
     <result column="charge_items" jdbcType="LONGVARCHAR" property="chargeItems" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, parent_id, school_id, student_name, amount, charge_bill_title, last_time
+    id, parent_id, school_id, student_name, amount, class_id, grade_class, charge_bill_title, last_time, state
   </sql>
   <sql id="Blob_Column_List">
     charge_item
@@ -54,6 +54,9 @@
       <if test="chargeItems != null">
         charge_items,
       </if>
+      <if test="state != null">
+        state,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="parentId != null">
@@ -86,8 +89,47 @@
       <if test="chargeItems != null">
         #{chargeItems,jdbcType=LONGVARCHAR},
       </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
+
+  <select id="getByPreBill" parameterType="com.learning.cloud.bill.entity.PreBill" resultType="com.learning.cloud.bill.entity.PreBill">
+    select * from bill_pre
+    <where>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="schoolId != null">
+        and school_id = #{schoolId,jdbcType=INTEGER}
+      </if>
+      <if test="campusId != null">
+        and campus_id = #{campusId,jdbcType=INTEGER}
+      </if>
+      <if test="studentUserId != null">
+        and student_user_id = #{studentUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="studentName != null">
+        and student_name = #{studentName,jdbcType=VARCHAR}
+      </if>
+      <if test="amount != null">
+        and amount = #{amount,jdbcType=DECIMAL}
+      </if>
+      <if test="chargeBillTitle != null">
+        and chargeBillTitle like CONCAT('%', chargeBillTitle, '%')
+      </if>
+      <if test="classId != null">
+        and class_id = #{classId,jdbcType=INTEGER}
+      </if>
+      <if test="gradeClass != null">
+        and grade_class = #{gradeClass,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
 
   <delete id="deletePreBillByParentId">
     delete from

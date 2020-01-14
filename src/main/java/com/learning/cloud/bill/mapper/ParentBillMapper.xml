@@ -11,6 +11,7 @@
     select *
     from bill_parent
     where 1=1
+    and school_id = #{schoolId}
     <if test="state!=null">
       and state = #{state}
     </if>
@@ -20,7 +21,6 @@
     <if test="sendTime!=null">
       and date(send_time) = #{sendTime}
     </if>
-      and school_id = #{schoolId}
     <if test="campusId!=null">
       and campus_id = #{campusId}
     </if>
@@ -70,6 +70,15 @@
       <if test="chargeItems != null">
         charge_items,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="user_id_str != null">
+        userIdStr,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -101,6 +110,15 @@
       </if>
       <if test="chargeItems != null">
         #{chargeItems,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="userIdStr != null">
+        #{userIdStr,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>

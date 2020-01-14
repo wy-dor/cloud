@@ -1,6 +1,8 @@
 package com.learning.cloud.sendMsg.service.impl;
 
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
+import com.learning.cloud.bill.dao.ParentBillDao;
+import com.learning.cloud.bill.entity.ParentBill;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
 import com.learning.cloud.dept.topApi.service.RoleTopApiService;
@@ -47,6 +49,9 @@ public class SendMsgServiceImpl implements SendMsgService {
 
     @Autowired
     private RoleTopApiService roleTopApiService;
+
+    @Autowired
+    private ParentBillDao parentBillDao;
 
     //发送消息
     @Override
@@ -146,6 +151,48 @@ public class SendMsgServiceImpl implements SendMsgService {
             return JsonResultUtil.success();
         } else {
             return JsonResultUtil.error(0, "还有班级成绩未发送成功");
+        }
+    }
+
+    @Override
+    public JsonResult sendBillChargeLink(Integer parentId, MsgInfo msgInfo) throws Exception {
+        ParentBill parentBill = parentBillDao.getParentBillById(parentId);
+        Integer schoolId = parentBill.getSchoolId();
+        School school = schoolDao.getBySchoolId(schoolId);
+        CorpAgent corpAgent = corpAgentDao.getByCorpId(school.getCorpId());
+        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+        msg.setMsgtype("action_card");
+        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
+        msg.getActionCard().setTitle(msgInfo.getTitle());
+        msg.getActionCard().setMarkdown(msgInfo.getText());
+        msg.getActionCard().setSingleTitle("查看账单");
+        msg.getActionCard().setSingleUrl("eapp://pages/gradeReport/studentReport/studentReport?moduleId=" + parentId);
+        WorkMsg workMsg = new WorkMsg();
+        workMsg.setToAllUser(false);
+        workMsg.setCorpId(school.getCorpId());
+        workMsg.setAgentId(corpAgent.getAgentId());
+        List<String> userIdList = Arrays.asList(parentBill.getUserIdStr().split(","));
+        int size = userIdList.size();
+        int circle = size / 20;
+        Boolean success = true;
+        for (int i = 0; i <= circle; i++) {
+            List<String> stuUserIdList = new ArrayList<>();
+            for (int j = 0; j < 20; j++) {
+                int k = 20 * i + j;
+                String userId = userIdList.get(k);
+                stuUserIdList.add(userId);
+            }
+            workMsg.setUserIdList(stuUserIdList);
+            JsonResult jsonResult = SendWorkMsg(workMsg, msg);
+            Integer code = jsonResult.getCode();
+            if (code != 1) {
+                success = false;
+            }
+        }
+        if (success) {
+            return JsonResultUtil.success();
+        } else {
+            return JsonResultUtil.error(0, "还有账单未发送成功");
         }
     }
 }

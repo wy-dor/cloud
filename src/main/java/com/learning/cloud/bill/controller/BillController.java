@@ -24,15 +24,6 @@ public class BillController {
     @Autowired
     private PreBillService preBillService;
 
-    //增加预账单
-    @PostMapping("addPreBill")
-    public JsonResult addPreBill(@Valid PreBill preBill, BindingResult bindingResult)throws Exception{
-        if(bindingResult.hasErrors()){
-            return JsonResultUtil.error(0,bindingResult.getFieldError().getDefaultMessage());
-        }
-        return preBillService.addPreBill(preBill);
-    }
-
     //新增账单，区分，支付宝和微信账单
     //新增账单，增加prepareBill概念，加入但是还未创建，add后再send
     @PostMapping("addAndSendBill")
