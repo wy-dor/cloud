@@ -140,6 +140,9 @@
             <if test="schoolStdCode != null">
                 school_std_code = #{schoolStdCode},
             </if>
+            <if test="appAuthToken != null">
+                app_auth_token = #{appAuthToken},
+            </if>
         </set>
         where school_id = #{schoolId}
     </update>

@@ -230,8 +230,7 @@ public class PaySchoolServiceImpl implements PaySchoolService {
         if (schoolPid == null || schoolPid.equals("")) {
             throw new PayException(JsonResultEnum.SCHOOL_PID);
         }
-        //todo appAuthToken从何而来
-        String appAuthToken = "";
+        String appAuthToken = paySchool.getAppAuthToken();
         if (appAuthToken == null || appAuthToken.equals("")) {
             throw new PayException(JsonResultEnum.APP_AUTH_TOKEN);
         }
@@ -243,8 +242,7 @@ public class PaySchoolServiceImpl implements PaySchoolService {
         String cityName = paySchool.getCityName();
         String districtCode = CommonUtils.pcdCodeFormat(paySchool.getDistrictCode());
         String districtName = paySchool.getDistrictName();
-        AlipayClient alipayClient = AlipayClientUtil.getClient();
-        alipayClient = AlipayClientUtil.getClient(appId);
+        AlipayClient alipayClient = AlipayClientUtil.getClient(appId);
         AlipayEcoEduKtSchoolinfoModifyRequest request = new AlipayEcoEduKtSchoolinfoModifyRequest();
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent("{\n" +

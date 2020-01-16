@@ -3,7 +3,9 @@ package com.learning.cloud.alipay.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
+import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.response.AlipayEcoEduKtBillingSendResponse;
+import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.learning.cloud.alipay.service.AlipaySignService;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
@@ -17,6 +19,7 @@ import com.learning.cloud.alipay.entity.UserDetails;
 import com.learning.cloud.alipay.service.AlipayService;
 import com.learning.cloud.bill.entity.Bill;
 import com.learning.cloud.bill.entity.ParentBill;
+import com.learning.enums.JsonResultEnum;
 import com.learning.utils.CommonUtils;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -256,6 +259,33 @@ public class AlipayServiceImpl implements AlipayService {
             return null;
         }
 
+    }
+
+    // 授权回调令牌
+    @Override
+    public JsonResult getAuthToken(String app_auth_code, Integer schoolId) throws Exception{
+        AlipayClient alipayClient = AlipayClientUtil.getClient();
+        AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
+        request.setBizContent("{" +
+                "    \"grant_type\":\"authorization_code\"," +
+                "    \"code\":\""+app_auth_code+"\"" +
+                "}");
+        AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            String appAuthToken = response.getAppAuthToken();
+            PaySchool paySchool = new PaySchool();
+            paySchool.setSchoolId(schoolId);
+            paySchool.setAppAuthToken(appAuthToken);
+            int i = paySchoolDao.updatePaySchool(paySchool);
+            if(i>0){
+                return JsonResultUtil.success();
+            }else{
+                return JsonResultUtil.error(JsonResultEnum.ERROR);
+            }
+        }else {
+            log.error(response.getMsg()+"schoolId:"+schoolId+"授权失败");
+            return JsonResultUtil.error(0, response.getSubMsg());
+        }
     }
 
 }

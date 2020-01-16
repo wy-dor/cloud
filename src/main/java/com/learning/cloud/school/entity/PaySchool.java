@@ -50,5 +50,6 @@ public class PaySchool extends BaseEntity {
 
     private Integer authK12;
 
+    private String appAuthToken;
 
 }

@@ -10,4 +10,7 @@ public interface AlipayService {
     JsonResult testSendAliEduBill() throws Exception;
 
     JsonResult testSendAliEduBillOrder()throws Exception;
+
+    // 授权回调令牌
+    JsonResult getAuthToken(String app_auth_code, Integer schoolId) throws Exception;
 }

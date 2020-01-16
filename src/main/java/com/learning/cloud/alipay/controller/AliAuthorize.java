@@ -31,11 +31,21 @@ public class AliAuthorize {
         return JsonResultUtil.success(url.toString());
     }
 
+    @GetMapping("aliSandBoxAuth")
+    public JsonResult aliSandBoxAuth(){
+        StringBuilder url = new StringBuilder();
+        url.append("https://openauth.alipaydev.com/oauth2/appToAppAuth.htm?app_id=");
+        url.append(appId);
+        url.append("&redirect_uri=");
+        url.append(authUrl);
+        return JsonResultUtil.success(url.toString());
+    }
+
     // 获取授权回调的值app_auth_code换取app_auth_token（应用授权令牌）
-//    @GetMapping("getAuthToken")
-//    public JsonResult getAuthToken(String app_auth_code, Integer payUserId)throws Exception{
-//        return alipayService.getAuthToken(app_auth_code, payUserId);
-//    }
+    @GetMapping("getAuthToken")
+    public JsonResult getAuthToken(String app_auth_code, Integer schoolId)throws Exception{
+        return alipayService.getAuthToken(app_auth_code, schoolId);
+    }
 
 
 }
