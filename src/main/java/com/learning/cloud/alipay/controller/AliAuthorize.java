@@ -17,6 +17,9 @@ public class AliAuthorize {
     @Value("${ali.key.authUrl}")
     private String authUrl;
 
+    @Value("${ali.key.openAuthUrl}")
+    private String openAuthUrl;
+
     @Autowired
     private AlipayService alipayService;
 
@@ -24,17 +27,8 @@ public class AliAuthorize {
     @GetMapping("aliAuth")
     public JsonResult aliAuth(){
         StringBuilder url = new StringBuilder();
-        url.append("https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=");
-        url.append(appId);
-        url.append("&redirect_uri=");
-        url.append(authUrl);
-        return JsonResultUtil.success(url.toString());
-    }
-
-    @GetMapping("aliSandBoxAuth")
-    public JsonResult aliSandBoxAuth(){
-        StringBuilder url = new StringBuilder();
-        url.append("https://openauth.alipaydev.com/oauth2/appToAppAuth.htm?app_id=");
+        url.append(openAuthUrl);
+        url.append("?app_id=");
         url.append(appId);
         url.append("&redirect_uri=");
         url.append(authUrl);
