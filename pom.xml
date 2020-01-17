@@ -24,7 +24,6 @@
 <!--        <mybatis.generator.generatorConfig.xml>${basedir}/src/main/resources/generatorConfig.xml</mybatis.generator.generatorConfig.xml>-->
     </properties>
     
-    <defaultGoal>compile</defaultGoal>
 
     <dependencies>
         <dependency>
