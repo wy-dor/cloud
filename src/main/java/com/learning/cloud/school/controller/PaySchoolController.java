@@ -1,6 +1,5 @@
 package com.learning.cloud.school.controller;
 
-import com.learning.cloud.school.dao.PaySchoolDao;
 import com.learning.cloud.school.entity.PaySchool;
 import com.learning.cloud.school.service.PaySchoolService;
 import com.learning.domain.JsonResult;
@@ -35,9 +34,9 @@ public class PaySchoolController {
         return paySchoolService.updatePaySchool(paySchool);
     }
 
-    @GetMapping("/getDistrictForPaySchool")
-    public JsonResult getDistrictForPaySchool(Integer schoolId){
-        return paySchoolService.getDistrictForPaySchool(schoolId);
+    @GetMapping("/getSchoolInfoForPaySchool")
+    public JsonResult getSchoolInfoForPaySchool(Integer schoolId){
+        return paySchoolService.getSchoolInfoForPaySchool(schoolId);
     }
 
     //兼容二维码

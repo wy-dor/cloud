@@ -22,16 +22,13 @@ import com.learning.utils.CommonUtils;
 import com.learning.utils.DateTransUtil;
 import com.learning.utils.JsonResultUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,37 +95,6 @@ public class PaySchoolServiceImpl implements PaySchoolService {
     @Transactional
     @Override
     public JsonResult addPaySchool(PaySchool paySchool) throws Exception {
-        Integer schoolId = paySchool.getSchoolId();
-        School school = schoolDao.getBySchoolId(schoolId);
-        if (school == null) {
-            return JsonResultUtil.error(0, "不存在该schoolId");
-        }
-        String corpId = school.getCorpId();
-        SyncBizData sbd = new SyncBizData();
-        sbd.setCorpId(corpId);
-        sbd.setBizType(4);
-        List<SyncBizData> byBizData = syncBizDataDao.getByBizData(sbd);
-        if (byBizData == null || byBizData.size() == 0) {
-            return JsonResultUtil.error(0, "学校尚未授权");
-        }
-        SyncBizData syncBizData = byBizData.get(0);
-        String bizData = syncBizData.getBizData();
-        Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData);
-        String syncAction = (String) parse_0.get("syncAction");
-        if ("org_suite_auth".equals(syncAction)) {
-            Map<String, Object> auth_corp_info = (Map<String, Object>) parse_0.get("auth_corp_info");
-            String corp_name = auth_corp_info.get("corp_name").toString();
-            String corp_province = auth_corp_info.get("corp_province").toString();
-            String corp_city = auth_corp_info.get("corp_city").toString();
-            String corp_logo_url = auth_corp_info.get("corp_logo_url").toString();
-            paySchool.setSchoolName(corp_name);
-            paySchool.setSchoolIcon(corp_logo_url);
-            paySchool.setSchoolIconType("jpg");
-            paySchool.setProvinceName(corp_province);
-            paySchool.setCityName(corp_city);
-        }else{
-            return JsonResultUtil.error(0,"该校未在授权中");
-        }
         int schoolNameExist = paySchoolDao.isPaySchoolNameExist(paySchool.getSchoolName());
         if (schoolNameExist > 0) {
             throw new PayException(JsonResultEnum.SCHOOL_EXIST);
@@ -180,46 +146,35 @@ public class PaySchoolServiceImpl implements PaySchoolService {
     }
 
     @Override
-    public JsonResult getDistrictForPaySchool(Integer schoolId){
-        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(schoolId);
-        String provinceName = paySchool.getProvinceName();
-        String cityName = paySchool.getCityName();
-        List<Map<String, String>> areaMapList = new ArrayList<>();
-        try {
-            ClassPathResource classPathResource = new ClassPathResource("classpath:json/pcd.json");
-            String areaData =  IOUtils.toString(classPathResource.getInputStream(), Charset.forName("UTF-8"));
-            List<Map<String, Object>> parse = (List<Map<String, Object>>) JSON.parse(areaData);
-            for (Map<String, Object> provinceMap : parse) {
-                if(provinceMap.get("name").toString().equals(provinceName)){
-                    String provinceCode = provinceMap.get("code").toString();
-                    paySchool.setProvinceCode(provinceCode);
-                    List<Map<String, Object>> cityMapList = (List<Map<String, Object>>)JSON.parse(provinceMap.get("cityList").toString());
-                    for (Map<String, Object> cityMap : cityMapList) {
-                        if(cityMap.get("name").toString().equals(cityName)){
-                            String cityCode = cityMap.get("code").toString();
-                            paySchool.setCityCode(cityCode);
-                            areaMapList = (List<Map<String, String>>)JSON.parse(provinceMap.get("areaList").toString());
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-//            JSON.parseObject(classPathResource.getInputStream(), StandardCharsets.UTF_8, List.class,
-//                    // 自动关闭流
-//                    Feature.AutoCloseSource,
-//                    // 允许注释
-//                    Feature.AllowComment,
-//                    // 允许单引号
-//                    Feature.AllowSingleQuotes,
-//                    // 使用 Big decimal
-//                    Feature.UseBigDecimal);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public JsonResult getSchoolInfoForPaySchool(Integer schoolId){
+        School school = schoolDao.getBySchoolId(schoolId);
+        if (school == null) {
+            return JsonResultUtil.error(0, "不存在该schoolId");
         }
-        paySchoolDao.updatePaySchool(paySchool);
-        return JsonResultUtil.success(areaMapList);
+        String corpId = school.getCorpId();
+        SyncBizData sbd = new SyncBizData();
+        sbd.setCorpId(corpId);
+        sbd.setBizType(4);
+        List<SyncBizData> byBizData = syncBizDataDao.getByBizData(sbd);
+        if (byBizData == null || byBizData.size() == 0) {
+            return JsonResultUtil.error(0, "学校尚未授权");
+        }
+        SyncBizData syncBizData = byBizData.get(0);
+        String bizData = syncBizData.getBizData();
+        Map<String, Object> parse_0 = (Map<String, Object>) JSON.parse(bizData);
+        String syncAction = (String) parse_0.get("syncAction");
+        Map<String, String> map = new HashMap<>();
+        if ("org_suite_auth".equals(syncAction)) {
+            Map<String, Object> auth_corp_info = (Map<String, Object>) parse_0.get("auth_corp_info");
+            String corp_province = auth_corp_info.get("corp_province").toString();
+            String corp_city = auth_corp_info.get("corp_city").toString();
+            map.put("province",corp_province);
+            map.put("city",corp_city);
+        }else{
+            return JsonResultUtil.error(0,"该校未在授权中");
+        }
+        map.put("schoolName",school.getSchoolName());
+        return JsonResultUtil.success(map);
     }
 
     //上传学校信息给支付宝，获取支付宝返回的学校编码
