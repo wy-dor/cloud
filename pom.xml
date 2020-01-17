@@ -23,6 +23,7 @@
         <plugin.frontend.version>0.0.27</plugin.frontend.version>
 <!--        <mybatis.generator.generatorConfig.xml>${basedir}/src/main/resources/generatorConfig.xml</mybatis.generator.generatorConfig.xml>-->
     </properties>
+    
 
     <dependencies>
         <dependency>
