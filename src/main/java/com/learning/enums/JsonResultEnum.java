@@ -67,6 +67,8 @@ public enum JsonResultEnum {
     ALI_CALLBACK_ERROR(1102,"支付宝账单回调异常"),
     ALI_MODIFY_ERROR(1103,"支付宝确认异常"),
     BILL_SEND_FAILURE(1104,"账单发送失败"),
+    NO_PHONE_INFO(1105,"该学生家长暂未添加手机号"),
+
 
     SCHOOL_PID(1111,"学校的支付宝商户号没有维护"),
     APP_AUTH_TOKEN(1112,"用户还没有授权，无法提交学校信息"),

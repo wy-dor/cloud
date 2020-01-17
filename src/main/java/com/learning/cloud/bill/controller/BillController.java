@@ -3,9 +3,7 @@ package com.learning.cloud.bill.controller;
 import com.learning.domain.JsonResult;
 import com.learning.cloud.bill.entity.Bill;
 import com.learning.cloud.bill.entity.BillSearch;
-import com.learning.cloud.bill.entity.PreBill;
 import com.learning.cloud.bill.service.BillService;
-import com.learning.cloud.bill.service.PreBillService;
 import com.learning.utils.JsonResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -20,9 +18,6 @@ public class BillController {
 
     @Autowired
     private BillService billService;
-
-    @Autowired
-    private PreBillService preBillService;
 
     //新增账单，区分，支付宝和微信账单
     //新增账单，增加prepareBill概念，加入但是还未创建，add后再send

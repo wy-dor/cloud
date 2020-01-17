@@ -6,19 +6,28 @@ import com.alipay.api.request.AlipayEcoEduKtBillingSendRequest;
 import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.response.AlipayEcoEduKtBillingSendResponse;
 import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
+import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
+import com.dingtalk.api.request.OapiEduStudentGetRequest;
+import com.dingtalk.api.response.OapiEduStudentGetResponse;
 import com.learning.cloud.alipay.service.AlipaySignService;
+import com.learning.cloud.bill.dao.PreBillDao;
+import com.learning.cloud.bill.entity.PreBill;
 import com.learning.cloud.dept.gradeClass.dao.GradeClassDao;
 import com.learning.cloud.dept.gradeClass.entity.GradeClass;
+import com.learning.cloud.index.service.AuthenService;
 import com.learning.cloud.school.dao.PaySchoolDao;
+import com.learning.cloud.school.dao.SchoolDao;
 import com.learning.cloud.school.entity.PaySchool;
+import com.learning.cloud.school.entity.School;
+import com.learning.cloud.user.parent.dao.ParentPhoneDao;
+import com.learning.cloud.user.parent.entity.ParentPhone;
 import com.learning.domain.JsonResult;
 import com.learning.cloud.alipay.AlipayClientUtil;
 import com.learning.cloud.alipay.entity.BillParam;
 import com.learning.cloud.alipay.entity.ChargeItems;
 import com.learning.cloud.alipay.entity.UserDetails;
 import com.learning.cloud.alipay.service.AlipayService;
-import com.learning.cloud.bill.entity.Bill;
-import com.learning.cloud.bill.entity.ParentBill;
 import com.learning.enums.JsonResultEnum;
 import com.learning.utils.CommonUtils;
 import com.learning.utils.JsonResultUtil;
@@ -44,7 +53,19 @@ public class AlipayServiceImpl implements AlipayService {
     private PaySchoolDao paySchoolDao;
 
     @Autowired
+    private SchoolDao schoolDao;
+
+    @Autowired
+    private AuthenService authenService;
+
+    @Autowired
     private GradeClassDao gradeClassDao;
+
+    @Autowired
+    private PreBillDao preBillDao;
+
+    @Autowired
+    private ParentPhoneDao parentPhoneDao;
 
     @Autowired
     private AlipaySignService alipaySignService;
@@ -54,36 +75,57 @@ public class AlipayServiceImpl implements AlipayService {
 
     //发送教育缴费账单接口
     @Override
-    public JsonResult sendAliEduBill(Bill bill, ParentBill parentBill) throws Exception {
+    public JsonResult sendAliEduBill(Integer preId) throws Exception {
+        PreBill preBill = preBillDao.getPreBillById(preId);
         JsonResult jsonResult = null;
         //根据schoolId获取学校信息，(前端实现兼容老款二维码，使用schoolNo获取学校信息)
-        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(bill.getSchoolId());
-        String appAuthToken = "201904BB369b995471e847b78ccec413acd29X39";
-        String childName = bill.getStudentName();
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(preBill.getSchoolId());
+        String appAuthToken = paySchool.getAppAuthToken();
+        String childName = preBill.getStudentName();
+        Long deptId = new Long("0");
         String grade = "";
-        String classIn = bill.getGradeClass();
-        Integer classId = bill.getClassId();
+        String classIn = preBill.getGradeClass();
+        Integer classId = preBill.getClassId();
         if (classId != null) {
-            GradeClass gc = gradeClassDao.getById(bill.getClassId());
+            GradeClass gc = gradeClassDao.getById(preBill.getClassId());
             grade = gc.getGradeName();
             classIn = gc.getClassName();
+            deptId = gc.getDeptId();
         }
         //生成缴费账单编号
         String isvTradeNo = CommonUtils.getIsvTradeNo();
         //生成当面付账单名称
-        String chargeBillTitle = parentBill.getName();
+        String chargeBillTitle = preBill.getChargeBillTitle();
         //当面付账单缴费项不可选
         String chargeType = "M";
-        List<ChargeItems> chargeItems = JSON.parseArray(bill.getChargeItem(), ChargeItems.class);
+        List<ChargeItems> chargeItems = JSON.parseArray(preBill.getChargeItems(), ChargeItems.class);
         //缴费截止时间,当面付默认截止时间为当前时间后24小时内支付
         String gmtEnd = CommonUtils.getFaceBillHoursLater();
         //Y为gmt_end生效，用户过期后，不能再缴费。
         String endEnable = "Y";
         BillParam billParam = new BillParam();
         List<UserDetails> users = new ArrayList<>();
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUser_mobile(bill.getParentPhone());
-        users.add(userDetails);
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/edu/student/get");
+        OapiEduStudentGetRequest req = new OapiEduStudentGetRequest();
+        req.setClassId(deptId);
+        req.setStudentUserid(preBill.getStudentUserId());
+        School school = schoolDao.getBySchoolId(preBill.getSchoolId());
+        String corpId = school.getCorpId();
+        String accessToken = authenService.getAccessToken(corpId);
+        OapiEduStudentGetResponse rsp = client.execute(req, accessToken);
+        OapiEduStudentGetResponse.StudentRespone result = rsp.getResult();
+        List<OapiEduStudentGetResponse.GuardianRespone> guardians = result.getGuardians();
+        for (OapiEduStudentGetResponse.GuardianRespone guardian : guardians) {
+            UserDetails userDetails = new UserDetails();
+            String guardianUserId = guardian.getGuardianUserid();
+            ParentPhone parentPhone = parentPhoneDao.getByUserId(guardianUserId);
+            if(parentPhone == null){
+                return JsonResultUtil.error(JsonResultEnum.NO_PHONE_INFO);
+            }
+            userDetails.setUser_mobile(parentPhone.getPhone());
+            userDetails.setUser_name(guardian.getNick());
+            users.add(userDetails);
+        }
         //家长信息
         billParam.setUsers(users);
         //学校支付宝pid
@@ -102,7 +144,7 @@ public class AlipayServiceImpl implements AlipayService {
         //缴费详情
         billParam.setCharge_item(chargeItems);
         //总金额
-        billParam.setAmount(bill.getAmount());
+        billParam.setAmount(preBill.getAmount());
         billParam.setGmt_end(gmtEnd);
         billParam.setEnd_enable(endEnable);
         //Isv支付宝pid

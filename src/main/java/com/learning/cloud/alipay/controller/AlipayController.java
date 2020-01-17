@@ -14,8 +14,8 @@ public class AlipayController {
     private AlipayService alipayService;
 
     @PostMapping("/sendAliEduBill")
-    public JsonResult sendAliEduBill(Bill bill, ParentBill parentBill) throws Exception {
-        return alipayService.sendAliEduBill(bill,parentBill);
+    public JsonResult sendAliEduBill(Integer preId) throws Exception {
+        return alipayService.sendAliEduBill(preId);
     }
 
     @PostMapping("/testSendAliEduBill")
