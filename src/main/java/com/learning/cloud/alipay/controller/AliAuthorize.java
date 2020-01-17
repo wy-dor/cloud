@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+
 @RestController
 public class AliAuthorize {
 
@@ -31,7 +33,7 @@ public class AliAuthorize {
         url.append("?app_id=");
         url.append(appId);
         url.append("&redirect_uri=");
-        url.append(authUrl);
+        url.append(URLEncoder.encode(authUrl));
         return JsonResultUtil.success(url.toString());
     }
 
