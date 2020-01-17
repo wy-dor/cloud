@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AlipayClientUtil {
-    //支付宝网关
-    private static final String URL = "https://openapi.alipay.com/gateway.do";
     private static final String CHARSET = "utf-8";
 
     private static String appId;
@@ -24,6 +22,8 @@ public class AlipayClientUtil {
     private static String alipayPublicKey;
 
     private static String miniAppId;
+
+    private static String URL;
 
     @Value("${ali.key.appId}")
     public void setAppId(String appId) {
@@ -43,6 +43,11 @@ public class AlipayClientUtil {
     @Value("${ali.key.miniAppId}")
     public void setMiniAppId(String miniAppId) {
         AlipayClientUtil.miniAppId = miniAppId;
+    }
+
+    @Value("${ali.key.gatewayUrl}")
+    public void setURL(String URL) {
+        AlipayClientUtil.URL = URL;
     }
 
     public static AlipayClient getClient(){
