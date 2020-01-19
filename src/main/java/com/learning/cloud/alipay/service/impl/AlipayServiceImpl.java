@@ -314,6 +314,7 @@ public class AlipayServiceImpl implements AlipayService {
                 "    \"grant_type\":\"authorization_code\"," +
                 "    \"code\":\""+app_auth_code+"\"" +
                 "}");
+        log.info(request.getBizContent());
         AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
         log.info("response: ");
         log.info("appId: " + response.getAuthAppId());
