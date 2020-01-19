@@ -55,7 +55,7 @@ public class AlipayClientUtil {
         AlipayClient alipayClient = new DefaultAlipayClient(
                 URL,appId,appPrivateKey,"json",CHARSET, alipayPublicKey, "RSA2"
         );
-        log.info("URL:" + URL, ", appId:" + appId, ", appPrivateKey:" + appPrivateKey, ", alipayPublicKey:" + alipayPublicKey);
+        log.info("URL:" + URL + ", appId:" + appId + ", appPrivateKey:" + appPrivateKey + ", alipayPublicKey:" + alipayPublicKey);
         return alipayClient;
     }
 
