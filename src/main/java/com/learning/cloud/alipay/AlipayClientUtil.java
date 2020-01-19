@@ -2,6 +2,7 @@ package com.learning.cloud.alipay;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2019-01-02 17:11
  * @Desc: alipayclient实例
  */
+@Slf4j
 @Component
 public class AlipayClientUtil {
     private static final String CHARSET = "utf-8";
@@ -53,6 +55,7 @@ public class AlipayClientUtil {
         AlipayClient alipayClient = new DefaultAlipayClient(
                 URL,appId,appPrivateKey,"json",CHARSET, alipayPublicKey, "RSA2"
         );
+        log.info("URL:" + URL, ", appId:" + appId, ", appPrivateKey:" + appPrivateKey, ", alipayPublicKey:" + alipayPublicKey);
         return alipayClient;
     }
 

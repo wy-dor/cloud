@@ -307,20 +307,18 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public JsonResult getAuthToken(String app_auth_code, Integer schoolId) throws Exception{
         log.info("=====================================");
-        log.info("app_auth_code" + app_auth_code);
+        log.info("app_auth_code：" + app_auth_code);
         AlipayClient alipayClient = AlipayClientUtil.getClient();
-        log.info("alipayClient: ");
-        log.info(alipayClient.toString());
         AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
         request.setBizContent("{" +
                 "    \"grant_type\":\"authorization_code\"," +
                 "    \"code\":\""+app_auth_code+"\"" +
                 "}");
         AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
-        log.info("request: ");
-        log.info(request.toString());
         log.info("response: ");
-        log.info(response.toString());
+        log.info("appId: " + response.getAuthAppId());
+        log.info("appAuthToken: " + response.getAppAuthToken());
+        log.info("userId: " + response.getUserId());
         log.info("****************************************************");
         if(response.isSuccess()){
             String appAuthToken = response.getAppAuthToken();
