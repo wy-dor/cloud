@@ -306,15 +306,22 @@ public class AlipayServiceImpl implements AlipayService {
     // 授权回调令牌
     @Override
     public JsonResult getAuthToken(String app_auth_code, Integer schoolId) throws Exception{
-        log.info(app_auth_code);
+        log.info("=====================================");
+        log.info("app_auth_code" + app_auth_code);
         AlipayClient alipayClient = AlipayClientUtil.getClient();
+        log.info("alipayClient: ");
+        log.info(alipayClient.toString());
         AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
         request.setBizContent("{" +
                 "    \"grant_type\":\"authorization_code\"," +
                 "    \"code\":\""+app_auth_code+"\"" +
                 "}");
         AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
+        log.info("request: ");
         log.info(request.toString());
+        log.info("response: ");
+        log.info(response.toString());
+        log.info("****************************************************");
         if(response.isSuccess()){
             String appAuthToken = response.getAppAuthToken();
             log.info(response.toString());
@@ -328,7 +335,7 @@ public class AlipayServiceImpl implements AlipayService {
                 return JsonResultUtil.error(JsonResultEnum.ERROR);
             }
         }else {
-            log.error(response.getMsg()+"schoolId:"+schoolId+"授权失败");
+            log.error(response.getMsg()+"   schoolId:"+schoolId+"授权失败");
             return JsonResultUtil.error(0, response.getSubMsg());
         }
     }
