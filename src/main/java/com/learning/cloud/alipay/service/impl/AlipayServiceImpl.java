@@ -306,6 +306,7 @@ public class AlipayServiceImpl implements AlipayService {
     // 授权回调令牌
     @Override
     public JsonResult getAuthToken(String app_auth_code, Integer schoolId) throws Exception{
+        log.info(app_auth_code);
         AlipayClient alipayClient = AlipayClientUtil.getClient();
         AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
         request.setBizContent("{" +
@@ -313,8 +314,10 @@ public class AlipayServiceImpl implements AlipayService {
                 "    \"code\":\""+app_auth_code+"\"" +
                 "}");
         AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
+        log.info(request.toString());
         if(response.isSuccess()){
             String appAuthToken = response.getAppAuthToken();
+            log.info(response.toString());
             PaySchool paySchool = new PaySchool();
             paySchool.setSchoolId(schoolId);
             paySchool.setAppAuthToken(appAuthToken);

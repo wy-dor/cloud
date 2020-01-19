@@ -147,6 +147,11 @@ public class PaySchoolServiceImpl implements PaySchoolService {
 
     @Override
     public JsonResult getSchoolInfoForPaySchool(Integer schoolId){
+        PaySchool paySchool = paySchoolDao.getPaySchoolBySchoolId(schoolId);
+        //支付学校信息已存在
+        if(paySchool != null && paySchool.getDistrictCode() != null && !paySchool.getDistrictCode().equals("")){
+            return JsonResultUtil.success(paySchool);
+        }
         School school = schoolDao.getBySchoolId(schoolId);
         if (school == null) {
             return JsonResultUtil.error(0, "不存在该schoolId");
