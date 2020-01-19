@@ -87,7 +87,7 @@ ali:
     pid: 2088431800965633
     phone: 0527-87024016
     name: 拾牛人工智能技术研发(南京)有限公司
-    notifyUrl: http://www.k12pay.com:8080/notify/payNotify
+    notifyUrl: http://114.55.168.33:8081//notify/payNotify
   mini:
     aliMiniUrl: pages/single/addBill/addBill
   key:
@@ -124,7 +124,7 @@ ali:
     pid: 2088431800965633
     phone: 0527-87024016
     name: 拾牛人工智能技术研发(南京)有限公司
-    notifyUrl: http://www.k12pay.com:8080/notify/payNotify
+    notifyUrl: http://114.55.168.33:8081//notify/payNotify
   mini:
     aliMiniUrl: pages/single/addBill/addBill
   key:
@@ -160,7 +160,7 @@ ali:
     pid: 2088431800965633
     phone: 0527-87024016
     name: 拾牛人工智能技术研发(南京)有限公司
-    notifyUrl: http://www.k12pay.com:8080/notify/payNotify
+    notifyUrl: http://114.55.168.33:8081//notify/payNotify
   mini:
     aliMiniUrl: pages/single/addBill/addBill
   key:
@@ -171,7 +171,7 @@ ali:
     #支付宝公钥
     public: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiacZtNfG+u1iyXRBmPfXNn/SfmylpefBX0B+VOvFdVLB78C1Tbste3gS/FL2MejxFAVzUj3nrCyV82nyHBUktnSbFzz9K+VTrwipG51JBcwqosUf+ZW3MQgNdV8aEhZyp97uiBlYJFdnjNuvLcbRedJondUJtvp5r3fAS2MIDJxOSXi6EPHvm0HSC5sR/A4dHt5bo2uUaGiG4CLnMsaJgnftOKo9IZY/jFmt70ucIJo5wo4LKjP0l3U3jL0pOQe9v95q52KN128DLfpu3zcbZNuATbNvvUxCXao1WKRpE3NzLkdilRYLnk07nZWyOnfXI1yxefvE1UNl31ZMK+5YbwIDAQAB
     #授权回调地址
-    authUrl: http://www.k12pay.com/main/callback #http://k12pay.com/return.html
+    authUrl: http://www.k12pay.com/main/callback
 
     openAuthUrl: https://openauth.alipay.com/oauth2/appToAppAuth.htm
     gatewayUrl: https://openapi.alipay.com/gateway.do
